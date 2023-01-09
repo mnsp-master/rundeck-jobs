@@ -15,7 +15,7 @@ $SessionToken = Invoke-RestMethod -Verbose "$AppURL/initSession" -Method Get -He
 #get all entities from GLPI
 $EntityResult = @() #empty array
 
-#limit entity result to one ID:5 BCL - development - BeechenCliff/Writhlington (ID:1)
+#limit entity result to one ID:5 BCL - development - ID:1 WRI
 #$EntityResult = Invoke-RestMethod "$AppURL/search/Entity?is_deleted=0&as_map=&range=0-10000000&criteria[1][link]=AND&criteria[1][field]=2&criteria[1][searchtype]=contains&criteria[1][value]=1&search=Search&itemtype=Entity&start=0" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
 
 #All entities: - Production
@@ -64,7 +64,7 @@ Write-warning "sleeping after updatting csv... "
 
 Write-host "-------------------------------------------`n"
 
-#compare google data and current glpi data creating/updating as necessary...
+#compare google data and current DB data creating/updating as necessary...
 foreach ($ChDevice in $GsuiteChromeDevices ) {
 #$ChDevice #dump curent content...    
 $uuid = @() #reset uuid var
@@ -99,7 +99,7 @@ $DeviceType = $($ChDevice.model)
     $entities_id = $entityID
     $operatingsystems_id = "4" #despite correct ID it is not currently associating?
 
-    $statusid = "1" #set status to active - needs to be google dynamic; provisioned, deprovisioned etc
+    $statusid = "1" #set status to active - needs to be dynamic; provisioned, deprovisioned etc
     $eolhwswsupportfield=$($ChDevice.autoUpdateExpiration)
     $googleworkspaceoufield=$($ChDevice.orgUnitPath)
     $comments = $($ChDevice.notes)
@@ -183,5 +183,5 @@ Write-Warning "sleeping before next entity...."
 
 }
 
-#close api session...
+#close current api session...
 Invoke-RestMethod "$AppURL/killSession" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
