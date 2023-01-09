@@ -1,3 +1,4 @@
+#confirm updating via vscode
 $GlobalGamBaseOU = "/ZZ Chrome Devices/" # MNSP root base OU
 
 Write-Host $(Get-Date)
