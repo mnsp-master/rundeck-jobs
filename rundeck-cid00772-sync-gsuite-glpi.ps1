@@ -144,8 +144,8 @@ if ($uuids.Contains($uuid)) { # check if uuid is already known, if no jump to cr
                       
             #update device by id using json content set earlier...
             $jsonupdate = $updateData | ConvertTo-Json
-            #SN-LOGONLY# $UpdateResult = Invoke-RestMethod "$AppURL/Computer" -Method Put -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -Body $jsonUpdate -ContentType 'application/json'
-            #SN-LOGONLY# $updateResult
+            $UpdateResult = Invoke-RestMethod "$AppURL/Computer" -Method Put -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -Body $jsonUpdate -ContentType 'application/json'
+            $updateResult
             $jsonupdate
 
             #>
@@ -167,9 +167,9 @@ if ($uuids.Contains($uuid)) { # check if uuid is already known, if no jump to cr
 
     $json = $Data | ConvertTo-Json
     $json
-    #SN-LOGONLY# $AddResult = Invoke-RestMethod "$AppURL/Computer" -Method Post -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -Body $json -ContentType 'application/json'
+    $AddResult = Invoke-RestMethod "$AppURL/Computer" -Method Post -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -Body $json -ContentType 'application/json'
     Write-Host "GLPI - Computer created" -ForegroundColor Green
-    #SN-LOGONLY# $AddResult
+    $AddResult
     Write-Host "----------------------------`n"
     }
     #update current Chrome device in google instance user (email), using entity yes/no toggle...
