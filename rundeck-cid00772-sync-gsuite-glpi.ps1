@@ -180,7 +180,7 @@ if ($uuids.Contains($uuid)) { # check if uuid is already known, if no jump to cr
     if ($entityUpdateChromeUserGsuite -eq "1") {
         #Write-Host "Updating current Google workspace chrome device uuid: $uuid with email: $googleworkspaceAnotatedUser attribute from GLPI"
         #set annotated Values using gamxtd3...
-        Write-Host "gam update cros $uuid annotatedUser $googleworkspaceAnotatedUser"
+        Write-Host "gam update cros $uuid annotatedUser $googleworkspaceAnotatedUser" #uncomment to genuinely action
 
     }
 }
