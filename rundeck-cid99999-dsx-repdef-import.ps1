@@ -12,7 +12,7 @@ $now = $(Get-Date -Format "dd MMMM yyyy HHHH:mm:s")
 $SimsPWD = "@option.SIMSuserPASS@" #rundeck key vault
 
 $SimsReport = "$DataDir\IT_DSXAttendanceYTD_dev.RptDef" #convert to rundeck defined option
-$SimsUser = "rundeckuser"
+
 $GoogleDocIDsimsInstances = "1R6l9sZKnY2Ii6qgcyYNoRccIZg0tZL6jhwCgzzPOvs4" #convert to rundeck defined option
 $GoogleDocIDsimsReportDefinitions = "1SYowGUfzpnVBx3MlVz0aVlVMF2NVrpzgBHWXRKK2dHk" #convert to rundeck defined option
 
