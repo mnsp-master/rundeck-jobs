@@ -1,6 +1,6 @@
 Clear-Host
 
-$CID="DEV9999"
+$CID="@option.ChangeID@"
 $GamDir="D:\AppData\GAMXTD3\app"
 $DataDir="D:\AppData\Rundeck\$CID\Data"
 $LogDir="D:\AppData\Rundeck\$CID\Logs"
