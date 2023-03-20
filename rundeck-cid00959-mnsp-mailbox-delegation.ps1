@@ -25,9 +25,13 @@ $trustee=@() #clear trustee variable
 $receiver=@() #clear user receiving delegation right variable
 
 #convert inputs into ps vars:
-$action = "@option.GmailUserAction@"
-$trustee = "@option.GmailToBeDelegated@"
-$receiver = "@option.GmailAddress@"
+#$action = "@option.GmailUserAction@"
+#$trustee = "@option.GmailToBeDelegated@"
+#$receiver = "@option.GmailAddress@"
+
+$action = "@(@option.GmailUserAction@)"
+$trustee = "@(@option.GmailToBeDelegated@)"
+$receiver = "@(@option.GmailAddress@)"
 
 Write-Host "Passed vars..."
 $action
