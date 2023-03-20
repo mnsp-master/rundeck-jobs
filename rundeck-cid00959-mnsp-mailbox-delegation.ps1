@@ -29,6 +29,11 @@ $action = "@option.GmailUserAction@"
 $trustee = "@option.GmailToBeDelegated@"
 $receiver = "@option.GmailAddress@"
 
+Write-Host "Passed vars..."
+$action
+$trustee
+$receiver
+
 if ($action -eq "delegate") {
     #Write-Host "Granting @option.GmailAddress@ trustee asignment of @option.GmailToBeDelegated@"
     if ($receiver) {
