@@ -29,9 +29,9 @@ $receiver=@() #clear user receiving delegation right variable
 #$trustee = "@option.GmailToBeDelegated@"
 #$receiver = "@option.GmailAddress@"
 
-$action = "@(@option.GmailUserAction@)"
-$trustee = "@(@option.GmailToBeDelegated@)"
-$receiver = "@(@option.GmailAddress@)"
+$action = ${option.GmailAddress}
+$trustee = ${option.GmailToBeDelegated}
+$receiver = ${option.GmailUserAction}
 
 Write-Host "Passed vars..."
 $action
