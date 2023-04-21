@@ -21,7 +21,7 @@ $GoogleGamMail = "@option.GoogleGamMail@"
 Start-Transcript -Path $transcriptlog -Force -NoClobber -Append
 
 Clear-Host
-Get-Variable | format-table -Autosize
+Get-Variable | format-table -Wrap -Autosize
 
 Write-Host "Downloading Googlesheet containing all sims instances, instance name etc..."
 
