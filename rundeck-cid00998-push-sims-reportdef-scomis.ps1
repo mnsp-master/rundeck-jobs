@@ -10,12 +10,13 @@ $tempcsv2="$DataDir\temp2.csv"
 $now = $(Get-Date -Format "dd MMMM yyyy HHHH:mm:s")
 $SimsPWD = "@option.SIMSuserPASS@" #rundeck key vault
 
-$GoogleDocIDsimsInstances = "1R6l9sZKnY2Ii6qgcyYNoRccIZg0tZL6jhwCgzzPOvs4" #convert to rundeck defined option
-$GoogleDocIDsimsReportDefinitions = "1SYowGUfzpnVBx3MlVz0aVlVMF2NVrpzgBHWXRKK2dHk" #convert to rundeck defined option
+$SimsReport = "@option.SimsReport@" # sims report to download push
+$SimsUser = "@option.SimsReportUser@" # sims user to get/push report def
+$GoogleDocIDsimsInstances = "@option.GoogleDocIDsimsInstances@" #ghseet containing all instances to be processed
+$GoogleDocReportSourceID = "@option.GoogleDocReportSourceID@" #exported/uploaded sims report definition
 
-$SimsInstancesCSV = "$datadir\DSX-sims-instances-CID00120.csv" #convert to rundeck defined option
-$SimsReportDefsCSV = "$dataDir\DEV-sims-ReportDefChecksums.csv" #convert to rundeck defined option
-$GoogleGamMail = "@option.GoogleGamMail@" #rundeck key vault
+$SimsInstancesCSV = "$datadir\@option.SimsInstancesCSV@.csv"
+$GoogleGamMail = "@option.GoogleGamMail@"
 
 Start-Transcript -Path $transcriptlog -Force -NoClobber -Append
 
