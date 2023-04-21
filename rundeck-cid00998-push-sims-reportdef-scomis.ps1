@@ -11,7 +11,7 @@ $now = $(Get-Date -Format "dd MMMM yyyy HHHH:mm:s")
 $SimsPWD = "@option.SIMSuserPASS@" #rundeck key vault
 
 $SimsReport = "@option.SimsReport@" # sims report to download push
-$SimsUser = "@option.SimsReportUser@" # sims user to get/push report def
+$SimsReportUser = "@option.SimsReportUser@" # sims user to get/push report def
 $GoogleDocIDsimsInstances = "@option.GoogleDocIDsimsInstances@" #ghseet containing all instances to be processed
 $GoogleDocReportSourceID = "@option.GoogleDocReportSourceID@" #exported/uploaded sims report definition
 
@@ -21,6 +21,8 @@ $GoogleGamMail = "@option.GoogleGamMail@"
 Start-Transcript -Path $transcriptlog -Force -NoClobber -Append
 
 Clear-Host
+Get-Variable
+
 Write-Host "Downloading Googlesheet containing all sims instances, instance name etc..."
 
 Stop-Transcript
