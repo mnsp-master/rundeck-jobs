@@ -1,12 +1,12 @@
 Clear-Host
 
-$CID="@option.ChangeID@"
-$GamDir="D:\AppData\GAMXTD3\app"
-$DataDir="D:\AppData\Rundeck\$CID\Data"
-$LogDir="D:\AppData\Rundeck\$CID\Logs"
+$CID = "@option.ChangeID@"
+$GamDir = "D:\AppData\GAMXTD3\app"
+$DataDir =" D:\AppData\Rundeck\$CID\Data"
+$LogDir = "D:\AppData\Rundeck\$CID\Logs"
 $transcriptlog = "$LogDir\$(Get-date -Format yyyyMMdd-HHmmss)_transcript.log"
-$tempcsv="$DataDir\temp.csv"
-$tempcsv2="$DataDir\temp2.csv"
+$tempcsv = "$DataDir\temp.csv"
+$tempcsv2 = "$DataDir\temp2.csv"
 $now = $(Get-Date -Format "dd MMMM yyyy HHHH:mm:s")
 $SimsPWD = "@option.SIMSuserPASS@" #rundeck key vault
 
