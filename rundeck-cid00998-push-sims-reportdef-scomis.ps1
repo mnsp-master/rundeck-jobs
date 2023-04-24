@@ -10,13 +10,13 @@ Clear-Host
 #$now = $(Get-Date -Format "dd MMMM yyyy HHHH:mm:s")
 #$SimsPWD = "@option.SIMSuserPASS@" #rundeck key vault
 
-$SimsReport = "@option.SimsReport@" # sims report to download push
-$SimsReportUser = "@option.SimsReportUser@" # sims user to get/push report def
-$GoogleDocIDsimsInstances = "@option.GoogleDocIDsimsInstances@" #ghseet containing all instances to be processed
-$GoogleDocReportSourceID = "@option.GoogleDocReportSourceID@" #exported/uploaded sims report definition
+#$SimsReport = "@option.SimsReport@" # sims report to download push
+#$SimsReportUser = "@option.SimsReportUser@" # sims user to get/push report def
+#$GoogleDocIDsimsInstances = "@option.GoogleDocIDsimsInstances@" #ghseet containing all instances to be processed
+#$GoogleDocReportSourceID = "@option.GoogleDocReportSourceID@" #exported/uploaded sims report definition
 
 #$SimsInstancesCSV = "$datadir\@option.SimsInstancesCSV@.csv"
-$GoogleGamMail = "@option.GoogleGamMail@"
+#$GoogleGamMail = "@option.GoogleGamMail@"
 
 Clear-Host
 Get-Variable | format-table -Wrap -Autosize
