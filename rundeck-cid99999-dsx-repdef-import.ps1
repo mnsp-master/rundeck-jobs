@@ -20,8 +20,6 @@ $SimsInstancesCSV = "$datadir\DSX-sims-instances-CID00120.csv" #convert to runde
 $SimsReportDefsCSV = "$dataDir\DEV-sims-ReportDefChecksums.csv" #convert to rundeck defined option
 $GoogleGamMail = "@option.GoogleGamMail@" #rundeck key vault
 
-Start-Transcript -Path $transcriptlog -Force -NoClobber -Append
-
 Clear-Host
 Write-Host "Downloading Googlesheet containing all sims instances, instance name etc..."
 if (Test-Path -path $SimsInstancesCSV ) {
