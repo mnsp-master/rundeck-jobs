@@ -24,5 +24,6 @@ Get-Variable | format-table -Wrap -Autosize
 Write-Host "Downloading Googlesheet containing all sims instances, instance name etc..."
 Write-Host "Passed vars..."
 $SimsInstancesCSV
+$SimsReport
 
 Stop-Transcript
