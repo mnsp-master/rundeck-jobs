@@ -19,11 +19,19 @@ Clear-Host
 #$GoogleGamMail = "@option.GoogleGamMail@"
 
 Clear-Host
-Get-Variable | format-table -Wrap -Autosize
+#Get-Variable | format-table -Wrap -Autosize
+
+$AutomaticVariables = Get-Variable
+function cmpv {
+    Compare-Object (Get-Variable) $AutomaticVariables -Property Name -PassThru | Where -Property Name -ne "AutomaticVariables"
+}
+
+cmpv
+
 
 Write-Host "Downloading Googlesheet containing all sims instances, instance name etc..."
 Write-Host "Passed vars..."
-$SimsInstancesCSV
-$SimsReport
+#$SimsInstancesCSV
+#$SimsReport
 
 Stop-Transcript
