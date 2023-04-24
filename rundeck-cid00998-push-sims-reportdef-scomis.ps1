@@ -18,8 +18,6 @@ $GoogleDocReportSourceID = "@option.GoogleDocReportSourceID@" #exported/uploaded
 $SimsInstancesCSV = "$datadir\@option.SimsInstancesCSV@.csv"
 $GoogleGamMail = "@option.GoogleGamMail@"
 
-Start-Transcript -Path $transcriptlog -Force -NoClobber -Append
-
 Clear-Host
 Get-Variable | format-table -Wrap -Autosize
 
