@@ -34,4 +34,4 @@ Write-Host "Passed vars..."
 $SimsInstancesCSV
 $SimsReport
 
-Stop-Transcript
+#Stop-Transcript
