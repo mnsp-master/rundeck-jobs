@@ -29,7 +29,7 @@ function cmpv {
 cmpv
 
 
-Write-Host "Downloading Googlesheet containing all sims instances, instance name etc..."
+#Write-Host "Downloading Googlesheet containing all sims instances, instance name etc..."
 Write-Host "Passed vars..."
 $SimsInstancesCSV
 $SimsReport
