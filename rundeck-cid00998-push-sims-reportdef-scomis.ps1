@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.2"
+$mnspVer = "0.0.0.0.3"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Version: $mnspVer"
 
@@ -37,13 +37,10 @@ foreach ($sims in $simsinstances) {
 	#$GoogleDocTitle = "DSX Attendance - $simsSchool : StartDate:$XMLdateStart EndDate:$XMLdateEnd ReportRuntime: $now"
 	$GoogleDocID = "$($sims.GoogleDocID)"
 	$simsDFE = "$($sims.DFEnumber)"
-    $simsReporterImporter = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporterImporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsUser /PASSWORD:$SimsPWD /REPORT:'$SimsReport'"
+    $simsReporterImporter = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporterImporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsReportUser /PASSWORD:$SimsPWD /REPORT:'$SimsReport'"
     $simsReporterImporter
 
 }
-
-$simsAppXML = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsUser /PASSWORD:$SimsPWD /REPORT:'$SimsReport' /PARAMDEF /OUTPUT:$SimsParamXML"
-
 
 
 <#
