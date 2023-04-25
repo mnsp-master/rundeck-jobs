@@ -20,7 +20,7 @@ Set-Location $GamDir
 
 Invoke-Expression "$GamDir\gam.exe user $GoogleGamMail get drivefile id $GoogleDocIDsimsInstances format csv targetfolder $datadir" -ErrorAction SilentlyContinue
 Start-Sleep 2
-$simsinstances = Import-Csv -Path $SimsInstancesCSV.csv
+$simsinstances = Import-Csv -Path $SimsInstancesCSV
 
 #loop through each sims instance
 foreach ($sims in $simsinstances) {
