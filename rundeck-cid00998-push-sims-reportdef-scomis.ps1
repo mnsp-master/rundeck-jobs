@@ -19,7 +19,7 @@ Clear-Host
 #$GoogleGamMail = "@option.GoogleGamMail@"
 
 Clear-Host
-#Get-Variable | format-table -Wrap -Autosize
+Get-Variable | format-table -Wrap -Autosize
 
 $AutomaticVariables = Get-Variable
 function cmpv {
@@ -33,5 +33,8 @@ cmpv
 Write-Host "Passed vars..."
 $SimsInstancesCSV
 $SimsReport
+$GoogleDocIDsimsInstances
+$GoogleGamMail
+$SimsReportUser
 
 #Stop-Transcript
