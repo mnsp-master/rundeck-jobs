@@ -6,18 +6,27 @@ Write-Host "MNSP Version: $mnspVer"
 
 
 Write-Host "Downloading Googlesheet containing all sims instances, instance name etc..."
+    if (Test-Path -path $SimsInstancesCSV ) {
 
-if (Test-Path -path $SimsInstancesCSV ) {
+        Write-Host "$SimsInstancesCSV exists, deleting..."
+        Remove-Item -Path $SimsInstancesCSV -Force
+    }
 
-	Write-Host "$SimsInstancesCSV exists, deleting..."
-	Remove-Item -Path $SimsInstancesCSV -Force
-}
+    Set-Location $GamDir
 
-Set-Location $GamDir
-
-Invoke-Expression "$GamDir\gam.exe user $GoogleGamMail get drivefile id $GoogleDocIDsimsInstances format csv targetfolder $datadir" -ErrorAction SilentlyContinue
+    Invoke-Expression "$GamDir\gam.exe user $GoogleGamMail get drivefile id $GoogleDocIDsimsInstances format csv targetfolder $datadir" -ErrorAction SilentlyContinue
 Start-Sleep 2
 $simsinstances = Import-Csv -Path $SimsInstancesCSV
+
+Write-Host "Downloading Sims Report Definition to distribute to all sims instances..."
+    if (Test-Path -path $SimsReport ) {
+
+        Write-Host "$SimsReport exists, deleting..."
+        Remove-Item -Path $SimsReport -Force
+    }
+
+    Set-Location $GamDir
+    Invoke-Expression "$GamDir\gam.exe user $GoogleGamMail get drivefile id $SimsReportGoogleDocID targetname $SimsReport" -ErrorAction SilentlyContinue
 
 Write-Host "loop through each sims instance..."
 
