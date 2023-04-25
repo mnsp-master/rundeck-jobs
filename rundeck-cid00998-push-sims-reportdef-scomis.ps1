@@ -1,14 +1,9 @@
 Clear-Host
-$mnspVer = "0.0.0.0.1"
+$mnspVer = "0.0.0.0.2"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Version: $mnspVer"
 
-Write-Host "Passed vars..."
-$SimsInstancesCSV
-$SimsReport
-$GoogleDocIDsimsInstances
-$GoogleGamMail
-$SimsReportUser
+
 
 Write-Host "Downloading Googlesheet containing all sims instances, instance name etc..."
 
@@ -24,7 +19,8 @@ Invoke-Expression "$GamDir\gam.exe user $GoogleGamMail get drivefile id $GoogleD
 Start-Sleep 2
 $simsinstances = Import-Csv -Path $SimsInstancesCSV
 
-#loop through each sims instance
+Write-Host "loop through each sims instance..."
+
 foreach ($sims in $simsinstances) {
     write-host "------------------------------------------------------------------"
 	write-host "IP      :" $sims.ip
@@ -40,12 +36,24 @@ foreach ($sims in $simsinstances) {
 	$simsSchool = "$($sims.school)"
 	#$GoogleDocTitle = "DSX Attendance - $simsSchool : StartDate:$XMLdateStart EndDate:$XMLdateEnd ReportRuntime: $now"
 	$GoogleDocID = "$($sims.GoogleDocID)"
-	$simsDFE = "$($sims.DFEnumber)"	
+	$simsDFE = "$($sims.DFEnumber)"
+    $simsReporterImporter = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporterImporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsUser /PASSWORD:$SimsPWD /REPORT:'$SimsReport'"
+    $simsReporterImporter
 
 }
 
+$simsAppXML = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsUser /PASSWORD:$SimsPWD /REPORT:'$SimsReport' /PARAMDEF /OUTPUT:$SimsParamXML"
+
+
 
 <#
+Write-Host "Passed vars..."
+$SimsInstancesCSV
+$SimsReport
+$GoogleDocIDsimsInstances
+$GoogleGamMail
+$SimsReportUser
+
 $AutomaticVariables = Get-Variable
 function cmpv {
     Compare-Object (Get-Variable) $AutomaticVariables -Property Name -PassThru | Where -Property Name -ne "AutomaticVariables"
