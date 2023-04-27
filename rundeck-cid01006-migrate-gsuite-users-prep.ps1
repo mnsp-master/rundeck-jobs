@@ -12,7 +12,8 @@ set-location $GamDir
 invoke-expression ".\gam.exe ou_and_children 'staff/Non-Teaching Staff/men' print allfields  | out-file $tempcsv"
 
 $users =@()
-$users = import-csv -Path $tempcsv | Where-Object { $_.suspended -notlike "True" } #exclude any suspended accounts
+$users = import-csv -Path $tempcsv #| Where-Object { $_.suspended -notlike "True" } #exclude any suspended accounts
+
 Write-host "Number of source users to process..." $users.count
 #$users.suspended
 
