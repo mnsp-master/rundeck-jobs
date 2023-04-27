@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.4"
+$mnspVer = "0.0.0.0.5"
 
 Write-Host "MNSP Version: $mnspVer"
 #Get-Variable | format-table -Wrap -Autosize
@@ -12,9 +12,8 @@ set-location $GamDir
 invoke-expression ".\gam.exe ou_and_children 'staff/Non-Teaching Staff/men' print allfields  | out-file $tempcsv"
 
 $users =@()
-Write-host "Number of source users to process..." $users.count
-$users = import-csv -Path $tempcsv #| Where-Object { $_.suspended -notlike "True" } #exclude any suspended accounts
-#$users.suspended
+$users = import-csv -Path $tempcsv | Where-Object { $_.suspended -notlike "True" } #exclude any suspended accounts
+$users.suspended
 
 Write-host "Number of source users to process..." $users.count
 
