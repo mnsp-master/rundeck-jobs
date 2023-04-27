@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.7"
+$mnspVer = "0.0.0.0.8"
 
 Write-Host "MNSP Version: $mnspVer"
 #Get-Variable | format-table -Wrap -Autosize
@@ -9,7 +9,7 @@ Write-Host "MNSP Version: $mnspVer"
 
 set-location $GamDir
 
-invoke-expression ".\gam.exe ou_and_children '$SourceGsuiteOrgUnits' print allfields  | out-file $tempcsv"
+invoke-expression ".\gam.exe ou_and_children 'staff/Non-Teaching Staff/men' print allfields  | out-file $tempcsv"
 
 $users =@()
 $users = import-csv -Path $tempcsv | Where-Object { $_.suspended -notlike "True" } #exclude any suspended accounts
@@ -24,5 +24,6 @@ $migratedUser =  "$username@$migratedDomain"
 $migratedUser
 
 } 
+
 
 $SourceGsuiteOrgUnits
