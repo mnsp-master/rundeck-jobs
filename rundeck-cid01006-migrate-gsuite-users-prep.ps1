@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.1.2"
+$mnspVer = "0.0.0.1.3"
 
 Write-Host "MNSP Version: $mnspVer"
 #Get-Variable | format-table -Wrap -Autosize
@@ -25,7 +25,7 @@ $migratedUser =  "$username@$migratedDomain"
 $user.id
 $user.primaryEmail
 $user.name.familyName
-$user.givenName
+$user.name.givenName
 $user.fullName
 $user.orgUnitPath
 $migratedUser
