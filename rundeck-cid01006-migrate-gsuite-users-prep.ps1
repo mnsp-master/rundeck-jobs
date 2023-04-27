@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.1.4"
+$mnspVer = "0.0.0.1.5"
 
 Write-Host "MNSP Version: $mnspVer"
 #Get-Variable | format-table -Wrap -Autosize
@@ -21,12 +21,13 @@ foreach ($user in $users) {
 Write-Host "--------------------------------------------------------"
 $username = @($user.primaryEmail.Split("@")[0])
 $migratedUser =  "$username@$migratedDomain"
-
+$surName = @($user.name.familyName)
+$firstName = @($user.givenName)
 #$user
 $user.id
 $user.primaryEmail
-$($user.name.familyName)
-$($user.name.givenName)
+$surName
+$firstName
 $user.fullName
 $user.orgUnitPath
 $migratedUser
