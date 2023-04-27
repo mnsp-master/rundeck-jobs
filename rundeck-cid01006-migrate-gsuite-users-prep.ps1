@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.5"
+$mnspVer = "0.0.0.0.6"
 
 Write-Host "MNSP Version: $mnspVer"
 #Get-Variable | format-table -Wrap -Autosize
@@ -13,7 +13,6 @@ invoke-expression ".\gam.exe ou_and_children 'staff/Non-Teaching Staff/men' prin
 
 $users =@()
 $users = import-csv -Path $tempcsv | Where-Object { $_.suspended -notlike "True" } #exclude any suspended accounts
-$users.suspended
 
 Write-host "Number of source users to process..." $users.count
 
@@ -25,3 +24,5 @@ $migratedUser =  "$username@$migratedDomain"
 $migratedUser
 
 } 
+
+$SourceGsuiteOrgUnits
