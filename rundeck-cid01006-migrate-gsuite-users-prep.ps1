@@ -18,9 +18,16 @@ $users = import-csv -Path $tempcsv | Where-Object { ($_.suspended -notlike "True
 Write-host "Number of source users to process..." $users.count
 
 foreach ($user in $users) {
-
+Write-Host "--------------------------------------------------------"
 $username = @($user.primaryEmail.Split("@")[0])
 $migratedUser =  "$username@$migratedDomain"
+
+$user.id
+$user.primaryEmail
+$user.name.familyName
+$user.givenName
+$user.fullName
+$user.orgUnitPath
 $migratedUser
 
 } 
