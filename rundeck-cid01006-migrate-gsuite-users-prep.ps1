@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.9"
+$mnspVer = "0.0.0.1.0"
 
 Write-Host "MNSP Version: $mnspVer"
 #Get-Variable | format-table -Wrap -Autosize
@@ -25,6 +25,3 @@ $migratedUser
 
 } 
 
-
-
-$SourceGsuiteOrgUnits
