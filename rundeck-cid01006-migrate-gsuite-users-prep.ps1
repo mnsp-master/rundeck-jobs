@@ -22,13 +22,13 @@ Write-Host "--------------------------------------------------------"
 $username = @($user.primaryEmail.Split("@")[0])
 $migratedUser =  "$username@$migratedDomain"
 
-$user
-#$user.id
-#$user.primaryEmail
-#$user.name.familyName
-#$user.name.givenName
-#$user.fullName
-#$user.orgUnitPath
+#$user
+$user.id
+$user.primaryEmail
+$($user.name.familyName)
+$($user.name.givenName)
+$user.fullName
+$user.orgUnitPath
 $migratedUser
 
 } 
