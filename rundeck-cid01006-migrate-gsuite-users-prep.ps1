@@ -2,7 +2,7 @@ Clear-Host
 $mnspVer = "0.0.0.1.9"
 
 Write-Host "MNSP Script Version: $mnspVer"
-#Get-Variable | format-table -Wrap -Autosize
+Get-Variable | format-table -Wrap -Autosize
 
 #$csv = "C:\temp\users.csv"
 #$migratedDomain = "dev.mnsp.org.uk"
