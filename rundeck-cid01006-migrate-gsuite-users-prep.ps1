@@ -22,7 +22,7 @@ Write-Host "--------------------------------------------------------"
 $username = @($user.primaryEmail.Split("@")[0])
 $migratedUser =  "$username@$migratedDomain"
 $surName = $user.'name.familyName'
-$firstName = $user.'user.givenName'
+$firstName = $user.'name.givenName'
 #$user
 $user.id
 $user.primaryEmail
