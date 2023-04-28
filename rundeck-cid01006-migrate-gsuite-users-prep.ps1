@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.1.6"
+$mnspVer = "0.0.0.0.1.7"
 
 Write-Host "MNSP Script Version: $mnspVer"
 #Get-Variable | format-table -Wrap -Autosize
@@ -13,7 +13,9 @@ set-location $GamDir
 invoke-expression ".\gam.exe ou_and_children '$SourceGsuiteContext' print allfields  | out-file $tempcsv" #produce csv header
 
 $users = @()
-$users = import-csv -Path $tempcsv | Where-Object { ($_.suspended -notlike "True") -and ($_.primaryEmail -like *"$SourceGsuiteDomain" )} #exclude any suspended accounts, include only @mendipstudioschool.org.uk 
+$users = import-csv -Path $tempcsv | Where-Object { ($_.suspended -notlike "True") -and ($_.primaryEmail -like "*$SourceGsuiteDomain*" )} #exclude any suspended accounts, include only @mendipstudioschool.org.uk 
+
+write-host "import-csv -Path $tempcsv | Where-Object { ($_.suspended -notlike "True") -and ($_.primaryEmail -like "*$SourceGsuiteDomain*" )}"
 
 Write-host "Number of source users to process..." $users.count
 
