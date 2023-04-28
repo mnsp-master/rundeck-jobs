@@ -1,7 +1,7 @@
 Clear-Host
-$mnspVer = "0.0.0.1.7"
+$mnspVer = "0.0.0.1.8"
 
-Write-Host "MNSP Version: $mnspVer"
+Write-Host "MNSP Script Version: $mnspVer"
 #Get-Variable | format-table -Wrap -Autosize
 
 #$csv = "C:\temp\users.csv"
@@ -10,7 +10,7 @@ $SourceGsuiteOrgUnits = @("$SourceGsuiteOrgUnit1","$SourceGsuiteOrgUnit2")
 set-location $GamDir
 
 
-invoke-expression ".\gam.exe ou_and_children 'staff' print allfields  | out-file $tempcsv" #produce csv header
+invoke-expression ".\gam.exe ou_and_children '$SourceGsuiteContext' print allfields  | out-file $tempcsv" #produce csv header
 
 $users = @()
 $users = import-csv -Path $tempcsv | Where-Object { ($_.suspended -notlike "True") -and ($_.primaryEmail -like "*mendipstudioschool.org.uk")} #exclude any suspended accounts, include only @mendipstudioschool.org.uk 
