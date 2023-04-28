@@ -13,9 +13,7 @@ set-location $GamDir
 invoke-expression ".\gam.exe ou_and_children '$SourceGsuiteContext' print allfields  | out-file $tempcsv" #produce csv header
 
 $users = @()
-$users = import-csv -Path $tempcsv | Where-Object { ($_.suspended -notlike "True") -and ($_.primaryEmail -like "*$SourceGsuiteDomain*" )} #exclude any suspended accounts, include only @mendipstudioschool.org.uk 
-
-write-host "import-csv -Path $tempcsv | Where-Object { ($_.suspended -notlike "True") -and ($_.primaryEmail -like "*$SourceGsuiteDomain*" )}"
+$users = import-csv -Path $tempcsv | Where-Object { ($_.suspended -notlike "True") -and ($_.primaryEmail -like "*$SourceGsuiteDomain*" )} #exclude any suspended accounts, include only @$SourceGsuiteDomain 
 
 Write-host "Number of source users to process..." $users.count
 
