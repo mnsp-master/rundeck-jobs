@@ -29,7 +29,7 @@ foreach ($SimsReportDef in $SimsReportDefs) {
 	$simsDFE = "$($simsreportdef.DFEnumber)"
     $simsSchoolShortName = "$($simsreportdef.SchoolShortName)"
     $simsReportName = "$($simsreportdef.SimsReportDefName)"
-    $GoogleSheetTitle = "$($simsreportdef.GoogleGsheetTitle) - $simsSchool : ReportRuntime: $now"
+    $GoogleSheetTitle = "$($simsreportdef.GoogleGsheetTitle) - $simsSchoolShortName : ReportRuntime: $now"
 
     #$simsReporterImporter = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporterImporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsReportUser /PASSWORD:$SimsPWD /REPORT:'$SimsReport'"
     #$simsReporterImporter
