@@ -1,60 +1,49 @@
 Clear-Host
-$mnspVer = "0.0.0.0.4"
+$mnspVer = "0.0.0.0.2"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Version: $mnspVer"
 
+Write-Host "Downloading Googlesheet containing all sims report(s) info, instance name,report def, target gsheet etc..."
+    if (Test-Path -path $SimsReportsSourceCSV ) {
 
-
-Write-Host "Downloading Googlesheet containing all sims instances, instance name etc..."
-    if (Test-Path -path $SimsInstancesCSV ) {
-
-        Write-Host "$SimsInstancesCSV exists, deleting..."
-        Remove-Item -Path $SimsInstancesCSV -Force
+        Write-Host "$SimsReportsSourceCSV exists, deleting..."
+        Remove-Item -Path $SimsReportsSourceCSV -Force
     }
 
     Set-Location $GamDir
 
     Invoke-Expression "$GamDir\gam.exe user $GoogleGamMail get drivefile id $GoogleDocIDsimsInstances format csv targetfolder $datadir" -ErrorAction SilentlyContinue
 Start-Sleep 2
-$simsinstances = Import-Csv -Path $SimsInstancesCSV
+$SimsReportDefs = Import-Csv -Path $SimsReportsSourceCSV
 
-Write-Host "Downloading Sims Report Definition to distribute to all sims instances..."
-    if (Test-Path -path $SimsReport ) {
+Write-Host "loop through each Sims ReportDef..."
 
-        Write-Host "$SimsReport exists, deleting..."
-        Remove-Item -Path $SimsReport -Force
-    }
-
-    Set-Location $GamDir
-    Invoke-Expression "$GamDir\gam.exe user $GoogleGamMail get drivefile id $SimsReportGoogleDocID targetname $SimsReport" -ErrorAction SilentlyContinue
-
-Write-Host "loop through each sims instance..."
-
-foreach ($sims in $simsinstances) {
+foreach ($SimsReportDef in $SimsReportDefs) {
     write-host "------------------------------------------------------------------"
-	write-host "IP      :" $sims.ip
-    write-host "MSSQL   :" $sims.SQLinstance
-    Write-Host "Sims DB :" $sims.dbname
-    write-host "GdocID  :" $sims.GoogleDocID
-    Write-Host "School  :" $sims.School
-    Write-Host "DfE num :" $sims.DFEnumber
+	write-host "SCOMIS Host :" $simsreportdef.host
+    write-host "MSSQL       :" $simsreportdef.SQLinstance
+    Write-Host "Sims DB     :" $simsreportdef.dbname
+    write-host "GsheetID    :" $simsreportdef.GoogleGsheetTargetID
+    Write-Host "School      :" $simsreportdef.School
+    Write-Host "DfE num     :" $simsreportdef.DFEnumber
+    Write-Host "Report Name :" $simsreportdef.GoogleGsheetTitle
 
 	$now = $(Get-Date -Format "dd MMMM yyyy HHHH:mm:s")
-	$simsServerName = "$($sims.ip)\$($sims.SQLInstance)"
-	$SimsDatabaseName = "$($sims.dbname)"
-	$simsSchool = "$($sims.school)"
+	$simsServerName = "$($simsreportdef.host)\$($simsreportdef.SQLInstance)"
+	$SimsDatabaseName = "$($simsreportdef.dbname)"
+	$simsSchool = "$($simsreportdef.school)"
 	#$GoogleDocTitle = "DSX Attendance - $simsSchool : StartDate:$XMLdateStart EndDate:$XMLdateEnd ReportRuntime: $now"
-	$GoogleDocID = "$($sims.GoogleDocID)"
-	$simsDFE = "$($sims.DFEnumber)"
-    $simsReporterImporter = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporterImporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsReportUser /PASSWORD:$SimsPWD /REPORT:'$SimsReport'"
-    $simsReporterImporter
+	$GoogleDocID = "$($simsreportdef.GoogleGsheetTargetID)"
+	$simsDFE = "$($simsreportdef.DFEnumber)"
+    #$simsReporterImporter = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporterImporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsReportUser /PASSWORD:$SimsPWD /REPORT:'$SimsReport'"
+    #$simsReporterImporter
 
 }
 
 
 <#
 Write-Host "Passed vars..."
-$SimsInstancesCSV
+$SimsReportsSourceCSV
 $SimsReport
 $GoogleDocIDsimsInstances
 $GoogleGamMail
@@ -66,4 +55,14 @@ function cmpv {
 }
 
 cmpv
+
+Write-Host "Downloading Sims Report Definition to distribute to all sims instances..."
+    if (Test-Path -path $SimsReport ) {
+
+        Write-Host "$SimsReport exists, deleting..."
+        Remove-Item -Path $SimsReport -Force
+    }
+
+    Set-Location $GamDir
+    Invoke-Expression "$GamDir\gam.exe user $GoogleGamMail get drivefile id $SimsReportGoogleDocID targetname $SimsReport" -ErrorAction SilentlyContinue
 #>
