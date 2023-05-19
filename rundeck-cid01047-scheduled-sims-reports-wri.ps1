@@ -42,6 +42,8 @@ foreach ($SimsReportDef in $SimsReportDefs) {
     Write-Host "DfE num            :" $simsDFE
     Write-Host "Report Name        :" $simsReportName
     Write-Host "Google Sheet Title :" $GoogleSheetTitle
+
+    Start-sleep 2
 }
 
 
