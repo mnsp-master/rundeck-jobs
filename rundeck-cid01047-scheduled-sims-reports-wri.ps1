@@ -1,7 +1,8 @@
 Clear-Host
-$mnspVer = "0.0.0.0.8"
+$mnspVer = "0.0.0.0.9"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Version: $mnspVer"
+
 
 Write-Host "Downloading Googlesheet containing all sims report(s) info, instance name,report def, target gsheet etc..."
     if (Test-Path -path $datadir\$SimsReportsSourceCSV ) {
