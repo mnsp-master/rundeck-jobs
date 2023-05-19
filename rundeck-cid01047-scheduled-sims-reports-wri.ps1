@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.9.4"
+$mnspVer = "0.0.0.0.9.5"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Version: $mnspVer"
 
@@ -42,7 +42,7 @@ foreach ($SimsReportDef in $SimsReportDefs) {
     Write-Host "Google Sheet Title :" $GoogleSheetTitle
 
     #create sims commandlinereported command line
-    $simsReporterApp = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsUser /PASSWORD:$SimsPWD /REPORT:$simsReportName /OUTPUT:$tempcsv"
+    $simsReporterApp = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsReportUser /PASSWORD:$SimsPWD /REPORT:$simsReportName /OUTPUT:$tempcsv"
     $simsReporterApp    
 }
 
