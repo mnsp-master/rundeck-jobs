@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.9"
+$mnspVer = "0.0.0.0.9.1"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Version: $mnspVer"
 
@@ -22,7 +22,7 @@ Write-Host "loop through each Sims ReportDef..."
 
 foreach ($SimsReportDef in $SimsReportDefs) {
 
-	$now = $(Get-Date -Format "dd MMMM yyyy HHHH:mm:s")
+	$now = $(Get-Date -Format "dd MMMM yyyy HHHH:mm:ss")
 	$simsServerName = "$($simsreportdef.host)\$($simsreportdef.SQLInstance)"
 	$SimsDatabaseName = "$($simsreportdef.dbname)"
 	$simsSchool = "$($simsreportdef.school)"
