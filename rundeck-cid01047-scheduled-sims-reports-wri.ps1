@@ -1,7 +1,7 @@
 Clear-Host
-$mnspVer = "0.0.0.1.0.0"
+$mnspVer = "0.0.0.1.0.1"
 #Get-Variable | format-table -Wrap -Autosize
-Write-Host "MNSP Version: $mnspVer"
+Write-Host "MNSP Script Version: $mnspVer"
 
 
 Write-Host "Downloading Googlesheet containing all sims report(s) info, instance name,report def, target gsheet etc..."
@@ -29,7 +29,7 @@ foreach ($SimsReportDef in $SimsReportDefs) {
 	$GoogleSheetID = "$($simsreportdef.DevGoogleGsheetTargetID)"
 	$simsDFE = "$($simsreportdef.DFEnumber)"
     $simsSchoolShortName = "$($simsreportdef.SchoolShortName)"
-    $simsReportName = "$($simsreportdef.'SimsReportDefName')"
+    $simsReportName = "$($simsreportdef.SimsReportDefName)"
     $GoogleSheetTitle = "$($simsreportdef.GoogleGsheetTitle) - $simsSchoolShortName : ReportRuntime: $now"
     $tempcsv = "$dataDir\tmp_$GoogleSheetID.csv"
     
@@ -43,7 +43,7 @@ foreach ($SimsReportDef in $SimsReportDefs) {
     Write-Host "Google Sheet Title :" $GoogleSheetTitle
 
     #create sims commandlinereported command line
-    $simsReporterApp = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsReportUser /PASSWORD:$SimsPWD /REPORT:$simsReportName /OUTPUT:$tempcsv"
+    $simsReporterApp = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsReportUser /PASSWORD:$SimsPWD /REPORT:'$simsReportName' /OUTPUT:$tempcsv"
     #Invoke-expression "$simsReporterApp" -ErrorAction SilentlyContinue
     Invoke-Expression "& $simsReporterApp " | Tee-object -variable 'result'
     $result
