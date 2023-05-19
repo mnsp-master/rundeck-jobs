@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.2"
+$mnspVer = "0.0.0.0.3"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Version: $mnspVer"
 
@@ -12,7 +12,7 @@ Write-Host "Downloading Googlesheet containing all sims report(s) info, instance
 
     Set-Location $GamDir
 
-    Invoke-Expression "$GamDir\gam.exe user $GoogleGamMail get drivefile id $GoogleDocIDsimsInstances format csv targetfolder $datadir" -ErrorAction SilentlyContinue
+    Invoke-Expression "$GamDir\gam.exe user $GoogleGamMail get drivefile id $SimsReportsSourceCSVGsheetID format csv targetfolder $datadir" -ErrorAction SilentlyContinue
 Start-Sleep 2
 $SimsReportDefs = Import-Csv -Path $SimsReportsSourceCSV
 
