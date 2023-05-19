@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.9.5"
+$mnspVer = "0.0.0.0.9.6"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Version: $mnspVer"
 
@@ -43,11 +43,19 @@ foreach ($SimsReportDef in $SimsReportDefs) {
 
     #create sims commandlinereported command line
     $simsReporterApp = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsReportUser /PASSWORD:$SimsPWD /REPORT:$simsReportName /OUTPUT:$tempcsv"
-    $simsReporterApp    
+    $simsReporterApp
+
+    #create gamxtd3 command line
+    Write-Host "replacing content of existing google sheet with upto date data..."
+    $GamApp = "$GamDir\gam.exe user $GoogleGamMail update drivefile id $GoogleSheetID newfilename '$GoogleSheetTitle' localfile $tempcsv"
+    $GamApp
+
 }
 
 
 <#
+    #Invoke-Expression "$GamDir\gam.exe user user@domain.com update drivefile id $GoogleDocID newfilename '$GoogleDocTitle' localfile $tempcsv" -ErrorAction SilentlyContinue
+    #Invoke-Expression "$GamDir\gam.exe user ######## update drivefile id $GoogleDocID newfilename 'Parent Primary emails - all years: $(Get-Date -Format "dd MMMM yyyy HHHH:mm:s")' localfile $tempcsv convert" -ErrorAction SilentlyContinue
 # = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsReportUser /PASSWORD:$SimsPWD /REPORT:'$simsReportName'"
     
 
