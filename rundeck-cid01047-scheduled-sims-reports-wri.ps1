@@ -1,13 +1,13 @@
 Clear-Host
-$mnspVer = "0.0.0.0.5"
+$mnspVer = "0.0.0.0.6"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Version: $mnspVer"
 
 Write-Host "Downloading Googlesheet containing all sims report(s) info, instance name,report def, target gsheet etc..."
-    if (Test-Path -path $SimsReportsSourceCSV ) {
+    if (Test-Path -path $datadir\$SimsReportsSourceCSV ) {
 
-        Write-Host "$SimsReportsSourceCSV exists, deleting..."
-        Remove-Item -Path $SimsReportsSourceCSV -Force
+        Write-Host "$datadir\$SimsReportsSourceCSV exists, deleting..."
+        Remove-Item -Path $datadir\$SimsReportsSourceCSV -Force
     }
 
     Set-Location $GamDir
