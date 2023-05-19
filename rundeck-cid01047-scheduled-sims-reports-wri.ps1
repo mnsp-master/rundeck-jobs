@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.7"
+$mnspVer = "0.0.0.0.8"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Version: $mnspVer"
 
@@ -20,25 +20,28 @@ $SimsReportDefs = Import-Csv -Path $datadir\$SimsReportsSourceCSV
 Write-Host "loop through each Sims ReportDef..."
 
 foreach ($SimsReportDef in $SimsReportDefs) {
-    write-host "------------------------------------------------------------------"
-	write-host "SCOMIS Host :" $simsreportdef.host
-    write-host "MSSQL       :" $simsreportdef.SQLinstance
-    Write-Host "Sims DB     :" $simsreportdef.dbname
-    write-host "GsheetID    :" $simsreportdef.GoogleGsheetTargetID
-    Write-Host "School      :" $simsreportdef.School
-    Write-Host "DfE num     :" $simsreportdef.DFEnumber
-    Write-Host "Report Name :" $simsreportdef.GoogleGsheetTitle
 
 	$now = $(Get-Date -Format "dd MMMM yyyy HHHH:mm:s")
 	$simsServerName = "$($simsreportdef.host)\$($simsreportdef.SQLInstance)"
 	$SimsDatabaseName = "$($simsreportdef.dbname)"
 	$simsSchool = "$($simsreportdef.school)"
-	#$GoogleDocTitle = "DSX Attendance - $simsSchool : StartDate:$XMLdateStart EndDate:$XMLdateEnd ReportRuntime: $now"
-	$GoogleDocID = "$($simsreportdef.GoogleGsheetTargetID)"
+	$GoogleSheetID = "$($simsreportdef.GoogleGsheetTargetID)"
 	$simsDFE = "$($simsreportdef.DFEnumber)"
+    $simsSchoolShortName = "$($simsreportdef.SchoolShortName)"
+    $simsReportName = "$($simsreportdef.SimsReportDefName)"
+    $GoogleSheetTitle = "$($simsreportdef.GoogleGsheetTitle) - $simsSchool : ReportRuntime: $now"
+
     #$simsReporterImporter = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporterImporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsReportUser /PASSWORD:$SimsPWD /REPORT:'$SimsReport'"
     #$simsReporterImporter
-
+    
+    write-host "------------------------------------------------------------------"
+	write-host "SimsServerName     :" $simsServerName
+    Write-Host "Sims DB            :" $SimsDatabaseName
+    write-host "GsheetID output    :" $GoogleSheetID
+    Write-Host "School             :" $simsSchoolShortName
+    Write-Host "DfE num            :" $simsDFE
+    Write-Host "Report Name        :" $simsReportName
+    Write-Host "Google Sheet Title :" $GoogleSheetTitle
 }
 
 
