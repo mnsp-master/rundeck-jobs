@@ -26,7 +26,7 @@ foreach ($SimsReportDef in $SimsReportDefs) {
 	$simsServerName = "$($simsreportdef.host)\$($simsreportdef.SQLInstance)"
 	$SimsDatabaseName = "$($simsreportdef.dbname)"
 	$simsSchool = "$($simsreportdef.school)"
-	$GoogleSheetID = "$($simsreportdef.GoogleGsheetTargetID)"
+	$GoogleSheetID = "$($simsreportdef.DevGoogleGsheetTargetID)"
 	$simsDFE = "$($simsreportdef.DFEnumber)"
     $simsSchoolShortName = "$($simsreportdef.SchoolShortName)"
     $simsReportName = "$($simsreportdef.SimsReportDefName)"
