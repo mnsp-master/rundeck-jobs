@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.9.1"
+$mnspVer = "0.0.0.0.9.3"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Version: $mnspVer"
 
@@ -31,9 +31,6 @@ foreach ($SimsReportDef in $SimsReportDefs) {
     $simsSchoolShortName = "$($simsreportdef.SchoolShortName)"
     $simsReportName = "$($simsreportdef.SimsReportDefName)"
     $GoogleSheetTitle = "$($simsreportdef.GoogleGsheetTitle) - $simsSchoolShortName : ReportRuntime: $now"
-
-    #$simsReporterImporter = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporterImporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsReportUser /PASSWORD:$SimsPWD /REPORT:'$SimsReport'"
-    #$simsReporterImporter
     
     write-host "------------------------------------------------------------------"
 	write-host "SimsServerName     :" $simsServerName
@@ -44,7 +41,9 @@ foreach ($SimsReportDef in $SimsReportDefs) {
     Write-Host "Report Name        :" $simsReportName
     Write-Host "Google Sheet Title :" $GoogleSheetTitle
 
-    Start-sleep 2
+    Write-host "Creating command line..."
+    $simsReporter = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsReportUser /PASSWORD:$SimsPWD /REPORT:'$SimsReport'"
+    $simsReporter
 }
 
 
