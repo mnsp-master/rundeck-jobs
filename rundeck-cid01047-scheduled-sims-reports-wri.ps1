@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.1.0.3"
+$mnspVer = "0.0.0.1.0.4"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Script Version: $mnspVer"
 
@@ -55,7 +55,7 @@ foreach ($SimsReportDef in $SimsReportDefs) {
     #$GamApp
     Invoke-Expression "& $GamApp " | Tee-object -variable 'result2'
     $result2 #uncomment to assist in error checking...
-    if ($result2 -like "*error*" ) {Write-warning "Issue here... $result2"}
+    if ($result2 -like "*failed*" ) {Write-warning "Issue here... $result2"}
 
 }
 
