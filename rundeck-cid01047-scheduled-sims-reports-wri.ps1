@@ -15,7 +15,7 @@ Write-Host "Downloading Googlesheet containing all sims report(s) info, instance
     Invoke-Expression "$GamDir\gam.exe user $GoogleGamMail get drivefile id $SimsReportsSourceCSVGsheetID format csv targetfolder $datadir" -ErrorAction SilentlyContinue
 Start-Sleep 2
 $SimsReportDefs = Import-Csv -Path $SimsReportsSourceCSV
-Get-Variable
+Get-Variable | Format-Table -Wrap -AutoSize
 
 Write-Host "loop through each Sims ReportDef..."
 
