@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.1.0.5"
+$mnspVer = "0.0.0.1.0.6"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Script Version: $mnspVer"
 
@@ -54,8 +54,8 @@ foreach ($SimsReportDef in $SimsReportDefs) {
     $GamApp = "$GamDir\gam.exe user $GoogleGamMail update drivefile id $GoogleSheetID newfilename '$GoogleSheetTitle' localfile $tempcsv"
     #$GamApp
     Invoke-Expression "& $GamApp " | Tee-object -variable 'result2'
-    #$result2 #uncomment to assist in error checking...
-    if ($result2 -notlike "*Updated with content from*" ) {Write-warning "Issue here... $result2"}
+    $result2 #uncomment to assist in error checking...
+    #if ($result2 -notlike "*Updated with content from*" ) {Write-warning "Issue here... $result2"} #not working - false positive...
 
 }
 
