@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.9.7"
+$mnspVer = "0.0.0.0.9.8"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Version: $mnspVer"
 
@@ -44,7 +44,7 @@ foreach ($SimsReportDef in $SimsReportDefs) {
 
     #create sims commandlinereported command line
     $simsReporterApp = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsReportUser /PASSWORD:$SimsPWD /REPORT:$simsReportName /OUTPUT:$tempcsv"
-    $simsReporterApp
+    Invoke-expression "$simsReporterApp" -ErrorAction SilentlyContinue
 
     #create gamxtd3 command line
     Write-Host "replacing content of existing google sheet with upto date data..."
