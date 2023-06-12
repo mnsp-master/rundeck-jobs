@@ -13,7 +13,7 @@ $ErrorActionPreference="Stop"
 
 #Parameters
 $Path = "D:\Microsoft SQL Server\MSSQL12.SDSSIMS\MSSQL\Backup" # Path where the file is located 
-$Days = "15" # Number of days before current date
+$Days = "14" # Number of days before current date
 $FileNamePatternMatch = "PARS_*.BAK"
  
 #Get All Files modified more than the last n days
