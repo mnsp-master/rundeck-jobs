@@ -11,8 +11,6 @@ Write-Host $(Get-Date)
 
 $ErrorActionPreference="Stop"
 
-#Set-Location $GamDir
-
 #Parameters
 $Path = "D:\Microsoft SQL Server\MSSQL12.SDSSIMS\MSSQL\Backup" # Path where the file is located 
 $Days = "15" # Number of days before current date
