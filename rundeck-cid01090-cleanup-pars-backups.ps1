@@ -1,5 +1,7 @@
 Clear-host
 
+$mnspVer = "1.0.0.0.4"
+
 $CID = "C01090"
 $DataDir = "D:\AppData\Rundeck\$CID\Data"
 $LogDir = "D:\AppData\Rundeck\$CID\Logs"
