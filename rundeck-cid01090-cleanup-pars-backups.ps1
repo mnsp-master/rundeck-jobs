@@ -1,6 +1,6 @@
 Clear-host
 
-$mnspVer = "1.0.0.0.5"
+$mnspVer = "1.0.0.0.6"
 
 $CID = "C01090"
 $DataDir = "D:\AppData\Rundeck\$CID\Data"
