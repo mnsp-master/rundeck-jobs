@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.9.3"
+$mnspVer = "0.0.0.0.9.4"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Version: $mnspVer"
 
@@ -27,9 +27,13 @@ Write-Host "Downloading Sims Report Definitions to distribute to all sims instan
 
     Set-Location $GamDir
     #Invoke-Expression "$GamDir\gam.exe user $GoogleGamMail get drivefile id $SimsReportGoogleDocID targetname '$SimsReport'" -ErrorAction SilentlyContinue
-    $GamRepDefs = "$GamDir\gam.exe user $GoogleGamMail print filelist select $SimsReportDefsGoogleFolderID fields id,name > $tempcsv" #-ErrorAction SilentlyContinue
-    Invoke-expression "& $GamRepDefs"
-    #gam user snoble@writhlington.org.uk print filelist select 1Mw7sWJIdXAGJLBbbOV0CXlX-NibOX4o5 fields id,name > f:\tmp\test.csv
+    $GamRepDefsGet = "$GamDir\gam.exe user $GoogleGamMail print filelist select $SimsReportDefsGoogleFolderID fields id,name > $tempcsv" #-ErrorAction SilentlyContinue
+    Invoke-expression "& $GamRepDefsGet"
+    
+    $SimsReportDefsArray = Import-Csv -Path $tempcsv
+
+    foreach ($SimsReportDef in $simsReportDefArray) { 
+        $ReportDefName = $SimsReportDef.name 
 
 Write-Host "loop through each sims instance..."
 
@@ -49,11 +53,13 @@ foreach ($sims in $simsinstances) {
 	#$GoogleDocTitle = "DSX Attendance - $simsSchool : StartDate:$XMLdateStart EndDate:$XMLdateEnd ReportRuntime: $now"
 	$GoogleDocID = "$($sims.GoogleDocID)"
 	$simsDFE = "$($sims.DFEnumber)"
-    $simsReporterImporter = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporterImporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsReportUser /PASSWORD:$SimsPWD /REPORT:'$SimsReport'"
+    #$simsReporterImporter = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporterImporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsReportUser /PASSWORD:$SimsPWD /REPORT:'$SimsReport'"
+    $simsReporterImporter = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporterImporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsReportUser /PASSWORD:$SimsPWD /REPORT:'$ReportDefName'"
+    
     $simsReporterImporter
 
+    }
 }
-
 
 <#
 Write-Host "Passed vars..."
