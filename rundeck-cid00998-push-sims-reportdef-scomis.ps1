@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.9.4"
+$mnspVer = "0.0.0.0.9.5"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Version: $mnspVer"
 
@@ -31,6 +31,8 @@ Write-Host "Downloading Sims Report Definitions to distribute to all sims instan
     Invoke-expression "& $GamRepDefsGet"
     
     $SimsReportDefsArray = Import-Csv -Path $tempcsv
+    $SimsReportDefsArray 
+    $SimsReportDefsArray.name
 
     foreach ($SimsReportDef in $simsReportDefArray) { 
         $ReportDefName = $SimsReportDef.name 
