@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.9.6"
+$mnspVer = "0.0.0.0.9.7"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Version: $mnspVer"
 
@@ -31,39 +31,37 @@ Write-Host "Downloading Sims Report Definitions to distribute to all sims instan
     Invoke-expression "& $GamRepDefsGet"
     
     $SimsReportDefsArray = Import-Csv -Path $tempcsv
-    $SimsReportDefsArray 
-    $SimsReportDefsArray.name
+    #$SimsReportDefsArray 
+    #$SimsReportDefsArray.name
 
 foreach ($SimsReportsDef in $SimsReportDefsArray) { 
         #$SimsReportDef.Name
         Write-Host "ReportDefName: " $SimsReportsDef.name
         Write-Host "ID           : " $SimsReportsDef.id
-        $ReportDefName = $SimsReportsDef.name
+        $ReportDefName = $($SimsReportsDef.name)
 
-Write-Host "loop through each sims instance..."
+            foreach ($sims in $simsinstances) {
+                write-host "------------------------------------------------------------------"
+                write-host "IP      :" $sims.ip
+                write-host "MSSQL   :" $sims.SQLinstance
+                Write-Host "Sims DB :" $sims.dbname
+                write-host "GdocID  :" $sims.GoogleDocID
+                Write-Host "School  :" $sims.School
+                Write-Host "DfE num :" $sims.DFEnumber
 
-foreach ($sims in $simsinstances) {
-    write-host "------------------------------------------------------------------"
-	write-host "IP      :" $sims.ip
-    write-host "MSSQL   :" $sims.SQLinstance
-    Write-Host "Sims DB :" $sims.dbname
-    write-host "GdocID  :" $sims.GoogleDocID
-    Write-Host "School  :" $sims.School
-    Write-Host "DfE num :" $sims.DFEnumber
+                $now = $(Get-Date -Format "dd MMMM yyyy HHHH:mm:s")
+                $simsServerName = "$($sims.ip)\$($sims.SQLInstance)"
+                $SimsDatabaseName = "$($sims.dbname)"
+                $simsSchool = "$($sims.school)"
+                #$GoogleDocTitle = "DSX Attendance - $simsSchool : StartDate:$XMLdateStart EndDate:$XMLdateEnd ReportRuntime: $now"
+                $GoogleDocID = "$($sims.GoogleDocID)"
+                $simsDFE = "$($sims.DFEnumber)"
+                #$simsReporterImporter = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporterImporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsReportUser /PASSWORD:$SimsPWD /REPORT:'$SimsReport'"
+                $simsReporterImporter = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporterImporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsReportUser /PASSWORD:$SimsPWD /REPORT:'$ReportDefName'"
+                
+                $simsReporterImporter
 
-	$now = $(Get-Date -Format "dd MMMM yyyy HHHH:mm:s")
-	$simsServerName = "$($sims.ip)\$($sims.SQLInstance)"
-	$SimsDatabaseName = "$($sims.dbname)"
-	$simsSchool = "$($sims.school)"
-	#$GoogleDocTitle = "DSX Attendance - $simsSchool : StartDate:$XMLdateStart EndDate:$XMLdateEnd ReportRuntime: $now"
-	$GoogleDocID = "$($sims.GoogleDocID)"
-	$simsDFE = "$($sims.DFEnumber)"
-    #$simsReporterImporter = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporterImporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsReportUser /PASSWORD:$SimsPWD /REPORT:'$SimsReport'"
-    $simsReporterImporter = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporterImporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsReportUser /PASSWORD:$SimsPWD /REPORT:'$ReportDefName'"
-    
-    $simsReporterImporter
-
-    }
+                }
 }
 
 <#
