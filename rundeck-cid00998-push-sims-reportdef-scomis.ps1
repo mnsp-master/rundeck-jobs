@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.7"
+$mnspVer = "0.0.0.0.8"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Version: $mnspVer"
 
