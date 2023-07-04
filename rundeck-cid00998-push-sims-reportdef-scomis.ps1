@@ -27,7 +27,7 @@ Write-Host "Downloading Sims Report Definitions to distribute to all sims instan
 
     Set-Location $GamDir
     #Invoke-Expression "$GamDir\gam.exe user $GoogleGamMail get drivefile id $SimsReportGoogleDocID targetname '$SimsReport'" -ErrorAction SilentlyContinue
-    Invoke-Expression "$GamDir\gam.exe user $GoogleGamMail print filelist select $SimsReportDefsGoogleFolderID fields id,name | out-file -path $tempcsv" #-ErrorAction SilentlyContinue
+    Invoke-Expression "$GamDir\gam.exe user $GoogleGamMail print filelist select $SimsReportDefsGoogleFolderID fields id,name >> $tempcsv" #-ErrorAction SilentlyContinue
     #gam user snoble@writhlington.org.uk print filelist select 1Mw7sWJIdXAGJLBbbOV0CXlX-NibOX4o5 fields id,name > f:\tmp\test.csv
 
 Write-Host "loop through each sims instance..."
