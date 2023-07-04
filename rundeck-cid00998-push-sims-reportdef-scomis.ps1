@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.9.5"
+$mnspVer = "0.0.0.0.9.6"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Version: $mnspVer"
 
@@ -34,8 +34,11 @@ Write-Host "Downloading Sims Report Definitions to distribute to all sims instan
     $SimsReportDefsArray 
     $SimsReportDefsArray.name
 
-    foreach ($SimsReportDef in $simsReportDefArray) { 
-        $ReportDefName = $SimsReportDef.name 
+foreach ($SimsReportsDef in $SimsReportDefsArray) { 
+        #$SimsReportDef.Name
+        Write-Host "ReportDefName: " $SimsReportsDef.name
+        Write-Host "ID           : " $SimsReportsDef.id
+        $ReportDefName = $SimsReportsDef.name
 
 Write-Host "loop through each sims instance..."
 
