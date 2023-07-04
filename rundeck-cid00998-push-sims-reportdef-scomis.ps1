@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.4"
+$mnspVer = "0.0.0.0.5"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Version: $mnspVer"
 
@@ -26,7 +26,7 @@ Write-Host "Downloading Sims Report Definition to distribute to all sims instanc
     }
 
     Set-Location $GamDir
-    Invoke-Expression "$GamDir\gam.exe user $GoogleGamMail get drivefile id $SimsReportGoogleDocID targetname $SimsReport" -ErrorAction SilentlyContinue
+    Invoke-Expression "$GamDir\gam.exe user $GoogleGamMail get drivefile id $SimsReportGoogleDocID targetname '$SimsReport'" -ErrorAction SilentlyContinue
 
 Write-Host "loop through each sims instance..."
 
