@@ -49,6 +49,7 @@ foreach ($SimsReportDef in $SimsReportDefs) {
     Write-Host "DfE num            :" $simsDFE
     Write-Host "Report Name        :" $simsReportName
     Write-Host "Google Sheet Title :" $GoogleSheetTitle
+    write-host "------------------------------------------------------------------"
 
     #create and execute sims commandlinereported command line
     $simsReporterApp = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsReportUser /PASSWORD:$SimsPWD /REPORT:'$simsReportName' /OUTPUT:$tempcsv"
@@ -70,6 +71,8 @@ foreach ($SimsReportDef in $SimsReportDefs) {
 
 
 <#
+
+
     #Invoke-Expression "$GamDir\gam.exe user user@domain.com update drivefile id $GoogleDocID newfilename '$GoogleDocTitle' localfile $tempcsv" -ErrorAction SilentlyContinue
     #Invoke-Expression "$GamDir\gam.exe user ######## update drivefile id $GoogleDocID newfilename 'Parent Primary emails - all years: $(Get-Date -Format "dd MMMM yyyy HHHH:mm:s")' localfile $tempcsv convert" -ErrorAction SilentlyContinue
 # = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsReportUser /PASSWORD:$SimsPWD /REPORT:'$simsReportName'"
