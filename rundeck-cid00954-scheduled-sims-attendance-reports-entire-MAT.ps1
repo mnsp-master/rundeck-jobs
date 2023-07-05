@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.0.7"
+$mnspVer = "0.0.0.0.0.8"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Script Version: $mnspVer"
 
@@ -28,7 +28,7 @@ Write-Host "loop through each Sims ReportDef..."
 foreach ($SimsReportDef in $SimsReportDefs) {
 
 	$now = $(Get-Date -Format "dd MMMM yyyy HHHH:mm:ss")
-	$simsServerName = "$($simsreportdef.IP)\$($simsreportdef.SQLInstance)"
+	$simsServerName = "$($simsreportdef.host)\$($simsreportdef.SQLInstance)"
 	$SimsDatabaseName = "$($simsreportdef.dbname)"
 	$simsSchool = "$($simsreportdef.school)"
 	$GoogleSheetID = "$($simsreportdef.DevGoogleGsheetTargetID)"
