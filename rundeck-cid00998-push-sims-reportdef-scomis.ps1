@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.9.8"
+$mnspVer = "0.0.0.0.9.9"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Version: $mnspVer"
 
@@ -24,7 +24,7 @@ Write-Host "Downloading Sims Report Definitions to distribute to all sims instan
         Write-Host "$SimsReport exists, deleting..."
         Remove-Item -Path $SimsReport -Force
     }
-
+    clear-content $tempcsv -Force # clear content of csv
     Set-Location $GamDir
     #Invoke-Expression "$GamDir\gam.exe user $GoogleGamMail get drivefile id $SimsReportGoogleDocID targetname '$SimsReport'" -ErrorAction SilentlyContinue
     $GamRepDefsGet = "$GamDir\gam.exe user $GoogleGamMail print filelist select $SimsReportDefsGoogleFolderID fields id,name > $tempcsv" #-ErrorAction SilentlyContinue
