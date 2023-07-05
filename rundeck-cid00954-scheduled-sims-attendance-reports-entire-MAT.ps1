@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.0.1"
+$mnspVer = "0.0.0.0.0.2"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Script Version: $mnspVer"
 
@@ -50,6 +50,7 @@ foreach ($SimsReportDef in $SimsReportDefs) {
     #create and execute sims commandlinereported command line
     $simsReporterApp = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsReportUser /PASSWORD:$SimsPWD /REPORT:'$simsReportName' /OUTPUT:$tempcsv"
     #Invoke-expression "$simsReporterApp" -ErrorAction SilentlyContinue
+    $simsReporterApp
     Invoke-Expression "& $simsReporterApp " | Tee-object -variable 'result'
     #$result #uncomment to assist in error checking...
     if ($result -like "*error*" ) {Write-warning "Issue here... $result"}
