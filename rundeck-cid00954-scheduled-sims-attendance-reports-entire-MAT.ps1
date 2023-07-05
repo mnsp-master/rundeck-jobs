@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.0.0.2"
+$mnspVer = "0.0.0.0.0.0.3"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Script Version: $mnspVer"
 
@@ -55,7 +55,7 @@ foreach ($SimsReportDef in $SimsReportDefs) {
     $simsReporterApp = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsReportUser /PASSWORD:$SimsPWD /REPORT:'$simsReportName' /OUTPUT:$tempcsv"
     #Invoke-expression "$simsReporterApp" -ErrorAction SilentlyContinue
     $simsReporterApp
-    ##SN## Invoke-Expression "& $simsReporterApp " | Tee-object -variable 'result'
+    Invoke-Expression "& $simsReporterApp " | Tee-object -variable 'result'
     #$result #uncomment to assist in error checking...
     if ($result -like "*error*" ) {Write-warning "Issue here... $result"}
 
@@ -63,7 +63,7 @@ foreach ($SimsReportDef in $SimsReportDefs) {
     Write-Host "replacing content of existing google sheet with upto date data..."
     $GamApp = "$GamDir\gam.exe user $GoogleGamMail update drivefile id $GoogleSheetID newfilename '$GoogleSheetTitle' csvsheet $simsSchoolShortName localfile $tempcsv"
     $GamApp
-    ##SN## Invoke-Expression "& $GamApp " | Tee-object -variable 'result2'
+    Invoke-Expression "& $GamApp " | Tee-object -variable 'result2'
     $result2 #uncomment to assist in error checking...
     #if ($result2 -notlike "*Updated with content from*" ) {Write-warning "Issue here... $result2"} #not working - false positive...
 
