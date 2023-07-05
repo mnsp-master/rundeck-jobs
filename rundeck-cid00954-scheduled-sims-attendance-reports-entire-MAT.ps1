@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.0.8"
+$mnspVer = "0.0.0.0.0.9"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Script Version: $mnspVer"
 
@@ -31,9 +31,10 @@ foreach ($SimsReportDef in $SimsReportDefs) {
 	$simsServerName = "$($simsreportdef.host)\$($simsreportdef.SQLInstance)"
 	$SimsDatabaseName = "$($simsreportdef.dbname)"
 	$simsSchool = "$($simsreportdef.school)"
-	$GoogleSheetID = "$($simsreportdef.DevGoogleGsheetTargetID)"
+	$GoogleSheetID = "$($simsreportdef.GoogleDocID)"
 	$simsDFE = "$($simsreportdef.DFEnumber)"
     $simsSchoolShortName = "$($simsreportdef.SchoolShortName)"
+    $simsSchoolFullName = "$($simsreportdef.SchoolFullName)"
     #$simsReportName = "$($simsreportdef.SimsReportDefName)"
     #$GoogleSheetTitle = "$($simsreportdef.GoogleGsheetTitle) - $simsSchoolShortName : ReportRuntime: $now"
     $GoogleSheetTitle = "Sims Report: '$simsReportName' : ReportRuntime: $now"
@@ -43,7 +44,8 @@ foreach ($SimsReportDef in $SimsReportDefs) {
 	write-host "SimsServerName     :" $simsServerName
     Write-Host "Sims DB            :" $SimsDatabaseName
     write-host "GsheetID output    :" $GoogleSheetID
-    Write-Host "School             :" $simsSchoolShortName
+    Write-Host "School Short Name  :" $simsSchoolShortName
+    Write-Host "School Long Name   :" $simsSchoolFullName
     Write-Host "DfE num            :" $simsDFE
     Write-Host "Report Name        :" $simsReportName
     Write-Host "Google Sheet Title :" $GoogleSheetTitle
