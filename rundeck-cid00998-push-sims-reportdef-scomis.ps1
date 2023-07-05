@@ -24,7 +24,7 @@ Write-Host "Downloading Sims Report Definitions to distribute to all sims instan
         Write-Host "$SimsReport exists, deleting..."
         Remove-Item -Path $SimsReport -Force
     }
-    clear-content $tempcsv -Force # clear content of csv
+    Clear-Content -Path $tempcsv -Force -Verbose # clear content of csv
     Set-Location $GamDir
     #Invoke-Expression "$GamDir\gam.exe user $GoogleGamMail get drivefile id $SimsReportGoogleDocID targetname '$SimsReport'" -ErrorAction SilentlyContinue
     $GamRepDefsGet = "$GamDir\gam.exe user $GoogleGamMail print filelist select $SimsReportDefsGoogleFolderID fields id,name > $tempcsv" #-ErrorAction SilentlyContinue
