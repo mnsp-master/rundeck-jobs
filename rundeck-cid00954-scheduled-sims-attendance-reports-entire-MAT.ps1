@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.0.0.3"
+$mnspVer = "0.0.0.0.0.0.4"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Script Version: $mnspVer"
 
@@ -37,7 +37,7 @@ foreach ($SimsReportDef in $SimsReportDefs) {
     $simsSchoolFullName = "$($simsreportdef.SchoolFullName)"
     #$simsReportName = "$($simsreportdef.SimsReportDefName)"
     #$GoogleSheetTitle = "$($simsreportdef.GoogleGsheetTitle) - $simsSchoolShortName : ReportRuntime: $now"
-    $GoogleSheetTitle = "Sims Report: '$simsReportName' : ReportRuntime: $now"
+    $GoogleSheetTitle = "Sims Report: $simsReportName : ReportRuntime: $now"
     $tempcsv = "$dataDir\tmp_$simsSchoolShortName.csv"
     
     write-host "------------------------------------------------------------------"
