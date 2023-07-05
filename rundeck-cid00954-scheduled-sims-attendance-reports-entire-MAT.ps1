@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.0.9"
+$mnspVer = "0.0.0.0.0.0.1"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Script Version: $mnspVer"
 
@@ -61,7 +61,7 @@ foreach ($SimsReportDef in $SimsReportDefs) {
 
     #create and execute gamxtd3 command line
     Write-Host "replacing content of existing google sheet with upto date data..."
-    $GamApp = "$GamDir\gam.exe user $GoogleGamMail update drivefile id $GoogleSheetID newfilename '$GoogleSheetTitle' localfile $tempcsv"
+    $GamApp = "$GamDir\gam.exe user $GoogleGamMail update drivefile id $GoogleSheetID newfilename '$GoogleSheetTitle' csvsheet $simsSchoolShortName localfile $tempcsv"
     $GamApp
     ##SN## Invoke-Expression "& $GamApp " | Tee-object -variable 'result2'
     $result2 #uncomment to assist in error checking...
@@ -71,7 +71,6 @@ foreach ($SimsReportDef in $SimsReportDefs) {
 
 
 <#
-
 
     #Invoke-Expression "$GamDir\gam.exe user user@domain.com update drivefile id $GoogleDocID newfilename '$GoogleDocTitle' localfile $tempcsv" -ErrorAction SilentlyContinue
     #Invoke-Expression "$GamDir\gam.exe user ######## update drivefile id $GoogleDocID newfilename 'Parent Primary emails - all years: $(Get-Date -Format "dd MMMM yyyy HHHH:mm:s")' localfile $tempcsv convert" -ErrorAction SilentlyContinue
