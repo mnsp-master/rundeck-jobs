@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.0.1.6"
+$mnspVer = "0.0.0.0.0.1.7"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Script Version: $mnspVer"
 
@@ -60,7 +60,7 @@ foreach ($SimsReportDef in $SimsReportDefs) {
     $simsAppXML = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsReportUser /PASSWORD:$SimsPWD /REPORT:'$simsReportName' /PARAMDEF /OUTPUT:$SimsParamXML"
 
     try {
-            Write-Host "Generating XML from sims report..."
+            # Generating XML from sims report...
             Invoke-Expression "& $simsAppXML"
             $simsApp #enable to output full cli to transaction log
                 
