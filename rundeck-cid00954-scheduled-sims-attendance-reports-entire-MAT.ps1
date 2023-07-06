@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.0.1.7"
+$mnspVer = "0.0.0.0.0.1.8"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Script Version: $mnspVer"
 
@@ -23,7 +23,7 @@ Start-sleep 2
 $SimsReportDefs = Import-Csv -Path $datadir\$SimsReportsSourceCSV
 #Get-Variable | Format-Table -Wrap -AutoSize
 
-Write-Host "loop through each Sims ReportDef..."
+Write-Host "loop through each Sims Instance..."
 
 foreach ($SimsReportDef in $SimsReportDefs) {
 
