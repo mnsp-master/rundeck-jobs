@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.9.9"
+$mnspVer = "0.0.0.1.0.1"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Version: $mnspVer"
 
@@ -43,7 +43,7 @@ foreach ($SimsReportsDef in $SimsReportDefsArray) {
 
             foreach ($sims in $simsinstances) {
                 write-host "------------------------------------------------------------------"
-                write-host "IP      :" $sims.ip
+                write-host "IP      :" $sims.host
                 write-host "MSSQL   :" $sims.SQLinstance
                 Write-Host "Sims DB :" $sims.dbname
                 write-host "GdocID  :" $sims.GoogleDocID
@@ -61,6 +61,10 @@ foreach ($SimsReportsDef in $SimsReportDefsArray) {
                 $simsReporterImporter = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporterImporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsReportUser /PASSWORD:$SimsPWD /REPORT:'$ReportDefName'"
                 
                 $simsReporterImporter
+
+                #SN# Invoke-Expression "& $simsReporterImporter" | Tee-object -variable 'result'
+                #$result #uncomment to assist in error checking...
+                if ($result -like "*error*" ) {Write-warning "Issue here... $result"}
 
                 }
 }
