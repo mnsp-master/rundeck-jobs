@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.0.1.0"
+$mnspVer = "0.0.0.0.0.1.1"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Script Version: $mnspVer"
 
@@ -40,6 +40,7 @@ foreach ($SimsReportDef in $SimsReportDefs) {
     $GoogleSheetTitle = "Sims Report: $simsReportName : ReportRuntime: $now"
     $tempcsv = "$dataDir\tmp_$simsSchoolShortName.csv"
     $tempcsvutf8 = "$dataDir\tmp_$($simsSchoolShortName)_utf8.csv"
+    $SimsParamXML = "$DataDir\tmp_$($simsSchoolShortName).xml"
     
     write-host "------------------------------------------------------------------"
 	write-host "SimsServerName     :" $simsServerName
@@ -51,6 +52,22 @@ foreach ($SimsReportDef in $SimsReportDefs) {
     Write-Host "Report Name        :" $simsReportName
     Write-Host "Google Sheet Title :" $GoogleSheetTitle
     write-host "------------------------------------------------------------------"
+
+    Write-Host "Generate xml from sims report cli..."
+    
+    $simsAppXML = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsReportUser /PASSWORD:$SimsPWD /REPORT:'$simsReportName' /PARAMDEF /OUTPUT:$SimsParamXML"
+
+    try {
+            Write-Host "Generating XML from sims report..."
+            Invoke-Expression "& $simsAppXML"
+            $simsApp #enable to output full cli to transaction log
+                
+            } catch {
+
+                Write-warning "Issue here: $error[0] $message"
+            }
+
+
 
     #create and execute sims commandlinereported command line
     $simsReporterApp = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsReportUser /PASSWORD:$SimsPWD /REPORT:'$simsReportName' /OUTPUT:$tempcsv"
