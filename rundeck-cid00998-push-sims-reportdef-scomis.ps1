@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.1.0.2"
+$mnspVer = "0.0.0.1.0.3"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Version: $mnspVer"
 
@@ -51,7 +51,7 @@ foreach ($SimsReportsDef in $SimsReportDefsArray) {
                 Write-Host "DfE num :" $sims.DFEnumber
 
                 $now = $(Get-Date -Format "dd MMMM yyyy HHHH:mm:s")
-                $simsServerName = "$($sims.ip)\$($sims.SQLInstance)"
+                $simsServerName = "$($sims.host)\$($sims.SQLInstance)"
                 $SimsDatabaseName = "$($sims.dbname)"
                 $simsSchool = "$($sims.school)"
                 #$GoogleDocTitle = "DSX Attendance - $simsSchool : StartDate:$XMLdateStart EndDate:$XMLdateEnd ReportRuntime: $now"
