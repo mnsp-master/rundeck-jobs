@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.0.1.3"
+$mnspVer = "0.0.0.0.0.1.4"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Script Version: $mnspVer"
 
@@ -44,14 +44,15 @@ foreach ($SimsReportDef in $SimsReportDefs) {
     $SimsReportEndDate = $((Get-date).ToString('yyyy-MM-ddTHH:mm:ss'))
     
     write-host "------------------------------------------------------------------"
-	write-host "SimsServerName     :" $simsServerName
-    Write-Host "Sims DB            :" $SimsDatabaseName
-    write-host "GsheetID output    :" $GoogleSheetID
-    Write-Host "School Short Name  :" $simsSchoolShortName
-    Write-Host "School Long Name   :" $simsSchoolFullName
-    Write-Host "DfE num            :" $simsDFE
-    Write-Host "Report Name        :" $simsReportName
-    Write-Host "Google Sheet Title :" $GoogleSheetTitle
+	write-host "SimsServerName      :" $simsServerName
+    Write-Host "Sims DB             :" $SimsDatabaseName
+    write-host "GsheetID output     :" $GoogleSheetID
+    Write-Host "School Short Name   :" $simsSchoolShortName
+    Write-Host "School Long Name    :" $simsSchoolFullName
+    Write-Host "DfE num             :" $simsDFE
+    Write-Host "Report Name         :" $simsReportName
+    Write-Host "Google Sheet Title  :" $GoogleSheetTitle
+    Write-Host "Sims Report End date:" $SimsReportEndDate
     write-host "------------------------------------------------------------------"
 
     Write-Host "Generate xml from sims report cli..."
@@ -90,7 +91,7 @@ foreach ($SimsReportDef in $SimsReportDefs) {
     $simsReporterApp = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsReportUser /PARAMFILE:$SimsParamXML /PASSWORD:$SimsPWD /REPORT:'$simsReportName' /OUTPUT:$tempcsv"
 
     #$simsReporterApp #enable to output full cli to transaction log
-    Invoke-Expression "& $simsReporterApp " | Tee-object -variable 'result'
+    #SN# Invoke-Expression "& $simsReporterApp " | Tee-object -variable 'result'
     #$result #uncomment to assist in error checking...
     if ($result -like "*error*" ) {Write-warning "Issue here... $result"}
 
@@ -103,7 +104,7 @@ foreach ($SimsReportDef in $SimsReportDefs) {
     Write-Host "replacing content of existing google sheet with upto date data..."
     $GamApp = "$GamDir\gam.exe user $GoogleGamMail update drivefile id $GoogleSheetID newfilename '$GoogleSheetTitle' csvsheet $simsSchoolShortName localfile $tempcsvutf8"
     #$GamApp #enable to output full cli to transaction log
-    Invoke-Expression "& $GamApp " | Tee-object -variable 'result2'
+    #SN# Invoke-Expression "& $GamApp " | Tee-object -variable 'result2'
     $result2 #uncomment to assist in error checking...
     #if ($result2 -notlike "*Updated with content from*" ) {Write-warning "Issue here... $result2"} #not working - false positive...
 
