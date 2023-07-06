@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.0.0.6"
+$mnspVer = "0.0.0.0.0.0.7"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Script Version: $mnspVer"
 
@@ -60,7 +60,8 @@ foreach ($SimsReportDef in $SimsReportDefs) {
     #$result #uncomment to assist in error checking...
     if ($result -like "*error*" ) {Write-warning "Issue here... $result"}
 
-    #convert sims csv output to utf8
+    Write-Host "convert sims csv output to utf8..."
+    start-sleep 3
     get-content $tempcsv | set-content -encoding utf8 $tempcsvutf8
 
     #create and execute gamxtd3 command line
