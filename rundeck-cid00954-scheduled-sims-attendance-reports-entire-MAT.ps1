@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.0.1.1"
+$mnspVer = "0.0.0.0.0.1.2"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Script Version: $mnspVer"
 
@@ -67,11 +67,27 @@ foreach ($SimsReportDef in $SimsReportDefs) {
                 Write-warning "Issue here: $error[0] $message"
             }
 
+                Write-Host "replacing all end dates in exported sims xml..."
+                $xml = @()
+                $xml =[xml](Get-content $SimsParamXML)
 
+                $nodes = $xml.SelectNodes("//End")
+                #$nodes print nodes to transcript log
+
+                foreach ($node in $nodes) {
+
+                #$node.InnerText #print all existing node dates to transcript log...
+                $node.InnerText = "$SimsReportEndDate"
+
+        }
+        $xml.Save($SimsParamXML) #replace extracted XML content with updated/date replaced nodes...
 
     #create and execute sims commandlinereported command line
-    $simsReporterApp = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsReportUser /PASSWORD:$SimsPWD /REPORT:'$simsReportName' /OUTPUT:$tempcsv"
-    #Invoke-expression "$simsReporterApp" -ErrorAction SilentlyContinue
+    #$simsReporterApp = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsReportUser /PASSWORD:$SimsPWD /REPORT:'$simsReportName' /OUTPUT:$tempcsv"
+    
+    #create and execute sims commandlinereported command line - including xml params
+    $simsReporterApp = "C:\PROGRA~2\SIMS\SIMS~1.net\CommandReporter.exe /SERVERNAME:$simsServerName /DATABASENAME:$SimsDatabaseName /USER:$SimsReportUser /PARAMFILE:$SimsParamXML /PASSWORD:$SimsPWD /REPORT:'$simsReportName' /OUTPUT:$tempcsv"
+
     #$simsReporterApp #enable to output full cli to transaction log
     Invoke-Expression "& $simsReporterApp " | Tee-object -variable 'result'
     #$result #uncomment to assist in error checking...
