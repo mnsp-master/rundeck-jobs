@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.0.0.4"
+$mnspVer = "0.0.0.0.0.0.5"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Script Version: $mnspVer"
 
@@ -39,6 +39,7 @@ foreach ($SimsReportDef in $SimsReportDefs) {
     #$GoogleSheetTitle = "$($simsreportdef.GoogleGsheetTitle) - $simsSchoolShortName : ReportRuntime: $now"
     $GoogleSheetTitle = "Sims Report: $simsReportName : ReportRuntime: $now"
     $tempcsv = "$dataDir\tmp_$simsSchoolShortName.csv"
+    $tempcsvutf8 = "$dataDir\tmp_$simsSchoolShortName_utf8.csv"
     
     write-host "------------------------------------------------------------------"
 	write-host "SimsServerName     :" $simsServerName
@@ -59,9 +60,12 @@ foreach ($SimsReportDef in $SimsReportDefs) {
     #$result #uncomment to assist in error checking...
     if ($result -like "*error*" ) {Write-warning "Issue here... $result"}
 
+    #convert sims csv output to utf8
+    get-content $tempcsv | set-content -encoding utf8 $tempcsvutf8
+
     #create and execute gamxtd3 command line
     Write-Host "replacing content of existing google sheet with upto date data..."
-    $GamApp = "$GamDir\gam.exe user $GoogleGamMail update drivefile id $GoogleSheetID newfilename '$GoogleSheetTitle' csvsheet $simsSchoolShortName localfile $tempcsv"
+    $GamApp = "$GamDir\gam.exe user $GoogleGamMail update drivefile id $GoogleSheetID newfilename '$GoogleSheetTitle' csvsheet $simsSchoolShortName localfile $tempcsvutf8"
     $GamApp
     Invoke-Expression "& $GamApp " | Tee-object -variable 'result2'
     $result2 #uncomment to assist in error checking...
