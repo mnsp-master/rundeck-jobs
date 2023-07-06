@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.0.1.2"
+$mnspVer = "0.0.0.0.0.1.3"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Script Version: $mnspVer"
 
@@ -41,6 +41,7 @@ foreach ($SimsReportDef in $SimsReportDefs) {
     $tempcsv = "$dataDir\tmp_$simsSchoolShortName.csv"
     $tempcsvutf8 = "$dataDir\tmp_$($simsSchoolShortName)_utf8.csv"
     $SimsParamXML = "$DataDir\tmp_$($simsSchoolShortName).xml"
+    $SimsReportEndDate = $((Get-date).ToString('yyyy-MM-ddTHH:mm:ss'))
     
     write-host "------------------------------------------------------------------"
 	write-host "SimsServerName     :" $simsServerName
