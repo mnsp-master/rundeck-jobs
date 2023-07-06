@@ -46,13 +46,13 @@ foreach ($SimsReportsDef in $SimsReportDefsArray) {
                 write-host "Host    :" $sims.host
                 write-host "MSSQL   :" $sims.SQLinstance
                 Write-Host "Sims DB :" $sims.dbname
-                Write-Host "School  :" $sims.School
+                Write-Host "School  :" $sims.SchoolShortName
                 Write-Host "DfE num :" $sims.DFEnumber
 
                 $now = $(Get-Date -Format "dd MMMM yyyy HHHH:mm:s")
                 $simsServerName = "$($sims.host)\$($sims.SQLInstance)"
                 $SimsDatabaseName = "$($sims.dbname)"
-                $simsSchool = "$($sims.school)"
+                $simsSchool = "$($sims.SchoolShortName)"
                 #$GoogleDocTitle = "DSX Attendance - $simsSchool : StartDate:$XMLdateStart EndDate:$XMLdateEnd ReportRuntime: $now"
                 $GoogleDocID = "$($sims.GoogleDocID)"
                 $simsDFE = "$($sims.DFEnumber)"
