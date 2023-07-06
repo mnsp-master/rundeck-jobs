@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.1.0.3"
+$mnspVer = "0.0.0.1.0.4"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Version: $mnspVer"
 
@@ -46,7 +46,6 @@ foreach ($SimsReportsDef in $SimsReportDefsArray) {
                 write-host "Host    :" $sims.host
                 write-host "MSSQL   :" $sims.SQLinstance
                 Write-Host "Sims DB :" $sims.dbname
-                write-host "GdocID  :" $sims.GoogleDocID
                 Write-Host "School  :" $sims.School
                 Write-Host "DfE num :" $sims.DFEnumber
 
