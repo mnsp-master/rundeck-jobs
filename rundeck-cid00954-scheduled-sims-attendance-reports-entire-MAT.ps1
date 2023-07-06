@@ -1,5 +1,5 @@
 Clear-Host
-$mnspVer = "0.0.0.0.0.1.5"
+$mnspVer = "0.0.0.0.0.1.6"
 #Get-Variable | format-table -Wrap -Autosize
 Write-Host "MNSP Script Version: $mnspVer"
 
@@ -17,7 +17,7 @@ Write-Host "Downloading Googlesheet containing all sims report(s) info, instance
 Start-Sleep 2
 
 #force delete any previous data...
-Remove-item -Path $DataDir\tmp_*.csv -Force 
+Remove-item -Path $DataDir\tmp_*.* -Force -verbose
 Start-sleep 2
 
 $SimsReportDefs = Import-Csv -Path $datadir\$SimsReportsSourceCSV
