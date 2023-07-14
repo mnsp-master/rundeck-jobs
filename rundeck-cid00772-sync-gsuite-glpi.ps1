@@ -1,6 +1,6 @@
 #SN-LOGONLY#
 
-$mnspver = "0.0.0.4"
+$mnspver = "0.0.0.5"
 $GlobalGamBaseOU = "/ZZ Chrome Devices/" # MNSP root base OU
 
 Write-Host $(Get-Date)
@@ -190,7 +190,7 @@ if ($uuids.Contains($uuid)) { # check if uuid is already known, if no jump to cr
 
     }
 }
-Write-Warning "sleeping before next entity...."
+Write-Host "sleeping before next entity...."
 
 }
 
