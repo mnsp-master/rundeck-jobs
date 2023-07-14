@@ -58,7 +58,7 @@ Write-host "-------------------------------------`n"
 clear-content -Path $tempcsv
 start-sleep 10
 Invoke-Expression "$GamDir\gam.exe $gamParams" | out-file -FilePath $tempcsv -ErrorAction Continue #get all chromeOS devices from google workspace
-Invoke-Expression "$GamDir\gam.exe $gamParams"drive tdnobrowser|""
+Invoke-Expression "$GamDir\gam.exe $gamParams todrive tdnobrowser"
 
 $GsuiteChromeDevices = @()
 $GsuiteChromeDevices = Import-Csv -Path $tempcsv #create array of all found Gsuite chrome devices
