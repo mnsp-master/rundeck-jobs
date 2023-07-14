@@ -5,6 +5,7 @@ $GlobalGamBaseOU = "/ZZ Chrome Devices/" # MNSP root base OU
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
+Start-Sleep 60
 $ErrorActionPreference="Continue"
 Set-Location $GamDir
 
