@@ -1,8 +1,10 @@
 #SN-LOGONLY#
 
+$mnspver = "0.0.0.1"
 $GlobalGamBaseOU = "/ZZ Chrome Devices/" # MNSP root base OU
 
 Write-Host $(Get-Date)
+Write-Host "MNSP Version" $mnspver
 $ErrorActionPreference="Continue"
 Set-Location $GamDir
 
@@ -56,6 +58,7 @@ Write-host "-------------------------------------`n"
 clear-content -Path $tempcsv
 start-sleep 10
 Invoke-Expression "$GamDir\gam.exe $gamParams" | out-file -FilePath $tempcsv -ErrorAction Continue #get all chromeOS devices from google workspace
+Invoke-Expression "$GamDir\gam.exe $gamParams"drive tdnobrowser|""
 
 $GsuiteChromeDevices = @()
 $GsuiteChromeDevices = Import-Csv -Path $tempcsv #create array of all found Gsuite chrome devices
@@ -148,9 +151,9 @@ if ($uuids.Contains($uuid)) { # check if uuid is already known, if no jump to cr
                       
             #update device by id using json content set earlier...
             $jsonupdate = $updateData | ConvertTo-Json
-            $UpdateResult = Invoke-RestMethod "$AppURL/Computer" -Method Put -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -Body $jsonUpdate -ContentType 'application/json'
+            ##CID00772## $UpdateResult = Invoke-RestMethod "$AppURL/Computer" -Method Put -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -Body $jsonUpdate -ContentType 'application/json'
             $updateResult
-            $jsonupdate
+            $#CID00772## jsonupdate
 
             #>
             Write-Host "----------------------------`n"
@@ -171,9 +174,9 @@ if ($uuids.Contains($uuid)) { # check if uuid is already known, if no jump to cr
 
     $json = $Data | ConvertTo-Json
     $json
-    $AddResult = Invoke-RestMethod "$AppURL/Computer" -Method Post -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -Body $json -ContentType 'application/json'
+    #CID00772## $AddResult = Invoke-RestMethod "$AppURL/Computer" -Method Post -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -Body $json -ContentType 'application/json'
     Write-Host "GLPI - Computer created" -ForegroundColor Green
-    $AddResult
+    #CID00772## $AddResult
     Write-Host "----------------------------`n"
     }
     #update current Chrome device in google instance user (email), using entity yes/no toggle...
