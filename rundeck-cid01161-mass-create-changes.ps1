@@ -1,4 +1,4 @@
-$mnspver = "0.0.0.0.0.1"
+$mnspver = "0.0.0.0.0.2"
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 Start-Sleep 10
@@ -6,7 +6,10 @@ $ErrorActionPreference="Continue"
 
 #
 
-$TargetEntityIDs
+$TargetEntityIDs = $TargetEntityIDs,split(',')
+foreach ($TargetEntityID in $TargetEntityIDs) {
+        Write-Host "Target Entity ID" $TargetEntityID
+}
 
 <#
 #create api session to glpi instance...
