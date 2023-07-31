@@ -1,4 +1,4 @@
-$mnspver = "0.0.0.0.0.4"
+$mnspver = "0.0.0.0.0.5"
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 Start-Sleep 10
@@ -8,7 +8,7 @@ $ErrorActionPreference="Continue"
 
 $TargetEntityIDs = $($TargetEntityIDs.split(','))
 foreach ($TargetEntityID in $TargetEntityIDs) {
-        Write-Host "Target Entity ID" $TargetEntityID
+        Write-Host "Target Entity ID:" $TargetEntityID
 }
 
 <#
