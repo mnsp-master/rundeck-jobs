@@ -4,7 +4,9 @@ Write-Host "MNSP Version" $mnspver
 Start-Sleep 10
 $ErrorActionPreference="Continue"
 
+#
 
+$TargetEntityIDs
 
 <#
 #create api session to glpi instance...
