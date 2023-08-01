@@ -1,4 +1,4 @@
-$mnspver = "0.0.0.0.0.0.2"
+$mnspver = "0.0.0.0.0.0.3"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -11,9 +11,6 @@ $ErrorActionPreference="Continue"
 #
 
 $TargetEntityIDs = $($TargetEntityIDs.split(','))
-foreach ($TargetEntityID in $TargetEntityIDs) {
-        Write-Host "Target Entity ID:" $TargetEntityID
-}
 
 
 #create api session to glpi instance...
@@ -26,31 +23,31 @@ $SessionToken = Invoke-RestMethod -Verbose "$AppURL/initSession" -Method Get -He
 #$entities = $EntityResult.data #convert api search into entities array
 #$entities
 
-
-Write-Host "Creating Change..."
-
-$data = @{
-    "input" = @(
-        @{
-            "content" = "Change description $(Get-Date)"
-            "name" = "API created $(Get-Date)"
-            "_users_id_requester" = "47"
-            "entities_id" = "1"
-            "priority" = "3"
-            "urgency" = "2"
-            "status" = "1"
-            "impact" = "3"
+foreach ($TargetEntityID in $TargetEntityIDs) {
+        Write-Host "Creating Change for entity ID:" $TargetEntityID
+        
+        $data = @{
+            "input" = @(
+                @{
+                    "content" = "Change description 1 $(Get-Date)"
+                    "name" = "API created 1 $(Get-Date)"
+                    "_users_id_requester" = "47"
+                    "entities_id" = "$TargetEntityID"
+                    "priority" = "3"
+                    "urgency" = "2"
+                    "status" = "1"
+                    "impact" = "3"
+                }
+            )
         }
-    )
+
+
+    $json = $data | ConvertTo-Json
+    Invoke-RestMethod -Method POST -Uri $ChangeCreateUrl -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -Body $json -ContentType 'application/json'
+
 }
-
-
-$json = $data | ConvertTo-Json
-Invoke-RestMethod -Method POST -Uri $ChangeCreateUrl -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -Body $json -ContentType 'application/json'
-
 #close current api session...
 Invoke-RestMethod "$AppURL/killSession" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
-
 
 <#
 Write-Host "get some info from GLPI..."
