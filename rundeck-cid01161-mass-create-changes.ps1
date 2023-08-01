@@ -1,4 +1,4 @@
-$mnspver = "0.0.0.0.0.1.3"
+$mnspver = "0.0.0.0.0.1.4"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -37,7 +37,7 @@ foreach ($TargetEntityID in $TargetEntityIDs) {
         $data = @{
             "input" = @(
                 @{
-                    "content" = "Change description 1 $(Get-Date)"
+                    "content" = "$ItemDescription"
                     "name" = "$($GetEntityAttributes.registration_number) - $ItemTitle $(Get-Date)"
                     "_users_id_requester" = "47"
                     "entities_id" = "$TargetEntityID"
