@@ -1,7 +1,8 @@
-$mnspver = "0.0.0.0.0.0.5"
+$mnspver = "0.0.0.0.0.0.6"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
+$EntityAttributesURL = "$AppURL/Entity"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -24,13 +25,19 @@ $SessionToken = Invoke-RestMethod -Verbose "$AppURL/initSession" -Method Get -He
 #$entities
 
 foreach ($TargetEntityID in $TargetEntityIDs) {
+        Write-Host "Getting Entity Info..."
+        $GetEntityAttributes = @()
+        $GetEntityAttributes = Invoke-RestMethod -Method POST -Uri $EntityAttributesURL/$TargetEntityID -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -Body $json -ContentType 'application/json'
+
         Write-Host "Creating Change for entity ID:" $TargetEntityID
+        Write-Host "Administrative Number: " $GetEntityAttributes.registration_number
+
         
         $data = @{
             "input" = @(
                 @{
                     "content" = "Change description 1 $(Get-Date)"
-                    "name" = "$ItemTitle $(Get-Date)"
+                    "name" = "$($GetEntityAttributes.registration_number) - $ItemTitle $(Get-Date)"
                     "_users_id_requester" = "47"
                     "entities_id" = "$TargetEntityID"
                     "priority" = "3"
