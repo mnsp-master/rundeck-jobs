@@ -1,4 +1,4 @@
-$mnspver = "0.0.0.0.0.1.2"
+$mnspver = "0.0.0.0.0.1.3"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
