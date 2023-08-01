@@ -1,4 +1,4 @@
-$mnspver = "0.0.0.0.0.6"
+$mnspver = "0.0.0.0.0.7"
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 Start-Sleep 10
@@ -18,11 +18,14 @@ $SessionToken = Invoke-RestMethod -Verbose "$AppURL/initSession" -Method Get -He
 
 #get all entities from GLPI
 $EntityResult = @() #empty array
+$EntityResult = Invoke-RestMethod "$AppURL/getActiveEntities" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
 
-$EntityResult = Invoke-RestMethod "$AppURL/search/Entity?is_deleted=0&as_map=0&range=0-1000000&criteria[0][link]=AND&criteria[0][field]=1&criteria[0][searchtype]=notequals&criteria[0][value]=0&search=Search&itemtype=Entity&start=0" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
+$EntityResult
 
-$entities = $EntityResult.data #convert api search into entities array
-$entities
+#$EntityResult = Invoke-RestMethod "$AppURL/search/Entity?is_deleted=0&as_map=0&range=0-1000000&criteria[0][link]=AND&criteria[0][field]=1&criteria[0][searchtype]=notequals&criteria[0][value]=0&search=Search&itemtype=Entity&start=0" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
+
+#$entities = $EntityResult.data #convert api search into entities array
+#$entities
 
 #close current api session...
 Invoke-RestMethod "$AppURL/killSession" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
