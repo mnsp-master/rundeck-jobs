@@ -1,4 +1,8 @@
-$mnspver = "0.0.0.0.0.9"
+$mnspver = "0.0.0.0.0.0.1"
+$TicketCreateUrl = "$AppURL/Ticket"
+$ChangeCreateUrl = "$AppURL/Change"
+$SetActiveEntity = "$AppURL/changeActiveEntities"
+
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 Start-Sleep 10
