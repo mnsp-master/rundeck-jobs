@@ -1,4 +1,4 @@
-$mnspver = "0.0.0.0.0.7"
+$mnspver = "0.0.0.0.0.8"
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 Start-Sleep 10
@@ -16,9 +16,9 @@ foreach ($TargetEntityID in $TargetEntityIDs) {
 $SessionToken = Invoke-RestMethod -Verbose "$AppURL/initSession" -Method Get -Headers @{"Content-Type" = "application/json";"Authorization" = "user_token $UserToken";"App-Token"=$AppToken}
 #https://www.urldecoder.org/
 
-#get all entities from GLPI
+Write-Host "get some info from GLPI..."
 $EntityResult = @() #empty array
-$EntityResult = Invoke-RestMethod "$AppURL/getActiveEntities" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
+$EntityResult = Invoke-RestMethod "$AppURL/Entity/1" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
 
 $EntityResult
 
