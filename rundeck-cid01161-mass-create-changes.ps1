@@ -1,4 +1,4 @@
-$mnspver = "0.0.0.0.0.0.6"
+$mnspver = "0.0.0.0.0.0.7"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -28,6 +28,7 @@ foreach ($TargetEntityID in $TargetEntityIDs) {
         Write-Host "Getting Entity Info..."
         $GetEntityAttributes = @()
         $GetEntityAttributes = Invoke-RestMethod -Method POST -Uri $EntityAttributesURL/$TargetEntityID -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -Body $json -ContentType 'application/json'
+        $GetEntityAttributes
 
         Write-Host "Creating Change for entity ID:" $TargetEntityID
         Write-Host "Administrative Number: " $GetEntityAttributes.registration_number
