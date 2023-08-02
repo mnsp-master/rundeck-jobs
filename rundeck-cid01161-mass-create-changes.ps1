@@ -1,4 +1,4 @@
-$mnspver = "0.0.0.0.0.1.4"
+$mnspver = "0.0.0.0.0.1.5"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -53,6 +53,8 @@ foreach ($TargetEntityID in $TargetEntityIDs) {
     $json = $data | ConvertTo-Json
     $ApiAction = Invoke-RestMethod -Method POST -Uri $ChangeCreateUrl -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -Body $json -ContentType 'application/json'
     $ApiAction
+    Write-Host "Created ID:" $ApiAction.id
+
 }
 #close current api session...
 Invoke-RestMethod "$AppURL/killSession" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
