@@ -1,8 +1,9 @@
-$mnspver = "0.0.0.0.0.1.6"
+$mnspver = "0.0.0.0.0.1.7"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
 $EntityAttributesURL = "$AppURL/Entity"
+$ProjectUpdateUrl = "$AppURL/Project"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -55,6 +56,20 @@ foreach ($TargetEntityID in $TargetEntityIDs) {
     $ApiAction
     $CreatedChangeID = $($ApiAction.id)
     Write-Host "Created Change ID: " $CreatedChangeID
+
+    #Link Change with Project ID:
+
+        $ProjectData = @{
+        "input" = @(
+            @{
+                "itemtype" = "Change"
+                "items_id" = "$CreatedChangeID"
+                "projects_id" = "$LinkedProjectID"
+            }
+        )
+    }
+    $ProjectDataJson = $ProjectData | ConvertTo-Json
+    Invoke-RestMethod -Method POST -Uri $ProjectUpdateUrl/$LinkedProjectID/Itil_Project -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -Body $ProjectDataJson -ContentType 'application/json'
 
 }
 #close current api session...
