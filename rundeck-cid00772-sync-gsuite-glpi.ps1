@@ -1,6 +1,6 @@
 #SN-LOGONLY#
 
-$mnspver = "0.0.0.5"
+$mnspver = "0.0.0.6"
 $GlobalGamBaseOU = "/ZZ Chrome Devices/" # MNSP root base OU
 
 Write-Host $(Get-Date)
@@ -61,7 +61,7 @@ Write-host "-------------------------------------`n"
 clear-content -Path $tempcsv
 start-sleep 10
 Invoke-Expression "$GamDir\gam.exe $gamParams" | out-file -FilePath $tempcsv -ErrorAction Continue #get all chromeOS devices from google workspace
-Invoke-Expression "$GamDir\gam.exe $gamParams todrive tdnobrowser"
+# Invoke-Expression "$GamDir\gam.exe $gamParams todrive tdnobrowser" # create gsheet - handy for debugging
 
 $GsuiteChromeDevices = @()
 $GsuiteChromeDevices = Import-Csv -Path $tempcsv #create array of all found Gsuite chrome devices
