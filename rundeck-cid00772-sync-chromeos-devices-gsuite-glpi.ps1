@@ -1,6 +1,6 @@
 #SN-LOGONLY#
 
-$mnspver = "0.0.0.8"
+$mnspver = "0.0.0.9"
 $GlobalGamBaseOU = "/ZZ Chrome Devices/" # MNSP root base OU
 
 Write-Host $(Get-Date)
@@ -58,8 +58,12 @@ foreach ( $entity in $entities ) {
 $entityID = $entity.2
 $entityName = $entity.14
 #$entityGoogleBaseOu = $entity.76673 #gsuite ou of device - 76673 (PROD) # appears to have changed to 76677 as of 17/07/2023
-$entityGoogleBaseOu = $entity.76677 #gsuite ou of device - 76677 (PROD) #
-$entityUpdateChromeUserGsuite = $entity.76674 # yes/no toggle from entity - returns 0 or 1 - 76674 (PROD)
+#$entityGoogleBaseOu = $entity.76677 #gsuite ou of device - 76677 (PROD) #
+$entityGoogleBaseOu = $entity.$GoogleWorkspaceChromebookBaseOUID #gsuite ou of device
+
+#$entityUpdateChromeUserGsuite = $entity.76674 # yes/no toggle from entity - returns 0 or 1 - 76674 (PROD)
+$entityUpdateChromeUserGsuite = $entity.$UpdateGoogleChromeDeviceUserAttributeID # yes/no toggle from entity - returns 0 or 1 - 76678 (PROD)
+
 $gamOU = "$GlobalGamBaseOU$entityGoogleBaseOu" #complete entity base ou
 $gamParams = "cros_ou_and_children ""$gamOu"" print cros fields serialNumber,annotatedAssetId,ou,annotatedLocation,ethernetMacAddress,firmwareVersion,lastEnrollmentTime,lastSync,macAddress,model,notes,osVersion,status,meid,autoUpdateExpiration"
 
