@@ -1,6 +1,6 @@
 #SN-LOGONLY#
 
-$mnspver = "0.0.1.2"
+$mnspver = "0.0.1.3"
 $GlobalGamBaseOU = "/ZZ Chrome Devices/" # MNSP root base OU
 
 Write-Host $(Get-Date)
@@ -82,7 +82,7 @@ Invoke-Expression "$GamDir\gam.exe $gamParams" | out-file -FilePath $tempcsv -Er
 
 $GsuiteChromeDevices = @()
 $GsuiteChromeDevices = Import-Csv -Path $tempcsv #create array of all found Gsuite chrome devices
-$GsuiteChromeDevices.Count
+Write-Host "Number of devices found in google workspace OU:" $gamOU $GsuiteChromeDevices.Count
 
 Write-warning "sleeping after updatting csv... "
 
