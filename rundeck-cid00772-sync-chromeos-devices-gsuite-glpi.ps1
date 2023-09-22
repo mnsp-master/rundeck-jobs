@@ -1,6 +1,6 @@
 #SN-LOGONLY#
 
-$mnspver = "0.0.0.9"
+$mnspver = "0.0.1.0"
 $GlobalGamBaseOU = "/ZZ Chrome Devices/" # MNSP root base OU
 
 Write-Host $(Get-Date)
@@ -171,8 +171,8 @@ if ($uuids.Contains($uuid)) { # check if uuid is already known, if no jump to cr
                       
             #update device by id using json content set earlier...
             $jsonupdate = $updateData | ConvertTo-Json
-            ##CID00772## $UpdateResult = Invoke-RestMethod "$AppURL/Computer" -Method Put -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -Body $jsonUpdate -ContentType 'application/json'
-            ##CID00772## $updateResult
+            $UpdateResult = Invoke-RestMethod "$AppURL/Computer" -Method Put -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -Body $jsonUpdate -ContentType 'application/json' ##CID00772## 
+            $updateResult ##CID00772## 
             $jsonupdate
 
             #>
@@ -194,9 +194,9 @@ if ($uuids.Contains($uuid)) { # check if uuid is already known, if no jump to cr
 
     $json = $Data | ConvertTo-Json
     $json
-    ##CID00772## $AddResult = Invoke-RestMethod "$AppURL/Computer" -Method Post -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -Body $json -ContentType 'application/json'
+    $AddResult = Invoke-RestMethod "$AppURL/Computer" -Method Post -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -Body $json -ContentType 'application/json' ##CID00772## 
     Write-Host "GLPI - Computer created" -ForegroundColor Green
-    ##CID00772## $AddResult
+    $AddResult ##CID00772## 
     Write-Host "----------------------------`n"
     }
     #update current Chrome device in google instance user (email), using entity yes/no toggle...
