@@ -1,6 +1,6 @@
 #SN-LOGONLY#
 
-$mnspver = "0.0.1.0"
+$mnspver = "0.0.1.1"
 $GlobalGamBaseOU = "/ZZ Chrome Devices/" # MNSP root base OU
 
 Write-Host $(Get-Date)
@@ -20,10 +20,10 @@ $SessionToken = Invoke-RestMethod -Verbose "$AppURL/initSession" -Method Get -He
 $EntityResult = @() #empty array
 
 #limit entity result to one ID:5 BCL - development - ID:1 WRI
-#$EntityResult = Invoke-RestMethod "$AppURL/search/Entity?is_deleted=0&as_map=&range=0-10000000&criteria[1][link]=AND&criteria[1][field]=2&criteria[1][searchtype]=contains&criteria[1][value]=1&search=Search&itemtype=Entity&start=0" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
+$EntityResult = Invoke-RestMethod "$AppURL/search/Entity?is_deleted=0&as_map=&range=0-10000000&criteria[1][link]=AND&criteria[1][field]=2&criteria[1][searchtype]=contains&criteria[1][value]=1&search=Search&itemtype=Entity&start=0" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
 
 #All entities: - Production
-$EntityResult = Invoke-RestMethod "$AppURL/search/Entity?is_deleted=0&as_map=0&range=0-1000000&criteria[0][link]=AND&criteria[0][field]=1&criteria[0][searchtype]=notequals&criteria[0][value]=0&search=Search&itemtype=Entity&start=0" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
+#$EntityResult = Invoke-RestMethod "$AppURL/search/Entity?is_deleted=0&as_map=0&range=0-1000000&criteria[0][link]=AND&criteria[0][field]=1&criteria[0][searchtype]=notequals&criteria[0][value]=0&search=Search&itemtype=Entity&start=0" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
 
 $entities = $EntityResult.data #convert api search into entities array
 $SearchResult=@()
