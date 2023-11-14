@@ -17,8 +17,6 @@ $GitHubUri = "@option.RawGitHubRepoSource@"
 $GLPIapiAppToken = "@option.GLPI-API-App-Token-01@"
 $GLPIuserApiToken = "@option.GLPI-API-User-Token-01@"
 $AppURL = "@option.GLPI-api-AppURL@"
-$UserToken = "@option.GLPI-API-User-Token-01@"
-$AppToken = "@option.GLPI-API-App-Token-01@"
 
 Start-Transcript -Path $transcriptlog -Force -NoClobber -Append
 Write-Host $(Get-Date)
