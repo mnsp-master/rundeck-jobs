@@ -1,7 +1,7 @@
 #common template that will download raw defined ps script and execute it, substituting localised vars as defined in rundeck job
 
 Clear-Host
-$mnspver = "0.0.0.0.0.1"
+$mnspver = "0.0.0.0.0.2"
 $Root = ":@option.Root@"
 $CID="C@option.ChangeID@"
 $GamDir="$Root\AppData\GAMXTD3\app"
@@ -13,7 +13,7 @@ $transcriptlog = "$LogDir\$(Get-date -Format yyyyMMdd-HHmmss)_transcript.log"
 $GitHubPS = "$DataDir\JobToRun.ps1"
 $GitHubUri = "@option.RawGitHubRepoSource@"
 
-#set/update/add vars below as required by the individual local rundeck job:
+#set/update/add vars (using options values) below as required by the individual local rundeck job:
 $GLPIapiAppToken = "@option.GLPI-API-App-Token-01@"
 $GLPIuserApiToken = "@option.GLPI-API-User-Token-01@"
 $AppURL = "@option.GLPI-api-AppURL@"
