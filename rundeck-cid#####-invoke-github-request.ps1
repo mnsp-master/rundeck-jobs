@@ -2,7 +2,7 @@
 
 Clear-Host
 $mnspver = "0.0.0.0.0.1"
-$Root = ":@option.root@"
+$Root = ":@option.Root@"
 $CID="C@option.ChangeID@"
 $GamDir="$Root\AppData\GAMXTD3\app"
 $DataDir="$Root\AppData\Rundeck\$CID\Data"
