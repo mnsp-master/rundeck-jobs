@@ -14,13 +14,16 @@ $GitHubPS = "$DataDir\JobToRun.ps1"
 $GitHubUri = "@option.RawGitHubRepoSource@"
 
 #set/update/add variables (using rundeck job option(s) values) below as required by the individual local rundeck job:
+#e.g: $MyVariable1 = "@option.rundeck-option@"
 $GLPIapiAppToken = "@option.GLPI-API-App-Token-01@"
 $GLPIuserApiToken = "@option.GLPI-API-User-Token-01@"
 $AppURL = "@option.GLPI-api-AppURL@"
 
+#start transaction log
 Start-Transcript -Path $transcriptlog -Force -NoClobber -Append
 Write-Host $(Get-Date)
 
+#download raw powershell script from github
 Invoke-WebRequest -Uri $GitHubUri -OutFile $GitHubPS
 
 $ErrorActionPreference="Continue"
