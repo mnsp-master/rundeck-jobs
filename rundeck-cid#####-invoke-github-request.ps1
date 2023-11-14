@@ -1,4 +1,5 @@
 #common template that will download raw defined ps script and execute it, substituting localised vars as defined in the rundeck job
+#use this as a starting point hen creating new rundeck jobs
 
 Clear-Host
 $mnspver = "0.0.0.0.0.3"
