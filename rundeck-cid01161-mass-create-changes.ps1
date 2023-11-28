@@ -79,7 +79,7 @@ foreach ($TargetEntityID in $TargetEntityIDs) {
                     "urgency" = "2"
                     "status" = "1"
                     "impact" = "3"
-                    "category_id" = "591"
+                    "category_id" = "131"
                 }
             )
         }
