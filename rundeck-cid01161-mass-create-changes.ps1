@@ -1,4 +1,4 @@
-$mnspver = "0.0.0.0.0.2.4"
+$mnspver = "0.0.0.0.0.2.5"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -25,7 +25,7 @@ $SessionToken = Invoke-RestMethod -Verbose "$AppURL/initSession" -Method Get -He
 #$entities = $EntityResult.data #convert api search into entities array
 #$entities
 
-################################ incrementing plugin id's fix #######################################
+################################ return GLPI plugin additional fields IDs #######################################
 $ApiSearchResult = Invoke-RestMethod "$AppURL/listSearchOptions/Entity" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} # api serach query for glpi entities
 $ApiSearchResult  | out-file -FilePath $temptxt # output api entity query to tmp txt doc
 $ApiSearchResultSummary = Get-Content $temptxt | where-object {$_ -Like "*MNSP IT Adhoc*"} | Select-Object #filter to only include specific Plugin generated ID's
@@ -33,7 +33,7 @@ $ApiSearchResultSummary = Get-Content $temptxt | where-object {$_ -Like "*MNSP I
 $ApiSearchResultSummary
 
 #$GLPIsearchStringHeadTeacher = "MNSP IT Adhoc - Head Teacher" #search string to return Plugin object ID
-$GLPIsearchStringSchoolNameCode = "MNSP IT Adhoc - SchoolNameCode" #search string to return Plugin object ID
+#$GLPIsearchStringSchoolNameCode = "MNSP IT Adhoc - SchoolNameCode" #search string to return Plugin object ID
 
 #$GLPIsearchStringMNSPUpdateGoogleChromeDeviceUserAttribute = "MNSP IT Adhoc - Update Google Chrome Device user attribute" #search string to return Plugin object ID
 
