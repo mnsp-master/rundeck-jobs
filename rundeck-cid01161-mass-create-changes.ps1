@@ -1,4 +1,4 @@
-$mnspver = "0.0.0.0.0.2.9"
+$mnspver = "0.0.0.0.0.2.9.1"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -56,10 +56,8 @@ foreach ($TargetEntityID in $TargetEntityIDs) {
         $GetEntityAttributes
 
         #get additional fields plugin values
-        #$EntitySpecificID = $TargetEntityID # school entity ID
-        
-        #$apiQuerySpecificID = "?as_map=0&browse=0&criteria[0][link]=AND&criteria[0][field]=2&criteria[0][searchtype]=contains&criteria[0][value]=$TargetEntityID&itemtype=Entity&start=0"
         $apiQuerySpecificID = "?as_map=0&browse=0&criteria[0][link]=AND&criteria[0][field]=76694&criteria[0][searchtype]=contains&criteria[0][value]=&criteria[1][link]=OR&criteria[1][field]=76692&criteria[1][searchtype]=contains&criteria[1][value]=&criteria[2][link]=OR&criteria[2][field]=76684&criteria[2][searchtype]=contains&criteria[2][value]=&criteria[3][link]=AND&criteria[3][field]=2&criteria[3][searchtype]=contains&criteria[3][value]=$TargetEntityID&itemtype=Entity&start=0"
+
         $EntityResult = Invoke-RestMethod "$AppURL/search/Entity$apiQuerySpecificID" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
         Write-host "additional fields plugin values..."
         $EntityResult.data
@@ -73,9 +71,9 @@ foreach ($TargetEntityID in $TargetEntityIDs) {
             "input" = @(
                 @{
                     "content" = "$ItemDescription"
-                    "name" = "$($GetEntityAttributes.registration_number) - $ItemTitle $(Get-Date)"
+                    "name" = "$($EntityResult.data.76694) - $ItemTitle $(Get-Date)"
                     "_users_id_requester" = "47"
-                    "_users_id_assign" = "57"
+                    "_users_id_assign" = "$($EntityResult.data.76692)"
                     "entities_id" = "$TargetEntityID"
                     "priority" = "3"
                     "urgency" = "2"
