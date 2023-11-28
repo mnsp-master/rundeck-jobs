@@ -1,4 +1,4 @@
-$mnspver = "0.0.0.0.0.2.5"
+$mnspver = "0.0.0.0.0.2.6"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -54,6 +54,12 @@ foreach ($TargetEntityID in $TargetEntityIDs) {
         $GetEntityAttributes = @()
         $GetEntityAttributes = Invoke-RestMethod -Method GET -Uri $EntityAttributesURL/$TargetEntityID -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken" ; "ContentType" = "application/json"}
         $GetEntityAttributes
+
+        #get additional fields plugin values
+        #$EntitySpecificID = $TargetEntityID # school entity ID
+        $apiQuerySpecificID = "?as_map=0&browse=0&criteria[0][link]=AND&criteria[0][field]=2&criteria[0][searchtype]=contains&criteria[0][value]=$TargetEntityID&itemtype=Entity&start=0"
+        $EntityResult = Invoke-RestMethod "$AppURL/search/Entity$apiQuerySpecificID" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
+        $EntityResult.data
 
         Write-Host "Creating Change for entity ID:" $TargetEntityID
         #Write-Host "Administrative Number: " $GetEntityAttributes.registration_number
