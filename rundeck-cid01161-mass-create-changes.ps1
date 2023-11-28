@@ -1,4 +1,4 @@
-$mnspver = "0.0.0.0.0.2.9.1"
+$mnspver = "0.0.0.0.0.2.9.2"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -79,6 +79,7 @@ foreach ($TargetEntityID in $TargetEntityIDs) {
                     "urgency" = "2"
                     "status" = "1"
                     "impact" = "3"
+                    "category" = "591"
                 }
             )
         }
