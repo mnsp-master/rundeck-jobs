@@ -1,4 +1,4 @@
-$mnspver = "0.0.0.0.0.3.0.7"
+$mnspver = "0.0.0.0.0.3.0.8"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -40,6 +40,7 @@ Write-host "$GLPIsearchStringSchoolNameCode ID: ---$GLPIsearchStringSchoolNameCo
 if ( $TargetEntityIDs -eq "1000" ) {
     Write-Host "Primaries ONLY...."
     $apiQueryALL = "?criteria[1][link]=AND&criteria[1][field]=76684&criteria[1][searchtype]=equals&criteria[1][value]=1&itemtype=Entity&start=0" #primaries
+    $EntitiesResult = Invoke-RestMethod "$AppURL/search/Entity$apiQueryALL" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
     $EntitiesResult.data
     break
     }
@@ -48,6 +49,7 @@ elseif
     ( $TargetEntityIDs -eq "1001" ) {
     Write-Host "Secondaries ONLY...."
     $apiQueryALL = "?criteria[1][link]=AND&criteria[1][field]=76684&criteria[1][searchtype]=equals&criteria[1][value]=2&itemtype=Entity&start=0" #secondaries
+    $EntitiesResult = Invoke-RestMethod "$AppURL/search/Entity$apiQueryALL" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
     $EntitiesResult.data
     break
     }
