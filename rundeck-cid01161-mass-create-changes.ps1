@@ -1,4 +1,4 @@
-$mnspver = "0.0.0.0.0.3.0.5"
+$mnspver = "0.0.0.0.0.3.0.6"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -38,12 +38,12 @@ Write-host "$GLPIsearchStringSchoolNameCode ID: ---$GLPIsearchStringSchoolNameCo
 
 #determine if input value is all primaries/secondaries/AP etc....
 if ( $TargetEntityIDs -eq "1000" ) {
-    Write-Host "Secondaries ONLY...."
+    Write-Host "Primaries ONLY...."
     }
 
-else if 
+elseif 
     ( $TargetEntityIDs -eq "1001" ) {
-    Write-Host "Primaries ONLY...."
+    Write-Host "Secondaries ONLY...."
     }
 
 
