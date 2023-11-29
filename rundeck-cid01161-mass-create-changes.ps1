@@ -1,4 +1,4 @@
-$mnspver = "0.0.0.0.0.3.1.2"
+$mnspver = "0.0.0.0.0.3.1.3"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -42,7 +42,7 @@ if ( $TargetEntityIDs -eq "1000" ) {
     $SchoolType = "1"
     $apiQueryALL = "?criteria[1][link]=AND&criteria[1][field]=76684&criteria[1][searchtype]=equals&criteria[1][value]=$SchoolType&itemtype=Entity&start=0" #primaries
     $EntitiesResult = Invoke-RestMethod "$AppURL/search/Entity$apiQueryALL" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
-    $EntitiesResult
+    $EntitiesResult.data
     #close current api session...
     Invoke-RestMethod "$AppURL/killSession" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
     exit
@@ -54,7 +54,7 @@ elseif
     $SchoolType = "2"
     $apiQueryALL = "?criteria[1][link]=AND&criteria[1][field]=76684&criteria[1][searchtype]=equals&criteria[1][value]=$SchoolType&itemtype=Entity&start=0" #primaries
     $EntitiesResult = Invoke-RestMethod "$AppURL/search/Entity$apiQueryALL" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
-    $EntitiesResult
+    $EntitiesResult.data
     Invoke-RestMethod "$AppURL/killSession" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
     exit
     }
