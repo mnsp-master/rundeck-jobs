@@ -1,4 +1,4 @@
-$mnspver = "0.0.0.0.0.2.9.3"
+$mnspver = "0.0.0.0.0.2.9.4"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -66,14 +66,17 @@ foreach ($TargetEntityID in $TargetEntityIDs) {
         #Write-Host "Administrative Number: " $GetEntityAttributes.registration_number
         Write-Host "SchoolNameCode: " $GetEntityAttributes.$GLPIsearchStringSchoolNameCodeID
 
-        
+        $dataName = $($EntityResult.data.76694) - $ItemTitle $(Get-Date)
+        $dataUsersIdAssign = $($EntityResult.data.76692)
+
+
         $data = @{
             "input" = @(
                 @{
                     "content" = "$ItemDescription"
-                    "name" = "$($EntityResult.data.76694) - $ItemTitle $(Get-Date)"
+                    "name" = "$dataName"
                     "_users_id_requester" = "47"
-                    "_users_id_assign" = "$($EntityResult.data.76692)"
+                    "_users_id_assign" = "$dataUsersIdAssign"
                     "entities_id" = "$TargetEntityID"
                     "priority" = "3"
                     "urgency" = "2"
@@ -104,6 +107,25 @@ foreach ($TargetEntityID in $TargetEntityIDs) {
     }
     $ProjectDataJson = $ProjectData | ConvertTo-Json
     Invoke-RestMethod -Method POST -Uri $ProjectUpdateUrl/$LinkedProjectID/Itil_Project -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -Body $ProjectDataJson -ContentType 'application/json'
+
+    ##create project task##
+    $ProjectUpdateUrl = "$AppURL/Project"
+        $ProjectData = @{
+            "input" = @(
+                @{
+                    "itemtype" = "projecttask"
+                    "projects_id" = "$LinkedProjectID"
+                    "name" = "$dataName"
+                    "content" = "$ItemDescription"
+                    "projectstates_id" = "1"
+
+                }
+            )
+        }
+        $ProjectDataJson = $ProjectData | ConvertTo-Json
+        Invoke-RestMethod -Method POST -Uri $ProjectUpdateUrl/$LinkedProjectID/ProjectTask -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -Body $ProjectDataJson -ContentType 'application/json' # 
+
+
 
 }
 #close current api session...
