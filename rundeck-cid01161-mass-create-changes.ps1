@@ -1,4 +1,4 @@
-$mnspver = "0.0.0.0.0.2.9.9"
+$mnspver = "0.0.0.0.0.3.0.0"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -66,7 +66,7 @@ foreach ($TargetEntityID in $TargetEntityIDs) {
         #Write-Host "Administrative Number: " $GetEntityAttributes.registration_number
         #Write-Host "SchoolNameCode: " $GetEntityAttributes.$GLPIsearchStringSchoolNameCodeID
 
-        $dataName = {$($EntityResult.data.76694) - $ItemTitle $(Get-Date)}
+        $dataName = ($($EntityResult.data.76694) - $ItemTitle $(Get-Date))
         $dataUsersIdAssign = $($EntityResult.data.76692)
 
         Write-Host "SNO 01..."
