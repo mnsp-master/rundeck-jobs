@@ -1,4 +1,4 @@
-$mnspver = "0.0.0.0.0.3.0.9"
+$mnspver = "0.0.0.0.0.3.1.0"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -30,13 +30,12 @@ $ApiSearchResult = Invoke-RestMethod "$AppURL/listSearchOptions/Entity" -Headers
 $ApiSearchResult  | out-file -FilePath $temptxt # output api entity query to tmp txt doc
 $ApiSearchResultSummary = Get-Content $temptxt | where-object {$_ -Like "*MNSP IT Adhoc*"} | Select-Object #filter to only include specific Plugin generated ID's
 
-$ApiSearchResultSummary
-
-
-$GLPIsearchStringSchoolNameCodeID = $($ApiSearchResultSummary | Where-Object {$_ -Like "*$GLPIsearchStringSchoolNameCode*"}).split(":")[0].TrimEnd() #get SchoolNameCode ID
-Write-host "$GLPIsearchStringSchoolNameCode ID: ---$GLPIsearchStringSchoolNameCodeID---"
+#$ApiSearchResultSummary
 
 #determine if input value is all primaries/secondaries/AP etc....
+$EntitiesResult =@()
+$apiQueryALL = @()
+
 if ( $TargetEntityIDs -eq "1000" ) {
     Write-Host "Primaries ONLY...."
     $apiQueryALL = "?criteria[1][link]=AND&criteria[1][field]=76684&criteria[1][searchtype]=equals&criteria[1][value]=1&itemtype=Entity&start=0" #primaries
@@ -52,7 +51,7 @@ elseif
     Write-Host "Secondaries ONLY...."
     $apiQueryALL = "?criteria[1][link]=AND&criteria[1][field]=76684&criteria[1][searchtype]=equals&criteria[1][value]=2&itemtype=Entity&start=0" #secondaries
     $EntitiesResult = Invoke-RestMethod "$AppURL/search/Entity$apiQueryALL" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
-    $EntitiesResult.data
+    $EntitiesResult
     Invoke-RestMethod "$AppURL/killSession" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
     exit
     }
@@ -145,6 +144,11 @@ foreach ($TargetEntityID in $TargetEntityIDs) {
 Invoke-RestMethod "$AppURL/killSession" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
 
 <#
+
+
+$GLPIsearchStringSchoolNameCodeID = $($ApiSearchResultSummary | Where-Object {$_ -Like "*$GLPIsearchStringSchoolNameCode*"}).split(":")[0].TrimEnd() #get SchoolNameCode ID
+Write-host "$GLPIsearchStringSchoolNameCode ID: ---$GLPIsearchStringSchoolNameCodeID---"
+
 
 #$GLPIsearchStringHeadTeacher = "MNSP IT Adhoc - Head Teacher" #search string to return Plugin object ID
 #$GLPIsearchStringSchoolNameCode = "MNSP IT Adhoc - SchoolNameCode" #search string to return Plugin object ID
