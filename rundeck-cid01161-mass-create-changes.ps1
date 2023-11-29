@@ -1,4 +1,4 @@
-$mnspver = "0.0.0.0.0.3.1.1"
+$mnspver = "0.0.0.0.0.3.1.2"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -35,10 +35,12 @@ $ApiSearchResultSummary = Get-Content $temptxt | where-object {$_ -Like "*MNSP I
 #determine if input value is all primaries/secondaries/AP etc....
 $EntitiesResult =@()
 $apiQueryALL = @()
+$SchoolType = @()
 
 if ( $TargetEntityIDs -eq "1000" ) {
     Write-Host "Primaries ONLY...."
-    $apiQueryALL = "?criteria[1][link]=AND&criteria[1][field]=76684&criteria[1][searchtype]=equals&criteria[1][value]=1&itemtype=Entity&start=0" #primaries
+    $SchoolType = "1"
+    $apiQueryALL = "?criteria[1][link]=AND&criteria[1][field]=76684&criteria[1][searchtype]=equals&criteria[1][value]=$SchoolType&itemtype=Entity&start=0" #primaries
     $EntitiesResult = Invoke-RestMethod "$AppURL/search/Entity$apiQueryALL" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
     $EntitiesResult
     #close current api session...
@@ -49,7 +51,8 @@ if ( $TargetEntityIDs -eq "1000" ) {
 elseif 
     ( $TargetEntityIDs -eq "1001" ) {
     Write-Host "Secondaries ONLY...."
-    $apiQueryALL = "?criteria[1][link]=AND&criteria[1][field]=76684&criteria[1][searchtype]=equals&criteria[1][value]=2&itemtype=Entity&start=0" #secondaries
+    $SchoolType = "2"
+    $apiQueryALL = "?criteria[1][link]=AND&criteria[1][field]=76684&criteria[1][searchtype]=equals&criteria[1][value]=$SchoolType&itemtype=Entity&start=0" #primaries
     $EntitiesResult = Invoke-RestMethod "$AppURL/search/Entity$apiQueryALL" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
     $EntitiesResult
     Invoke-RestMethod "$AppURL/killSession" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
