@@ -1,4 +1,4 @@
-$mnspver = "0.0.0.0.0.3.0.6"
+$mnspver = "0.0.0.0.0.3.0.7"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -39,11 +39,17 @@ Write-host "$GLPIsearchStringSchoolNameCode ID: ---$GLPIsearchStringSchoolNameCo
 #determine if input value is all primaries/secondaries/AP etc....
 if ( $TargetEntityIDs -eq "1000" ) {
     Write-Host "Primaries ONLY...."
+    $apiQueryALL = "?criteria[1][link]=AND&criteria[1][field]=76684&criteria[1][searchtype]=equals&criteria[1][value]=1&itemtype=Entity&start=0" #primaries
+    $EntitiesResult.data
+    break
     }
 
 elseif 
     ( $TargetEntityIDs -eq "1001" ) {
     Write-Host "Secondaries ONLY...."
+    $apiQueryALL = "?criteria[1][link]=AND&criteria[1][field]=76684&criteria[1][searchtype]=equals&criteria[1][value]=2&itemtype=Entity&start=0" #secondaries
+    $EntitiesResult.data
+    break
     }
 
 
