@@ -1,4 +1,4 @@
-$mnspver = "0.0.0.0.0.3.0.2"
+$mnspver = "0.0.0.0.0.3.0.3"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -69,15 +69,15 @@ foreach ($TargetEntityID in $TargetEntityIDs) {
         $dataName = "$($EntityResult.data.76694) - $ItemTitle" # $(Get-Date)
         $dataUsersIdAssign = $($EntityResult.data.76692)
 
-        Write-Host "SNO 01..."
-        $dataName
+        #Write-Host "SNO 01..."
+        #$dataName
 
 
         $data = @{
             "input" = @(
                 @{
                     "content" = "$ItemDescription"
-                    "name" = "$($EntityResult.data.76694) - $ItemTitle $(Get-Date)"
+                    "name" = "$dataName"
                     "_users_id_requester" = "47"
                     "_users_id_assign" = "$dataUsersIdAssign"
                     "entities_id" = "$TargetEntityID"
@@ -118,7 +118,7 @@ foreach ($TargetEntityID in $TargetEntityIDs) {
                 @{
                     "itemtype" = "projecttask"
                     "projects_id" = "$LinkedProjectID"
-                    "name" = "$($EntityResult.data.76694) - $ItemTitle $(Get-Date)"
+                    "name" = "$dataName"
                     "content" = "$ItemDescription"
                     "projectstates_id" = "1"
 
