@@ -1,4 +1,4 @@
-$mnspver = "0.0.0.0.0.2.9.5"
+$mnspver = "0.0.0.0.0.2.9.6"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -66,7 +66,7 @@ foreach ($TargetEntityID in $TargetEntityIDs) {
         #Write-Host "Administrative Number: " $GetEntityAttributes.registration_number
         Write-Host "SchoolNameCode: " $GetEntityAttributes.$GLPIsearchStringSchoolNameCodeID
 
-        $dataName = "$($EntityResult.data.76694) - $ItemTitle $(Get-Date)"
+        #$dataName = "$($EntityResult.data.76694) - $ItemTitle $(Get-Date)"
         $dataUsersIdAssign = $($EntityResult.data.76692)
 
 
@@ -74,7 +74,7 @@ foreach ($TargetEntityID in $TargetEntityIDs) {
             "input" = @(
                 @{
                     "content" = "$ItemDescription"
-                    "name" = "$dataName"
+                    "name" = "$($EntityResult.data.76694) - $ItemTitle $(Get-Date)"
                     "_users_id_requester" = "47"
                     "_users_id_assign" = "$dataUsersIdAssign"
                     "entities_id" = "$TargetEntityID"
@@ -115,7 +115,7 @@ foreach ($TargetEntityID in $TargetEntityIDs) {
                 @{
                     "itemtype" = "projecttask"
                     "projects_id" = "$LinkedProjectID"
-                    "name" = "$dataName"
+                    "name" = "$($EntityResult.data.76694) - $ItemTitle $(Get-Date)"
                     "content" = "$ItemDescription"
                     "projectstates_id" = "1"
 
