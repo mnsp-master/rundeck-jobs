@@ -1,4 +1,4 @@
-$mnspver = "0.0.0.0.0.3.1.8"
+$mnspver = "0.0.0.0.0.3.1.9"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -31,6 +31,20 @@ $ApiSearchResult  | out-file -FilePath $temptxt # output api entity query to tmp
 $ApiSearchResultSummary = Get-Content $temptxt | where-object {$_ -Like "*MNSP IT Adhoc*"} | Select-Object #filter to only include specific Plugin generated ID's
 
 #$ApiSearchResultSummary
+#get DB IDs....
+$GLPIsearchStringSchoolType ="MNSP IT Adhoc - School Type"
+$MNSPITAdhocSchoolTypeID = $($ApiSearchResultSummary | where-Object {$_ -Like "*$GLPIsearchStringSchoolType*"}).split(":")[0].TrimEnd()
+Write-Host "$GLPIsearchStringSchoolType ID: ---$MNSPITAdhocSchoolTypeID---"
+
+#close current api session...
+Invoke-RestMethod "$AppURL/killSession" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
+exit
+
+
+#$GLPIsearchStringGoogleWorkspaceChromebookBaseOU = "MNSP IT Adhoc - Google workspace chrome book base OU" #search string to return Plugin object ID
+#$GoogleWorkspaceChromebookBaseOUID = $($ApiSearchResultSummary | Where-Object {$_ -Like "*$GLPIsearchStringGoogleWorkspaceChromebookBaseOU*"}).split(":")[0].TrimEnd() #get headteacher ID
+#Write-host "$GLPIsearchStringGoogleWorkspaceChromebookBaseOU ID: ---$GoogleWorkspaceChromebookBaseOUID---"
+
 
 #determine if input value is all primaries/secondaries/AP etc....
 $EntitiesResult =@()
