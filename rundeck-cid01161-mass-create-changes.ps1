@@ -31,7 +31,7 @@ $ApiSearchResult  | out-file -FilePath $temptxt # output api entity query to tmp
 $ApiSearchResultSummary = Get-Content $temptxt | where-object {$_ -Like "*MNSP IT Adhoc*"} | Select-Object #filter to only include specific Plugin generated ID's
 
 #$ApiSearchResultSummary
-#get DB IDs....
+#get specific GLPI plugin additional fields object IDs...
 $GLPIsearchStringSchoolType = "MNSP IT Adhoc - School Type"
 $MNSPSchoolTypeID = $($ApiSearchResultSummary | where-Object {$_ -Like "*$GLPIsearchStringSchoolType*"}).split(":")[0].TrimEnd()
 Write-Host "$GLPIsearchStringSchoolType ID: ---$MNSPSchoolTypeID---"
