@@ -1,4 +1,4 @@
-$mnspver = "0.0.0.0.0.3.1.9"
+$mnspver = "0.0.0.0.0.3.2.0"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -32,9 +32,17 @@ $ApiSearchResultSummary = Get-Content $temptxt | where-object {$_ -Like "*MNSP I
 
 #$ApiSearchResultSummary
 #get DB IDs....
-$GLPIsearchStringSchoolType ="MNSP IT Adhoc - School Type"
-$MNSPITAdhocSchoolTypeID = $($ApiSearchResultSummary | where-Object {$_ -Like "*$GLPIsearchStringSchoolType*"}).split(":")[0].TrimEnd()
-Write-Host "$GLPIsearchStringSchoolType ID: ---$MNSPITAdhocSchoolTypeID---"
+$GLPIsearchStringSchoolType = "MNSP IT Adhoc - School Type"
+$MNSPSchoolTypeID = $($ApiSearchResultSummary | where-Object {$_ -Like "*$GLPIsearchStringSchoolType*"}).split(":")[0].TrimEnd()
+Write-Host "$GLPIsearchStringSchoolType ID: ---$MNSPSchoolTypeID---"
+
+$GLPIsearchStringLevel3ITEngineer = "MNSP IT Adhoc - Level 3 IT Engineer"
+$MNSPLevel3EngineerID = $($ApiSearchResultSummary | where-Object {$_ -Like "*$GLPIsearchStringLevel3ITEngineer*"}).split(":")[0].TrimEnd()
+Write-Host "$GLPIsearchStringLevel3ITEngineer ID: ---$MNSPLevel3EngineerID---"
+
+$GLPIsearchStringSchoolNameCode = "MNSP IT Adhoc - School Name Code"
+$MNSPSchoolNameCodeID = $($ApiSearchResultSummary | where-Object {$_ -Like "*$GLPIsearchStringSchoolNameCode*"}).split(":")[0].TrimEnd()
+Write-Host "$GLPIsearchStringSchoolNameCode ID: ---$MNSPSchoolNameCodeID---"
 
 #close current api session...
 Invoke-RestMethod "$AppURL/killSession" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
