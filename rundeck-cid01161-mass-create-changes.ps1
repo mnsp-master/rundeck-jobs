@@ -1,4 +1,4 @@
-$mnspver = "0.0.0.0.0.3.2.5"
+$mnspver = "0.0.0.0.0.3.2.6"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -88,10 +88,12 @@ foreach ($TargetEntityID in $TargetEntityIDs) {
         Write-Host "Getting Entity Info..."
         $GetEntityAttributes = @()
         $GetEntityAttributes = Invoke-RestMethod -Method GET -Uri $EntityAttributesURL/$TargetEntityID -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken" ; "ContentType" = "application/json"}
-        $GetEntityAttributes
+        #$GetEntityAttributes
 
         #get additional fields plugin values
-        $apiQuerySpecificID = "?as_map=0&browse=0&criteria[0][link]=AND&criteria[0][field]=76694&criteria[0][searchtype]=contains&criteria[0][value]=&criteria[1][link]=OR&criteria[1][field]=76692&criteria[1][searchtype]=contains&criteria[1][value]=&criteria[2][link]=OR&criteria[2][field]=76684&criteria[2][searchtype]=contains&criteria[2][value]=&criteria[3][link]=AND&criteria[3][field]=2&criteria[3][searchtype]=contains&criteria[3][value]=$TargetEntityID&itemtype=Entity&start=0"
+        #$apiQuerySpecificID = "?as_map=0&browse=0&criteria[0][link]=AND&criteria[0][field]=76694&criteria[0][searchtype]=contains&criteria[0][value]=&criteria[1][link]=OR&criteria[1][field]=76692&criteria[1][searchtype]=contains&criteria[1][value]=&criteria[2][link]=OR&criteria[2][field]=76684&criteria[2][searchtype]=contains&criteria[2][value]=&criteria[3][link]=AND&criteria[3][field]=2&criteria[3][searchtype]=contains&criteria[3][value]=$TargetEntityID&itemtype=Entity&start=0"
+
+        $apiQuerySpecificID = "?as_map=0&browse=0&criteria[0][link]=AND&criteria[0][field]=$MNSPSchoolNameCodeID&criteria[0][searchtype]=contains&criteria[0][value]=&criteria[1][link]=OR&criteria[1][field]=$MNSPLevel3EngineerID&criteria[1][searchtype]=contains&criteria[1][value]=&criteria[2][link]=OR&criteria[2][field]=$MNSPSchoolTypeID&criteria[2][searchtype]=contains&criteria[2][value]=&criteria[3][link]=AND&criteria[3][field]=2&criteria[3][searchtype]=contains&criteria[3][value]=$TargetEntityID&itemtype=Entity&start=0"
 
         $EntityResult = Invoke-RestMethod "$AppURL/search/Entity$apiQuerySpecificID" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
         Write-host "additional fields plugin values..."
@@ -103,13 +105,13 @@ foreach ($TargetEntityID in $TargetEntityIDs) {
 
         $dataName = @()
         #$dataName = "$($EntityResult.data.76694) - $ItemTitle" # $(Get-Date)
-        #$dataName = "$($EntityResult.data.$MNSPSchoolNameCodeID) - $ItemTitle" # $(Get-Date)
-        $dataName = "$($EntityResult.data.76684) - $ItemTitle" # $(Get-Date)
-        #$($EntityResult.data.$MNSPSchoolNameCodeID)
+        $dataName = "$($EntityResult.data.$MNSPSchoolNameCodeID) - $ItemTitle" # $(Get-Date)
+        #$dataName = "$($EntityResult.data.76684) - $ItemTitle" # $(Get-Date)
+        $($EntityResult.data.$MNSPSchoolNameCodeID)
         #$dataUsersIdAssign = $($EntityResult.data.76692)
-        $dataUsersIdAssign = $($EntityResult.data.76683)
-        #$dataUsersIdAssign = $($EntityResult.data.$MNSPLevel3EngineerID)
-        #$($EntityResult.data.$MNSPLevel3EngineerID)
+        #$dataUsersIdAssign = $($EntityResult.data.76683)
+        $dataUsersIdAssign = $($EntityResult.data.$MNSPLevel3EngineerID)
+        $($EntityResult.data.$MNSPLevel3EngineerID)
 
         #Write-Host "SNO 01..."
         #$dataName
