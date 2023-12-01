@@ -1,4 +1,4 @@
-$mnspver = "0.0.0.0.0.3.2.4"
+$mnspver = "0.0.0.0.0.3.2.5"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -103,11 +103,13 @@ foreach ($TargetEntityID in $TargetEntityIDs) {
 
         $dataName = @()
         #$dataName = "$($EntityResult.data.76694) - $ItemTitle" # $(Get-Date)
-        $dataName = "$($EntityResult.data.$MNSPSchoolNameCodeID) - $ItemTitle" # $(Get-Date)
-        $($EntityResult.data.$MNSPSchoolNameCodeID)
+        #$dataName = "$($EntityResult.data.$MNSPSchoolNameCodeID) - $ItemTitle" # $(Get-Date)
+        $dataName = "$($EntityResult.data.76684) - $ItemTitle" # $(Get-Date)
+        #$($EntityResult.data.$MNSPSchoolNameCodeID)
         #$dataUsersIdAssign = $($EntityResult.data.76692)
-        $dataUsersIdAssign = $($EntityResult.data.$MNSPLevel3EngineerID)
-        $($EntityResult.data.$MNSPLevel3EngineerID)
+        $dataUsersIdAssign = $($EntityResult.data.76683)
+        #$dataUsersIdAssign = $($EntityResult.data.$MNSPLevel3EngineerID)
+        #$($EntityResult.data.$MNSPLevel3EngineerID)
 
         #Write-Host "SNO 01..."
         #$dataName
