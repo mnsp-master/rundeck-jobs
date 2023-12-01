@@ -1,4 +1,4 @@
-$mnspver = "0.0.0.0.0.3.2.6"
+$mnspver = "0.0.0.0.0.3.2.7"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -75,6 +75,18 @@ elseif
     ( $TargetEntityIDs -eq "1001" ) {
     Write-Host "Secondaries ONLY...."
     $SchoolType = "2" # too hard coded - needs lookup mechanism
+    $apiQueryALL = "?criteria[1][link]=AND&criteria[1][field]=$MNSPSchoolTypeID&criteria[1][searchtype]=equals&criteria[1][value]=$SchoolType&itemtype=Entity&start=0" #primaries
+    $EntitiesResult = Invoke-RestMethod "$AppURL/search/Entity$apiQueryALL" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
+    $TargetEntityIDs = $EntitiesResult.data.2
+    $TargetEntityIDs
+    #Invoke-RestMethod "$AppURL/killSession" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
+    #exit
+    }
+
+elseif
+    ( $TargetEntityIDs -eq "1002" ) {
+    Write-Host "AP Schools ONLY...."
+    $SchoolType = "7" # too hard coded - needs lookup mechanism
     $apiQueryALL = "?criteria[1][link]=AND&criteria[1][field]=$MNSPSchoolTypeID&criteria[1][searchtype]=equals&criteria[1][value]=$SchoolType&itemtype=Entity&start=0" #primaries
     $EntitiesResult = Invoke-RestMethod "$AppURL/search/Entity$apiQueryALL" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
     $TargetEntityIDs = $EntitiesResult.data.2
