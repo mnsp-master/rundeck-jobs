@@ -1,4 +1,4 @@
-$mnspver = "0.0.0.0.0.3.2.2"
+$mnspver = "0.0.0.0.0.3.2.3"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -67,8 +67,8 @@ if ( $TargetEntityIDs -eq "1000" ) {
     $TargetEntityIDs = $EntitiesResult.data.2
     $TargetEntityIDs
     #close current api session...
-    Invoke-RestMethod "$AppURL/killSession" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
-    exit
+    #Invoke-RestMethod "$AppURL/killSession" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
+    #exit
     }
 
 elseif 
@@ -79,8 +79,8 @@ elseif
     $EntitiesResult = Invoke-RestMethod "$AppURL/search/Entity$apiQueryALL" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
     $TargetEntityIDs = $EntitiesResult.data.2
     $TargetEntityIDs
-    Invoke-RestMethod "$AppURL/killSession" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
-    exit
+    #Invoke-RestMethod "$AppURL/killSession" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
+    #exit
     }
 
 
@@ -102,8 +102,10 @@ foreach ($TargetEntityID in $TargetEntityIDs) {
         #Write-Host "SchoolNameCode: " $GetEntityAttributes.$GLPIsearchStringSchoolNameCodeID
 
         $dataName = @()
-        $dataName = "$($EntityResult.data.76694) - $ItemTitle" # $(Get-Date)
-        $dataUsersIdAssign = $($EntityResult.data.76692)
+        #$dataName = "$($EntityResult.data.76694) - $ItemTitle" # $(Get-Date)
+        $dataName = "$($EntityResult.data.$MNSPSchoolNameCodeID) - $ItemTitle" # $(Get-Date)
+        #$dataUsersIdAssign = $($EntityResult.data.76692)
+        $dataUsersIdAssign = $($EntityResult.data.$MNSPLevel3EngineerID)
 
         #Write-Host "SNO 01..."
         #$dataName
