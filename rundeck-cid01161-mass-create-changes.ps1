@@ -1,4 +1,4 @@
-$mnspver = "0.0.0.0.0.3.2.0"
+$mnspver = "0.0.0.0.0.3.2.1"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -45,8 +45,8 @@ $MNSPSchoolNameCodeID = $($ApiSearchResultSummary | where-Object {$_ -Like "*$GL
 Write-Host "$GLPIsearchStringSchoolNameCode ID: ---$MNSPSchoolNameCodeID---"
 
 #close current api session...
-Invoke-RestMethod "$AppURL/killSession" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
-exit
+#Invoke-RestMethod "$AppURL/killSession" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
+#exit
 
 
 #$GLPIsearchStringGoogleWorkspaceChromebookBaseOU = "MNSP IT Adhoc - Google workspace chrome book base OU" #search string to return Plugin object ID
@@ -61,26 +61,26 @@ $SchoolType = @()
 
 if ( $TargetEntityIDs -eq "1000" ) {
     Write-Host "Primaries ONLY...."
-    $SchoolType = "1"
-    $apiQueryALL = "?criteria[1][link]=AND&criteria[1][field]=76684&criteria[1][searchtype]=equals&criteria[1][value]=$SchoolType&itemtype=Entity&start=0" #primaries
+    $SchoolType = "1" # too hard coded - needs lookup mechanism
+    $apiQueryALL = "?criteria[1][link]=AND&criteria[1][field]=$MNSPSchoolTypeID&criteria[1][searchtype]=equals&criteria[1][value]=$SchoolType&itemtype=Entity&start=0" #primaries
     $EntitiesResult = Invoke-RestMethod "$AppURL/search/Entity$apiQueryALL" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
     $TargetEntityIDs = $EntitiesResult.data.2
     $TargetEntityIDs
     #close current api session...
-    #Invoke-RestMethod "$AppURL/killSession" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
-    #exit
+    Invoke-RestMethod "$AppURL/killSession" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
+    exit
     }
 
 elseif 
     ( $TargetEntityIDs -eq "1001" ) {
     Write-Host "Secondaries ONLY...."
-    $SchoolType = "2"
-    $apiQueryALL = "?criteria[1][link]=AND&criteria[1][field]=76684&criteria[1][searchtype]=equals&criteria[1][value]=$SchoolType&itemtype=Entity&start=0" #primaries
+    $SchoolType = "2" # too hard coded - needs lookup mechanism
+    $apiQueryALL = "?criteria[1][link]=AND&criteria[1][field]=7$MNSPSchoolTypeID&criteria[1][searchtype]=equals&criteria[1][value]=$SchoolType&itemtype=Entity&start=0" #primaries
     $EntitiesResult = Invoke-RestMethod "$AppURL/search/Entity$apiQueryALL" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
     $TargetEntityIDs = $EntitiesResult.data.2
     $TargetEntityIDs
-    #Invoke-RestMethod "$AppURL/killSession" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
-    #exit
+    Invoke-RestMethod "$AppURL/killSession" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
+    exit
     }
 
 
