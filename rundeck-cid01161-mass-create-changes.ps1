@@ -1,4 +1,4 @@
-$mnspver = "0.0.0.0.0.3.2.7"
+$mnspver = "0.0.0.0.0.3.2.8"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -134,7 +134,7 @@ foreach ($TargetEntityID in $TargetEntityIDs) {
                 @{
                     "content" = "$ItemDescription"
                     "name" = "$dataName"
-                    "_users_id_requester" = "47"
+                    "_users_id_requester" = "$GLPIChangeRequesterID"
                     "_users_id_assign" = "$dataUsersIdAssign"
                     "entities_id" = "$TargetEntityID"
                     "priority" = "3"
