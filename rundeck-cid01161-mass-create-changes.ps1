@@ -1,4 +1,4 @@
-$mnspver = "0.0.0333"
+$mnspver = "0.0.0334"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -155,6 +155,7 @@ foreach ($TargetEntityID in $TargetEntityIDs) {
 
     $subject = "New GLPI change assigned to you: $dataname"
     $mailBody = "$ItemDescription $GLPIChangeURL$CreatedChangeID"
+    $mailRecepient = $dataUsersIdAssign
     #send email
     Send-MailMessage -SmtpServer $SMTPServer -Port $SMTPPort -UseSsl -From $from -To $mailRecepient -Subject $subject -Credential $credential -body $mailBody -verbose
 
