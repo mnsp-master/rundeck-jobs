@@ -1,4 +1,4 @@
-$mnspver = "0.0.0335"
+$mnspver = "0.0.0336"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -14,7 +14,7 @@ $TargetEntityIDs = $($TargetEntityIDs.split(',')) #split supplied value using co
 
 
 #create api session to glpi instance...
-$SessionToken = Invoke-RestMethod -Verbose "$AppURL/initSession" -Method Get -Headers @{"Content-Type" = "application/json";"Authorization" = "user_token $UserToken";"App-Token"=$AppToken}
+$SessionToken = Invoke-RestMethod -Verbose "$AppURL/initSession" -Method Get -Headers @{"Content-Type"= "application/json";"Authorization" = "user_token $UserToken";"App-Token"=$AppToken}
 #https://www.urldecoder.org/
 
 
