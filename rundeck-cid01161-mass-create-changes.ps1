@@ -1,4 +1,4 @@
-$mnspver = "0.0.0332"
+$mnspver = "0.0.0333"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -148,6 +148,15 @@ foreach ($TargetEntityID in $TargetEntityIDs) {
         $ProjectDataJson = $ProjectData | ConvertTo-Json
         Invoke-RestMethod -Method POST -Uri $ProjectUpdateUrl/$LinkedProjectID/ProjectTask -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -Body $ProjectDataJson -ContentType 'application/json' # 
 
+    #notify assigned level 3 engineer of assigned change
+    #create credential object to authenticate to smtp 
+    [SecureString]$securepassword = $password | ConvertTo-SecureString -AsPlainText -Force
+    $credential = New-Object System.Management.Automation.PSCredential -ArgumentList $username, $securepassword
+
+    $subject = "New GLPI change assigned to you: $dataname"
+    $mailBody = "$ItemDescription $GLPIChangeURL$CreatedChangeID"
+    #send email
+    Send-MailMessage -SmtpServer $SMTPServer -Port $SMTPPort -UseSsl -From $from -To $mailRecepient -Subject $subject -Credential $credential -body $mailBody -verbose
 
 
 }
