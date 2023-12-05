@@ -1,4 +1,4 @@
-$mnspver = "0.0.0334"
+$mnspver = "0.0.0335"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -91,6 +91,11 @@ foreach ($TargetEntityID in $TargetEntityIDs) {
         $dataUsersIdAssign = $($EntityResult.data.$MNSPLevel3EngineerID)
         $($EntityResult.data.$MNSPLevel3EngineerID)
 
+        #get level 3 engineer's mail address
+        $Level3ITengineerData = Invoke-RestMethod "$AppURL/User/$dataUsersIdAssign" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
+
+        $Level3ITengineerEmail = $($Level3ITengineerData.name)
+
 
         $data = @{
             "input" = @(
@@ -155,7 +160,7 @@ foreach ($TargetEntityID in $TargetEntityIDs) {
 
     $subject = "New GLPI change assigned to you: $dataname"
     $mailBody = "$ItemDescription $GLPIChangeURL$CreatedChangeID"
-    $mailRecepient = $dataUsersIdAssign
+    $mailRecepient = $Level3ITengineerEmail
     #send email
     Send-MailMessage -SmtpServer $SMTPServer -Port $SMTPPort -UseSsl -From $from -To $mailRecepient -Subject $subject -Credential $credential -body $mailBody -verbose
 
