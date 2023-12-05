@@ -1,4 +1,4 @@
-$mnspver = "0.0.0331"
+$mnspver = "0.0.0332"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -106,6 +106,7 @@ foreach ($TargetEntityID in $TargetEntityIDs) {
                     "status" = "1"
                     "impact" = "3"
                     "itilcategories_id" = "$GLPIITILCategoryID"
+                    "use_notification" = "1"
                 }
             )
         }
