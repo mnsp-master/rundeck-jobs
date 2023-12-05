@@ -1,4 +1,4 @@
-$mnspver = "0.0.0336"
+$mnspver = "0.0.0337"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -93,7 +93,6 @@ foreach ($TargetEntityID in $TargetEntityIDs) {
 
         #get level 3 engineer's mail address
         $Level3ITengineerData = Invoke-RestMethod "$AppURL/User/$dataUsersIdAssign" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
-
         $Level3ITengineerEmail = $($Level3ITengineerData.name)
 
 
