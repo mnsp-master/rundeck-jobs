@@ -1,4 +1,4 @@
-$mnspver = "0.0.0337"
+$mnspver = "0.0.0338"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -86,16 +86,16 @@ foreach ($TargetEntityID in $TargetEntityIDs) {
         Write-Host "Creating Change for entity ID:" $TargetEntityID
 
         $dataName = @()
-        $dataName = "$($EntityResult.data.$MNSPSchoolNameCodeID) - $ItemTitle" # $(Get-Date)
+        $dataName = "$($EntityResult.data.$MNSPSchoolNameCodeID) - $ItemTitle" # $(Get-Date) #set Change Title using api query result data
         $($EntityResult.data.$MNSPSchoolNameCodeID)
-        $dataUsersIdAssign = $($EntityResult.data.$MNSPLevel3EngineerID)
+        $dataUsersIdAssign = $($EntityResult.data.$MNSPLevel3EngineerID) # get level 3 engineer from api query result data
         $($EntityResult.data.$MNSPLevel3EngineerID)
 
         #get level 3 engineer's mail address
         $Level3ITengineerData = Invoke-RestMethod "$AppURL/User/$dataUsersIdAssign" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
         $Level3ITengineerEmail = $($Level3ITengineerData.name)
 
-
+        #data to use as json object
         $data = @{
             "input" = @(
                 @{
