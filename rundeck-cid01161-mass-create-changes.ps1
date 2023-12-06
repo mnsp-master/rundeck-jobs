@@ -1,4 +1,4 @@
-$mnspver = "0.0.0341"
+$mnspver = "0.0.0342"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -14,9 +14,10 @@ $TargetEntityIDs = $($TargetEntityIDs.split(',')) #split supplied value using co
 
 
 #create api session to glpi instance...
+(get-date).ToString('hhmmssfff')
 $SessionToken = Invoke-RestMethod -Verbose "$AppURL/initSession" -Method Get -Headers @{"Content-Type"= "application/json";"Authorization" = "user_token $UserToken";"App-Token"=$AppToken}
 #https://www.urldecoder.org/
-
+(get-date).ToString('hhmmssfff')
 
 ################################ return GLPI plugin additional fields IDs #######################################
 $ApiSearchResult = Invoke-RestMethod "$AppURL/listSearchOptions/Entity" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} # api serach query for glpi entities
@@ -25,7 +26,7 @@ $ApiSearchResult = Invoke-RestMethod "$AppURL/listSearchOptions/Entity" -Headers
 
 $ApiSearchResult #execute api search
 
-$ApiSearchResultSummary = $ApiSearchResult | where-object {$_ -Like "*MNSP IT Adhoc*"} | Select-Object
+$ApiSearchResultSummary = $($ApiSearchResult | where-object {$_ -Like "*MNSP IT Adhoc*"} | Select-Object )
 #Write-Host "Alternative direct object - no txt file output:"
 $ApiSearchResultSummary
 
