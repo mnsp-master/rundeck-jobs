@@ -1,4 +1,4 @@
-$mnspver = "0.0.0343"
+$mnspver = "0.0.0344"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -14,10 +14,10 @@ $TargetEntityIDs = $($TargetEntityIDs.split(',')) #split supplied value using co
 
 
 #create api session to glpi instance...
-(get-date).ToString('hhmmssfff')
+(get-date).ToString('hhmmssfff') # time api initsession
 $SessionToken = Invoke-RestMethod -Verbose "$AppURL/initSession" -Method Get -Headers @{"Content-Type"= "application/json";"Authorization" = "user_token $UserToken";"App-Token"=$AppToken}
 #https://www.urldecoder.org/
-(get-date).ToString('hhmmssfff')
+(get-date).ToString('hhmmssfff') # time api initsession
 
 ################################ return GLPI plugin additional fields IDs #######################################
 $ApiSearchResult = Invoke-RestMethod "$AppURL/listSearchOptions/Entity" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} # api serach query for glpi entities
@@ -166,7 +166,7 @@ foreach ($TargetEntityID in $TargetEntityIDs) {
     $credential = New-Object System.Management.Automation.PSCredential -ArgumentList $username, $securepassword
 
     $subject = "$GoogleWorkspaceEmailSubject $dataname"
-    $mailBody = "$ItemDescription $GLPIChangeURL$CreatedChangeID"
+    $mailBody = "Description: $ItemDescription `n GLPI change $GLPIChangeURL$CreatedChangeID"
     $mailRecepient = $Level3ITengineerEmail
     #send email
     Send-MailMessage -SmtpServer $SMTPServer -Port $SMTPPort -UseSsl -From $from -To $mailRecepient -Subject $subject -Credential $credential -body $mailBody -verbose
