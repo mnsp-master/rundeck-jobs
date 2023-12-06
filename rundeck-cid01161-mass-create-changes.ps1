@@ -1,4 +1,4 @@
-$mnspver = "0.0.0340"
+$mnspver = "0.0.0341"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -20,12 +20,14 @@ $SessionToken = Invoke-RestMethod -Verbose "$AppURL/initSession" -Method Get -He
 
 ################################ return GLPI plugin additional fields IDs #######################################
 $ApiSearchResult = Invoke-RestMethod "$AppURL/listSearchOptions/Entity" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} # api serach query for glpi entities
-$ApiSearchResult  | out-file -FilePath $temptxt # output api entity query to tmp txt file
-$ApiSearchResultSummary = Get-Content $temptxt | where-object {$_ -Like "*MNSP IT Adhoc*"} | Select-Object #filter to only include specific Plugin generated ID's
+##$ApiSearchResult  | out-file -FilePath $temptxt # output api entity query to tmp txt file
+##$ApiSearchResultSummary = Get-Content $temptxt | where-object {$_ -Like "*MNSP IT Adhoc*"} | Select-Object #filter to only include specific Plugin generated ID's
 
-$ApiSearchResultSummary2 = $ApiSearchResult | where-object {$_ -Like "*MNSP IT Adhoc*"} | Select-Object
-Write-Host "Alternative direct object - no txt file output:"
-$ApiSearchResultSummary2
+$ApiSearchResult #execute api search
+
+$ApiSearchResultSummary = $ApiSearchResult | where-object {$_ -Like "*MNSP IT Adhoc*"} | Select-Object
+#Write-Host "Alternative direct object - no txt file output:"
+$ApiSearchResultSummary
 
 #get specific GLPI plugin additional fields object IDs...
 $GLPIsearchStringSchoolType = "MNSP IT Adhoc - School Type"
