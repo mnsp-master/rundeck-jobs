@@ -1,4 +1,4 @@
-$mnspver = "0.0.0344"
+$mnspver = "0.0.0345"
 $TicketCreateUrl = "$AppURL/Ticket"
 $ChangeCreateUrl = "$AppURL/Change"
 $SetActiveEntity = "$AppURL/changeActiveEntities"
@@ -166,7 +166,7 @@ foreach ($TargetEntityID in $TargetEntityIDs) {
     $credential = New-Object System.Management.Automation.PSCredential -ArgumentList $username, $securepassword
 
     $subject = "$GoogleWorkspaceEmailSubject $dataname"
-    $mailBody = "Description: $ItemDescription `n GLPI change $GLPIChangeURL$CreatedChangeID"
+    $mailBody = "Description: $ItemDescription `nGLPI change $GLPIChangeURL$CreatedChangeID"
     $mailRecepient = $Level3ITengineerEmail
     #send email
     Send-MailMessage -SmtpServer $SMTPServer -Port $SMTPPort -UseSsl -From $from -To $mailRecepient -Subject $subject -Credential $credential -body $mailBody -verbose
