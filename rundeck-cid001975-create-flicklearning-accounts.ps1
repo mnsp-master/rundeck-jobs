@@ -12,7 +12,7 @@ Invoke-Expression "$GamDir\gam.exe info domain"
 #download gsheet
 
 Write-Host "Downloading Googlesheet containing all required users..."
-$SrcUserDataCSV = $tempcsv
+
     if (Test-Path -path $SrcUserDataCSV ) {
 
         Write-Host "$SrcUserDataCSV exists, deleting..."
