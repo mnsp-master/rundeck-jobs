@@ -9,6 +9,13 @@ Set-Location $GamDir
 #Get/Confirm Google instance
 Invoke-Expression "$GamDir\gam.exe info domain" 
 
+
+$AppParams = -join ("&users[0][email]=",$email,"&users[0][firstname]=",$FirstName,"&users[0][lastname]=",$LastName,"&users[0][password]=",$Password)
+$AppFullURL = -join ($AppURL,$AppFunction,$APIToken,$AppParams) #create full rest api url
+
+$AppFullURL
+
+
 #All entities: - Production
 #$EntityResult = Invoke-RestMethod "$AppURL/search/Entity?is_deleted=0&as_map=0&range=0-1000000&criteria[0][link]=AND&criteria[0][field]=1&criteria[0][searchtype]=notequals&criteria[0][value]=0&search=Search&itemtype=Entity&start=0" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
 
