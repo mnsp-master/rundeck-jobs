@@ -1,4 +1,4 @@
-$mnspver = "0.0.7"
+$mnspver = "0.0.8"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -12,7 +12,7 @@ Invoke-Expression "$GamDir\gam.exe info domain"
 #download gsheet
 
 Write-Host "Downloading Googlesheet containing all required users..."
-
+$SrcUserDataCSV = $DataDir\$GsheetName
     if (Test-Path -path $SrcUserDataCSV ) {
 
         Write-Host "$SrcUserDataCSV exists, deleting..."
