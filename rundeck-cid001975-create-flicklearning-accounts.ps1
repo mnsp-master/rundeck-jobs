@@ -1,4 +1,4 @@
-$mnspver = "0.0.10"
+$mnspver = "0.0.11"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -25,7 +25,7 @@ Write-Host "Downloading Googlesheet containing all required users..."
 Start-Sleep 2
 $userSource = Import-Csv -Path $SrcUserDataCSV
 
-foreach ($SrcUser in $SrcUserDataCSV) {
+foreach ($SrcUser in $userSource) {
 
 $email = $($SrcUser.email)
 $FirstName = $($SrcUser.FirstName)
