@@ -1,4 +1,4 @@
-$mnspver = "0.0.13"
+$mnspver = "0.0.15"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -9,8 +9,16 @@ Set-Location $GamDir
 #Get/Confirm Google instance
 Invoke-Expression "$GamDir\gam.exe info domain" 
 
-#download gsheet
+Write-Host "get members of google group of previously processed users..."
+if (Test-Path -path $GoogleGroupUsersCSV ) {
 
+        Write-Host "$GoogleGroupUsersCSV exists, deleting..."
+        Remove-Item -Path $GoogleGroupUsersCSV -Force
+    }
+    Invoke-Expression "$GamDir\gam.exe gam print group-members group_ns $GoogleGroup > $GoogleGroupUsersCSV" -ErrorAction SilentlyContinue
+
+
+#download gsheet
 Write-Host "Downloading Googlesheet containing all required users..."
 
     if (Test-Path -path $SrcUserDataCSV ) {
