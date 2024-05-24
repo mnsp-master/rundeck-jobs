@@ -1,4 +1,4 @@
-$mnspver = "0.0.19"
+$mnspver = "0.0.20"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -61,7 +61,7 @@ Write-Host "looking for email: $email"
 #Write-Host "User creation response..."
 #$userResult.RESPONSE.MULTIPLE.SINGLE.KEY #create user response
 
-}
+#}
 
 <#
 
