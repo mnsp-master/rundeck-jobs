@@ -1,4 +1,4 @@
-$mnspver = "0.0.24"
+$mnspver = "0.0.25"
 
 Function GeneratePwd {
 # Generate random code or password
@@ -18,7 +18,6 @@ while($code.Length -lt $codeLength) {
 }
 
 $pwd = $code + "!"
-$pwd
 
 }
 
@@ -80,6 +79,9 @@ Write-Host "looking for email: $email"
         #create user using api
         $userResult = Invoke-RestMethod $AppFullURL #compose restapi
         $userResult 
+
+        Write-Host "User creation response..."
+        $userResult.RESPONSE.MULTIPLE.SINGLE.KEY #create user response
 
         Write-host "Adding user to Google Group: $GoogleGroup"
         Invoke-Expression "$GamDir\gam.exe update group $GoogleGroup add member $email" -ErrorAction SilentlyContinue
