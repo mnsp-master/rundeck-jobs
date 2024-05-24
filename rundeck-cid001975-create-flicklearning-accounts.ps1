@@ -1,4 +1,4 @@
-$mnspver = "0.0.21"
+$mnspver = "0.0.22"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -53,8 +53,8 @@ Write-Host "looking for email: $email"
         $AppFullURL
 
         #create user using api
-        #$userResult = Invoke-RestMethod $AppFullURL #compose restapi
-        #$userResult 
+        $userResult = Invoke-RestMethod $AppFullURL #compose restapi
+        $userResult 
 
         Write-host "Adding user to Google Group: $GoogleGroup"
         Invoke-Expression "$GamDir\gam.exe update group $GoogleGroup add member $email" -ErrorAction SilentlyContinue
