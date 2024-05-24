@@ -1,4 +1,4 @@
-$mnspver = "0.0.9"
+$mnspver = "0.0.10"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -25,6 +25,11 @@ Write-Host "Downloading Googlesheet containing all required users..."
 Start-Sleep 2
 $userSource = Import-Csv -Path $SrcUserDataCSV
 
+foreach ($SrcUser in $SrcUserDataCSV) {
+
+$email = $($SrcUser.email)
+$FirstName = $($SrcUser.FirstName)
+$LastName = $($SrcUser.LastName)
 
 $AppParams = -join ("&users[0][email]=",$email,"&users[0][firstname]=",$FirstName,"&users[0][lastname]=",$LastName,"&users[0][password]=",$Password)
 $AppFullURL = -join ($AppURL,$AppFunction,$APIToken,$AppParams) #create full rest api url
@@ -39,4 +44,4 @@ $AppFullURL
 #Write-Host "User creation response..."
 #$userResult.RESPONSE.MULTIPLE.SINGLE.KEY #create user response
 
-
+}
