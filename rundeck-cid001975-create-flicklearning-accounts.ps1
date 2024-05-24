@@ -1,7 +1,7 @@
-$mnspver = "0.0.23"
+$mnspver = "0.0.24"
 
 Function GeneratePwd {
-# Generate an random code or password
+# Generate random code or password
 $code = ""
 $codeLength = 24
 $allowedChars = "ABCDEFGHJKMNPQRSTWXYZabcdefghmnpqrstwxyz123456789"
