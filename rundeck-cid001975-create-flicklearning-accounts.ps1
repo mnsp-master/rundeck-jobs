@@ -1,4 +1,4 @@
-$mnspver = "0.0.11"
+$mnspver = "0.0.12"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -24,6 +24,7 @@ Write-Host "Downloading Googlesheet containing all required users..."
     Invoke-Expression "$GamDir\gam.exe user $GoogleGamMail get drivefile id $GsheetUserSourceID format csv targetfolder $datadir" -ErrorAction SilentlyContinue
 Start-Sleep 2
 $userSource = Import-Csv -Path $SrcUserDataCSV
+$userSource
 
 foreach ($SrcUser in $userSource) {
 
