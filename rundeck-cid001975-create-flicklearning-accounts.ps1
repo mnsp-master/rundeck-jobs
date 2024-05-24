@@ -1,4 +1,26 @@
-$mnspver = "0.0.22"
+$mnspver = "0.0.23"
+
+Function GeneratePwd {
+# Generate an random code or password
+$code = ""
+$codeLength = 24
+$allowedChars = "ABCDEFGHJKMNPQRSTWXYZabcdefghmnpqrstwxyz123456789"
+$rng = new-object System.Security.Cryptography.RNGCryptoServiceProvider
+$randomBytes = new-object "System.Byte[]" 1
+# keep unbiased by making sure input range divides evenly by output range
+$inputRange = $allowedChars.Length * [Math]::Floor(256 / $allowedChars.Length)
+while($code.Length -lt $codeLength) {
+    $rng.GetBytes($randomBytes)
+    $byte = $randomBytes[0]
+    if($byte -lt $inputRange) { # throw away out-of-range inputs
+        $code += $allowedChars[$byte % $allowedChars.Length]
+    }
+}
+
+$pwd = $code + "!"
+$pwd
+
+}
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -41,6 +63,9 @@ $email = $($SrcUser.email)
 Write-Host "looking for email: $email"
     if ($PreviouslyProcessedUsers.email.Contains($email)) { 
     Write-Host "$email already processed" } else {
+
+        #generate random password
+        $password = $(GeneratePwd)
 
         #$email = $($SrcUser.email)
         $FirstName = $($SrcUser.FirstName)
