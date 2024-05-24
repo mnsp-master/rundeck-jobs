@@ -1,4 +1,4 @@
-$mnspver = "0.0.25"
+$mnspver = "0.0.26"
 
 Function GeneratePwd {
 # Generate random code or password
@@ -61,7 +61,7 @@ foreach ($SrcUser in $userSource) {
 $email = $($SrcUser.email)
 Write-Host "looking for email: $email"
     if ($PreviouslyProcessedUsers.email.Contains($email)) { 
-    Write-Host "$email already processed" } else {
+    Write-Host "$email already processed skipping..." } else {
 
         #generate random password
         $password = $(GeneratePwd)
@@ -85,6 +85,11 @@ Write-Host "looking for email: $email"
 
         Write-host "Adding user to Google Group: $GoogleGroup"
         Invoke-Expression "$GamDir\gam.exe update group $GoogleGroup add member $email" -ErrorAction SilentlyContinue
+
+    #send notification email to service Supplier
+    #gam sendemail auser@domain from noreply@domain subject "test" message "test message"
+
+
  }
 }
 
