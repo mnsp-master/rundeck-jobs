@@ -1,4 +1,4 @@
-$mnspver = "0.0.17"
+$mnspver = "0.0.18"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -17,7 +17,7 @@ if (Test-Path -path $GoogleGroupUsersCSV ) {
     }
     Start-sleep 5
     Invoke-Expression "$GamDir\gam.exe print group-members group_ns $GoogleGroup > $GoogleGroupUsersCSV" -ErrorAction SilentlyContinue
-
+$PreviouslyProcessedUsers = import-csv $GoogleGroupUsersCSV
 
 #download gsheet
 Write-Host "Downloading Googlesheet containing all required users..."
@@ -34,6 +34,37 @@ Write-Host "Downloading Googlesheet containing all required users..."
 Start-Sleep 2
 $userSource = Import-Csv -Path $SrcUserDataCSV
 
+
+foreach ($SrcUser in $userSource) {
+
+$email = $($SrcUser.email)
+Write-Host "looking for email: $email"
+    if ($PreviouslyProcessedUsers.email.Contains($email)) { 
+    Write-Host "$email already processed" } else {
+
+        #$email = $($SrcUser.email)
+        $FirstName = $($SrcUser.FirstName)
+        $LastName = $($SrcUser.LastName)
+
+        $AppParams = -join ("&users[0][email]=",$email,"&users[0][firstname]=",$FirstName,"&users[0][lastname]=",$LastName,"&users[0][password]=",$Password)
+        $AppFullURL = -join ($AppURL,$AppFunction,$APIToken,$AppParams) #create full rest api url
+
+        Write-Host "Full App URL..."
+        $AppFullURL
+ }
+}
+
+#create user
+#$userResult = Invoke-RestMethod $AppFullURL #compose restapi
+#$userResult 
+
+#Write-Host "User creation response..."
+#$userResult.RESPONSE.MULTIPLE.SINGLE.KEY #create user response
+
+}
+
+<#
+
 foreach ($SrcUser in $userSource) {
 
 $email = $($SrcUser.email)
@@ -45,12 +76,4 @@ $AppFullURL = -join ($AppURL,$AppFunction,$APIToken,$AppParams) #create full res
 
 Write-Host "Full App URL..."
 $AppFullURL
-
-#create user
-#$userResult = Invoke-RestMethod $AppFullURL #compose restapi
-#$userResult 
-
-#Write-Host "User creation response..."
-#$userResult.RESPONSE.MULTIPLE.SINGLE.KEY #create user response
-
-}
+#>
