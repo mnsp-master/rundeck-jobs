@@ -1,7 +1,9 @@
-$mnspver = "0.0.26"
+$mnspver = "0.0.27"
 
-Function GeneratePwd {
-# Generate random code or password
+Function GeneratePWD {
+#Write-Host $i
+
+# Generate an random code or password
 $code = ""
 $codeLength = 24
 $allowedChars = "ABCDEFGHJKMNPQRSTWXYZabcdefghmnpqrstwxyz123456789"
@@ -18,6 +20,7 @@ while($code.Length -lt $codeLength) {
 }
 
 $pwd = $code + "!"
+$pwd
 
 }
 
@@ -64,7 +67,7 @@ Write-Host "looking for email: $email"
     Write-Host "$email already processed skipping..." } else {
 
         #generate random password
-        $password = $(GeneratePwd)
+        $password = $(GeneratePWD)
 
         #$email = $($SrcUser.email)
         $FirstName = $($SrcUser.FirstName)
@@ -113,4 +116,28 @@ $AppFullURL = -join ($AppURL,$AppFunction,$APIToken,$AppParams) #create full res
 
 Write-Host "Full App URL..."
 $AppFullURL
+
+
+Function GeneratePwd {
+# Generate random code or password
+$code = ""
+$codeLength = 24
+$allowedChars = "ABCDEFGHJKMNPQRSTWXYZabcdefghmnpqrstwxyz123456789"
+$rng = new-object System.Security.Cryptography.RNGCryptoServiceProvider
+$randomBytes = new-object "System.Byte[]" 1
+# keep unbiased by making sure input range divides evenly by output range
+$inputRange = $allowedChars.Length * [Math]::Floor(256 / $allowedChars.Length)
+while($code.Length -lt $codeLength) {
+    $rng.GetBytes($randomBytes)
+    $byte = $randomBytes[0]
+    if($byte -lt $inputRange) { # throw away out-of-range inputs
+        $code += $allowedChars[$byte % $allowedChars.Length]
+    }
+}
+
+$pwd = $code + "!"
+
+}
+
+
 #>
