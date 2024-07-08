@@ -1,4 +1,4 @@
-$mnspver = "0.0.29"
+$mnspver = "0.0.30"
 
 Function GeneratePWD {
 #Write-Host $i
@@ -77,7 +77,7 @@ Write-Host "looking for email: $email"
         $AppFullURL = -join ($AppURL,$AppFunction,$APIToken,$AppParams) #create full rest api url
 
         Write-Host "Full App URL..."
-        writehost "$AppFullURL"
+        Write-host $AppFullURL
 
         <#
         #create user using api
