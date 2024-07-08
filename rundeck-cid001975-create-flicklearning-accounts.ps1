@@ -1,4 +1,4 @@
-$mnspver = "0.0.30"
+$mnspver = "0.0.31"
 
 Function GeneratePWD {
 #Write-Host $i
@@ -79,7 +79,7 @@ Write-Host "looking for email: $email"
         Write-Host "Full App URL..."
         Write-host $AppFullURL
 
-        <#
+        #<#
         #create user using api
         $userResult = Invoke-RestMethod $AppFullURL #compose restapi
         $userResult 
