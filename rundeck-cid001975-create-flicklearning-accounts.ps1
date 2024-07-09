@@ -1,9 +1,9 @@
-$mnspver = "0.0.31"
+$mnspver = "0.0.33"
 
 Function GeneratePWD {
 #Write-Host $i
 
-# Generate an random code or password
+# Generate a random code or password
 $code = ""
 $codeLength = 24
 $allowedChars = "ABCDEFGHJKMNPQRSTWXYZabcdefghmnpqrstwxyz123456789"
@@ -58,7 +58,7 @@ Write-Host "Downloading Googlesheet containing all required users..."
 Start-Sleep 2
 $userSource = Import-Csv -Path $SrcUserDataCSV
 
-
+#compare required accounts with previously processed accounts
 foreach ($SrcUser in $userSource) {
 
 $email = $($SrcUser.email)
@@ -79,21 +79,25 @@ Write-Host "looking for email: $email"
         Write-Host "Full App URL..."
         Write-host $AppFullURL
 
-        #<#
-        #create user using api
-        $userResult = Invoke-RestMethod $AppFullURL #compose restapi
-        $userResult 
+        if (!password) { #null password check
+            Write-Warning "Password empty as of $(get-date)"
+        } else {
 
-        Write-Host "User creation response..."
-        $userResult.RESPONSE.MULTIPLE.SINGLE.KEY #create user response
+                #<#
+                #create user using api
+                $userResult = Invoke-RestMethod $AppFullURL #compose restapi
+                $userResult 
 
-        Write-host "Adding user to Google Group: $GoogleGroup"
-        Invoke-Expression "$GamDir\gam.exe update group $GoogleGroup add member $email" -ErrorAction SilentlyContinue
-        #>
+                Write-Host "User creation response..."
+                $userResult.RESPONSE.MULTIPLE.SINGLE.KEY #create user response
 
-    #send notification email to service Supplier
-    #gam sendemail auser@domain from noreply@domain subject "test" message "test message"
+                Write-host "Adding user to Google Group: $GoogleGroup"
+                Invoke-Expression "$GamDir\gam.exe update group $GoogleGroup add member $email" -ErrorAction SilentlyContinue
+                #>
 
+                #send notification email to service Supplier - still needs work attaching csv.
+                #gam sendemail auser@domain from noreply@domain subject "test" message "test message"
+        }
 
  }
 }
