@@ -7,3 +7,5 @@ Set-Location $GamDir
 
 #Get/Confirm Google instance
 Invoke-Expression "$GamDir\gam.exe info domain" 
+
+#
