@@ -1,4 +1,4 @@
-$mnspver = "0.0.35"
+$mnspver = "0.0.36"
 
 Function GeneratePWD {
 #Write-Host $i
@@ -99,7 +99,7 @@ foreach ($SrcUser in $userSource) {
                     #send notification email to service Supplier - still needs work attaching csv.
                     #gam sendemail auser@domain from noreply@domain subject "test" message "test message"
             }
-
+    }
 }
 
 
