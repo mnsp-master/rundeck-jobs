@@ -1,4 +1,4 @@
-$mnspver = "0.0.36"
+$mnspver = "0.0.37"
 
 Function GeneratePWD {
 #Write-Host $i
@@ -63,7 +63,11 @@ $userSource = Import-Csv -Path $SrcUserDataCSV | where-object {$_ -notmatch $NoM
 foreach ($SrcUser in $userSource) {
 
     $email = $($SrcUser.email)
-    Write-Host "looking for email: $email"
+    $FirstName = $($SrcUser.FirstName)
+    $LastName = $($SrcUser.LastName)
+    $PersonRef = $($SrcUser.PersonRef)
+    
+    Write-Host "looking for email: $email for Person Reference: $PersonRef"
     if ($PreviouslyProcessedUsers.email.Contains($email)) { 
     Write-Host "$email already processed skipping..." } else {
 
@@ -71,8 +75,7 @@ foreach ($SrcUser in $userSource) {
         $password = $(GeneratePWD)
 
         #$email = $($SrcUser.email)
-        $FirstName = $($SrcUser.FirstName)
-        $LastName = $($SrcUser.LastName)
+        
 
         $AppParams = -join ("&users[0][email]=",$email,"&users[0][firstname]=",$FirstName,"&users[0][lastname]=",$LastName,"&users[0][password]=",$Password)
         $AppFullURL = -join ($AppURL,$AppFunction,$APIToken,$AppParams) #create full rest api url
@@ -102,6 +105,7 @@ foreach ($SrcUser in $userSource) {
     }
 }
 
+#summary of any skipped users
 
 
 #Write-Host "User creation response..."
