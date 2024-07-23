@@ -1,4 +1,4 @@
-$mnspver = "0.0.37"
+$mnspver = "0.0.38"
 
 Function GeneratePWD {
 #Write-Host $i
@@ -106,6 +106,12 @@ foreach ($SrcUser in $userSource) {
 }
 
 #summary of any skipped users
+$SkippedUserSource = Import-Csv -Path $SrcUserDataCSV | where-object {$_ -match $NoMailCheck}
+Write-Host "Skipped users - no mail attribute present - count: $SkippedUserSource"
+$SkippedUserSource
+
+
+
 
 
 #Write-Host "User creation response..."
