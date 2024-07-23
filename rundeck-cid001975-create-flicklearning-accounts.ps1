@@ -1,4 +1,4 @@
-$mnspver = "0.0.40"
+$mnspver = "0.0.41"
 
 Function GeneratePWD {
 #Write-Host $i
@@ -33,7 +33,7 @@ Set-Location $GamDir
 #Get/Confirm Google instance
 Invoke-Expression "$GamDir\gam.exe info domain" 
 
-Write-Host "get members of google group: $GoogleGroup of previously processed users..."
+Write-Host "getting members of google group: $GoogleGroup (previously processed users)..."
 if (Test-Path -path $GoogleGroupUsersCSV ) {
 
         Write-Host "$GoogleGroupUsersCSV exists, deleting..."
