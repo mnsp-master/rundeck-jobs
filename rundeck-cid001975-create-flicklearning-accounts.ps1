@@ -1,4 +1,4 @@
-$mnspver = "0.0.33"
+$mnspver = "0.0.34"
 
 Function GeneratePWD {
 #Write-Host $i
@@ -61,8 +61,11 @@ $userSource = Import-Csv -Path $SrcUserDataCSV
 #compare required accounts with previously processed accounts
 foreach ($SrcUser in $userSource) {
 
-$email = $($SrcUser.email)
-Write-Host "looking for email: $email"
+    #additional condition check skip if supplied email value is empty
+    if ($email -ne $NoMailCheck ) {
+
+    $email = $($SrcUser.email)
+    Write-Host "looking for email: $email"
     if ($PreviouslyProcessedUsers.email.Contains($email)) { 
     Write-Host "$email already processed skipping..." } else {
 
@@ -79,27 +82,30 @@ Write-Host "looking for email: $email"
         Write-Host "Full App URL..."
         Write-host $AppFullURL
 
-        if (!password) { #null password check
-            Write-Warning "Password empty as of $(get-date)"
-        } else {
+            if (!password) { #null password check
+                Write-Warning "Password empty as of $(get-date)"
+            } else {
 
-                #<#
-                #create user using api
-                $userResult = Invoke-RestMethod $AppFullURL #compose restapi
-                $userResult 
+                    #<#
+                    #create user using api
+                    $userResult = Invoke-RestMethod $AppFullURL #compose restapi
+                    $userResult 
 
-                Write-Host "User creation response..."
-                $userResult.RESPONSE.MULTIPLE.SINGLE.KEY #create user response
+                    Write-Host "User creation response..."
+                    $userResult.RESPONSE.MULTIPLE.SINGLE.KEY #create user response
 
-                Write-host "Adding user to Google Group: $GoogleGroup"
-                Invoke-Expression "$GamDir\gam.exe update group $GoogleGroup add member $email" -ErrorAction SilentlyContinue
-                #>
+                    Write-host "Adding user to Google Group: $GoogleGroup"
+                    Invoke-Expression "$GamDir\gam.exe update group $GoogleGroup add member $email" -ErrorAction SilentlyContinue
+                    #>
 
-                #send notification email to service Supplier - still needs work attaching csv.
-                #gam sendemail auser@domain from noreply@domain subject "test" message "test message"
+                    #send notification email to service Supplier - still needs work attaching csv.
+                    #gam sendemail auser@domain from noreply@domain subject "test" message "test message"
+            }
+
         }
-
- }
+    } else {
+        Write-warning "No email attribute avaialble for $FirstName $LastName skipping..."
+    }
 }
 
 
