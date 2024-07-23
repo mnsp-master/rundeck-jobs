@@ -1,4 +1,4 @@
-$mnspver = "0.0.34"
+$mnspver = "0.0.35"
 
 Function GeneratePWD {
 #Write-Host $i
@@ -56,13 +56,11 @@ Write-Host "Downloading Googlesheet containing all required users..."
 
     Invoke-Expression "$GamDir\gam.exe user $GoogleGamMail get drivefile id $GsheetUserSourceID format csv targetfolder $datadir" -ErrorAction SilentlyContinue
 Start-Sleep 2
-$userSource = Import-Csv -Path $SrcUserDataCSV
+#$userSource = Import-Csv -Path $SrcUserDataCSV
+$userSource = Import-Csv -Path $SrcUserDataCSV | where-object {$_ -notmatch $NoMailCheck} #additional condition check skip if supplied email value is empty
 
 #compare required accounts with previously processed accounts
 foreach ($SrcUser in $userSource) {
-
-    #additional condition check skip if supplied email value is empty
-    if ($email -ne $NoMailCheck ) {
 
     $email = $($SrcUser.email)
     Write-Host "looking for email: $email"
@@ -102,10 +100,6 @@ foreach ($SrcUser in $userSource) {
                     #gam sendemail auser@domain from noreply@domain subject "test" message "test message"
             }
 
-        }
-    } else {
-        Write-warning "No email attribute avaialble for $FirstName $LastName skipping..."
-    }
 }
 
 
