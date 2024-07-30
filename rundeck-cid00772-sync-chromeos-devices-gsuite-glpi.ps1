@@ -1,6 +1,6 @@
 #SN-LOGONLY#
 
-$mnspver = "0.0.1.3"
+$mnspver = "0.0.1.4"
 $GlobalGamBaseOU = "/ZZ Chrome Devices/" # MNSP root base OU
 
 Write-Host $(Get-Date)
@@ -75,8 +75,10 @@ Write-Host "Google workspace OU  :" $entityGoogleBaseOu
 Write-Host "Complete OU Path var :" $gamOU
 Write-host "-------------------------------------`n"
 
-clear-content -Path $tempcsv
+clear-content -Path $tempcsv -Verbose
 start-sleep 10
+Write-host "executing command: $GamDir\gam.exe $gamParams | out-file -FilePath $tempcsv" #debug post acronis AV go live...
+
 Invoke-Expression "$GamDir\gam.exe $gamParams" | out-file -FilePath $tempcsv -ErrorAction Continue #get all chromeOS devices from google workspace
 # Invoke-Expression "$GamDir\gam.exe $gamParams todrive tdnobrowser" # create gsheet - handy for debugging
 
