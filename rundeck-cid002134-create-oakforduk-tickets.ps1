@@ -1,4 +1,4 @@
-$mnspver = "0.0.11"
+$mnspver = "0.0.12"
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 
@@ -12,6 +12,7 @@ $Query = "'subject:$GlpiTicketID $GLPITicketSubject'"
 #$Query = "'subject:$GlpiTicketID'"
 
 # get message id from search criteria ...
+Write-Host "$GamDir\gam.exe user $GLPIGmailAddress print messages query $Query"
 Invoke-Expression "$GamDir\gam.exe user $GLPIGmailAddress print messages query $Query"
 Invoke-Expression "$GamDir\gam.exe user $GLPIGmailAddress print messages query $Query" | out-file $tempcsv
 
