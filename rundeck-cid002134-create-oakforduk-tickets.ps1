@@ -1,4 +1,4 @@
-$mnspver = "0.0.2"
+$mnspver = "0.0.£"
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 
@@ -9,4 +9,4 @@ Set-Location $GamDir
 Invoke-Expression "$GamDir\gam.exe info domain" 
 
 # get message id from search criteria ...
-Invoke-Expression "$GamDir\gam.exe user $GLPIGmailAddress print messages query "subject:\$TicketID $GLPITicketSubject\"" > $tempcsv""
+#Invoke-Expression "$GamDir\gam.exe user $GLPIGmailAddress print messages query "subject:\$GLPITicketID $GLPITicketSubject\"" > $tempcsv""
