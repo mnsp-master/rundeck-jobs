@@ -79,8 +79,8 @@ clear-content -Path $tempcsv -Verbose
 start-sleep 10
 Write-host "executing command: $GamDir\gam.exe $gamParams | out-file -FilePath $tempcsv" #debug post acronis AV go live...
 
-#Invoke-Expression "$GamDir\gam.exe $gamParams" | out-file -FilePath $tempcsv -ErrorAction Continue #get all chromeOS devices from google workspace
-Invoke-Expression "$GamDir\gam.exe $gamParams" | out-file $tempcsv -ErrorAction Continue #get all chromeOS 
+Invoke-Expression "$GamDir\gam.exe $gamParams" | out-file -FilePath $tempcsv -ErrorAction Continue #get all chromeOS devices from google workspace
+#Invoke-Expression "$GamDir\gam.exe $gamParams" | out-file $tempcsv -ErrorAction Continue #get all chromeOS 
 
 # Invoke-Expression "$GamDir\gam.exe $gamParams todrive tdnobrowser" # create gsheet - handy for debugging
 
