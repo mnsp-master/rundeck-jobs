@@ -1,4 +1,4 @@
-$mnspver = "0.0.16"
+$mnspver = "0.0.17"
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 
@@ -19,20 +19,21 @@ Invoke-Expression "$GamDir\gam.exe user $GLPIGmailAddress print messages query $
 Write-host "importing csv data..."
 $GmailMessage = import-csv $tempcsv
 
-Write-Host "Getting mail domain from user..."
+#Getting mail domain from user...
 $SenderDomain = $GmailMessage.user.Split("@")[1]
-$SenderDomain
+Write-host "sender domain:" $SenderDomain
 
-Write-host "removing < and  > from message ID..."
+#remove enclosing chevrons from message id
 $MessageID = $GmailMessage.'Message-ID'.TrimStart("<")
 $MessageID = $MessageID.TrimEnd(">")
-$MessageID
+Write-host "removing < and  > from message ID - trimmed ID:" $MessageID
 
-Write-Host "Setting message receiver..."
+#set message receiver by splitting requester and domain
 $MailReceiver = "$ReceiverPrefix@$senderDomain"
-$MailReceiver
+Write-Host "Setting message receiver to:" $MailReceiver
 
-$RFCQuery = "'rfc822msgid:$MessageID'"
+$RFCQuery = "'rfc822msgid:$MessageID'" #concatenate message query
+
 $Subject = "Alternate Subject"
 
 Write-host "$GamDir\gam.exe user $GLPIGmailAddress forward threads to $MailReceiver query $RFCQuery subject $Subject"
