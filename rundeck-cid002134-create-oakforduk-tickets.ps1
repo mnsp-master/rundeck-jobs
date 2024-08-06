@@ -1,4 +1,4 @@
-$mnspver = "0.0.9"
+$mnspver = "0.0.10"
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 
@@ -8,7 +8,8 @@ Set-Location $GamDir
 #Get/Confirm Google instance
 #Invoke-Expression "$GamDir\gam.exe info domain" 
 
-$Query = "'subject:$GlpiTicketID $GLPITicketSubject'"
+#$Query = "'subject:$GlpiTicketID $GLPITicketSubject'"
+$Query = "'subject:$GlpiTicketID'"
 
 # get message id from search criteria ...
 Invoke-Expression "$GamDir\gam.exe user $GLPIGmailAddress print messages query $Query"
