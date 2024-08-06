@@ -9,4 +9,4 @@ Set-Location $GamDir
 Invoke-Expression "$GamDir\gam.exe info domain" 
 
 # get message id from search criteria ...
-Invoke-Expression "$GamDir\gam.exe user $GLPIGmailAddress print messages query "subject:\$TicketID $GLPITicketSubject\"" > $tempcsv"
+Invoke-Expression "$GamDir\gam.exe user $GLPIGmailAddress print messages query "subject:\$TicketID $GLPITicketSubject\"" > $tempcsv""
