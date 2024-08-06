@@ -8,8 +8,8 @@ Set-Location $GamDir
 #Get/Confirm Google instance
 #Invoke-Expression "$GamDir\gam.exe info domain" 
 
-#$Query = "'subject:$GlpiTicketID $GLPITicketSubject'"
-$Query = "'subject:$GlpiTicketID'"
+$Query = "'subject:$GlpiTicketID $GLPITicketSubject'"
+#$Query = "'subject:$GlpiTicketID'"
 
 # get message id from search criteria ...
 Invoke-Expression "$GamDir\gam.exe user $GLPIGmailAddress print messages query $Query"
