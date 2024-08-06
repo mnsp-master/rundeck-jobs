@@ -1,4 +1,4 @@
-$mnspver = "0.0.13"
+$mnspver = "0.0.15"
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 
@@ -28,8 +28,10 @@ $MessageID = $GmailMessage.'Message-ID'.TrimStart("<")
 $MessageID = $MessageID.TrimEnd(">")
 $MessageID
 
+Write-Host "Setting message receiver..."
 $MailReceiver = "$ReceiverPrefix@$senderDomain"
 $MailReceiver
+
 
 Write-host "$GamDir\gam.exe user $GLPIGmailAddress forward threads to $MailReceiver query "rfc822msgid:$MessageID" subject "Test ALternate subject"
 
