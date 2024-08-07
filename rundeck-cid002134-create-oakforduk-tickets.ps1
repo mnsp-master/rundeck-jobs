@@ -1,4 +1,4 @@
-$mnspver = "0.0.52"
+$mnspver = "0.0.53"
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 
@@ -27,7 +27,7 @@ $MessageID = $MessageID.TrimEnd(">")
 Write-host "removing < and > from message ID - trimmed ID:" $MessageID
 
 #set message receiver by splitting requester and domain
-$MailReceiver = "$ReceiverPrefix@$senderDomain"
+## DEV ## $MailReceiver = "$ReceiverPrefix@$senderDomain"
 Write-Host "Setting message receiver to:" $MailReceiver
 
 $RFCQuery = "'rfc822msgid:$MessageID'" #concatenate message query
