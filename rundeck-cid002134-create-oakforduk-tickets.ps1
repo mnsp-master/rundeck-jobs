@@ -17,6 +17,10 @@ Invoke-Expression "$GamDir\gam.exe user $GLPIGmailAddress print messages query $
 Invoke-Expression "$GamDir\gam.exe user $GLPIGmailAddress print messages query $Query" | out-file $tempcsv
 
 Write-host "importing filtered csv data..."
+$MsgIDElement01
+$MsgIDElement02
+$MsgIDElement03
+
 $GmailMessage = import-csv $tempcsv | where { ( $_.'Message-ID' -like $MsgIDElement01 -and $_.'Message-ID' -like $MsgIDElement02 -and $_.'Message-ID' -like $MsgIDElement03 ) }
 $GmailMessage
 
