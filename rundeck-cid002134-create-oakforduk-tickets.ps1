@@ -1,4 +1,4 @@
-$mnspver = "0.0.39"
+$mnspver = "0.0.40"
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 
@@ -16,7 +16,7 @@ $Query = "'subject:$GlpiTicketID $GLPITicketSubject'"
 Invoke-Expression "$GamDir\gam.exe user $GLPIGmailAddress print messages query $Query"
 Invoke-Expression "$GamDir\gam.exe user $GLPIGmailAddress print messages query $Query" | out-file $tempcsv
 
-Write-host "importing csv data..."
+Write-host "importing filtered csv data..."
 $GmailMessage = import-csv $tempcsv | where { ( $_.'Message-ID' -like '*GLPI_*' -and $_.'Message-ID' -like '*solved*' -and $_.'Message-ID' -like '*wrisch-web05*' ) }
 
 #Getting mail domain from user...
@@ -58,7 +58,7 @@ $Subject = "'$subject01'"
 #forward message using RFC message id to mail receiver...
 Write-Host "$GamDir\gam.exe user $GLPIGmailAddress forward threads to $MailReceiver query $RFCQuery subject $Subject"
 
-Invoke-expression "$GamDir\gam.exe user $GLPIGmailAddress forward threads to $MailReceiver query $RFCQuery $subject doit"
+Invoke-expression "$GamDir\gam.exe user $GLPIGmailAddress forward threads to $MailReceiver query $RFCQuery subject: $subject doit"
 
 #$exec = @'
 #& $GamDir\gam.exe user $GLPIGmailAddress forward threads to $MailReceiver query $RFCQuery subject $Subject doit
