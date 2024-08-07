@@ -1,4 +1,4 @@
-$mnspver = "0.0.24"
+$mnspver = "0.0.25"
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 
@@ -42,7 +42,7 @@ Write-Host "$GamDir\gam.exe user $GLPIGmailAddress forward threads to $MailRecei
 
 
 $exec = @'
-& $GamDir\gam.exe user $GLPIGmailAddress forward threads to $MailReceiver query $RFCQuery subject $Subject
+& $GamDir\gam.exe user $GLPIGmailAddress forward threads to $MailReceiver query $RFCQuery subject $Subject doit
 '@
 
 Invoke-Expression $exec
