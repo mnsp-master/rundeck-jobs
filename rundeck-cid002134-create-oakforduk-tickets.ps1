@@ -1,4 +1,4 @@
-$mnspver = "0.0.46"
+$mnspver = "0.0.47"
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 
@@ -20,7 +20,7 @@ Write-host "importing filtered csv data..."
 $MsgIDElement01
 $MsgIDElement02
 $MsgIDElement03
-
+Write-host "import-csv $tempcsv | where { ( $_.'Message-ID' -like $MsgIDElement01 -and $_.'Message-ID' -like $MsgIDElement02 -and $_.'Message-ID' -like $MsgIDElement03 ) }"
 $GmailMessage = import-csv $tempcsv | where { ( $_.'Message-ID' -like $MsgIDElement01 -and $_.'Message-ID' -like $MsgIDElement02 -and $_.'Message-ID' -like $MsgIDElement03 ) }
 $GmailMessage
 
