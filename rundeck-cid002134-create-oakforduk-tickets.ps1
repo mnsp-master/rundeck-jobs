@@ -1,4 +1,4 @@
-$mnspver = "0.0.30"
+$mnspver = "0.0.31"
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 
@@ -51,7 +51,9 @@ $split02 = $split01[0] -split $substring02 -replace("]","")
 Write-Host "Ticket Number:"$split02[1]
 
 
-$Subject = "'$subject01'"
+#$Subject = "'$subject01'"
+
+$subject = "'Modified subject'"
 
 #forward message using RFC message id to mail receiver...
 Write-Host "$GamDir\gam.exe user $GLPIGmailAddress forward threads to $MailReceiver query $RFCQuery subject $Subject"
