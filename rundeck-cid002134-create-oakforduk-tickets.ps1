@@ -1,4 +1,4 @@
-$mnspver = "0.0.41"
+$mnspver = "0.0.43"
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 
@@ -17,7 +17,7 @@ Invoke-Expression "$GamDir\gam.exe user $GLPIGmailAddress print messages query $
 Invoke-Expression "$GamDir\gam.exe user $GLPIGmailAddress print messages query $Query" | out-file $tempcsv
 
 Write-host "importing filtered csv data..."
-$GmailMessage = import-csv $tempcsv | where { ( $_.'Message-ID' -like '*GLPI_*' -and $_.'Message-ID' -like '*solved*' -and $_.'Message-ID' -like '*wrisch-web05*' ) }
+$GmailMessage = import-csv $tempcsv | where { $SMsgSearchCritera }
 
 #Getting mail domain from user...
 $SenderDomain = $GmailMessage.user.Split("@")[1]
@@ -38,38 +38,20 @@ $OriginalSubjectSRC = "$MessageID.Subject"
 
 #split original ticket title elements...
 $OriginalSubjectSRC = $GmailMessage.Subject
-$substring01 = "Ticket Solved"
-$substring02 = "MNSP ITSupport"
 
-#ticket title...
-$split01 = $OriginalSubjectSRC -Split $substring01
-Write-Host "Ticket Title:"$split01[1] #after split
-$subject01 = $split01[1]
+    #ticket title...
+    $split01 = $OriginalSubjectSRC -Split $TicketTitleElement01
+    Write-Host "Ticket Title:"$split01[1] #after split
+    $subject01 = $split01[1]
 
-#ticket number...
-$split02 = $split01[0] -split $substring02 -replace("]","")
-Write-Host "Ticket Number:"$split02[1]
+    #ticket number...
+    $split02 = $split01[0] -split $TicketTitleElement02 -replace("]","")
+    Write-Host "Ticket Number:"$split02[1]
+
+    $Subject = "'$subject01'"
 
 
-$Subject = "'$subject01'"
-
-#$subject = "'Modified subject'"
-
-#forward message using RFC message id to mail receiver...
-Write-Host "$GamDir\gam.exe user $GLPIGmailAddress forward threads to $MailReceiver query $RFCQuery subject $Subject"
-
+#forward message using RFC message id to new mail receiver...
+Write-Host "$GamDir\gam.exe user $GLPIGmailAddress forward threads to $MailReceiver query $RFCQuery subject $Subject" # log purposes only
 Invoke-expression "$GamDir\gam.exe user $GLPIGmailAddress forward threads to $MailReceiver query $RFCQuery subject $subject doit"
 
-#$exec = @'
-#& $GamDir\gam.exe user $GLPIGmailAddress forward threads to $MailReceiver query $RFCQuery subject $Subject doit
-#'@
-
-#Invoke-Expression $exec
-
-<#
-$exec = @'
-& "C:\Program Files\7-Zip\7z.exe" u -mx5 -tzip -r "$DestFileZip" "$DestFile"
-'@
-
-Invoke-Expression $exec
-#>
