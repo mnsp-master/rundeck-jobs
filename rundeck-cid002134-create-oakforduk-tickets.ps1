@@ -1,4 +1,4 @@
-$mnspver = "0.0.27"
+$mnspver = "0.0.28"
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 
@@ -34,7 +34,7 @@ Write-Host "Setting message receiver to:" $MailReceiver
 
 $RFCQuery = "'rfc822msgid:$MessageID'" #concatenate message query
 
-$Subject = "'Alternate Subject'"
+$Subject = "subject 'Alternate Subject'"
 
 #forward message using RFC message id to mail receiver...
 Write-Host "$GamDir\gam.exe user $GLPIGmailAddress forward threads to $MailReceiver query $RFCQuery subject $Subject"
