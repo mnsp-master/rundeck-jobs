@@ -1,4 +1,4 @@
-$mnspver = "0.0.50"
+$mnspver = "0.0.51"
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 
@@ -9,16 +9,13 @@ Set-Location $GamDir
 #Invoke-Expression "$GamDir\gam.exe info domain" 
 
 $Query = "'subject:$GlpiTicketID $GLPITicketSubject'"
-#$Query = "'subject:$GlpiTicketID'"
 
 # get message id from search criteria ...
-#Write-Host "$GamDir\gam.exe user $GLPIGmailAddress print messages query $Query"
 Invoke-Expression "$GamDir\gam.exe user $GLPIGmailAddress print messages query $Query"
 Invoke-Expression "$GamDir\gam.exe user $GLPIGmailAddress print messages query $Query" | out-file $tempcsv
 
 Write-host "importing filtered csv data..."
 $GmailMessage = import-csv $tempcsv | where { ( $_.'Message-ID' -like $MsgIDElement01 -and $_.'Message-ID' -like $MsgIDElement02 -and $_.'Message-ID' -like $MsgIDElement03 ) }
-#$GmailMessage = import-csv $tempcsv | where { ($_.'Message-ID' -like '*GLPI_*' -and $_.'Message-ID' -like '*solved*' -and $_.'Message-ID' -like '*wrisch-web05*' ) }
 
 #Getting mail domain from user...
 $SenderDomain = $GmailMessage.user.Split("@")[1]
@@ -46,13 +43,14 @@ $OriginalSubjectSRC = $GmailMessage.Subject
     $subject01 = $split01[1]
 
     #ticket number...
-    $split02 = $split01[0] -split $TicketTitleElement02 -replace("]","")
+    $split02 = $split01[0] -split $TicketTitleElement02 -replace("]","") #also remove closing ]
     Write-Host "Ticket Number:"$split02[1]
 
+    #
     $Subject = "'$subject01'"
 
 
 #forward message using RFC message id to new mail receiver...
-Write-Host "$GamDir\gam.exe user $GLPIGmailAddress forward threads to $MailReceiver query $RFCQuery subject $Subject" # log purposes only
+Write-Host "$GamDir\gam.exe user $GLPIGmailAddress forward threads to $MailReceiver query $RFCQuery subject $Subject" # logging
 Invoke-expression "$GamDir\gam.exe user $GLPIGmailAddress forward threads to $MailReceiver query $RFCQuery subject $subject doit"
 
