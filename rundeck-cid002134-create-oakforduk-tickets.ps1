@@ -1,4 +1,4 @@
-$mnspver = "0.0.37"
+$mnspver = "0.0.38"
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 
@@ -36,7 +36,7 @@ $RFCQuery = "'rfc822msgid:$MessageID'" #concatenate message query
 
 $OriginalSubjectSRC = "$MessageID.Subject"
 
-#split ticket title elements...
+#split original ticket title elements...
 $OriginalSubjectSRC = $GmailMessage.Subject
 $substring01 = "Ticket Solved"
 $substring02 = "MNSP ITSupport"
@@ -58,7 +58,7 @@ $Subject = "'$subject01'"
 #forward message using RFC message id to mail receiver...
 Write-Host "$GamDir\gam.exe user $GLPIGmailAddress forward threads to $MailReceiver query $RFCQuery subject $Subject"
 
-Invoke-expression "$GamDir\gam.exe user $GLPIGmailAddress forward threads to $MailReceiver query $RFCQuery subject $subject doit"
+Invoke-expression "$GamDir\gam.exe user $GLPIGmailAddress forward threads to $MailReceiver query $RFCQuery $subject doit"
 
 #$exec = @'
 #& $GamDir\gam.exe user $GLPIGmailAddress forward threads to $MailReceiver query $RFCQuery subject $Subject doit
