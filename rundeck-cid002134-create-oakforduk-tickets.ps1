@@ -1,4 +1,4 @@
-$mnspver = "0.0.43"
+$mnspver = "0.0.44"
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 
@@ -17,7 +17,7 @@ Invoke-Expression "$GamDir\gam.exe user $GLPIGmailAddress print messages query $
 Invoke-Expression "$GamDir\gam.exe user $GLPIGmailAddress print messages query $Query" | out-file $tempcsv
 
 Write-host "importing filtered csv data..."
-$GmailMessage = import-csv $tempcsv | where { $SMsgSearchCritera }
+$GmailMessage = import-csv $tempcsv | where { ($_.'Message-ID' -like $MsgIDElement01 -and $_.'Message-ID' -like $MsgIDElement02 -and $_.'Message-ID' -like $MsgIDElement03 ) }
 
 #Getting mail domain from user...
 $SenderDomain = $GmailMessage.user.Split("@")[1]
