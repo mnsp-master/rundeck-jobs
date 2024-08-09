@@ -1,8 +1,8 @@
-$mnspver = "0.0.2"
+$mnspver = "0.0.3"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
-Start-Sleep 10
+#Start-Sleep 10
 $ErrorActionPreference="Continue"
 Set-Location $GamDir
 
@@ -10,11 +10,12 @@ Set-Location $GamDir
 $SessionToken = Invoke-RestMethod -Verbose "$AppURL/initSession" -Method Get -Headers @{"Content-Type" = "application/json";"Authorization" = "user_token $UserToken";"App-Token"=$AppToken}
 #https://www.urldecoder.org/
 
-
-
 # all tickets
-$TicketResult = Invoke-RestMethod "$AppURL/search/ticket?is_deleted=0&as_map=0&browse=0&criteria[0][link]=AND&criteria[0][field]=23&criteria[0][searchtype]=equals&criteria[0][value]=12&itemtype=Ticket&start=0"
-$TicketResult
+#$TicketResult = Invoke-RestMethod "$AppURL/search/ticket?is_deleted=0&as_map=0&browse=0&criteria[0][link]=AND&criteria[0][field]=23&criteria[0][searchtype]=equals&criteria[0][value]=12&itemtype=Ticket&start=0"
+#$TicketResult
+
+
+Start-Sleep 10
 
 #close current api session...
 Invoke-RestMethod "$AppURL/killSession" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
