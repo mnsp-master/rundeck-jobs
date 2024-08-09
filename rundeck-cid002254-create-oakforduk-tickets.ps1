@@ -1,4 +1,4 @@
-$mnspver = "0.0.15"
+$mnspver = "0.0.16"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -48,7 +48,7 @@ if ($previouslyProcessedbyID -Match $GLPITicketID) {
 
     #process mail using gamxtd....
 
-            $Query = "'subject:$GlpiTicketID $GLPITicketSubject'"
+            $Query = "'subject:#00$GlpiTicketID $GLPITicketSubject'"
             Write-host "Runing query:" $Query
 
             # get message id from search criteria ...
