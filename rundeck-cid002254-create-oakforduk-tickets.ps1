@@ -1,4 +1,4 @@
-$mnspver = "0.0.13"
+$mnspver = "0.0.14"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -49,6 +49,7 @@ if ($previouslyProcessedbyID -Match $GLPITicketID) {
     #process mail using gamxtd....
 
             $Query = "'subject:$GlpiTicketID $GLPITicketSubject'"
+            Write-host "Runing query:" $Query
 
             # get message id from search criteria ...
             Invoke-Expression "$GamDir\gam.exe user $GLPIGmailAddress print messages query $Query"
@@ -97,7 +98,7 @@ if ($previouslyProcessedbyID -Match $GLPITicketID) {
 
 
 
-    $GLPITicketID | out-file -Append $tempcsv1 #csv must be encoded as UCS-2 LE BOM
+    ### $GLPITicketID | out-file -Append $tempcsv1 #csv must be encoded as UCS-2 LE BOM
     start-sleep 1
     Write-Host "-----------------------------------------------`n"
     
