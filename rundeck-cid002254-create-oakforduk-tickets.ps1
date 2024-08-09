@@ -16,7 +16,7 @@ $previouslyProcessedbyID = @()
 $previouslyProcessedbyID = import-csv $tempcsv1
 #$previouslyProcessedbyID
 
-# all tickets
+# get all tickets that match search criteria...(value: 12)
 $TicketResult = @()
 $TicketResult = Invoke-RestMethod "$AppURL/search/Ticket?is_deleted=0&as_map=0&browse=0&criteria[0][link]=AND&criteria[0][field]=23&criteria[0][searchtype]=equals&criteria[0][value]=12&itemtype=Ticket&start=0" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
 $TicketData = $TicketResult.data
@@ -46,9 +46,8 @@ if ($previouslyProcessedbyID -Match $TicketID) {
     $Mail = $userDetail.data.5
     Write-Host "Users email address:" $Mail
     #process mail using gamxtd
+    
 
-    #add-content -path $tempcsv1 -Value $TicketID
-    #$TicketID | export-csv -append -path $tempcsv1
     $TicketID | out-file -Append $tempcsv1 #csv must be encoded as UCS-2 LE BOM
     start-sleep 1
     Write-Host "-----------------------------------------------`n"
