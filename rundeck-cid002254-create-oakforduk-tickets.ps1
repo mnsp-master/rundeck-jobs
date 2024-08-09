@@ -1,4 +1,4 @@
-$mnspver = "0.0.14"
+$mnspver = "0.0.15"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -52,6 +52,7 @@ if ($previouslyProcessedbyID -Match $GLPITicketID) {
             Write-host "Runing query:" $Query
 
             # get message id from search criteria ...
+            Write-Host "$GamDir\gam.exe user $GLPIGmailAddress print messages query $Query"
             Invoke-Expression "$GamDir\gam.exe user $GLPIGmailAddress print messages query $Query"
             Invoke-Expression "$GamDir\gam.exe user $GLPIGmailAddress print messages query $Query" | out-file $tempcsv
 
