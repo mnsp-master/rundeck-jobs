@@ -1,4 +1,4 @@
-$mnspver = "0.0.9"
+$mnspver = "0.0.10"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -33,7 +33,7 @@ $GLPITicketID = $Ticket.2
 Write-Host "Assessing Ticket ID:" $GLPITicketID
 #check if ticket has been previously processed...
 Write-Host "ticket number check:" $previouslyProcessedbyID.TicketID
-if ($previouslyProcessedbyID -Match $TicketID) {
+if ($previouslyProcessedbyID -Match $GLPITicketID) {
     Write-Host "ID: $($GLPITicketID) is a Previously processed Ticket..."
     Write-Host "-----------------------------------------------`n"
     } else {
