@@ -1,4 +1,4 @@
-$mnspver = "0.0.11"
+$mnspver = "0.0.12"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -31,7 +31,7 @@ foreach ($Ticket in $TicketData){
 $GLPITicketID = @()
 $GLPITicketID = $Ticket.2
 Write-Host "Assessing Ticket ID:" $GLPITicketID
-#check if ticket has been previously processed...
+#check if ticket has been previously processed (imported csv data)...
 Write-Host "ticket number check:" $previouslyProcessedbyID.TicketID
 if ($previouslyProcessedbyID -Match $GLPITicketID) {
     Write-Host "ID: $($GLPITicketID) is a Previously processed Ticket..."
@@ -42,9 +42,9 @@ if ($previouslyProcessedbyID -Match $GLPITicketID) {
     #get user ID: Details
     $userDetail = @()
     $userDetail = Invoke-RestMethod "$AppURL/search/User?is_deleted=0&as_map=0&browse=0&criteria%5B0%5D%5Blink%5D=AND&criteria%5B0%5D%5Bfield%5D=2&criteria%5B0%5D%5Bsearchtype%5D=contains&criteria%5B0%5D%5Bvalue%5D=$($Ticket.4)&itemtype=User&start=0" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
-    $Mail = @()
-    $Mail = $userDetail.data.5
-    Write-Host "Users email address:" $Mail
+    $GLPIGmailAddress = @()
+    $GLPIGmailAddress = $userDetail.data.5
+    Write-Host "Users email address:" $GLPIGmailAddress
     #process mail using gamxtd
 
 
