@@ -1,4 +1,4 @@
-$mnspver = "0.0.7"
+$mnspver = "0.0.8"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -28,16 +28,16 @@ Write-Host "-----------------------------------------------`n"
 #$TicketData = @()
 foreach ($Ticket in $TicketData){
 
-$TicketID = @()
-$TicketID = $Ticket.2
-Write-Host "Assessing Ticket ID:" $TicketID
+$GLPITicketID = @()
+$GLPITicketID = $Ticket.2
+Write-Host "Assessing Ticket ID:" $GLPITicketID
 #check if ticket has been previously processed...
 Write-Host "ticket number check:" $previouslyProcessedbyID.GLPITicketID
-if ($previouslyProcessedbyID -Match $TicketID) {
-    Write-Host "ID: $($TicketID) is a Previously processed Ticket..."
+if ($previouslyProcessedbyID -Match $GLPITicketID) {
+    Write-Host "ID: $($GLPITicketID) is a Previously processed Ticket..."
     Write-Host "-----------------------------------------------`n"
     } else {
-    Write-Host "ID: $($TicketID) will be processed..."
+    Write-Host "ID: $($GLPITicketID) will be processed..."
     Write-Host "GLPI User ID: $($Ticket.4)"
     #get user ID: Details
     $userDetail = @()
@@ -46,9 +46,9 @@ if ($previouslyProcessedbyID -Match $TicketID) {
     $Mail = $userDetail.data.5
     Write-Host "Users email address:" $Mail
     #process mail using gamxtd
-    
 
-    $TicketID | out-file -Append $tempcsv1 #csv must be encoded as UCS-2 LE BOM
+
+    $GLPITicketID | out-file -Append $tempcsv1 #csv must be encoded as UCS-2 LE BOM
     start-sleep 1
     Write-Host "-----------------------------------------------`n"
     
