@@ -1,4 +1,4 @@
-$mnspver = "0.0.17"
+$mnspver = "0.0.18"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -88,8 +88,9 @@ if ($previouslyProcessedbyID -Match $GLPITicketID) {
                 $subject01 = $split01[1]
 
                 #ticket number...
-                $split02 = $split01[0] -split $TicketTitleElement02 -replace("]","") #also remove closing ]
-                Write-Host "Ticket Number:"$split02[1]
+                #$split02 = $split01[0] -split $TicketTitleElement02 -replace("]","") #also remove closing ]
+                #Write-Host "Ticket Number:"$split02[1]
+                Write-Host "Ticket Number: #00$GlpiTicketID"
 
                 #
                 $Subject = "'$subject01'"
@@ -109,12 +110,9 @@ if ($previouslyProcessedbyID -Match $GLPITicketID) {
     }
 }
 
-
-
-
 Start-Sleep 10
 
-#close current api session...
+Write-Host "closing current api session..."
 Invoke-RestMethod "$AppURL/killSession" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
 
 <#
