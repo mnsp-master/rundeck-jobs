@@ -1,4 +1,4 @@
-$mnspver = "0.0.16"
+$mnspver = "0.0.17"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -58,6 +58,9 @@ if ($previouslyProcessedbyID -Match $GLPITicketID) {
 
             Write-host "importing filtered csv data..."
             $GmailMessage = import-csv $tempcsv | where { ( $_.'Message-ID' -like $MsgIDElement01 -and $_.'Message-ID' -like $MsgIDElement02 -and $_.'Message-ID' -like $MsgIDElement03 ) }
+
+            Write-Host "Raw message:"
+            $GmailMessage
 
             #Getting mail domain from user...
             $SenderDomain = $GmailMessage.user.Split("@")[1]
