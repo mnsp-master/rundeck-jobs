@@ -1,4 +1,4 @@
-$mnspver = "0.0.20"
+$mnspver = "0.0.21"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -105,7 +105,7 @@ if ($previouslyProcessedbyID -Match $GLPITicketID) {
 
 
 
-    $GLPITicketID | out-file -Append $tempcsv1 #csv must be encoded as UCS-2 LE BOM
+    $GLPITicketID | out-file -Append $tempcsv1 -Verbose #csv must be encoded as UCS-2 LE BOM
     start-sleep 1
     Write-Host "-----------------------------------------------`n"
     
