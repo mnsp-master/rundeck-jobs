@@ -1,4 +1,4 @@
-$mnspver = "0.0.11"
+$mnspver = "0.0.12"
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 
@@ -19,7 +19,7 @@ $Credentials = New-Object System.Management.Automation.PSCredential -ArgumentLis
 $users = Get-ADUser -Credential $Credentials -filter * -SearchBase $ADSearchBase -properties sAMAccountName,mail,GivenName,Surname | select sAMAccountName,mail,GivenName,Surname
 $users
 
-foreach ($user in $users.sAMAccountName) {
+foreach ($user in $users) {
 
 $pwd = $(Invoke-WebRequest -Uri $PwdGenURL -UseBasicParsing)
 #    $pwd.Content
