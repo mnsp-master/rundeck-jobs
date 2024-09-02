@@ -1,4 +1,4 @@
-$mnspver = "0.0.27"
+$mnspver = "0.0.28"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -112,10 +112,11 @@ if ($previouslyProcessedbyID -Match $GLPITicketID) {
             start-sleep 1
             Write-Host "-----------------------------------------------`n"
         
-            }       
+
+       
         
         } else {
-        Write-Warning "No gmail ID message exists..."
+            Write-Warning "No gmail ID message exists..."
     }
 }
 Start-Sleep 10
