@@ -1,4 +1,4 @@
-$mnspver = "0.0.14"
+$mnspver = "0.0.15"
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 
@@ -36,7 +36,7 @@ $pwd = $(Invoke-WebRequest -Uri $PwdGenURL -UseBasicParsing)
 $Fullname = $($user.displayName)
 $email = $($user.mail)
 
-Write-Host "Processing User: $($user.displayName) $($user.mail) new password as of $(Get-Date): $password"
+Write-Host "Processing User: $($user.displayName) $($user.mail) $($user.sAMAccountName) new password as of $(Get-Date): $password"
 
 #Fullname,username,email,password
 
@@ -44,7 +44,7 @@ Write-Host "Processing User: $($user.displayName) $($user.mail) new password as 
  
 sleep 1
  
-#"$($user),$password" | out-file -filepath $tempcsv -Append
+"$($user.displayName),$($user.sAMAccountName),$($user.mail),$password" | out-file -filepath $tempcsv -Append
  
 Write-Host "`n"
 }
