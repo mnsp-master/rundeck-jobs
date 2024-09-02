@@ -1,4 +1,4 @@
-$mnspver = "0.0.15"
+$mnspver = "0.0.16"
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 
@@ -40,7 +40,7 @@ Write-Host "Processing User: $($user.displayName) $($user.mail) $($user.sAMAccou
 
 #Fullname,username,email,password
 
-#Set-ADAccountPassword -Credential $Credentials -Identity $user -Reset -NewPassword (ConvertTo-SecureString -AsPlainText $password -Force) 
+Set-ADAccountPassword -Credential $Credentials -Identity $($user.sAMAccountName) -Reset -NewPassword (ConvertTo-SecureString -AsPlainText $password -Force) -Verbose
  
 sleep 1
  
