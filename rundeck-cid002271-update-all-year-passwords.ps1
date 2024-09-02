@@ -1,4 +1,4 @@
-$mnspver = "0.0.3"
+$mnspver = "0.0.4"
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 
@@ -14,6 +14,7 @@ $csvheader | out-file -filepath $tempcsv -Append #create blank csv with simple h
 $PlainPassword = $ADDomainPass
 $SecurePassword = $PlainPassword | ConvertTo-SecureString -AsPlainText -Force
 $UserName = $ADDomainUser
+$Credentials = New-Object System.Management.Automation.PSCredential -ArgumentList $UserName, $SecurePassword
 
 $users = Get-ADUser -Credential $Credentials -filter * -SearchBase $SearchBase
 
