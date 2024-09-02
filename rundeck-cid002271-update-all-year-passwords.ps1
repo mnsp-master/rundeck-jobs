@@ -32,13 +32,18 @@ $pwd = $(Invoke-WebRequest -Uri $PwdGenURL -UseBasicParsing)
         $password = "Js653151MH$"
         }
 
-Write-Host "Processing User: $user new password as of $(Get-Date): $password"
+$Fullname = ( $user.GivenName $User.Surname )
+$email = $user@$mailDomain
+
+Write-Host "Processing User: $Fullname $user $email new password as of $(Get-Date): $password"
+
+#Fullname,username,email,password
 
 #Set-ADAccountPassword -Credential $Credentials -Identity $user -Reset -NewPassword (ConvertTo-SecureString -AsPlainText $password -Force) 
  
 sleep 1
  
-#"$($user),$password" | out-file -filepath $csv -Append
+#"$($user),$password" | out-file -filepath $tempcsv -Append
  
 Write-Host "`n"
 }
