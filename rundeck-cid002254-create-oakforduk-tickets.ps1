@@ -1,4 +1,4 @@
-$mnspver = "0.0.26"
+$mnspver = "0.0.27"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -65,7 +65,6 @@ if ($previouslyProcessedbyID -Match $GLPITicketID) {
 
             if ($GmailMessage.id) {
             Write-host "an ID exists processing..."
-            }
                     Write-Host "Raw message:"
                     $GmailMessage
 
@@ -112,12 +111,13 @@ if ($previouslyProcessedbyID -Match $GLPITicketID) {
             $GLPITicketID | out-file -Append $tempcsv1 -Verbose #csv must be encoded as UCS-2 LE BOM
             start-sleep 1
             Write-Host "-----------------------------------------------`n"
-            
-            } else {
-             Write-Warning "No gmail ID message exists..."
-            }
+        
+            }       
+        
+        } else {
+        Write-Warning "No gmail ID message exists..."
+    }
 }
-
 Start-Sleep 10
 
 Write-Host "closing current api session..."
