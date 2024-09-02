@@ -1,4 +1,4 @@
-$mnspver = "0.0.12"
+$mnspver = "0.0.13"
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 
@@ -16,8 +16,8 @@ $SecurePassword = $PlainPassword | ConvertTo-SecureString -AsPlainText -Force
 $UserName = $ADDomainUser
 $Credentials = New-Object System.Management.Automation.PSCredential -ArgumentList $UserName, $SecurePassword
 
-$users = Get-ADUser -Credential $Credentials -filter * -SearchBase $ADSearchBase -properties sAMAccountName,mail,GivenName,Surname | select sAMAccountName,mail,GivenName,Surname
-$users
+$users = Get-ADUser -Credential $Credentials -filter * -SearchBase $ADSearchBase -properties sAMAccountName,mail,displayName | select sAMAccountName,mail,DisplayName
+#$users
 
 foreach ($user in $users) {
 
@@ -33,8 +33,8 @@ $pwd = $(Invoke-WebRequest -Uri $PwdGenURL -UseBasicParsing)
         $password = "Js653151MH$"
         }
 
-$Fullname = "$($user.GivenName) $($User.Surname)"
-$email = "$($user.mail)"
+$Fullname = $($user.displayName)
+$email = $($user.mail)
 
 Write-Host "Processing User: $Fullname $user $email new password as of $(Get-Date): $password"
 
