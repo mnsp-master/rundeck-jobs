@@ -1,4 +1,4 @@
-$mnspver = "0.0.24"
+$mnspver = "0.0.25"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -62,57 +62,60 @@ if ($previouslyProcessedbyID -Match $GLPITicketID) {
             $GmailMessage = import-csv $tempcsv | where { ( $_.'Message-ID' -like $MsgIDElement01 -and $_.'Message-ID' -like $MsgIDElement02 -and $_.'Message-ID' -like $MsgIDElement03 ) }
 
             #TODO require null check....
-            Write-Host "Message Count:" $GmailMessage.Count
+
+            if ($GmailMessage.id) {
+            Write-host "an ID exists processing..."
+            }
+                    Write-Host "Raw message:"
+                    $GmailMessage
+
+                    #Getting mail domain from user...
+                    $SenderDomain = $GmailMessage.user.Split("@")[1]
+                    Write-host "sender domain:" $SenderDomain
+
+                    #remove enclosing chevrons from message id
+                    $MessageID = $GmailMessage.'Message-ID'.TrimStart("<")
+                    $MessageID = $MessageID.TrimEnd(">")
+                    Write-host "removing < and > from message ID - trimmed ID:" $MessageID
+
+                    #set message receiver by splitting requester and domain
+                    $MailReceiver = "$ReceiverPrefix@$senderDomain"
+                    Write-Host "Setting message receiver to:" $MailReceiver
+
+                    $RFCQuery = "'rfc822msgid:$MessageID'" #concatenate message query
+
+                    $OriginalSubjectSRC = "$MessageID.Subject"
+
+                    #split original ticket title elements...
+                    $OriginalSubjectSRC = $GmailMessage.Subject
+
+                        #ticket title...
+                        $split01 = $OriginalSubjectSRC -Split $TicketTitleElement01
+                        Write-Host "Ticket Title:"$split01[1] #after split
+                        $subject01 = $split01[1]
+
+                        #ticket number...
+                        #$split02 = $split01[0] -split $TicketTitleElement02 -replace("]","") #also remove closing ]
+                        #Write-Host "Ticket Number:"$split02[1]
+                        Write-Host "Ticket Number: #00$GlpiTicketID"
+
+                        #
+                        $Subject = "'$subject01'"
 
 
-            Write-Host "Raw message:"
-            $GmailMessage
-
-            #Getting mail domain from user...
-            $SenderDomain = $GmailMessage.user.Split("@")[1]
-            Write-host "sender domain:" $SenderDomain
-
-            #remove enclosing chevrons from message id
-            $MessageID = $GmailMessage.'Message-ID'.TrimStart("<")
-            $MessageID = $MessageID.TrimEnd(">")
-            Write-host "removing < and > from message ID - trimmed ID:" $MessageID
-
-            #set message receiver by splitting requester and domain
-            $MailReceiver = "$ReceiverPrefix@$senderDomain"
-            Write-Host "Setting message receiver to:" $MailReceiver
-
-            $RFCQuery = "'rfc822msgid:$MessageID'" #concatenate message query
-
-            $OriginalSubjectSRC = "$MessageID.Subject"
-
-            #split original ticket title elements...
-            $OriginalSubjectSRC = $GmailMessage.Subject
-
-                #ticket title...
-                $split01 = $OriginalSubjectSRC -Split $TicketTitleElement01
-                Write-Host "Ticket Title:"$split01[1] #after split
-                $subject01 = $split01[1]
-
-                #ticket number...
-                #$split02 = $split01[0] -split $TicketTitleElement02 -replace("]","") #also remove closing ]
-                #Write-Host "Ticket Number:"$split02[1]
-                Write-Host "Ticket Number: #00$GlpiTicketID"
-
-                #
-                $Subject = "'$subject01'"
+                    #forward message using RFC message id to new mail receiver...
+                    Write-Host "$GamDir\gam.exe user $GLPIGmailAddress forward threads to $MailReceiver query $RFCQuery subject $Subject" # logging
+                    #Invoke-expression "$GamDir\gam.exe user $GLPIGmailAddress forward threads to $MailReceiver query $RFCQuery subject $subject"
+                    Invoke-expression "$GamDir\gam.exe user $GLPIGmailAddress forward threads to $MailReceiver query $RFCQuery doit"
 
 
-            #forward message using RFC message id to new mail receiver...
-            Write-Host "$GamDir\gam.exe user $GLPIGmailAddress forward threads to $MailReceiver query $RFCQuery subject $Subject" # logging
-            #Invoke-expression "$GamDir\gam.exe user $GLPIGmailAddress forward threads to $MailReceiver query $RFCQuery subject $subject"
-            Invoke-expression "$GamDir\gam.exe user $GLPIGmailAddress forward threads to $MailReceiver query $RFCQuery doit"
-
-
-    $GLPITicketID | out-file -Append $tempcsv1 -Verbose #csv must be encoded as UCS-2 LE BOM
-    start-sleep 1
-    Write-Host "-----------------------------------------------`n"
-    
-    }
+            $GLPITicketID | out-file -Append $tempcsv1 -Verbose #csv must be encoded as UCS-2 LE BOM
+            start-sleep 1
+            Write-Host "-----------------------------------------------`n"
+            
+            } else {
+             Write-Warning "No gmail ID message exists..."
+            }
 }
 
 Start-Sleep 10
