@@ -1,4 +1,4 @@
-$mnspver = "0.0.10"
+$mnspver = "0.0.11"
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 
@@ -17,6 +17,7 @@ $UserName = $ADDomainUser
 $Credentials = New-Object System.Management.Automation.PSCredential -ArgumentList $UserName, $SecurePassword
 
 $users = Get-ADUser -Credential $Credentials -filter * -SearchBase $ADSearchBase -properties sAMAccountName,mail,GivenName,Surname | select sAMAccountName,mail,GivenName,Surname
+$users
 
 foreach ($user in $users.sAMAccountName) {
 
