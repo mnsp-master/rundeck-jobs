@@ -1,4 +1,4 @@
-$mnspver = "0.0.7"
+$mnspver = "0.0.8"
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 
@@ -32,8 +32,8 @@ $pwd = $(Invoke-WebRequest -Uri $PwdGenURL -UseBasicParsing)
         $password = "Js653151MH$"
         }
 
-$Fullname = ( $user.GivenName $User.Surname )
-$email = $user@$mailDomain
+$Fullname = "$user.GivenName $User.Surname"
+$email = "$user@$mailDomain"
 
 Write-Host "Processing User: $Fullname $user $email new password as of $(Get-Date): $password"
 
