@@ -1,4 +1,4 @@
-$mnspver = "0.0.4"
+$mnspver = "0.0.5"
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 
@@ -16,6 +16,6 @@ $SecurePassword = $PlainPassword | ConvertTo-SecureString -AsPlainText -Force
 $UserName = $ADDomainUser
 $Credentials = New-Object System.Management.Automation.PSCredential -ArgumentList $UserName, $SecurePassword
 
-$users = Get-ADUser -Credential $Credentials -filter * -SearchBase $SearchBase
+$users = Get-ADUser -Credential $Credentials -filter * -SearchBase $ADSearchBase
 
 $users
