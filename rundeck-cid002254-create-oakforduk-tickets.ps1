@@ -1,4 +1,4 @@
-$mnspver = "0.0.25"
+$mnspver = "0.0.26"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -61,7 +61,7 @@ if ($previouslyProcessedbyID -Match $GLPITicketID) {
             Write-host "importing filtered csv data..."
             $GmailMessage = import-csv $tempcsv | where { ( $_.'Message-ID' -like $MsgIDElement01 -and $_.'Message-ID' -like $MsgIDElement02 -and $_.'Message-ID' -like $MsgIDElement03 ) }
 
-            #TODO require null check....
+            #message id null check, if no corisponding message id returned do not process....
 
             if ($GmailMessage.id) {
             Write-host "an ID exists processing..."
