@@ -1,4 +1,4 @@
-$mnspver = "0.0.5"
+$mnspver = "0.0.6"
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 
@@ -18,4 +18,28 @@ $Credentials = New-Object System.Management.Automation.PSCredential -ArgumentLis
 
 $users = Get-ADUser -Credential $Credentials -filter * -SearchBase $ADSearchBase
 
-$users
+foreach ($user in $users.samaccountname) {
+
+$pwd = $(Invoke-WebRequest -Uri $PwdGenURL -UseBasicParsing)
+#    $pwd.Content
+    #$pwd.StatusCode
+        if ($pwd.StatusCode -eq 200) {
+        Write-Host "proceed with pwd reservation"
+        $password = $($pwd.Content)
+        #Write-Host "Password: " $password
+        } else {
+        Write-Error "No Webserver, or pwd received"
+        $password = "Js653151MH$"
+        }
+
+Write-Host "Processing User: $user new password as of $(Get-Date): $password"
+
+#Set-ADAccountPassword -Credential $Credentials -Identity $user -Reset -NewPassword (ConvertTo-SecureString -AsPlainText $password -Force) 
+ 
+sleep 1
+ 
+#"$($user),$password" | out-file -filepath $csv -Append
+ 
+Write-Host "`n"
+}
+
