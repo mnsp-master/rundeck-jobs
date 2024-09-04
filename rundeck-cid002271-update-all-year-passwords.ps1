@@ -1,4 +1,4 @@
-$mnspver = "0.0.17"
+$mnspver = "0.0.18"
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 
@@ -18,7 +18,7 @@ $Credentials = New-Object System.Management.Automation.PSCredential -ArgumentLis
 
 #$users = Get-ADUser -Credential $Credentials -filter * -SearchBase $ADSearchBase -properties sAMAccountName,mail,displayName | select sAMAccountName,mail,DisplayName
 
-$createdSinceDate = ((Get-Date).AddDays(-1)).Date #last 1 day
+$createdSinceDate = ((Get-Date).AddDays(-$ADuserCreatedSinceDateDays)).Date #last n day
 $users = Get-ADUser -Credential $Credentials -filter {whenCreated -ge $createdSinceDate} -SearchBase $ADSearchBase -properties sAMAccountName,mail,displayName | select sAMAccountName,mail,DisplayName
 
 #$users
