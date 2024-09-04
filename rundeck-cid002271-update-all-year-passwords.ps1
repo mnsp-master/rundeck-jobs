@@ -1,4 +1,4 @@
-$mnspver = "0.0.16"
+$mnspver = "0.0.17"
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 
@@ -16,7 +16,11 @@ $SecurePassword = $PlainPassword | ConvertTo-SecureString -AsPlainText -Force
 $UserName = $ADDomainUser
 $Credentials = New-Object System.Management.Automation.PSCredential -ArgumentList $UserName, $SecurePassword
 
-$users = Get-ADUser -Credential $Credentials -filter * -SearchBase $ADSearchBase -properties sAMAccountName,mail,displayName | select sAMAccountName,mail,DisplayName
+#$users = Get-ADUser -Credential $Credentials -filter * -SearchBase $ADSearchBase -properties sAMAccountName,mail,displayName | select sAMAccountName,mail,DisplayName
+
+$createdSinceDate = ((Get-Date).AddDays(-1)).Date #last 1 day
+$users = Get-ADUser -Credential $Credentials -filter {whenCreated -ge $createdSinceDate} -SearchBase $ADSearchBase -properties sAMAccountName,mail,displayName | select sAMAccountName,mail,DisplayName
+
 #$users
 
 foreach ($user in $users) {
