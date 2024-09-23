@@ -1,4 +1,4 @@
-$mnspver = "0.0.29"
+$mnspver = "0.0.30"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -18,7 +18,7 @@ $previouslyProcessedbyID = import-csv $tempcsv1
 
 # get all tickets that match search criteria...(value: 12)
 $TicketResult = @()
-$TicketResult = Invoke-RestMethod "$AppURL/search/Ticket?is_deleted=0&as_map=0&browse=0&criteria[0][link]=AND&criteria[0][field]=23&criteria[0][searchtype]=equals&criteria[0][value]=12&itemtype=Ticket&start=0" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
+$TicketResult = Invoke-RestMethod "$AppURL/search/Ticket?is_deleted=0&as_map=0&range=0-1000000&browse=0&criteria[0][link]=AND&criteria[0][field]=23&criteria[0][searchtype]=equals&criteria[0][value]=12&itemtype=Ticket&start=0" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
 $TicketData = $TicketResult.data
 
 Write-Host "Ticket id's found that match search criteria:"
