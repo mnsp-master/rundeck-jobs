@@ -1,4 +1,4 @@
-$mnspver = "1.0.2"
+$mnspver = "1.0.3"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -54,7 +54,8 @@ foreach ($Ticket in $TicketData){
                     # get message id from search criteria ...
                     Write-Host "$GamDir\gam.exe user $GLPIGmailAddress print messages query $Query"
                     Invoke-Expression "$GamDir\gam.exe user $GLPIGmailAddress print messages query $Query"
-                    Invoke-Expression "$GamDir\gam.exe user $GLPIGmailAddress print messages query $Query" | out-file $tempcsv
+                    #Invoke-Expression "$GamDir\gam.exe user $GLPIGmailAddress print messages query $Query" | out-file $tempcsv
+                    Invoke-Expression "$GamDir\gam.exe user $GLPIGmailAddress print messages includespamtrash query $Query" | out-file $tempcsv #include trashed messages
 
                     
 
