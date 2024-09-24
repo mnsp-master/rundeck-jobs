@@ -1,4 +1,4 @@
-$mnspver = "0.0.30"
+$mnspver = "1.0.1"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -108,7 +108,7 @@ foreach ($Ticket in $TicketData){
                             Invoke-expression "$GamDir\gam.exe user $GLPIGmailAddress forward threads to $MailReceiver query $RFCQuery doit"
 
 
-                    $GLPITicketID | out-file -Append $tempcsv1 -Verbose #csv must be encoded as UCS-2 LE BOM
+                    $GLPITicketID | out-file -Append $tempcsv1 -Verbose #note existing csv must be encoded as UCS-2 LE BOM
                     start-sleep 1
                     Write-Host "-----------------------------------------------`n"
                 
@@ -127,17 +127,4 @@ Start-Sleep 10
 Write-Host "closing current api session..."
 Invoke-RestMethod "$AppURL/killSession" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
 
-<#
 
-# all tickets
-$TicketResult = @()
-$TicketResult = Invoke-RestMethod "$AppURL/search/Ticket?is_deleted=0&as_map=0&browse=0&criteria[0][link]=AND&criteria[0][field]=23&criteria[0][searchtype]=equals&criteria[0][value]=12&itemtype=Ticket&start=0" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
-$TicketResult.data
-
-#All entities: - Production
-$EntityResult = Invoke-RestMethod "$AppURL/search/Entity?is_deleted=0&as_map=0&range=0-1000000&criteria[0][link]=AND&criteria[0][field]=1&criteria[0][searchtype]=notequals&criteria[0][value]=0&search=Search&itemtype=Entity&start=0" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
-
-$entities = $EntityResult.data #convert api search into entities array
-$SearchResult=@()
-
-#>
