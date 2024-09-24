@@ -1,4 +1,4 @@
-$mnspver = "1.0.1"
+$mnspver = "1.0.2"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -32,7 +32,7 @@ foreach ($Ticket in $TicketData){
     $GLPITicketID = $Ticket.2
     Write-Host "Assessing Ticket ID:" $GLPITicketID
     #check if ticket has been previously processed (imported csv data)...
-    Write-Host "ticket number check:" $previouslyProcessedbyID.TicketID
+    # Write-Host "ticket number check:" $previouslyProcessedbyID.TicketID #uncomment for debugging...
         if ($previouslyProcessedbyID -Match $GLPITicketID) {
             Write-Host "ID: $($GLPITicketID) is a Previously processed Ticket..."
             Write-Host "-----------------------------------------------`n"
