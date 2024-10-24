@@ -1,4 +1,4 @@
-$mnspver = "0.0.16"
+$mnspver = "0.0.17"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -6,7 +6,7 @@ Start-Sleep 10
 $ErrorActionPreference="Continue"
 Set-Location $GamDir
 
-$GoogleSvcAccount = $GoogleServiceAccountPrefix$$$GoogleWorkSpaceSource@GoogleWorkspaceDomain
+$GoogleSvcAccount = "$GoogleServiceAccountPrefix$GoogleWorkSpaceSource@$GoogleWorkspaceDomain"
 
 function DashedLine {
 Write-host "-----------------------------------------------------------`n"
