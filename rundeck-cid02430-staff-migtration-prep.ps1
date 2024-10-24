@@ -1,4 +1,4 @@
-$mnspver = "0.0.4"
+$mnspver = "0.0.5"
 
 
 Write-Host $(Get-Date)
@@ -9,11 +9,11 @@ Set-Location $GamDir
 
 Write-Host "Setting workspace source: $GoogleWorkSpaceSource"
 Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceSource save" # swap/set google workspace
-Invoke-Expression "$GamDir\gam.exe info domain"
+Invoke-Expression "$GamDir\gam.exe"
 
 Start-sleep 30
 
 Write-Host "Setting workspace destination: $GoogleWorkSpaceDestination"
 Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceDestination save" # swap/set google workspace
-Invoke-Expression "$GamDir\gam.exe info domain"
+Invoke-Expression "$GamDir\gam.exe"
 
