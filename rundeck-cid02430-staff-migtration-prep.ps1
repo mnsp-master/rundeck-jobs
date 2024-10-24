@@ -1,4 +1,4 @@
-$mnspver = "0.0.3"
+$mnspver = "0.0.4"
 
 
 Write-Host $(Get-Date)
@@ -7,12 +7,13 @@ Start-Sleep 10
 $ErrorActionPreference="Continue"
 Set-Location $GamDir
 
-Write-Host "Workspace Source: $GoogleWorkSpaceSource"
-Write-Host "Workspace destination: $GoogleWorkSpaceDestination"
-
+Write-Host "Setting workspace source: $GoogleWorkSpaceSource"
 Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceSource save" # swap/set google workspace
 Invoke-Expression "$GamDir\gam.exe info domain"
 
+Start-sleep 30
+
+Write-Host "Setting workspace destination: $GoogleWorkSpaceDestination"
 Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceDestination save" # swap/set google workspace
 Invoke-Expression "$GamDir\gam.exe info domain"
 
