@@ -1,4 +1,4 @@
-$mnspver = "0.0.26"
+$mnspver = "0.0.27"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -18,6 +18,7 @@ DashedLine
 $GoogleSourceSvcAccount = ("$GoogleServiceAccountPrefix" + "$GoogleWorkSpaceSource" + "@" + "$GGoogleWorkspaceSourceMailDomain")
 Write-Host "Google Source Service Account: $GoogleSourceSvcAccount"
 
+$GoogleWorkspaceSourceGroup = ("$GoogleWorkspaceSourceGroupPrefix" + "@" + "$GGoogleWorkspaceSourceMailDomain")
 Write-Host "Getting members of users to process source group $GoogleWorkspaceSourceGroup"
 Invoke-Expression "$GamDir\gam.exe print group-members group_ns $GoogleWorkspaceSourceGroup > $tempcsv"
 
