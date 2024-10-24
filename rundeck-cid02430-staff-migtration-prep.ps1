@@ -1,4 +1,4 @@
-$mnspver = "0.0.10"
+$mnspver = "0.0.11"
 
 
 Write-Host $(Get-Date)
@@ -14,7 +14,7 @@ Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceSource save" # swap/se
 Invoke-Expression "$GamDir\gam.exe info domain"
 
 Write-Host "Getting members of users to process source group $GoogleWorkspaceSourceGroup"
-Invoke-Expression "$GamDir\gam.exe print group-members group_ns $GoogleWorkspaceSourceGroup > $tempcsv
+Invoke-Expression "$GamDir\gam.exe print group-members group_ns $GoogleWorkspaceSourceGroup" > $tempcsv
 
 #<
 Start-sleep 5
