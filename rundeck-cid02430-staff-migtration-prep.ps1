@@ -1,12 +1,10 @@
-$mnspver = "0.0.21"
+$mnspver = "0.0.22"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 Start-Sleep 10
 $ErrorActionPreference="Continue"
 Set-Location $GamDir
-
-$GoogleSvcAccount = $(-join ($GoogleServiceAccountPrefix,$GoogleWorkSpaceSource,"@",$GGoogleWorkspaceSourceMailDomain))
 
 function DashedLine {
 Write-host "-----------------------------------------------------------`n"
@@ -16,6 +14,8 @@ Write-Host "Setting workspace source: $GoogleWorkSpaceSource"
 Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceSource save" # swap/set google workspace
 Invoke-Expression "$GamDir\gam.exe"
 DashedLine
+$GoogleSourceSvcAccount = $(-join ($GoogleServiceAccountPrefix,$GoogleWorkSpaceSource,"@",$GGoogleWorkspaceSourceMailDomain))
+Write-Host "Google Source Service Account: $GoogleSourceSvcAccount"
 
 Write-Host "Getting members of users to process source group $GoogleWorkspaceSourceGroup"
 Invoke-Expression "$GamDir\gam.exe print group-members group_ns $GoogleWorkspaceSourceGroup > $tempcsv"
@@ -23,7 +23,6 @@ Invoke-Expression "$GamDir\gam.exe print group-members group_ns $GoogleWorkspace
 #get verified user data
 #if exist check & remove $tempcsv4
 Write-Host "Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleSheetID format csv gsheet $GoogleSheetTab targetfolder $DataDir targetname $tempcsv4""
-
 
 $UsersToProcess = Import-csv $tempcsv
 
