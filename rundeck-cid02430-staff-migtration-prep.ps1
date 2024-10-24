@@ -1,4 +1,4 @@
-$mnspver = "0.0.30"
+$mnspver = "0.0.31"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -26,10 +26,13 @@ Invoke-Expression "$GamDir\gam.exe print group-members group_ns $GoogleWorkspace
 #if exist check & remove $tempcsv4
 if (test-path $tempcsv4) { remove-item $tempcsv4 -force -verbose }
 
+Start-sleep 2
+
+#####upto here##### 
 Invoke-Expression "$GamDir\gam.exe user $GoogleSourceSvcAccount get drivefile $GoogleSheetID format csv gsheet $GoogleSheetTab targetfolder $DataDir targetname $tempcsv4"
 
 
-
+$UsersToProcess = @()
 $UsersToProcess = Import-csv $tempcsv
 
 foreach ($user in $UsersToProcess) {
@@ -38,7 +41,6 @@ foreach ($user in $UsersToProcess) {
     Write-Host "Processing $usermail"
 
     #set custom attribute
-
     
     DashedLine
 }
