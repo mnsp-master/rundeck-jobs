@@ -1,4 +1,4 @@
-$mnspver = "0.0.6"
+$mnspver = "0.0.7"
 
 
 Write-Host $(Get-Date)
@@ -6,6 +6,11 @@ Write-Host "MNSP Version" $mnspver
 Start-Sleep 10
 $ErrorActionPreference="Continue"
 Set-Location $GamDir
+
+Write-host "--------------------------------------`n"
+
+Write-Host "Current workspace source..."
+Invoke-Expression "$GamDir\gam.exe"
 
 Write-host "--------------------------------------`n"
 
