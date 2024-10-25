@@ -1,4 +1,4 @@
-$mnspver = "0.0.36"
+$mnspver = "0.0.37"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -31,8 +31,7 @@ Start-sleep 2
 Write-Host "downloading gsheet ID: $GoogleSheetID tab: $GoogleSheetTab01"
 Invoke-Expression "$GamDir\gam.exe user $GoogleSourceSvcAccount get drivefile $GoogleSheetID format csv gsheet ""$GoogleSheetTab01"" targetfolder $DataDir targetname $tempcsv4"
 
-
-#$GmailMessage = import-csv $tempcsv | where { ( $_.'Message-ID' -like $MsgIDElement01 -and $_.'Message-ID' -like $MsgIDElement02 -and $_.'Message-ID' -like $MsgIDElement03 ) }
+$VerifiedUserData = Get-Content -path $tempcsv4 | select-object -skip 1 | convertFrom-csv | where { $_.$FieldMatch01 -like $FieldString } #import where field like $FieldMatch01, and skip 1st line
 
 
 
