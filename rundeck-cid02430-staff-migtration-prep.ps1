@@ -1,4 +1,4 @@
-$mnspver = "0.0.31"
+$mnspver = "0.0.32"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -29,7 +29,7 @@ if (test-path $tempcsv4) { remove-item $tempcsv4 -force -verbose }
 Start-sleep 2
 
 #####upto here##### 
-Invoke-Expression "$GamDir\gam.exe user $GoogleSourceSvcAccount get drivefile $GoogleSheetID format csv gsheet $GoogleSheetTab targetfolder $DataDir targetname $tempcsv4"
+Invoke-Expression "$GamDir\gam.exe user $GoogleSourceSvcAccount get drivefile $GoogleSheetID format csv gsheet $GoogleSheetTab01 targetfolder $DataDir targetname $tempcsv4"
 
 
 $UsersToProcess = @()
