@@ -1,4 +1,4 @@
-$mnspver = "0.0.10"
+$mnspver = "0.0.11"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -17,8 +17,9 @@ $SessionToken = Invoke-RestMethod -Verbose "$AppURL/initSession" -Method Get -He
 $GLPIReplacementUserLogin = $GLPIReplacementUserName + "@" + $GoogleWorkspaceMailDomain # replacement loginname
 
 $UserData = Invoke-RestMethod -Method GET -Uri "$AppURL/User/$GLPIuserID" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -ContentType 'application/json'
-Write-Host "Users current attributes:"
-$UserData
+Write-Host "Users attributes: as of $(Get-date)"
+$UserData.name
+$UserName.user_dn
 DashedLine
 
 $updatedUID = "uid=" + $GLPIReplacementUserName + ","
@@ -56,6 +57,12 @@ $GLPIReplacementUserLogin = $GLPIReplacementUserName + "@" + $MailDomain
            $jsonupdate2 = $updateData2 | ConvertTo-Json
            $UpdateResult2 = Invoke-RestMethod -Method PUT -Uri "$AppURL/UserEmail" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -Body $jsonUpdate2 -ContentType 'application/json'
            $UpdateResult2
+DashedLine
+
+$UserData = Invoke-RestMethod -Method GET -Uri "$AppURL/User/$GLPIuserID" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -ContentType 'application/json'
+Write-Host "Users attributes: as of $(Get-date)"
+$UserData.name
+$UserName.user_dn
 DashedLine
 
 #close current api session...
