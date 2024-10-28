@@ -1,4 +1,4 @@
-$mnspver = "0.0.5"
+$mnspver = "0.0.6"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -14,19 +14,56 @@ Write-host "-----------------------------------------------------------`n"
 $SessionToken = Invoke-RestMethod -Verbose "$AppURL/initSession" -Method Get -Headers @{"Content-Type" = "application/json";"Authorization" = "user_token $UserToken";"App-Token"=$AppToken}
 #https://www.urldecoder.org/
 
-Write-Host "Getting user ID data for user ID:" $GLPIuserID
-#Write-Host "Invoke-RestMethod "$AppURL/search/User?is_deleted=0&as_map=0&browse=0&criteria[0][link]=AND&criteria[0][field]=2&criteria[0][searchtype]=contains&criteria[0][value]=$GLPIuserID&itemtype=User&start=0" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}"
-$UsersData = Invoke-RestMethod "$AppURL/search/User?is_deleted=0&as_map=0&browse=0&criteria[0][link]=AND&criteria[0][field]=2&criteria[0][searchtype]=contains&criteria[0][value]=$GLPIuserID&itemtype=User&start=0" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
+$GLPIReplacementUserLogin = $GLPIReplacementUserName + "@" + $GoogleWorkspaceMailDomain # replacement loginname
 
-#print result...
-$UsersData.data
+$UserData = Invoke-RestMethod -Method GET -Uri "$AppURL/User/$GLPIuserID" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -ContentType 'application/json'
+$UserData.user_dn
+$updatedUID = "uid=" + $GLPIReplacementUserName + ","
+$GLPIReplacementUID = $($UserData.user_dn) -replace '^(.+?),',$updatedUID #regex replace everything upto the first comma of DN (uid) with updated username
 
+#create json content of values to update/set...
+               $UpdateData = @{input=@{
+               id=$GLPIuserID
+               user_dn=$GLPIReplacementUID
+               name=$GLPIReplacementUserLogin
+               }
+               }
+
+           #update login (email attribute) and LDAP directory uid
+           $jsonupdate = $updateData | ConvertTo-Json
+           $UpdateResult = Invoke-RestMethod "$AppURL/User" -Method Put -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -Body $jsonUpdate -ContentType 'application/json'
+           $UpdateResult
+
+           #get users email id from emails table
+           $UpdateResult1 = Invoke-RestMethod -Method GET -Uri "$AppURL/User/$GLPIuserID/UserEmail" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -ContentType 'application/json'
+           $updateResult1.id
+           $id1 = $updateResult1.id #
+
+           #create json content of values to update/set...
+           $UpdateData2 = @{input=@{
+           id=$id1
+           email=$GLPIReplacementUserLogin
+           }
+           }
+           
+           #update users email address in email address table
+           $jsonupdate2 = $updateData2 | ConvertTo-Json
+           $UpdateResult2 = Invoke-RestMethod -Method PUT -Uri "$AppURL/UserEmail" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -Body $jsonUpdate2 -ContentType 'application/json'
+           $UpdateResult2
 DashedLine
 
 #close current api session...
 Invoke-RestMethod "$AppURL/killSession" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
 
 <#
+
+#Write-Host "Invoke-RestMethod "$AppURL/search/User?is_deleted=0&as_map=0&browse=0&criteria[0][link]=AND&criteria[0][field]=2&criteria[0][searchtype]=contains&criteria[0][value]=$GLPIuserID&itemtype=User&start=0" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}"
+$UsersData = Invoke-RestMethod "$AppURL/search/User?is_deleted=0&as_map=0&browse=0&criteria[0][link]=AND&criteria[0][field]=2&criteria[0][searchtype]=contains&criteria[0][value]=$GLPIuserID&itemtype=User&start=0" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
+
+$UserData = @() #reset array
+$UserData = Invoke-RestMethod -Method GET -Uri "$AppURL/User/$GLPIuserID" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -ContentType 'application/json'
+$UserData
+
 
 $GoogleSourceSvcAccount = ("$GoogleServiceAccountPrefix" + "$GoogleWorkSpaceSource" + "@" + "$GGoogleWorkspaceSourceMailDomain")
 Write-Host "Google Source Service Account: $GoogleSourceSvcAccount"
