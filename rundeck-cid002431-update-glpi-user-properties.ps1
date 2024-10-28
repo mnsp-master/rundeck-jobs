@@ -1,4 +1,4 @@
-$mnspver = "0.0.3"
+$mnspver = "0.0.4"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -15,7 +15,8 @@ $SessionToken = Invoke-RestMethod -Verbose "$AppURL/initSession" -Method Get -He
 #https://www.urldecoder.org/
 
 Write-Host "Getting user ID data for user ID:" $GLPIuserID
-$UsersData = Invoke-RestMethod "$AppURL/search/User?is_deleted=0&as_map=0&browse=0&criteria[0][link]=AND&criteria[0][field]=2&criteria[0][searchtype]=contains&criteria[0][value]=$GLPIuserID&itemtype=User&start=0" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
+Write-Host "Invoke-RestMethod "$AppURL/search/User?is_deleted=0&as_map=0&browse=0&criteria[0][link]=AND&criteria[0][field]=2&criteria[0][searchtype]=contains&criteria[0][value]=$GLPIuserID&itemtype=User&start=0" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}"
+#$UsersData = Invoke-RestMethod "$AppURL/search/User?is_deleted=0&as_map=0&browse=0&criteria[0][link]=AND&criteria[0][field]=2&criteria[0][searchtype]=contains&criteria[0][value]=$GLPIuserID&itemtype=User&start=0" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
 
 #print result...
 $UsersData.data
