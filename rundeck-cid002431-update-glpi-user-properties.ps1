@@ -1,4 +1,4 @@
-$mnspver = "0.0.9"
+$mnspver = "0.0.10"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -22,7 +22,10 @@ $UserData
 DashedLine
 
 $updatedUID = "uid=" + $GLPIReplacementUserName + ","
+$MailDomain = $($UserData.name).Split("@")[1] #split full mail address using @ synbol, select element 1
+
 $GLPIReplacementUID = $($UserData.user_dn) -replace '^(.+?),',$updatedUID #regex replace everything upto the first comma of DN (uid) with updated username
+$GLPIReplacementUserLogin = $GLPIReplacementUserName + "@" + $MailDomain
 
 #create json content of values to update/set...
                $UpdateData = @{input=@{
