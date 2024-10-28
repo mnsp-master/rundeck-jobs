@@ -18,6 +18,8 @@ $GLPIReplacementUserLogin = $GLPIReplacementUserName + "@" + $GoogleWorkspaceMai
 
 $UserData = @()
 $UserData = Invoke-RestMethod -Method GET -Uri "$AppURL/User/$GLPIuserID" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -ContentType 'application/json'
+
+DashedLine
 Write-Host "Users attributes: as of $(Get-date)"
 $UserData.name
 $UserData.user_dn
@@ -58,14 +60,17 @@ $GLPIReplacementUserLogin = $GLPIReplacementUserName + "@" + $MailDomain
            $jsonupdate2 = $updateData2 | ConvertTo-Json
            $UpdateResult2 = Invoke-RestMethod -Method PUT -Uri "$AppURL/UserEmail" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -Body $jsonUpdate2 -ContentType 'application/json'
            $UpdateResult2
-DashedLine
 
 $UserData = @()
 $UserData = Invoke-RestMethod -Method GET -Uri "$AppURL/User/$GLPIuserID" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -ContentType 'application/json'
+
+DashedLine
 Write-Host "Users attributes: as of $(Get-date)"
 $UserData.name
-$UserName.user_dn
+$UserData.user_dn
 DashedLine
+
+start-sleep 2
 
 #close current api session...
 Invoke-RestMethod "$AppURL/killSession" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
