@@ -1,8 +1,8 @@
-$mnspver = "0.0.1"
+$mnspver = "0.0.3"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
-Start-Sleep 10
+#Start-Sleep 10
 $ErrorActionPreference="Continue"
 Set-Location $GamDir
 
@@ -14,8 +14,10 @@ Write-host "-----------------------------------------------------------`n"
 $SessionToken = Invoke-RestMethod -Verbose "$AppURL/initSession" -Method Get -Headers @{"Content-Type" = "application/json";"Authorization" = "user_token $UserToken";"App-Token"=$AppToken}
 #https://www.urldecoder.org/
 
-Write-Host "Getting user ID: $GLPIuserID data..."
+Write-Host "Getting user ID data for user ID:" $GLPIuserID
 $UsersData = Invoke-RestMethod "$AppURL/search/User?is_deleted=0&as_map=0&browse=0&criteria[0][link]=AND&criteria[0][field]=2&criteria[0][searchtype]=contains&criteria[0][value]=$GLPIuserID&itemtype=User&start=0" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
+
+#print result...
 $UsersData.data
 
 DashedLine
