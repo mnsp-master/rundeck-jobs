@@ -1,4 +1,4 @@
-$mnspver = "0.0.11"
+$mnspver = "0.0.12"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -16,10 +16,11 @@ $SessionToken = Invoke-RestMethod -Verbose "$AppURL/initSession" -Method Get -He
 
 $GLPIReplacementUserLogin = $GLPIReplacementUserName + "@" + $GoogleWorkspaceMailDomain # replacement loginname
 
+$UserData = @()
 $UserData = Invoke-RestMethod -Method GET -Uri "$AppURL/User/$GLPIuserID" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -ContentType 'application/json'
 Write-Host "Users attributes: as of $(Get-date)"
 $UserData.name
-$UserName.user_dn
+$UserData.user_dn
 DashedLine
 
 $updatedUID = "uid=" + $GLPIReplacementUserName + ","
@@ -59,6 +60,7 @@ $GLPIReplacementUserLogin = $GLPIReplacementUserName + "@" + $MailDomain
            $UpdateResult2
 DashedLine
 
+$UserData = @()
 $UserData = Invoke-RestMethod -Method GET -Uri "$AppURL/User/$GLPIuserID" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} -ContentType 'application/json'
 Write-Host "Users attributes: as of $(Get-date)"
 $UserData.name
