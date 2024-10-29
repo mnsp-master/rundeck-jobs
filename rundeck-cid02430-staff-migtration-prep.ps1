@@ -1,4 +1,4 @@
-$mnspver = "0.0.51"
+$mnspver = "0.0.52"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -79,7 +79,7 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Lastname: $LastName"
 
     #create destination accounts...
-    Write-Host "Invoke-Expression $GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password random 16 org $DestinationUserOU"
+    Write-Host "Invoke-Expression $GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password random 16 org $GoogleWorkspaceDestinationUserOU"
 
     #hide accounts from GAL..
     Write-Host "Invoke-Expression $GamDir\gam.exe update user $ReplacementUserMail gal false"
