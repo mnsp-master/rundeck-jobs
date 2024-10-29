@@ -79,7 +79,7 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Lastname: $LastName"
 
     #create destination accounts...
-    Write-Host "Invoke-Expression $GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password random 16 org $DestinationOU"
+    Write-Host "Invoke-Expression $GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password random 16 org $DestinationUserOU"
 
     #hide accounts from GAL..
     Write-Host "Invoke-Expression $GamDir\gam.exe update user $ReplacementUserMail gal false"
