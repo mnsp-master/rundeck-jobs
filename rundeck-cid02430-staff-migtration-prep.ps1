@@ -1,4 +1,4 @@
-$mnspver = "0.0.54"
+$mnspver = "0.0.55"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -29,7 +29,6 @@ if (test-path $tempcsv4) { remove-item $tempcsv4 -force -verbose }
 Start-sleep 2
 
 #create destination gfolder for all existing shared drive associations
-#gam user svc-gam-hem@hemingtonprimary.co.uk create drivefile drivefilename "SNODEV01" mimetype gfolder parentid 1mh40YVxLp5dxgAp0dC9yeb28GstUYxhg returnidonly
 $GfolderReportID = $(Invoke-Expression $GamDir\gam.exe user $GoogleSourceSvcAccount create drivefile drivefilename $ReportsFolderName mimetype gfolder parentid $ReportsFolderParentID returnidonly)
 
 Write-Host "downloading gsheet ID: $GoogleSheetID tab: $GoogleSheetTab01"
