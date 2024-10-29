@@ -1,4 +1,4 @@
-$mnspver = "0.0.45"
+$mnspver = "0.0.46"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -35,7 +35,7 @@ $VerifiedUserData = Get-Content -path $tempcsv4 | select-object -skip 1 | conver
 Write Host "Number of records matching selection criteria:" $VerifiedUserData.count
 
 #if ($uuids.Contains($uuid)) { } # if var is in array
-
+#legacy google instance...
 foreach ($user in $VerifiedUserData) {
     DashedLine
     $LegacyUserMail= $user."Existing Email Address" #current mail address
@@ -52,6 +52,32 @@ foreach ($user in $VerifiedUserData) {
 
     #update legacy accounts
     Write-Host "Invoke-Expression user $LegacyUserMail $GoogleCustomAttribute01 $HRid" #set HR ID
+
+    DashedLine
+}
+
+#Replacement google instance...
+Write-Host "Setting workspace source: $GoogleWorkSpaceDestination"
+Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceDestination save" # swap/set google workspace
+Invoke-Expression "$GamDir\gam.exe"
+DashedLine
+
+foreach ($user in $VerifiedUserData) {
+    DashedLine
+    $LegacyUserMail= $user."Existing Email Address" #current mail address
+    $HRid = $user."Staff full name" # HR id
+    $FirstName = $user."Staff first name" #prefered firstname
+    $LastName = $user."Staff Surname"
+    $ReplacementUserMail = $user."new email"
+
+    Write-Host "Processing: $LegacyUserMail"
+    Write-Host "HR ID: $HRid"
+    Write-Host "Firstname: $FirstName"
+    Write-Host "Lastname: $LastName"
+    Write-Host "Replacement mail: $ReplacementUserMail"
+
+    #update legacy accounts
+    Write-Host "Invoke-Expression user $ReplacementUserMail $GoogleCustomAttribute01 $HRid" #set HR ID
 
     DashedLine
 }
