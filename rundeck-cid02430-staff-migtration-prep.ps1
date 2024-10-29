@@ -1,4 +1,4 @@
-$mnspver = "0.0.58"
+$mnspver = "0.0.59"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -68,7 +68,7 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "$LegacyUserTeamDriveID = $( Invoke-expression "$GamDir\gam.exe user $GoogleSourceSvcAccount create teamdrive '$TeamDriveName' adminmanagedrestrictions true asadmin returnidonly")"
 
     #move to data move enabled OU...
-    Write-Host "Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin ou $LegacyUserTeamDriveOU""
+    Write-Host "Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin ou $LegacyUserTeamDriveOU"" #location needs confirming
 
     #Allow outside sharing...
     Write-Host "Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin domainUsersOnly False""
