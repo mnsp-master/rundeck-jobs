@@ -1,4 +1,4 @@
-$mnspver = "0.0.49"
+$mnspver = "0.0.50"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -50,7 +50,10 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Lastname: $LastName"
 
     #update legacy accounts...
-    Write-Host "Invoke-Expression user $LegacyUserMail $GoogleCustomAttribute01 $HRid" #set HR ID
+    Write-Host "Invoke-Expression $GamDir\gam.exe user $LegacyUserMail $GoogleCustomAttribute01 $HRid" #set HR ID
+
+    #send current calendar invite...
+    Write-Host "Invoke-Expression $GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail sendnotifications false"
 
     DashedLine
 }
