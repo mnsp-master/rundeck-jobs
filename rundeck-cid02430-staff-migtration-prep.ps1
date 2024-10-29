@@ -1,4 +1,4 @@
-$mnspver = "0.0.41"
+$mnspver = "0.0.42"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -34,25 +34,26 @@ Invoke-Expression "$GamDir\gam.exe user $GoogleSourceSvcAccount get drivefile $G
 $VerifiedUserData = Get-Content -path $tempcsv4 | select-object -skip 1 | convertFrom-csv | where { $_.$FieldMatch01 -like $FieldString } #import where field like $FieldMatch01, and skip 1st line
 Write Host "Number of records matching selection criteria:" $VerifiedUserData.count
 
-$VerifiedUserData
-
 #if ($uuids.Contains($uuid)) { } # if var is in array
 
-<#
-$UsersToProcess = @()
-$UsersToProcess = Import-csv $tempcsv
-
-foreach ($user in $UsersToProcess) {
+foreach ($user in $VerifiedUserData) {
     DashedLine
-    $usermail = $User.email
-    Write-Host "Processing $usermail"
+    $CurrentUserMail = $user."Existing Email Address" #current mail address
+    $HRid = $user."Staff full name" # HR id
+
+    Write-Host "Processing $CurrentUserMail"
+    Write-Host "HR ID: $HRid"
 
     #set custom attribute
     
     DashedLine
 }
-#>
 
+
+<#
+
+$UsersToProcess = @()
+$UsersToProcess = Import-csv $tempcsv
 
 #Start-sleep 5
 #Write-host "--------------------------------------`n"
@@ -66,3 +67,4 @@ foreach ($user in $UsersToProcess) {
 #Start-sleep 5
 #Write-Host $(Get-Date)
 
+#>
