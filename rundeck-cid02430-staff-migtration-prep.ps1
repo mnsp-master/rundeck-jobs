@@ -1,4 +1,4 @@
-$mnspver = "0.0.52"
+$mnspver = "0.0.53"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -99,19 +99,5 @@ foreach ($user in $VerifiedUserData) {
 
 <#
 
-$UsersToProcess = @()
-$UsersToProcess = Import-csv $tempcsv
-
-#Start-sleep 5
-#Write-host "--------------------------------------`n"
-
-#Write-Host "Setting workspace destination: $GoogleWorkSpaceDestination"
-#Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceDestination save" # swap/set google workspace
-#Invoke-Expression "$GamDir\gam.exe"
-
-#Write-host "--------------------------------------`n"
-
-#Start-sleep 5
-#Write-Host $(Get-Date)
 
 #>
