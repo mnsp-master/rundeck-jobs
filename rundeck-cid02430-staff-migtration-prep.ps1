@@ -1,4 +1,4 @@
-$mnspver = "0.0.48"
+$mnspver = "0.0.49"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -38,7 +38,7 @@ Write Host "Number of records matching selection criteria:" $VerifiedUserData.co
 #legacy google instance...
 foreach ($user in $VerifiedUserData) {
     DashedLine
-    $LegacyUserMail= $user."Existing Email Address" #current mail address
+    $LegacyUserMail = $user."Existing Email Address" #current mail address
     $HRid = $user."Staff full name" # HR id
     $FirstName = $user."Staff first name" #prefered firstname
     $LastName = $user."Staff Surname"
@@ -74,6 +74,18 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "HR ID: $HRid"
     Write-Host "Firstname: $FirstName"
     Write-Host "Lastname: $LastName"
+
+    #create destination accounts...
+    Write-Host "Invoke-Expression $GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password random 16 org $DestinationOU"
+
+    #hide accounts from GAL..
+    Write-Host "Invoke-Expression $GamDir\gam.exe update user $ReplacementUserMail gal false"
+
+    #generate MFA backup codes...
+    Write-Host "Invoke-Expression $GamDir\gam.exe user $ReplacementUserMail update backupcodes"
+    
+    #Accept calendar invite...
+    Write-Host "Invoke-Expression $GamDir\gam.exe user $LegacyUserMail add calendar $ReplacementUserMail selected true"
 
     #update Replacement accounts...
     Write-Host "Invoke-Expression user $ReplacementUserMail $GoogleCustomAttribute01 $HRid" #set HR ID
