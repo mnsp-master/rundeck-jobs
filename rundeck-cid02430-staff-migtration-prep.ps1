@@ -1,4 +1,4 @@
-$mnspver = "0.0.56"
+$mnspver = "0.0.57"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -28,10 +28,10 @@ if (test-path $tempcsv4) { remove-item $tempcsv4 -force -verbose }
 
 Start-sleep 2
 
-#create destination gfolder for all existing shared drive association user reports...
-$GfolderReportsID = @()
-$GfolderReportsID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSourceSvcAccount create drivefile drivefilename '$ReportsFolderName' mimetype gfolder parentid $ReportsFolderParentID returnidonly")
-$GfolderReportsID
+#Write-Host "creating destination gfolder for all existing shared drive association user reports..."
+#$GfolderReportsID = @()
+#$GfolderReportsID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSourceSvcAccount create drivefile drivefilename '$ReportsFolderName' mimetype gfolder parentid $ReportsFolderParentID returnidonly")
+$GfolderReportsID = "1X4xdjK5fJLnXn5Q1sqqhBpKYJ1KJHVc9" #update once in production
 
 Write-Host "downloading gsheet ID: $GoogleSheetID tab: $GoogleSheetTab01"
 Invoke-Expression "$GamDir\gam.exe user $GoogleSourceSvcAccount get drivefile $GoogleSheetID format csv gsheet ""$GoogleSheetTab01"" targetfolder $DataDir targetname $tempcsv4"
@@ -59,6 +59,9 @@ foreach ($user in $VerifiedUserData) {
 
     #send current calendar invite...
     Write-Host "Invoke-Expression $GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail sendnotifications false"
+
+    #report current shared drive folder associations...
+    Invoke-expression "$GamDir\gam.exe user $legacyUserMail print teamdrives todrive tdparent id:$GfolderReportsID tdnobrowser tdtitle '$LegacyUserMail shared drives summary as of $(get-date)'"
 
     DashedLine
 }
