@@ -1,4 +1,4 @@
-$mnspver = "0.0.47"
+$mnspver = "0.0.48"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -56,9 +56,10 @@ foreach ($user in $VerifiedUserData) {
 }
 
 #Replacement google instance...
-Write-Host "Setting workspace source: $GoogleWorkSpaceDestination"
+Write-Host "Setting workspace Destination: $GoogleWorkSpaceDestination"
 Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceDestination save" # swap/set google workspace
 Invoke-Expression "$GamDir\gam.exe"
+start-sleep 3
 DashedLine
 
 foreach ($user in $VerifiedUserData) {
