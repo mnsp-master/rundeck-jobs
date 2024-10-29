@@ -1,4 +1,4 @@
-$mnspver = "0.0.59"
+$mnspver = "0.0.60"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -40,6 +40,9 @@ $VerifiedUserData = Get-Content -path $tempcsv4 | select-object -skip 1 | conver
 Write Host "Number of records matching selection criteria:" $VerifiedUserData.count
 
 #if ($uuids.Contains($uuid)) { } # if var is in array
+
+##########ORDER needs confirming legacy/destination First/Last#######################
+
 #legacy google instance...
 foreach ($user in $VerifiedUserData) {
     DashedLine
