@@ -1,4 +1,4 @@
-$mnspver = "0.0.43"
+$mnspver = "0.0.44"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -38,20 +38,21 @@ Write Host "Number of records matching selection criteria:" $VerifiedUserData.co
 
 foreach ($user in $VerifiedUserData) {
     DashedLine
-    $CurrentUserMail = $user."Existing Email Address" #current mail address
+    $LegacyUserMail= $user."Existing Email Address" #current mail address
     $HRid = $user."Staff full name" # HR id
     $FirstName = $user."Staff first name" #prefered firstname
     $LastName = $user."Staff Surname"
     $ReplacementUserMail = $user."new email"
 
-    Write-Host "Processing: $CurrentUserMail"
+    Write-Host "Processing: $LegacyUserMail"
     Write-Host "HR ID: $HRid"
     Write-Host "Firstname: $FirstName"
     Write-Host "Lastname: $LastName"
     Write-Host "Replacement mail: $ReplacementUserMail"
 
-    #set custom attribute
-    
+    #update legacy accounts
+    Write-Host "Invoke-Expression user $LegacyUserMail $GoogleCustomAttribute01 $HR_id" #set HR ID
+
     DashedLine
 }
 
