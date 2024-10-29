@@ -1,4 +1,4 @@
-$mnspver = "0.0.42"
+$mnspver = "0.0.43"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -40,9 +40,15 @@ foreach ($user in $VerifiedUserData) {
     DashedLine
     $CurrentUserMail = $user."Existing Email Address" #current mail address
     $HRid = $user."Staff full name" # HR id
+    $FirstName = $user."Staff first name" #prefered firstname
+    $LastName = $user."Staff Surname"
+    $ReplacementUserMail = $user."new email"
 
-    Write-Host "Processing $CurrentUserMail"
+    Write-Host "Processing: $CurrentUserMail"
     Write-Host "HR ID: $HRid"
+    Write-Host "Firstname: $FirstName"
+    Write-Host "Lastname: $LastName"
+    Write-Host "Replacement mail: $ReplacementUserMail"
 
     #set custom attribute
     
