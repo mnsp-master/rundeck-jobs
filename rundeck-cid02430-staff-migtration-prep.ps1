@@ -1,4 +1,4 @@
-$mnspver = "0.0.44"
+$mnspver = "0.0.45"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -51,7 +51,7 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Replacement mail: $ReplacementUserMail"
 
     #update legacy accounts
-    Write-Host "Invoke-Expression user $LegacyUserMail $GoogleCustomAttribute01 $HR_id" #set HR ID
+    Write-Host "Invoke-Expression user $LegacyUserMail $GoogleCustomAttribute01 $HRid" #set HR ID
 
     DashedLine
 }
