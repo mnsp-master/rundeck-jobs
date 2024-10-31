@@ -1,4 +1,4 @@
-$mnspver = "0.0.75.2"
+$mnspver = "0.0.79"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -15,7 +15,6 @@ Write-Host "Setting workspace source: $GoogleWorkSpaceSource"
 Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceSource save" # swap/set google workspace
 Invoke-Expression "$GamDir\gam.exe"
 DashedLine
-
 
 #Write-Host "creating destination gfolder for all existing shared drive association user reports..."
 #$GfolderReportsID = @()
@@ -71,17 +70,14 @@ foreach ($user in $VerifiedUserData) {
     Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password random 16 org '$GoogleWorkspaceDestinationUserOU'"
 
     Write-Host "hide account from GAL.."
-    Write-Host "$GamDir\gam.exe update user $ReplacementUserMail gal false"
+    #Write-Host "$GamDir\gam.exe update user $ReplacementUserMail gal false"
     Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail gal false"
 
     Write-Host "generate MFA backup codes..."
     Invoke-Expression "$GamDir\gam.exe user $ReplacementUserMail update backupcodes"
-    
-    Write-Host "Accept calendar invite..."
-    Write-Host "Invoke-Expression $GamDir\gam.exe user $LegacyUserMail add calendar $ReplacementUserMail selected true"
 
     Write-Host "update Replacement account..."
-    Write-Host "Invoke-Expression $GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $HRid" #set HR ID
+    #Write-Host "Invoke-Expression $GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $HRid" #set HR ID
 
     DashedLine
 }
@@ -116,35 +112,59 @@ foreach ($user in $VerifiedUserData) {
     Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail $GoogleCustomAttribute01 $HRid" #set HR ID
 
     Write-Host "send current calendar invite..."
-    Write-Host "Invoke-Expression $GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail sendnotifications false"
+    #Invoke-Expression "$GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail sendnotifications false"
 
     Write-Host "report current shared drive folder associations for: $LegacyUserMail ..."
     #Invoke-expression "$GamDir\gam.exe user $legacyUserMail print teamdrives todrive tdparent id:$GfolderReportsID tdnobrowser tdtitle '$LegacyUserMail shared drives summary as of $(get-date)'"
 
     Write-Host "shared drive creation (Legacy Source to Destination user)..."
     $TeamDriveName = "DRA DEV $(Get-Date)" #convention needs confirming
-    #$LegacyUserTeamDriveID = "$( Invoke-expression $GamDir\gam.exe user $GoogleSourceSvcAccount create teamdrive '$TeamDriveName' adminmanagedrestrictions true asadmin returnidonly )"
+    $LegacyUserTeamDriveID = "$( Invoke-expression $GamDir\gam.exe user $GoogleSourceSvcAccount create teamdrive '$TeamDriveName' adminmanagedrestrictions true asadmin returnidonly )"
 
     Write-Host "move to data move enabled OU..."
-    Write-Host "Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin ou $LegacyUserTeamDriveOU"" #location needs confirming
+    #Write-Host "Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin ou $LegacyUserTeamDriveOU"" #location needs confirming
 
     Write-Host "Allow outside sharing..."
-    Write-Host "Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin domainUsersOnly False""
+    #Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin domainUsersOnly False"
 
     Write-Host "Allow people who aren't shared drive members to access files - false..."
-    Write-Host "Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin sharingFoldersRequiresOrganizerPermission True""
+    #Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin sharingFoldersRequiresOrganizerPermission True"
 
     Write-Host "Add internal user as manager..."
-    Write-Host "Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $LegacyUserMail role organizer""
+    #Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $LegacyUserMail role organizer"
     
     Write-Host "Add external user as manager..."
-    Write-Host "Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $ReplacementUserMail role organizer""
+    #Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $ReplacementUserMail role organizer"
 
     DashedLine
 }
 
+#Replacement google instance...
+Write-Host "Setting workspace Destination: $GoogleWorkSpaceDestination"
+Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceDestination save" # swap/set google workspace
+Invoke-Expression "$GamDir\gam.exe"
+start-sleep 3
+DashedLine
 
+foreach ($user in $VerifiedUserData) {
+    DashedLine
+    $LegacyUserMail = $user."Existing Email Address" #current mail address
+    $HRid = $user."Staff full name" # HR id
+    $FirstName = $user."Staff first name" #prefered firstname
+    $LastName = $user."Staff Surname"
+    $ReplacementUserMail = $user."new email"
 
+    if ( $RunDeckDev -eq "true" ) { $ReplacementUserMail = $RundeckDevMail } # Dev environment
+    
+    Write-Host "Processing: $LegacyUserMail"
+    Write-Host "HR ID: $HRid"
+    Write-Host "Firstname: $FirstName"
+    Write-Host "Lastname: $LastName"
+
+    Write-Host "Accept calendar invite..."
+    #Invoke-Expression "$GamDir\gam.exe user $LegacyUserMail add calendar $ReplacementUserMail selected true"
+
+}
 <#
 
 
