@@ -1,4 +1,4 @@
-$mnspver = "0.0.66"
+$mnspver = "0.0.67"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -41,7 +41,45 @@ Write Host "Number of records matching selection criteria:" $VerifiedUserData.co
 
 #if ($uuids.Contains($uuid)) { } # if var is in array
 
-##########ORDER needs confirming legacy/destination First/Last#######################
+#Replacement google instance...
+Write-Host "Setting workspace Destination: $GoogleWorkSpaceDestination"
+Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceDestination save" # swap/set google workspace
+Invoke-Expression "$GamDir\gam.exe"
+start-sleep 3
+DashedLine
+
+foreach ($user in $VerifiedUserData) {
+    DashedLine
+    $LegacyUserMail= $user."Existing Email Address" #current mail address
+    $HRid = $user."Staff full name" # HR id
+    $FirstName = $user."Staff first name" #prefered firstname
+    $LastName = $user."Staff Surname"
+    $ReplacementUserMail = $user."new email"
+
+    Write-Host "Processing: $ReplacementUserMail"
+    Write-Host "HR ID: $HRid"
+    Write-Host "Firstname: $FirstName"
+    Write-Host "Lastname: $LastName"
+
+    Write-Host "create destination account..."
+    Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password random 16 org $GoogleWorkspaceDestinationUserOU"
+
+    Write-Host "hide account from GAL.."
+    Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail gal false"
+
+    Write-Host "generate MFA backup codes..."
+    Write-Host "Invoke-Expression $GamDir\gam.exe user $ReplacementUserMail update backupcodes"
+    
+    Write-Host "Accept calendar invite..."
+    Write-Host "Invoke-Expression $GamDir\gam.exe user $LegacyUserMail add calendar $ReplacementUserMail selected true"
+
+    Write-Host "update Replacement account..."
+    Write-Host "Invoke-Expression $GamDir\gam.exe user $ReplacementUserMail $GoogleCustomAttribute01 $HRid" #set HR ID
+
+    DashedLine
+}
+
+
 
 #legacy google instance...
 foreach ($user in $VerifiedUserData) {
@@ -88,43 +126,6 @@ foreach ($user in $VerifiedUserData) {
     DashedLine
 }
 
-#Replacement google instance...
-Write-Host "Setting workspace Destination: $GoogleWorkSpaceDestination"
-Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceDestination save" # swap/set google workspace
-Invoke-Expression "$GamDir\gam.exe"
-start-sleep 3
-DashedLine
-
-foreach ($user in $VerifiedUserData) {
-    DashedLine
-    $LegacyUserMail= $user."Existing Email Address" #current mail address
-    $HRid = $user."Staff full name" # HR id
-    $FirstName = $user."Staff first name" #prefered firstname
-    $LastName = $user."Staff Surname"
-    $ReplacementUserMail = $user."new email"
-
-    Write-Host "Processing: $ReplacementUserMail"
-    Write-Host "HR ID: $HRid"
-    Write-Host "Firstname: $FirstName"
-    Write-Host "Lastname: $LastName"
-
-    Write-Host "create destination account..."
-    Write-Host "Invoke-Expression $GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password random 16 org $GoogleWorkspaceDestinationUserOU"
-
-    Write-Host "hide account from GAL.."
-    Write-Host "Invoke-Expression $GamDir\gam.exe update user $ReplacementUserMail gal false"
-
-    Write-Host "generate MFA backup codes..."
-    Write-Host "Invoke-Expression $GamDir\gam.exe user $ReplacementUserMail update backupcodes"
-    
-    Write-Host "Accept calendar invite..."
-    Write-Host "Invoke-Expression $GamDir\gam.exe user $LegacyUserMail add calendar $ReplacementUserMail selected true"
-
-    Write-Host "update Replacement account..."
-    Write-Host "Invoke-Expression $GamDir\gam.exe user $ReplacementUserMail $GoogleCustomAttribute01 $HRid" #set HR ID
-
-    DashedLine
-}
 
 
 <#
