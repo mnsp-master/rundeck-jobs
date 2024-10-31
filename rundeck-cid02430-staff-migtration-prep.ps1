@@ -1,4 +1,4 @@
-$mnspver = "0.0.65"
+$mnspver = "0.0.66"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -58,7 +58,7 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Lastname: $LastName"
 
     Write-Host "update legacy accounts..."
-    Write-Host "Invoke-Expression $GamDir\gam.exe user $LegacyUserMail $GoogleCustomAttribute01 $HRid" #set HR ID
+    Invoke-Expression "$GamDir\gam.exe user $LegacyUserMail $GoogleCustomAttribute01 $HRid" #set HR ID
 
     Write-Host "send current calendar invite..."
     Write-Host "Invoke-Expression $GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail sendnotifications false"
@@ -67,8 +67,8 @@ foreach ($user in $VerifiedUserData) {
     #Invoke-expression "$GamDir\gam.exe user $legacyUserMail print teamdrives todrive tdparent id:$GfolderReportsID tdnobrowser tdtitle '$LegacyUserMail shared drives summary as of $(get-date)'"
 
     Write-Host "shared drive creation (Legacy Source to Destination user)..."
-    $TeamDriveName = "HEM DEV $(Get-Date)" #convention needs confirming
-    Write-Host "$LegacyUserTeamDriveID = $( Invoke-expression $GamDir\gam.exe user $GoogleSourceSvcAccount create teamdrive '$TeamDriveName' adminmanagedrestrictions true asadmin returnidonly )"
+    $TeamDriveName = "DRA DEV $(Get-Date)" #convention needs confirming
+    #$LegacyUserTeamDriveID = "$( Invoke-expression $GamDir\gam.exe user $GoogleSourceSvcAccount create teamdrive '$TeamDriveName' adminmanagedrestrictions true asadmin returnidonly )"
 
     Write-Host "move to data move enabled OU..."
     Write-Host "Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin ou $LegacyUserTeamDriveOU"" #location needs confirming
