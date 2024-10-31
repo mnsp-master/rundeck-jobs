@@ -1,4 +1,4 @@
-$mnspver = "0.0.84"
+$mnspver = "0.0.85"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -113,7 +113,7 @@ foreach ($user in $VerifiedUserData) {
     #Invoke-Expression "$GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail sendnotifications false"
 
     Write-Host "shared drive creation (Legacy Source to Destination user)..."
-    $TeamDriveName = "DRA DEV $(Get-Date)" #convention needs confirming
+    $TeamDriveName = "$LegacyUserMail (Legacy) $(Get-Date)" #convention needs confirming
     $LegacyUserTeamDriveID = $(Invoke-expression "$GamDir\gam.exe user $GoogleSourceSvcAccount create teamdrive '$TeamDriveName' adminmanagedrestrictions true asadmin returnidonly")
     Write-Host "Shared Drive ID: $LegacyUserTeamDriveID "
 
