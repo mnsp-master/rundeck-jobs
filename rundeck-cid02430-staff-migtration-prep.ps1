@@ -1,4 +1,4 @@
-$mnspver = "0.0.63"
+$mnspver = "0.0.64"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -63,7 +63,7 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "send current calendar invite..."
     Write-Host "Invoke-Expression $GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail sendnotifications false"
 
-    #report current shared drive folder associations...
+    Write-Host "report current shared drive folder associations for: $LegacyUserMail ..."
     #Invoke-expression "$GamDir\gam.exe user $legacyUserMail print teamdrives todrive tdparent id:$GfolderReportsID tdnobrowser tdtitle '$LegacyUserMail shared drives summary as of $(get-date)'"
 
     Write-Host "shared drive creation (Legacy Source to Destination user)..."
