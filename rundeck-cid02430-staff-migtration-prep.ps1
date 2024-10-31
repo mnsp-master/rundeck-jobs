@@ -1,4 +1,4 @@
-$mnspver = "0.0.67"
+$mnspver = "0.0.68"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -10,31 +10,19 @@ function DashedLine {
 Write-host "-----------------------------------------------------------`n"
 }
 
-Write-Host "Setting workspace source: $GoogleWorkSpaceSource"
-Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceSource save" # swap/set google workspace
-Invoke-Expression "$GamDir\gam.exe"
-DashedLine
-
-$GoogleSourceSvcAccount = ("$GoogleServiceAccountPrefix" + "$GoogleWorkSpaceSource" + "@" + "$GGoogleWorkspaceSourceMailDomain")
-Write-Host "Google Source Service Account: $GoogleSourceSvcAccount"
-
-$GoogleWorkspaceSourceGroup = ("$GoogleWorkspaceSourceGroupPrefix" + "@" + "$GGoogleWorkspaceSourceMailDomain")
-Write-Host "Getting members of users to process source group $GoogleWorkspaceSourceGroup"
-Invoke-Expression "$GamDir\gam.exe print group-members group_ns $GoogleWorkspaceSourceGroup > $tempcsv"
-
-#get verified user data
-#if exist check & remove $tempcsv4
-if (test-path $tempcsv4) { remove-item $tempcsv4 -force -verbose }
-
-Start-sleep 2
-
 #Write-Host "creating destination gfolder for all existing shared drive association user reports..."
 #$GfolderReportsID = @()
 #$GfolderReportsID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSourceSvcAccount create drivefile drivefilename '$ReportsFolderName' mimetype gfolder parentid $ReportsFolderParentID returnidonly")
 $GfolderReportsID = "1X4xdjK5fJLnXn5Q1sqqhBpKYJ1KJHVc9" #update/enable once in production
 
+#get verified user data
+#if exist check & remove $tempcsv4
+if (test-path $tempcsv4) { remove-item $tempcsv4 -force -verbose }
+
 Write-Host "downloading gsheet ID: $GoogleSheetID tab: $GoogleSheetTab01"
 Invoke-Expression "$GamDir\gam.exe user $GoogleSourceSvcAccount get drivefile $GoogleSheetID format csv gsheet ""$GoogleSheetTab01"" targetfolder $DataDir targetname $tempcsv4"
+
+Start-sleep 2
 
 $VerifiedUserData = Get-Content -path $tempcsv4 | select-object -skip 1 | convertFrom-csv | where { $_.$FieldMatch01 -like $FieldString } #import where field like $FieldMatch01, and skip 1st line
 Write Host "Number of records matching selection criteria:" $VerifiedUserData.count
@@ -62,10 +50,12 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Lastname: $LastName"
 
     Write-Host "create destination account..."
-    Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password random 16 org $GoogleWorkspaceDestinationUserOU"
+    Write-Host "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password random 16 org $GoogleWorkspaceDestinationUserOU"
+    #Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password random 16 org $GoogleWorkspaceDestinationUserOU"
 
     Write-Host "hide account from GAL.."
-    Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail gal false"
+    Write-Host "$GamDir\gam.exe update user $ReplacementUserMail gal false"
+    #Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail gal false"
 
     Write-Host "generate MFA backup codes..."
     Write-Host "Invoke-Expression $GamDir\gam.exe user $ReplacementUserMail update backupcodes"
@@ -80,8 +70,19 @@ foreach ($user in $VerifiedUserData) {
 }
 
 
-
 #legacy google instance...
+Write-Host "Setting workspace source: $GoogleWorkSpaceSource"
+Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceSource save" # swap/set google workspace
+Invoke-Expression "$GamDir\gam.exe"
+DashedLine
+
+$GoogleSourceSvcAccount = ("$GoogleServiceAccountPrefix" + "$GoogleWorkSpaceSource" + "@" + "$GGoogleWorkspaceSourceMailDomain")
+Write-Host "Google Source Service Account: $GoogleSourceSvcAccount"
+
+$GoogleWorkspaceSourceGroup = ("$GoogleWorkspaceSourceGroupPrefix" + "@" + "$GGoogleWorkspaceSourceMailDomain")
+Write-Host "Getting members of users to process source group $GoogleWorkspaceSourceGroup"
+Invoke-Expression "$GamDir\gam.exe print group-members group_ns $GoogleWorkspaceSourceGroup > $tempcsv"
+
 foreach ($user in $VerifiedUserData) {
     DashedLine
     $LegacyUserMail = $user."Existing Email Address" #current mail address
