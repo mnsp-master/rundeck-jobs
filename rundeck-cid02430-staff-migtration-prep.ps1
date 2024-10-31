@@ -113,7 +113,8 @@ foreach ($user in $VerifiedUserData) {
     Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail $GoogleCustomAttribute01 $HRid" #set HR ID
 
     Write-Host "send current calendar invite..."
-    Invoke-Expression "$GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail sendnotifications false"
+    #Invoke-Expression "$GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail sendnotifications false"
+    Invoke-Expression "$GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail"
 
     Write-Host "shared drive creation (Legacy Source to Destination user)..."
     $TeamDriveName = "$LegacyUserMail (Legacy) $(Get-Date)" #convention needs confirming
