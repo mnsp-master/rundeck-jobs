@@ -1,4 +1,4 @@
-$mnspver = "0.0.71"
+$mnspver = "0.0.72"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -46,6 +46,14 @@ foreach ($user in $VerifiedUserData) {
     $FirstName = $user."Staff first name" #prefered firstname
     $LastName = $user."Staff Surname"
     $ReplacementUserMail = $user."new email"
+
+    #dev enviornment...
+    if ( $RunDeckDev -eq "true" ) {
+        Write-Host "Setting random dev mail address"
+        $ReplacementUserMail = ("SNO-" + $([int64](Get-Date -UFormat %s)) + "@" + "$GoogleWorkspaceDestinationMailDomain")
+        $ReplacementUserMail
+
+        }
 
     Write-Host "Processing: $ReplacementUserMail"
     Write-Host "HR ID: $HRid"
