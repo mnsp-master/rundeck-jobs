@@ -1,4 +1,4 @@
-$mnspver = "0.0.68"
+$mnspver = "0.0.69"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -14,6 +14,9 @@ Write-host "-----------------------------------------------------------`n"
 #$GfolderReportsID = @()
 #$GfolderReportsID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSourceSvcAccount create drivefile drivefilename '$ReportsFolderName' mimetype gfolder parentid $ReportsFolderParentID returnidonly")
 $GfolderReportsID = "1X4xdjK5fJLnXn5Q1sqqhBpKYJ1KJHVc9" #update/enable once in production
+
+$GoogleSourceSvcAccount = ("$GoogleServiceAccountPrefix" + "$GoogleWorkSpaceSource" + "@" + "$GGoogleWorkspaceSourceMailDomain")
+Write-Host "Google Source Service Account: $GoogleSourceSvcAccount"
 
 #get verified user data
 #if exist check & remove $tempcsv4
@@ -76,8 +79,7 @@ Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceSource save" # swap/se
 Invoke-Expression "$GamDir\gam.exe"
 DashedLine
 
-$GoogleSourceSvcAccount = ("$GoogleServiceAccountPrefix" + "$GoogleWorkSpaceSource" + "@" + "$GGoogleWorkspaceSourceMailDomain")
-Write-Host "Google Source Service Account: $GoogleSourceSvcAccount"
+
 
 $GoogleWorkspaceSourceGroup = ("$GoogleWorkspaceSourceGroupPrefix" + "@" + "$GGoogleWorkspaceSourceMailDomain")
 Write-Host "Getting members of users to process source group $GoogleWorkspaceSourceGroup"
