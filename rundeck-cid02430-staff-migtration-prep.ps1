@@ -1,4 +1,4 @@
-$mnspver = "0.0.85"
+$mnspver = "0.0.90"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -75,7 +75,7 @@ foreach ($user in $VerifiedUserData) {
     Invoke-Expression "$GamDir\gam.exe user $ReplacementUserMail update backupcodes"
 
     Write-Host "update Replacement account..."
-    #Write-Host "Invoke-Expression $GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $HRid" #set HR ID
+    Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $HRid" #set HR ID
 
     DashedLine
 }
