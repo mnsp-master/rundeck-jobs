@@ -1,4 +1,4 @@
-$mnspver = "0.0.76"
+$mnspver = "0.0.77"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -106,29 +106,29 @@ foreach ($user in $VerifiedUserData) {
     Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail $GoogleCustomAttribute01 $HRid" #set HR ID
 
     Write-Host "send current calendar invite..."
-    Write-Host "Invoke-Expression $GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail sendnotifications false"
+    Invoke-Expression "$GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail sendnotifications false"
 
     Write-Host "report current shared drive folder associations for: $LegacyUserMail ..."
-    #Invoke-expression "$GamDir\gam.exe user $legacyUserMail print teamdrives todrive tdparent id:$GfolderReportsID tdnobrowser tdtitle '$LegacyUserMail shared drives summary as of $(get-date)'"
+    Invoke-expression "$GamDir\gam.exe user $legacyUserMail print teamdrives todrive tdparent id:$GfolderReportsID tdnobrowser tdtitle '$LegacyUserMail shared drives summary as of $(get-date)'"
 
     Write-Host "shared drive creation (Legacy Source to Destination user)..."
     $TeamDriveName = "DRA DEV $(Get-Date)" #convention needs confirming
-    #$LegacyUserTeamDriveID = "$( Invoke-expression $GamDir\gam.exe user $GoogleSourceSvcAccount create teamdrive '$TeamDriveName' adminmanagedrestrictions true asadmin returnidonly )"
+    $LegacyUserTeamDriveID = "$( Invoke-expression $GamDir\gam.exe user $GoogleSourceSvcAccount create teamdrive '$TeamDriveName' adminmanagedrestrictions true asadmin returnidonly )"
 
     Write-Host "move to data move enabled OU..."
-    Write-Host "Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin ou $LegacyUserTeamDriveOU"" #location needs confirming
+    #Write-Host "Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin ou $LegacyUserTeamDriveOU"" #location needs confirming
 
     Write-Host "Allow outside sharing..."
-    Write-Host "Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin domainUsersOnly False""
+    Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin domainUsersOnly False"
 
     Write-Host "Allow people who aren't shared drive members to access files - false..."
-    Write-Host "Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin sharingFoldersRequiresOrganizerPermission True""
+    Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin sharingFoldersRequiresOrganizerPermission True"
 
     Write-Host "Add internal user as manager..."
-    Write-Host "Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $LegacyUserMail role organizer""
+    Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $LegacyUserMail role organizer"
     
     Write-Host "Add external user as manager..."
-    Write-Host "Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $ReplacementUserMail role organizer""
+    Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $ReplacementUserMail role organizer"
 
     DashedLine
 }
@@ -156,7 +156,7 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Lastname: $LastName"
 
     Write-Host "Accept calendar invite..."
-    Write-Host "Invoke-Expression $GamDir\gam.exe user $LegacyUserMail add calendar $ReplacementUserMail selected true"
+    Invoke-Expression "$GamDir\gam.exe user $LegacyUserMail add calendar $ReplacementUserMail selected true"
 
 }
 <#
