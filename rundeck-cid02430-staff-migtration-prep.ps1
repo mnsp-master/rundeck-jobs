@@ -1,4 +1,4 @@
-$mnspver = "0.0.80"
+$mnspver = "0.0.81"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -111,10 +111,10 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "update legacy accounts..."
     Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail $GoogleCustomAttribute01 $HRid" #set HR ID
 
-    Write-Host "send current calendar invite..."
+    #Write-Host "send current calendar invite..."
     #Invoke-Expression "$GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail sendnotifications false"
 
-    Write-Host "report current shared drive folder associations for: $LegacyUserMail ..."
+    #Write-Host "report current shared drive folder associations for: $LegacyUserMail ..."
     #Invoke-expression "$GamDir\gam.exe user $legacyUserMail print teamdrives todrive tdparent id:$GfolderReportsID tdnobrowser tdtitle '$LegacyUserMail shared drives summary as of $(get-date)'"
 
     Write-Host "shared drive creation (Legacy Source to Destination user)..."
@@ -125,16 +125,16 @@ foreach ($user in $VerifiedUserData) {
     #Write-Host "Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin ou $LegacyUserTeamDriveOU"" #location needs confirming
 
     Write-Host "Allow outside sharing..."
-    #Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin domainUsersOnly False"
+    Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin domainUsersOnly False"
 
     Write-Host "Allow people who aren't shared drive members to access files - false..."
-    #Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin sharingFoldersRequiresOrganizerPermission True"
+    Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin sharingFoldersRequiresOrganizerPermission True"
 
     Write-Host "Add internal user as manager..."
-    #Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $LegacyUserMail role organizer"
+    Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $LegacyUserMail role organizer"
     
     Write-Host "Add external user as manager..."
-    #Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $ReplacementUserMail role organizer"
+    Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $ReplacementUserMail role organizer"
 
     DashedLine
 }
