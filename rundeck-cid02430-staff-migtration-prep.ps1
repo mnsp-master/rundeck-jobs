@@ -1,4 +1,4 @@
-$mnspver = "0.0.93"
+$mnspver = "0.0.94"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -41,7 +41,7 @@ Write Host "Number of records matching selection criteria:" $VerifiedUserData.co
 
 #if ($uuids.Contains($uuid)) { } # if var is in array
 
-#Replacement google instance...
+#Destination google instance...
 Write-Host "Setting workspace Destination: $GoogleWorkSpaceDestination"
 Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceDestination save" # swap/set google workspace
 Invoke-Expression "$GamDir\gam.exe"
@@ -142,7 +142,7 @@ foreach ($user in $VerifiedUserData) {
     DashedLine
 }
 
-#Replacement google instance...
+#Destination google instance...
 Write-Host "Setting workspace Destination: $GoogleWorkSpaceDestination"
 Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceDestination save" # swap/set google workspace
 Invoke-Expression "$GamDir\gam.exe"
