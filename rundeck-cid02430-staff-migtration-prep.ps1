@@ -1,4 +1,4 @@
-$mnspver = "0.0.83"
+$mnspver = "0.0.84"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -53,7 +53,7 @@ foreach ($user in $VerifiedUserData) {
     $LastName = $user."Staff Surname"
     $ReplacementUserMail = $user."new email"
 
-    #dev enviornment...
+    #script dev check...
     if ( $RunDeckDev -eq "true" ) {
         Write-Host "Setting random dev mail address..."
         $RundeckDevMail = ("SNO-" + $([int64](Get-Date -UFormat %s)) + "@" + "$GoogleWorkspaceDestinationMailDomain")
@@ -66,11 +66,9 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Lastname: $LastName"
 
     Write-Host "create destination account..."
-    #Write-Host "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password random 16 org '$GoogleWorkspaceDestinationUserOU'"
     Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password random 16 org '$GoogleWorkspaceDestinationUserOU'"
 
     Write-Host "hide account from GAL.."
-    #Write-Host "$GamDir\gam.exe update user $ReplacementUserMail gal false"
     Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail gal false"
 
     Write-Host "generate MFA backup codes..."
@@ -101,7 +99,7 @@ foreach ($user in $VerifiedUserData) {
     $LastName = $user."Staff Surname"
     $ReplacementUserMail = $user."new email"
 
-    if ( $RunDeckDev -eq "true" ) { $ReplacementUserMail = $RundeckDevMail } # Dev environment
+    if ( $RunDeckDev -eq "true" ) { $ReplacementUserMail = $RundeckDevMail } #script dev check...
     
     Write-Host "Processing: $LegacyUserMail"
     Write-Host "HR ID: $HRid"
@@ -113,9 +111,6 @@ foreach ($user in $VerifiedUserData) {
 
     #Write-Host "send current calendar invite..."
     #Invoke-Expression "$GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail sendnotifications false"
-
-    #Write-Host "report current shared drive folder associations for: $LegacyUserMail ..."
-    #Invoke-expression "$GamDir\gam.exe user $legacyUserMail print teamdrives todrive tdparent id:$GfolderReportsID tdnobrowser tdtitle '$LegacyUserMail shared drives summary as of $(get-date)'"
 
     Write-Host "shared drive creation (Legacy Source to Destination user)..."
     $TeamDriveName = "DRA DEV $(Get-Date)" #convention needs confirming
@@ -137,6 +132,9 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Add external user as manager..."
     Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $ReplacementUserMail role organizer"
 
+    Write-Host "report current shared drive folder associations for: $LegacyUserMail ..."
+    Invoke-expression "$GamDir\gam.exe user $legacyUserMail print teamdrives todrive tdparent id:$GfolderReportsID tdnobrowser tdtitle '$LegacyUserMail shared drives summary as of $(get-date)'"
+
     DashedLine
 }
 
@@ -155,7 +153,7 @@ foreach ($user in $VerifiedUserData) {
     $LastName = $user."Staff Surname"
     $ReplacementUserMail = $user."new email"
 
-    if ( $RunDeckDev -eq "true" ) { $ReplacementUserMail = $RundeckDevMail } # Dev environment
+    if ( $RunDeckDev -eq "true" ) { $ReplacementUserMail = $RundeckDevMail } #script dev check...
     
     Write-Host "Processing: $LegacyUserMail"
     Write-Host "HR ID: $HRid"
