@@ -1,4 +1,4 @@
-$mnspver = "0.0.72"
+$mnspver = "0.0.73"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -49,10 +49,8 @@ foreach ($user in $VerifiedUserData) {
 
     #dev enviornment...
     if ( $RunDeckDev -eq "true" ) {
-        Write-Host "Setting random dev mail address"
+        Write-Host "Setting random dev mail address..."
         $ReplacementUserMail = ("SNO-" + $([int64](Get-Date -UFormat %s)) + "@" + "$GoogleWorkspaceDestinationMailDomain")
-        $ReplacementUserMail
-
         }
 
     Write-Host "Processing: $ReplacementUserMail"
@@ -61,12 +59,12 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Lastname: $LastName"
 
     Write-Host "create destination account..."
-    Write-Host "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password random 16 org '$GoogleWorkspaceDestinationUserOU'"
+    #Write-Host "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password random 16 org '$GoogleWorkspaceDestinationUserOU'"
     Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password random 16 org '$GoogleWorkspaceDestinationUserOU'"
 
     Write-Host "hide account from GAL.."
     Write-Host "$GamDir\gam.exe update user $ReplacementUserMail gal false"
-    #Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail gal false"
+    Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail gal false"
 
     Write-Host "generate MFA backup codes..."
     Write-Host "Invoke-Expression $GamDir\gam.exe user $ReplacementUserMail update backupcodes"
@@ -87,11 +85,9 @@ Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceSource save" # swap/se
 Invoke-Expression "$GamDir\gam.exe"
 DashedLine
 
-
-
-$GoogleWorkspaceSourceGroup = ("$GoogleWorkspaceSourceGroupPrefix" + "@" + "$GGoogleWorkspaceSourceMailDomain")
-Write-Host "Getting members of users to process source group $GoogleWorkspaceSourceGroup"
-Invoke-Expression "$GamDir\gam.exe print group-members group_ns $GoogleWorkspaceSourceGroup > $tempcsv"
+#$GoogleWorkspaceSourceGroup = ("$GoogleWorkspaceSourceGroupPrefix" + "@" + "$GGoogleWorkspaceSourceMailDomain")
+#Write-Host "Getting members of users to process source group $GoogleWorkspaceSourceGroup"
+#Invoke-Expression "$GamDir\gam.exe print group-members group_ns $GoogleWorkspaceSourceGroup > $tempcsv"
 
 foreach ($user in $VerifiedUserData) {
     DashedLine
