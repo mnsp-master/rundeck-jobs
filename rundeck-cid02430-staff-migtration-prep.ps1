@@ -1,4 +1,4 @@
-$mnspver = "0.0.82"
+$mnspver = "0.0.83"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -120,15 +120,16 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "shared drive creation (Legacy Source to Destination user)..."
     $TeamDriveName = "DRA DEV $(Get-Date)" #convention needs confirming
     $LegacyUserTeamDriveID = $(Invoke-expression "$GamDir\gam.exe user $GoogleSourceSvcAccount create teamdrive '$TeamDriveName' adminmanagedrestrictions true asadmin returnidonly")
-
-    Write-Host "move to data move enabled OU..."
-    Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin ou '$LegacyUserTeamDriveOU'" #location needs confirming
+    Write-Host "Shared Drive ID: $LegacyUserTeamDriveID "
 
     Write-Host "Allow outside sharing..."
     Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin domainUsersOnly False"
 
     Write-Host "Allow people who aren't shared drive members to access files - false..."
     Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin sharingFoldersRequiresOrganizerPermission True"
+
+    Write-Host "move shared drive to move enabled OU..."
+    Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin ou '$LegacyUserTeamDriveOU'" #location needs confirming
 
     Write-Host "Add internal user as manager..."
     Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $LegacyUserMail role organizer"
