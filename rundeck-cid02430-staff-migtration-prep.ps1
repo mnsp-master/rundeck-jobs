@@ -1,4 +1,4 @@
-$mnspver = "0.0.75.1"
+$mnspver = "0.0.75.2"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -9,6 +9,13 @@ Set-Location $GamDir
 function DashedLine {
 Write-host "-----------------------------------------------------------`n"
 }
+
+#legacy google instance...
+Write-Host "Setting workspace source: $GoogleWorkSpaceSource"
+Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceSource save" # swap/set google workspace
+Invoke-Expression "$GamDir\gam.exe"
+DashedLine
+
 
 #Write-Host "creating destination gfolder for all existing shared drive association user reports..."
 #$GfolderReportsID = @()
