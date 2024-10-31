@@ -1,4 +1,4 @@
-$mnspver = "0.0.94"
+$mnspver = "0.0.95"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -165,8 +165,8 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Lastname: $LastName"
 
     Write-Host "Accept calendar invite..."
-    Invoke-Expression "$GamDir\gam.exe user $LegacyUserMail add calendar $ReplacementUserMail selected true"
-    Write-Host "Invoke-Expression $GamDir\gam.exe user $LegacyUserMail add calendar $ReplacementUserMail selected true"
+    Invoke-Expression "$GamDir\gam.exe user $ReplacementUserMail add calendar $LegacyUserMail selected true"
+    #Write-Host "Invoke-Expression $GamDir\gam.exe user $LegacyUserMail add calendar $ReplacementUserMail selected true"
 
 }
 <#
