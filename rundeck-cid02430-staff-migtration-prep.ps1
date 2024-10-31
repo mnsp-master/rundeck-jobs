@@ -1,4 +1,4 @@
-$mnspver = "0.0.91"
+$mnspver = "0.0.92"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -112,8 +112,8 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "update legacy accounts..."
     Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail $GoogleCustomAttribute01 $HRid" #set HR ID
 
-    #Write-Host "send current calendar invite..."
-    #Invoke-Expression "$GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail sendnotifications false"
+    Write-Host "send current calendar invite..."
+    Invoke-Expression "$GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail sendnotifications false"
 
     Write-Host "shared drive creation (Legacy Source to Destination user)..."
     $TeamDriveName = "$LegacyUserMail (Legacy) $(Get-Date)" #convention needs confirming
@@ -164,7 +164,7 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Lastname: $LastName"
 
     Write-Host "Accept calendar invite..."
-    #Invoke-Expression "$GamDir\gam.exe user $LegacyUserMail add calendar $ReplacementUserMail selected true"
+    Invoke-Expression "$GamDir\gam.exe user $LegacyUserMail add calendar $ReplacementUserMail selected true"
 
 }
 <#
