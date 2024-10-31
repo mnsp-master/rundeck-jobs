@@ -1,4 +1,4 @@
-$mnspver = "0.0.74"
+$mnspver = "0.0.75"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -50,7 +50,8 @@ foreach ($user in $VerifiedUserData) {
     #dev enviornment...
     if ( $RunDeckDev -eq "true" ) {
         Write-Host "Setting random dev mail address..."
-        $ReplacementUserMail = ("SNO-" + $([int64](Get-Date -UFormat %s)) + "@" + "$GoogleWorkspaceDestinationMailDomain")
+        $RundeckDevMail = ("SNO-" + $([int64](Get-Date -UFormat %s)) + "@" + "$GoogleWorkspaceDestinationMailDomain")
+        $ReplacementUserMail = $RundeckDevMail
         }
 
     Write-Host "Processing: $ReplacementUserMail"
@@ -73,7 +74,7 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Invoke-Expression $GamDir\gam.exe user $LegacyUserMail add calendar $ReplacementUserMail selected true"
 
     Write-Host "update Replacement account..."
-    Write-Host "Invoke-Expression $GamDir\gam.exe user $ReplacementUserMail $GoogleCustomAttribute01 $HRid" #set HR ID
+    Write-Host "Invoke-Expression $GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $HRid" #set HR ID
 
     DashedLine
 }
@@ -97,13 +98,15 @@ foreach ($user in $VerifiedUserData) {
     $LastName = $user."Staff Surname"
     $ReplacementUserMail = $user."new email"
 
+    if ( $RunDeckDev -eq "true" ) { $ReplacementUserMail = $RundeckDevMail } # Dev environment
+    
     Write-Host "Processing: $LegacyUserMail"
     Write-Host "HR ID: $HRid"
     Write-Host "Firstname: $FirstName"
     Write-Host "Lastname: $LastName"
 
     Write-Host "update legacy accounts..."
-    Invoke-Expression "$GamDir\gam.exe user $LegacyUserMail $GoogleCustomAttribute01 $HRid" #set HR ID
+    Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail $GoogleCustomAttribute01 $HRid" #set HR ID
 
     Write-Host "send current calendar invite..."
     Write-Host "Invoke-Expression $GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail sendnotifications false"
