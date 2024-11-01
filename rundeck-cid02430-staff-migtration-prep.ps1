@@ -1,4 +1,4 @@
-$mnspver = "0.0.95"
+$mnspver = "0.0.96"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -68,8 +68,24 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Firstname: $FirstName"
     Write-Host "Lastname: $LastName"
 
+    Write-Host "Generating Random Password..."
+        $pwd = $(Invoke-WebRequest -Uri $PwdWebRequestURI -UseBasicParsing)
+        #    $pwd.Content
+            #$pwd.StatusCode
+                if ($pwd.StatusCode -eq 200) {
+                Write-Host "proceed with pwd reservation"
+                $password = $($pwd.Content)
+                #Write-Host "Password: " $password
+                } else {
+                Write-Error "No Webserver, or pwd received"
+                $password = $PwdFailsafe
+                }
+
+        start-sleep 1
+
+
     Write-Host "create destination account..."
-    Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password random 16 org '$GoogleWorkspaceDestinationUserOU'"
+    Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU'"
 
     Write-Host "hide account from GAL.."
     Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail gal false"
