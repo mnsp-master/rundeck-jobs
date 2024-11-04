@@ -1,4 +1,4 @@
-$mnspver = "0.0.100"
+$mnspver = "0.0.101"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -149,8 +149,8 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Allow people who aren't shared drive members to access files - false..."
     Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin sharingFoldersRequiresOrganizerPermission True"
 
-    Write-Host "move shared drive to move enabled OU..."
-    Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin ou '$LegacyUserTeamDriveOU'" #location needs confirming
+    #Write-Host "move shared drive to move enabled OU..."
+    #Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin ou '$LegacyUserTeamDriveOU'" #location needs confirming
 
     Write-Host "Add internal sysadmins group as manager..."
     Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $GoogleWorkspaceSourceSysadminGroupFQDN role organizer" 
