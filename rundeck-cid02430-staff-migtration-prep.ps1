@@ -1,4 +1,4 @@
-$mnspver = "0.0.101"
+$mnspver = "0.0.102"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -96,11 +96,11 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "hide account from GAL.."
     Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail gal false"
 
-    Write-Host "generate MFA backup codes..." # TODO - confirm this is needed
-    Invoke-Expression "$GamDir\gam.exe user $ReplacementUserMail update backupcodes"
+    #Write-Host "generate MFA backup codes..." # Agreed  not to enforce imediate MFA - grace period of 2 days instead
+    #Invoke-Expression "$GamDir\gam.exe user $ReplacementUserMail update backupcodes"
 
     Write-Host "update Replacement account..."
-    Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $HRid" #set HR ID - Confirm if this can be replicated to helpdesk user objects
+    Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $HRid" #set HR ID 
 
     DashedLine
 }
