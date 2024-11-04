@@ -1,4 +1,4 @@
-$mnspver = "0.0.105"
+$mnspver = "0.0.106"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -173,6 +173,8 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "report current shared drive folder associations for: $LegacyUserMail ..."
     Invoke-expression "$GamDir\gam.exe user $legacyUserMail print teamdrives todrive tdparent id:$GfolderReportsID tdnobrowser tdtitle '$LegacyUserMail shared drives summary as of $(get-date)'"
     
+    # TODO - add processed users to runonce control group...
+
     DashedLine
 }
 
