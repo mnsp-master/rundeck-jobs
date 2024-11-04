@@ -1,4 +1,4 @@
-$mnspver = "0.0.104"
+$mnspver = "0.0.105"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -53,6 +53,15 @@ Invoke-Expression "$GamDir\gam.exe"
 start-sleep 3
 DashedLine
 
+#Create common shared drives (Destination instance)...###
+GoogleWorkspaceGroupSettings = ("whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","isArchived true","whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","whoCanMarkFavoriteReplyOnOwnTopic OWNERS_AND_MANAGERS","whoCanPostMessage ALL_MANAGERS_CAN_POST","whoCanTakeTopics OWNERS_AND_MANAGERS","whoCanViewGroup ALL_MANAGERS_CAN_VIEW","whoCanViewMembership ALL_MANAGERS_CAN_VIEW")
+
+if (test-path $tempcsv3) { remove-item $tempcsv4 -force -verbose } ###
+
+Write-Host "downloading gsheet ID: $GoogleSheetID tab: $GoogleSheetTab03" ###
+Invoke-Expression "$GamDir\gam.exe user $GoogleSourceSvcAccount get drivefile $GoogleSheetID format csv gsheet ""$GoogleSheetTab03"" targetfolder $DataDir targetname $tempcsv3"
+
+
 foreach ($user in $VerifiedUserData) {
     DashedLine
     $LegacyUserMail= $user."Existing Email Address" #current mail address
@@ -90,8 +99,8 @@ foreach ($user in $VerifiedUserData) {
 
 
     Write-Host "create destination account..."
-    Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU'"
-    $password # TODO - force password change at first login 
+    Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU' changepassword on" ###
+    $password
 
     Write-Host "hide account from GAL.."
     Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail gal false"
