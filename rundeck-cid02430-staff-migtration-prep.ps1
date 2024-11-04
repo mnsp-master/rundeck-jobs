@@ -86,7 +86,7 @@ foreach ($user in $VerifiedUserData) {
 
     Write-Host "create destination account..."
     Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU'"
-    $password
+    $password # TODO - force password change at first login 
 
     Write-Host "hide account from GAL.."
     Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail gal false"
@@ -155,6 +155,9 @@ foreach ($user in $VerifiedUserData) {
 
     Write-Host "report current shared drive folder associations for: $LegacyUserMail ..."
     Invoke-expression "$GamDir\gam.exe user $legacyUserMail print teamdrives todrive tdparent id:$GfolderReportsID tdnobrowser tdtitle '$LegacyUserMail shared drives summary as of $(get-date)'"
+
+    # TODO - Admin access to these drives
+    # TODO - drive name Migration-username
 
     DashedLine
 }
