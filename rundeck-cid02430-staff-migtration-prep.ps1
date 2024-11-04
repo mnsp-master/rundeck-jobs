@@ -1,4 +1,4 @@
-$mnspver = "0.0.97"
+$mnspver = "0.0.98"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -68,7 +68,7 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Firstname: $FirstName"
     Write-Host "Lastname: $LastName"
 
-    Write-Host "Generating Random Password..."
+    Write-Host "Generating Random Password..." # TODO - Capturing and distribution mechanism
         $pwd = $(Invoke-WebRequest -Uri $PwdWebRequestURI -UseBasicParsing)
         #    $pwd.Content
             #$pwd.StatusCode
@@ -91,11 +91,11 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "hide account from GAL.."
     Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail gal false"
 
-    Write-Host "generate MFA backup codes..."
+    Write-Host "generate MFA backup codes..." # TODO - confirm this is needed
     Invoke-Expression "$GamDir\gam.exe user $ReplacementUserMail update backupcodes"
 
     Write-Host "update Replacement account..."
-    Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $HRid" #set HR ID
+    Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $HRid" #set HR ID - Confirm if this can be replicated to helpdesk user objects
 
     DashedLine
 }
@@ -127,7 +127,7 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Lastname: $LastName"
 
     Write-Host "update legacy accounts..."
-    Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail $GoogleCustomAttribute01 $HRid" #set HR ID
+    Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail $GoogleCustomAttribute01 $HRid" #set HR ID - Confirm if this can be replicated to helpdesk user objects
 
     Write-Host "send current calendar invite..."
     #Invoke-Expression "$GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail sendnotifications false"
