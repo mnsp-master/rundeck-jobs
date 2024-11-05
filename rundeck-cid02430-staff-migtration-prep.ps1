@@ -1,4 +1,4 @@
-$mnspver = "0.0.125"
+$mnspver = "0.0.126"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -176,10 +176,10 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "update legacy accounts..."
     Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail $GoogleCustomAttribute01 $HRid" #set HR ID - Confirm if this can be replicated to helpdesk user objects
 
-    Write-Host "send current calendar invite..."
-    #Invoke-Expression "$GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail sendnotifications false"
-    Invoke-Expression "$GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail"
-    Write-Host "Invoke-Expression $GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail"
+    Write-Host "send current calendar invite: $LegacyUserMail add acls reader $ReplacementUserMail ..."
+    Invoke-Expression "$GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail sendnotifications false"
+    #Invoke-Expression "$GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail"
+    #Write-Host "Invoke-Expression $GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail"
 
     Write-Host "shared drive creation (Legacy Source to Destination user)..."
     $TeamDriveName = "Migration $LegacyUserMail $(Get-Date)"
@@ -195,16 +195,16 @@ foreach ($user in $VerifiedUserData) {
     #Write-Host "move shared drive to move enabled OU..."
     #Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin ou '$LegacyUserTeamDriveOU'" #location needs confirming
 
-    Write-Host "Add internal sysadmins group as manager..."
+    Write-Host "Add internal sysadmins group as manager: add drivefileacl $LegacyUserTeamDriveID user $GoogleWorkspaceSourceSysadminGroupFQDN role organizer"
     Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $GoogleWorkspaceSourceSysadminGroupFQDN role organizer" 
 
-    Write-Host "Add internal user as manager..."
+    Write-Host "Add internal user as manager: add drivefileacl $LegacyUserTeamDriveID user $LegacyUserMail role organizer ..."
     Write-Host "Invoke-expression $GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $LegacyUserMail role organizer"
-    Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $LegacyUserMail role organizer"
+    #Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $LegacyUserMail role organizer"
     
-    Write-Host "Add external user as manager..."
+    Write-Host "Add external user as manager: add drivefileacl $LegacyUserTeamDriveID user $ReplacementUserMail role organizer..."
     Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $ReplacementUserMail role organizer"
-    Write-Host "Invoke-expression $GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $ReplacementUserMail role organizer"
+    #Write-Host "Invoke-expression $GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $ReplacementUserMail role organizer"
 
     Write-Host "report current shared drive folder associations for: $LegacyUserMail ..."
     Invoke-expression "$GamDir\gam.exe user $legacyUserMail print teamdrives todrive tdparent id:$GfolderReportsID tdnobrowser tdtitle '$LegacyUserMail shared drives summary as of $(get-date)'"
@@ -238,9 +238,9 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Firstname: $FirstName"
     Write-Host "Lastname: $LastName"
 
-    Write-Host "Accept calendar invite..."
+    Write-Host "Accept calendar invite: user $LegacyUserMail add calendar $ReplacementUserMail selected true ..."
     Invoke-Expression "$GamDir\gam.exe user $ReplacementUserMail add calendar $LegacyUserMail selected true"
-    Write-Host "Invoke-Expression $GamDir\gam.exe user $LegacyUserMail add calendar $ReplacementUserMail selected true"
+    #Write-Host "Invoke-Expression $GamDir\gam.exe user $LegacyUserMail add calendar $ReplacementUserMail selected true"
 }
 
     ### add members tpp groups ###
