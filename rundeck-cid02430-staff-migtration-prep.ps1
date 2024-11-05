@@ -1,4 +1,4 @@
-$mnspver = "0.0.108"
+$mnspver = "0.0.109"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -56,23 +56,23 @@ DashedLine
 Write-Host "Create common shared drives security groups (Destination instance)..."
 $GoogleWorkspaceGroupSettings = ("whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","isArchived true","whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","whoCanMarkFavoriteReplyOnOwnTopic OWNERS_AND_MANAGERS","whoCanPostMessage ALL_MANAGERS_CAN_POST","whoCanTakeTopics OWNERS_AND_MANAGERS","whoCanViewGroup ALL_MANAGERS_CAN_VIEW","whoCanViewMembership ALL_MANAGERS_CAN_VIEW")
 
-if (test-path $tempcsv3) { remove-item $tempcsv4 -force -verbose }
+if (test-path $tempcsv6) { remove-item $tempcsv6 -force -verbose }
 
-Write-Host "downloading gsheet ID: $GoogleSheetID tab: $GoogleSheetTab03"
-Invoke-Expression "$GamDir\gam.exe user $GoogleSourceSvcAccount get drivefile $GoogleSheetID format csv gsheet ""$GoogleSheetTab03"" targetfolder $DataDir targetname $tempcsv3"
+Write-Host "downloading gsheet ID: $GoogleSheetID tab: $GoogleSheetTab06"
+Invoke-Expression "$GamDir\gam.exe user $GoogleSourceSvcAccount get drivefile $GoogleSheetID format csv gsheet ""$GoogleSheetTab06"" targetfolder $DataDir targetname $tempcsv6"
 
 $GoogleWorkspaceGroupSettings = ("whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","isArchived true","whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","whoCanMarkFavoriteReplyOnOwnTopic OWNERS_AND_MANAGERS","whoCanPostMessage ALL_MANAGERS_CAN_POST","whoCanTakeTopics OWNERS_AND_MANAGERS","whoCanViewGroup ALL_MANAGERS_CAN_VIEW","whoCanViewMembership ALL_MANAGERS_CAN_VIEW")
 $GoogleGroups = @()
 $GoogleGroupsHeader = @()
 $member = @()
 
-$GoogleGroups = Import-csv -path $tempcsv3
+$GoogleGroups = Import-csv -path $tempcsv6
 $GoogleGroupsHeader = $($GoogleGroups | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name)
 
     foreach ($member in $GoogleGroupsHeader) {
 
     Write-Host "-----------Creating group: $member ----------"`n
-    $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDomain)
+    $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain)
     Write-Host "Invoke-expression $GamDir\gam.exe create group $GoogleGroupFQDN"
     Write-Host "Invoke-Expression $GamDir\gam.exe update cigroup $GoogleGroupFQDN makesecuritygroup"
 
@@ -236,7 +236,7 @@ foreach ($user in $VerifiedUserData) {
     $GroupMembershipHeader = @()
     $member = @()
 
-    $GoogleGroupMembership = Import-csv -path $tempcsv3
+    $GoogleGroupMembership = Import-csv -path $tempcsv6
     $GroupMembershipHeader = $($GoogleGroupMembership | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name)
 
     foreach ($member in $GroupMembershipHeader) {
