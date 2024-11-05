@@ -1,4 +1,4 @@
-$mnspver = "0.0.114"
+$mnspver = "0.0.115"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -13,10 +13,13 @@ Write-host "-----------------------------------------------------------`n"
 #local sysadmins group mail address...
 $GoogleWorkspaceSourceSysadminGroupFQDN = ("$GoogleWorkspaceSourceSysadminGroup" + "@" + "$GoogleWorkspaceSourceMailDomain")
 
-#legacy google instance...
+#set google instance: legacy...
+$GoogleSourceSvcAccount = ("$GoogleServiceAccountPrefix" + "$GoogleWorkSpaceSource" + "@" + "$GGoogleWorkspaceSourceMailDomain")
+Write-Host "Google Source Service Account: $GoogleSourceSvcAccount"
 Write-Host "Setting workspace source: $GoogleWorkSpaceSource"
 Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceSource save" # swap/set google workspace
 Invoke-Expression "$GamDir\gam.exe"
+
 DashedLine
 
 <#
@@ -28,9 +31,6 @@ if ( $RunDeckDev -eq "true" ) {
         $GfolderReportsID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSourceSvcAccount create drivefile drivefilename '$ReportsFolderName' mimetype gfolder parentid $ReportsFolderParentID returnidonly")
 }
 #>
-
-$GoogleSourceSvcAccount = ("$GoogleServiceAccountPrefix" + "$GoogleWorkSpaceSource" + "@" + "$GGoogleWorkspaceSourceMailDomain")
-Write-Host "Google Source Service Account: $GoogleSourceSvcAccount"
 
 #get verified user data
 #if exist check & remove $tempcsv4
@@ -47,8 +47,8 @@ Write Host "Number of records matching selection criteria:" $VerifiedUserData.co
 
 #if ($uuids.Contains($uuid)) { } # if var is in array
 
-#Destination google instance...
-$GoogleSourceSvcAccount = ("$GoogleServiceAccountPrefix" + "$GoogleWorkSpaceSource" + "@" + "$GGoogleWorkspaceSourceMailDomain")
+#Set google instance: Destination
+$GoogleSourceSvcAccount = ("$GoogleServiceAccountPrefix" + "$GoogleWorkSpaceDestination" + "@" + "$GGoogleWorkspaceSourceMailDomain")
 Write-Host "Google Source Service Account: $GoogleSourceSvcAccount"
 
 Write-Host "Setting workspace Destination: $GoogleWorkSpaceDestination"
@@ -147,7 +147,9 @@ foreach ($user in $VerifiedUserData) {
 }
 
 
-#legacy google instance...
+#Set Google instance: legacy...
+$GoogleSourceSvcAccount = ("$GoogleServiceAccountPrefix" + "$GoogleWorkSpaceSource" + "@" + "$GGoogleWorkspaceSourceMailDomain")
+Write-Host "Google Source Service Account: $GoogleSourceSvcAccount"
 Write-Host "Setting workspace source: $GoogleWorkSpaceSource"
 Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceSource save" # swap/set google workspace
 Invoke-Expression "$GamDir\gam.exe"
@@ -210,7 +212,9 @@ foreach ($user in $VerifiedUserData) {
     DashedLine
 }
 
-#Destination google instance...
+#Set Google instance: Destination...
+$GoogleSourceSvcAccount = ("$GoogleServiceAccountPrefix" + "$GoogleWorkSpaceDestination" + "@" + "$GGoogleWorkspaceSourceMailDomain")
+Write-Host "Google Source Service Account: $GoogleSourceSvcAccount"
 Write-Host "Setting workspace Destination: $GoogleWorkSpaceDestination"
 Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceDestination save" # swap/set google workspace
 Invoke-Expression "$GamDir\gam.exe"
