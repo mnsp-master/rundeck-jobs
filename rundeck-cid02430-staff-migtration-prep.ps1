@@ -1,4 +1,4 @@
-$mnspver = "0.0.113"
+$mnspver = "0.0.114"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -48,6 +48,9 @@ Write Host "Number of records matching selection criteria:" $VerifiedUserData.co
 #if ($uuids.Contains($uuid)) { } # if var is in array
 
 #Destination google instance...
+$GoogleSourceSvcAccount = ("$GoogleServiceAccountPrefix" + "$GoogleWorkSpaceSource" + "@" + "$GGoogleWorkspaceSourceMailDomain")
+Write-Host "Google Source Service Account: $GoogleSourceSvcAccount"
+
 Write-Host "Setting workspace Destination: $GoogleWorkSpaceDestination"
 Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceDestination save" # swap/set google workspace
 Invoke-Expression "$GamDir\gam.exe"
