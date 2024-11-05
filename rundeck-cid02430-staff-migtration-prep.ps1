@@ -1,4 +1,4 @@
-$mnspver = "0.0.123"
+$mnspver = "0.0.124"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -240,7 +240,7 @@ foreach ($user in $VerifiedUserData) {
 
     Write-Host "Accept calendar invite..."
     Invoke-Expression "$GamDir\gam.exe user $ReplacementUserMail add calendar $LegacyUserMail selected true"
-    #Write-Host "Invoke-Expression $GamDir\gam.exe user $LegacyUserMail add calendar $ReplacementUserMail selected true"
+    Write-Host "Invoke-Expression $GamDir\gam.exe user $LegacyUserMail add calendar $ReplacementUserMail selected true"
 }
 
     ### add members tpp groups ###
