@@ -1,4 +1,4 @@
-$mnspver = "0.0.118"
+$mnspver = "0.0.119"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -49,7 +49,7 @@ Write Host "Number of records matching selection criteria:" $VerifiedUserData.co
 
 #Set google instance: Destination
 $GoogleSvcAccount = $GoogleWorkspaceMNSPsvcAccount
-Write-Host "Google Source Service Account: $GoogleSvcAccount"
+Write-Host "Google Destination Service Account: $GoogleSvcAccount"
 
 Write-Host "Setting workspace Destination: $GoogleWorkSpaceDestination"
 Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceDestination save" # swap/set google workspace
@@ -214,7 +214,7 @@ foreach ($user in $VerifiedUserData) {
 
 #Set Google instance: Destination...
 $GoogleSvcAccount = $GoogleWorkspaceMNSPsvcAccount
-Write-Host "Google Source Service Account: $GoogleSvcAccount"
+Write-Host "Google Destination Service Account: $GoogleSvcAccount"
 Write-Host "Setting workspace Destination: $GoogleWorkSpaceDestination"
 Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceDestination save" # swap/set google workspace
 Invoke-Expression "$GamDir\gam.exe"
