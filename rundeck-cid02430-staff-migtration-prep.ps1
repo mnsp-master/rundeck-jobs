@@ -1,4 +1,4 @@
-$mnspver = "0.0.112"
+$mnspver = "0.0.113"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -58,6 +58,7 @@ Write-Host "Create common shared drives security groups (Destination instance)..
 $GoogleWorkspaceGroupSettings = ("whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","isArchived true","whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","whoCanMarkFavoriteReplyOnOwnTopic OWNERS_AND_MANAGERS","whoCanPostMessage ALL_MANAGERS_CAN_POST","whoCanTakeTopics OWNERS_AND_MANAGERS","whoCanViewGroup ALL_MANAGERS_CAN_VIEW","whoCanViewMembership ALL_MANAGERS_CAN_VIEW")
 
 if (test-path $tempcsv6) { remove-item $tempcsv6 -force -verbose }
+start-sleep 2
 
 Write-Host "downloading gsheet ID: $GoogleSheetID tab: $GoogleSheetTab06"
 Write-Host "Invoke-Expression $GamDir\gam.exe user $GoogleSourceSvcAccount get drivefile $GoogleSheetID format csv gsheet ""$GoogleSheetTab06"" targetfolder $DataDir targetname $tempcsv6"
