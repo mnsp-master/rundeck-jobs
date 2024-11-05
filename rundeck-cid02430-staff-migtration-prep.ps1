@@ -1,4 +1,4 @@
-$mnspver = "0.0.124"
+$mnspver = "0.0.125"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -102,11 +102,11 @@ foreach ($user in $VerifiedUserData) {
     $ReplacementUserMail = $user."new email"
 
     #script dev check...
-    if ( $RunDeckDev -eq "true" ) {
-        Write-Host "Setting random dev mail address..."
-        $RundeckDevMail = ("SNO-" + $([int64](Get-Date -UFormat %s)) + "@" + "$GoogleWorkspaceDestinationMailDomain")
-        $ReplacementUserMail = $RundeckDevMail
-        }
+    #if ( $RunDeckDev -eq "true" ) {
+    #    Write-Host "Setting random dev mail address..."
+    #    $RundeckDevMail = ("SNO-" + $([int64](Get-Date -UFormat %s)) + "@" + "$GoogleWorkspaceDestinationMailDomain")
+    #    $ReplacementUserMail = $RundeckDevMail
+    #    }
 
     Write-Host "Processing: $ReplacementUserMail"
     Write-Host "HR ID: $HRid"
@@ -166,7 +166,7 @@ foreach ($user in $VerifiedUserData) {
     $LastName = $user."Staff Surname"
     $ReplacementUserMail = $user."new email"
 
-    if ( $RunDeckDev -eq "true" ) { $ReplacementUserMail = $RundeckDevMail } #script dev check...
+    #if ( $RunDeckDev -eq "true" ) { $ReplacementUserMail = $RundeckDevMail } #script dev check...
     
     Write-Host "Processing: $LegacyUserMail"
     Write-Host "HR ID: $HRid"
@@ -231,7 +231,7 @@ foreach ($user in $VerifiedUserData) {
     $LastName = $user."Staff Surname"
     $ReplacementUserMail = $user."new email"
 
-    if ( $RunDeckDev -eq "true" ) { $ReplacementUserMail = $RundeckDevMail } #script dev check...
+    #if ( $RunDeckDev -eq "true" ) { $ReplacementUserMail = $RundeckDevMail } #script dev check...
     
     Write-Host "Processing: $LegacyUserMail"
     Write-Host "HR ID: $HRid"
