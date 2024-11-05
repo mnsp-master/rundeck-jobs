@@ -1,4 +1,4 @@
-$mnspver = "0.0.106"
+$mnspver = "0.0.107"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -53,15 +53,39 @@ Invoke-Expression "$GamDir\gam.exe"
 start-sleep 3
 DashedLine
 
-#Create common shared drives (Destination instance)...###
+Write-Host "Create common shared drives security groups (Destination instance)..."
 GoogleWorkspaceGroupSettings = ("whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","isArchived true","whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","whoCanMarkFavoriteReplyOnOwnTopic OWNERS_AND_MANAGERS","whoCanPostMessage ALL_MANAGERS_CAN_POST","whoCanTakeTopics OWNERS_AND_MANAGERS","whoCanViewGroup ALL_MANAGERS_CAN_VIEW","whoCanViewMembership ALL_MANAGERS_CAN_VIEW")
 
-if (test-path $tempcsv3) { remove-item $tempcsv4 -force -verbose } ###
+if (test-path $tempcsv3) { remove-item $tempcsv4 -force -verbose }
 
-Write-Host "downloading gsheet ID: $GoogleSheetID tab: $GoogleSheetTab03" ###
+Write-Host "downloading gsheet ID: $GoogleSheetID tab: $GoogleSheetTab03"
 Invoke-Expression "$GamDir\gam.exe user $GoogleSourceSvcAccount get drivefile $GoogleSheetID format csv gsheet ""$GoogleSheetTab03"" targetfolder $DataDir targetname $tempcsv3"
 
+$GoogleWorkspaceGroupSettings = ("whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","isArchived true","whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","whoCanMarkFavoriteReplyOnOwnTopic OWNERS_AND_MANAGERS","whoCanPostMessage ALL_MANAGERS_CAN_POST","whoCanTakeTopics OWNERS_AND_MANAGERS","whoCanViewGroup ALL_MANAGERS_CAN_VIEW","whoCanViewMembership ALL_MANAGERS_CAN_VIEW")
+$GoogleGroups = @()
+$GoogleGroupsHeader = @()
+$member = @()
 
+$GoogleGroups = Import-csv -path $tempcsv3
+$GoogleGroupsHeader = $($GoogleGroups | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name)
+
+    foreach ($member in $GoogleGroupsHeader) {
+
+    Write-Host "-----------Creating group: $member ----------"`n
+    $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDomain)
+    Write-Host "Invoke-expression $GamDir\gam.exe create group $GoogleGroupFQDN"
+    Write-Host "Invoke-Expression $GamDir\gam.exe update cigroup $GoogleGroupFQDN makesecuritygroup"
+
+    Start-sleep 2
+
+        foreach ($action in $GoogleWorkspaceGroupSettings) { 
+        Write-Host "Invoke-expression $GamDir\gam.exe update group $GoogleGroupFQDN $action"
+        
+        }
+
+    }
+
+Write-Host "Creating users in destination..."
 foreach ($user in $VerifiedUserData) {
     DashedLine
     $LegacyUserMail= $user."Existing Email Address" #current mail address
@@ -203,7 +227,28 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Accept calendar invite..."
     Invoke-Expression "$GamDir\gam.exe user $ReplacementUserMail add calendar $LegacyUserMail selected true"
     #Write-Host "Invoke-Expression $GamDir\gam.exe user $LegacyUserMail add calendar $ReplacementUserMail selected true"
-
 }
+
+    ### add members tpp groups ###
+    if (test-path $DataDir\*.lst) { remove-item $DataDir\*.lst -force -verbose } #force delete any .lst files if exist...
+
+    $GoogleGroupMembership = @()
+    $GroupMembershipHeader = @()
+    $member = @()
+
+    $GoogleGroupMembership = Import-csv -path $tempcsv3
+    $GroupMembershipHeader = $($GoogleGroupMembership | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name)
+
+    foreach ($member in $GroupMembershipHeader) {
+
+    Write-Host "----------- $member ----------"`n
+    $GoogleGroupMembership.$member | where { $_ -notlike "#N/A" } | out-file "$DataDir\$member.lst"
+
+    #use lst file to update google group membership... gam update group sno-dev-01@hemington.mnsp.org.uk add members file d:\temp\User_Download_01112024_150858.lst
+    $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDomain)
+    Write-Host "Invoke-expression $GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
+
+    }
+
 <#
 #>
