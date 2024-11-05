@@ -1,4 +1,4 @@
-$mnspver = "0.0.117"
+$mnspver = "0.0.118"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -48,8 +48,8 @@ Write Host "Number of records matching selection criteria:" $VerifiedUserData.co
 #if ($uuids.Contains($uuid)) { } # if var is in array
 
 #Set google instance: Destination
-$GoogleSourceSvcAccount = ("$GoogleServiceAccountPrefix" + "$GoogleWorkSpaceDestination" + "@" + "$GoogleWorkspaceDestinationMailDomain")
-Write-Host "Google Source Service Account: $GoogleSourceSvcAccount"
+$GoogleSvcAccount = $GoogleWorkspaceMNSPsvcAccount
+Write-Host "Google Source Service Account: $GoogleSvcAccount"
 
 Write-Host "Setting workspace Destination: $GoogleWorkSpaceDestination"
 Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceDestination save" # swap/set google workspace
@@ -64,8 +64,8 @@ if (test-path $tempcsv6) { remove-item $tempcsv6 -force -verbose }
 start-sleep 2
 
 Write-Host "downloading gsheet ID: $GoogleSheetID tab: $GoogleSheetTab06"
-Write-Host "Invoke-Expression $GamDir\gam.exe user $GoogleSourceSvcAccount get drivefile $GoogleSheetID format csv gsheet ""$GoogleSheetTab06"" targetfolder $DataDir targetname $tempcsv6"
-Invoke-Expression "$GamDir\gam.exe user $GoogleSourceSvcAccount get drivefile $GoogleSheetID format csv gsheet ""$GoogleSheetTab06"" targetfolder $DataDir targetname $tempcsv6"
+Write-Host "Invoke-Expression $GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleSheetID format csv gsheet ""$GoogleSheetTab06"" targetfolder $DataDir targetname $tempcsv6"
+Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleSheetID format csv gsheet ""$GoogleSheetTab06"" targetfolder $DataDir targetname $tempcsv6"
 
 $GoogleWorkspaceGroupSettings = ("whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","isArchived true","whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","whoCanMarkFavoriteReplyOnOwnTopic OWNERS_AND_MANAGERS","whoCanPostMessage ALL_MANAGERS_CAN_POST","whoCanTakeTopics OWNERS_AND_MANAGERS","whoCanViewGroup ALL_MANAGERS_CAN_VIEW","whoCanViewMembership ALL_MANAGERS_CAN_VIEW")
 $GoogleGroups = @()
@@ -213,8 +213,8 @@ foreach ($user in $VerifiedUserData) {
 }
 
 #Set Google instance: Destination...
-$GoogleSourceSvcAccount = ("$GoogleServiceAccountPrefix" + "$GoogleWorkSpaceDestination" + "@" + "$GoogleWorkspaceDestinationMailDomain")
-Write-Host "Google Source Service Account: $GoogleSourceSvcAccount"
+$GoogleSvcAccount = $GoogleWorkspaceMNSPsvcAccount
+Write-Host "Google Source Service Account: $GoogleSvcAccount"
 Write-Host "Setting workspace Destination: $GoogleWorkSpaceDestination"
 Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceDestination save" # swap/set google workspace
 Invoke-Expression "$GamDir\gam.exe"
