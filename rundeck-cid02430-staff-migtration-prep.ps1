@@ -1,4 +1,4 @@
-$mnspver = "0.0.119"
+$mnspver = "0.0.120"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -91,7 +91,6 @@ $GoogleGroupsHeader = $($GoogleGroups | Get-Member -MemberType NoteProperty | Se
 
     }
 
-    exit
 
 Write-Host "Creating users in destination..."
 foreach ($user in $VerifiedUserData) {
