@@ -1,4 +1,4 @@
-$mnspver = "0.0.127"
+$mnspver = "0.0.128"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -258,7 +258,7 @@ foreach ($user in $VerifiedUserData) {
         Write-Host "----------- $member ----------"`n
         $GoogleGroupMembership.$member | where { $_ -notlike "#N/A" } | out-file "$DataDir\$member.lst"
 
-        $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDomain)
+        $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain)
         Write-Host "Invoke-expression $GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
 
     }
@@ -285,12 +285,10 @@ Write-Host "Add members to mail dist groups ..."
         Write-Host "----------- $member ----------"`n
         $GoogleGroupMembership.$member | where { $_ -notlike "#N/A" } | out-file "$DataDir\$member.lst" # TODO confirm
 
-        $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDomain)
+        $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain)
         Write-Host "Invoke-expression $GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
 
     }
-
-
 
 
 <#
