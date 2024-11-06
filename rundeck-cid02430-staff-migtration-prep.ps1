@@ -1,4 +1,4 @@
-$mnspver = "0.0.138"
+$mnspver = "0.0.139"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -9,6 +9,12 @@ Set-Location $GamDir
 function DashedLine {
 Write-host "-----------------------------------------------------------`n"
 }
+
+#prepare user details csv
+Write-Host "emptying $tempcsv2 of any existing data..."
+Clear-Content $tempcsv2
+sleep 1
+$UserInfoCSVheader | out-file -filepath $tempcsv2 -Append #create blank csv with simple header
 
 #local sysadmins group mail address...
 $GoogleWorkspaceSourceSysadminGroupFQDN = ("$GoogleWorkspaceSourceSysadminGroup" + "@" + "$GoogleWorkspaceSourceMailDomain")
@@ -192,7 +198,8 @@ foreach ($user in $VerifiedUserData) {
 
     Write-Host "create destination account..."
     Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU' changepassword on" ###
-    $password
+    
+    "$firstname,$lastname,$ReplacementUserMail,$password" | out-file -filepath $tempcsv2 -Append #capture initial credentials
 
     Write-Host "hide account from GAL.."
     Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail gal false"
