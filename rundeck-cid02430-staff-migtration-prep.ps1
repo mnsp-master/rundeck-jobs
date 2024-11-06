@@ -1,4 +1,4 @@
-$mnspver = "0.0.129"
+$mnspver = "0.0.130"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -45,8 +45,6 @@ Start-sleep 2
 $VerifiedUserData = Get-Content -path $tempcsv4 | select-object -skip 1 | convertFrom-csv | where { $_.$FieldMatch01 -like $FieldString } #import where field like $FieldMatch01, and skip 1st line
 Write Host "Number of records matching selection criteria:" $VerifiedUserData.count
 
-#if ($uuids.Contains($uuid)) { } # if var is in array
-
 #Set google instance: Destination
 $GoogleSvcAccount = $GoogleWorkspaceMNSPsvcAccount
 Write-Host "Google Destination Service Account: $GoogleSvcAccount"
@@ -61,6 +59,8 @@ Write-Host "Create common shared drives security groups (Destination instance)..
 $GoogleWorkspaceSecGroupSettings = ("whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","isArchived true","whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","whoCanMarkFavoriteReplyOnOwnTopic OWNERS_AND_MANAGERS","whoCanPostMessage ALL_MANAGERS_CAN_POST","whoCanTakeTopics OWNERS_AND_MANAGERS","whoCanViewGroup ALL_MANAGERS_CAN_VIEW","whoCanViewMembership ALL_MANAGERS_CAN_VIEW")
 
 if (test-path $tempcsv6) { remove-item $tempcsv6 -force -verbose }
+if (test-path $tempcsv8) { remove-item $tempcsv8 -force -verbose }
+
 start-sleep 2
 
 Write-Host "downloading gsheet ID: $GoogleSheetID tab: $GoogleSheetTab06"
@@ -69,11 +69,21 @@ Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleS
 $GoogleGroups = @()
 $GoogleGroupsHeader = @()
 $member = @()
+$GroupexistCheck =@()
 
 $GoogleGroups = Import-csv -path $tempcsv6
 $GoogleGroupsHeader = $($GoogleGroups | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name)
+$GroupNameSearchString = $($GoogleGroupsHeader[0].substring(0,12)) #first element of array, first 12 chars
+
+#
+Invoke-Expression "$GamDir\gam.exe print groups query ""email:$GroupNameSearchString*"" > $tempcsv8" #check if group already exists...
+$GroupexistCheck = import-csv -Path $tempcsv8 #check if group already exists...
 
     foreach ($member in $GoogleGroupsHeader) {
+    
+     if ($GroupexistCheck.email.Contains($member)) {
+        Write-Warning "Group: $member already exists skiping creation ..."
+        } else { 
 
     Write-Host "-----------Creating group: $member ----------"`n
     $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain)
@@ -87,6 +97,7 @@ $GoogleGroupsHeader = $($GoogleGroups | Get-Member -MemberType NoteProperty | Se
         
         }
 
+    }
     }
 
 Write-Host "Create email dist groups (Destination instance)..."
