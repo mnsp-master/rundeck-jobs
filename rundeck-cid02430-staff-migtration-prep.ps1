@@ -1,4 +1,4 @@
-$mnspver = "0.0.126"
+$mnspver = "0.0.127"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -243,26 +243,55 @@ foreach ($user in $VerifiedUserData) {
     #Write-Host "Invoke-Expression $GamDir\gam.exe user $LegacyUserMail add calendar $ReplacementUserMail selected true"
 }
 
-    ### add members tpp groups ###
-    if (test-path $DataDir\*.lst) { remove-item $DataDir\*.lst -force -verbose } #force delete any .lst files if exist...
+    Write-Host "Add members to security groups ..."
+        if (test-path $DataDir\*.lst) { remove-item $DataDir\*.lst -force -verbose } #force delete any .lst files if exist...
 
-    $GoogleGroupMembership = @()
-    $GroupMembershipHeader = @()
-    $member = @()
+        $GoogleGroupMembership = @()
+        $GroupMembershipHeader = @()
+        $member = @()
 
-    $GoogleGroupMembership = Import-csv -path $tempcsv6
-    $GroupMembershipHeader = $($GoogleGroupMembership | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name)
+        $GoogleGroupMembership = Import-csv -path $tempcsv6
+        $GroupMembershipHeader = $($GoogleGroupMembership | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name)
 
-    foreach ($member in $GroupMembershipHeader) {
+        foreach ($member in $GroupMembershipHeader) {
 
-    Write-Host "----------- $member ----------"`n
-    $GoogleGroupMembership.$member | where { $_ -notlike "#N/A" } | out-file "$DataDir\$member.lst"
+        Write-Host "----------- $member ----------"`n
+        $GoogleGroupMembership.$member | where { $_ -notlike "#N/A" } | out-file "$DataDir\$member.lst"
 
-    #use lst file to update google group membership... gam update group sno-dev-01@hemington.mnsp.org.uk add members file d:\temp\User_Download_01112024_150858.lst
-    $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDomain)
-    Write-Host "Invoke-expression $GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
+        $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDomain)
+        Write-Host "Invoke-expression $GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
 
     }
+
+Write-Host "Add members to mail dist groups ..."
+
+        if (test-path $tempcsv7) { remove-item $tempcsv7 -force -verbose }
+        start-sleep 2
+
+        Write-Host "downloading gsheet ID: $GoogleSheetID tab: $GoogleSheetTab07"
+        Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleSheetID format csv gsheet ""$GoogleSheetTab07"" targetfolder $DataDir targetname $tempcsv7"
+
+        if (test-path $DataDir\*.lst) { remove-item $DataDir\*.lst -force -verbose } #force delete any .lst files if exist...
+
+        $GoogleGroupMembership = @()
+        $GroupMembershipHeader = @()
+        $member = @()
+
+        $GoogleGroupMembership = Import-csv -path $tempcsv7
+        $GroupMembershipHeader = $($GoogleGroupMembership | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name)
+
+        foreach ($member in $GroupMembershipHeader) {
+
+        Write-Host "----------- $member ----------"`n
+        $GoogleGroupMembership.$member | where { $_ -notlike "#N/A" } | out-file "$DataDir\$member.lst" # TODO confirm
+
+        $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDomain)
+        Write-Host "Invoke-expression $GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
+
+    }
+
+
+
 
 <#
 #>
