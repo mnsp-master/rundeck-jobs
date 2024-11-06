@@ -1,4 +1,4 @@
-$mnspver = "0.0.134"
+$mnspver = "0.0.135"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -109,6 +109,7 @@ Write-Host "Create email dist groups (Destination instance)..."
 $GoogleWorkspaceGroupSettings = ("whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","isArchived true","whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","whoCanMarkFavoriteReplyOnOwnTopic OWNERS_AND_MANAGERS","whoCanPostMessage ALL_MANAGERS_CAN_POST","whoCanTakeTopics OWNERS_AND_MANAGERS","whoCanViewGroup ALL_MANAGERS_CAN_VIEW","whoCanViewMembership ALL_MANAGERS_CAN_VIEW")
 
 if (test-path $tempcsv7) { remove-item $tempcsv7 -force -verbose }
+if (test-path $tempcsv8) { remove-item $tempcsv8 -force -verbose }
 start-sleep 2
 
 Write-Host "downloading gsheet ID: $GoogleSheetID tab: $GoogleSheetTab07"
@@ -124,6 +125,11 @@ $GoogleGroupsHeader = $($GoogleGroups | Get-Member -MemberType NoteProperty | Se
 Write-Host "CSV header: $GoogleGroupsHeader"
 $GroupNameSearchString = $($GoogleGroupsHeader[0].substring(0,3)) #first element of array, first 3 chars
 Write-Host "Group Search String: $GroupNameSearchString"
+
+
+Invoke-Expression "$GamDir\gam.exe print groups query ""email:$GroupNameSearchString*"" > $tempcsv8" #check if group already exists...
+$GroupexistCheck = import-csv -Path $tempcsv8 #check if group already exists...
+
 
     foreach ($member in $GoogleGroupsHeader) {
 
