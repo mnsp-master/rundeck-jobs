@@ -13,7 +13,7 @@ Write-host "-----------------------------------------------------------`n"
 #local sysadmins group mail address...
 $GoogleWorkspaceSourceSysadminGroupFQDN = ("$GoogleWorkspaceSourceSysadminGroup" + "@" + "$GoogleWorkspaceSourceMailDomain")
 
-#set google instance: legacy...
+Write-Host "###### set google instance: legacy... ######"
 $GoogleSourceSvcAccount = ("$GoogleServiceAccountPrefix" + "$GoogleWorkSpaceSource" + "@" + "$GGoogleWorkspaceSourceMailDomain")
 Write-Host "Google Source Service Account: $GoogleSourceSvcAccount"
 Write-Host "Setting workspace source: $GoogleWorkSpaceSource"
@@ -176,6 +176,7 @@ foreach ($user in $VerifiedUserData) {
 
 
 #Set Google instance: legacy...
+Write-Host "###### set google instance: legacy... ######"
 $GoogleSourceSvcAccount = ("$GoogleServiceAccountPrefix" + "$GoogleWorkSpaceSource" + "@" + "$GGoogleWorkspaceSourceMailDomain")
 Write-Host "Google Source Service Account: $GoogleSourceSvcAccount"
 Write-Host "Setting workspace source: $GoogleWorkSpaceSource"
@@ -244,6 +245,7 @@ foreach ($user in $VerifiedUserData) {
 }
 
 #Set Google instance: Destination...
+Write-Host "###### Set Google instance: Destination... ######"
 $GoogleSvcAccount = $GoogleWorkspaceMNSPsvcAccount
 Write-Host "Google Destination Service Account: $GoogleSvcAccount"
 Write-Host "Setting workspace Destination: $GoogleWorkSpaceDestination"
