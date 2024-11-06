@@ -1,4 +1,4 @@
-$mnspver = "0.0.141"
+$mnspver = "0.0.142"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -217,7 +217,7 @@ foreach ($user in $VerifiedUserData) {
 }
 
 Write-Host "replacing content of existing google sheet with upto date data..."
-Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount update drivefile id $UserInfoGsheetID localfile $tempcsv2"
+Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount update drivefile id $UserInfoGsheetID localfile $tempcsv2" #TODO new filename option needed...
 
 
 #Set Google instance: legacy...
