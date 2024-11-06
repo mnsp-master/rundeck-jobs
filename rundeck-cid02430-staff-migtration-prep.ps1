@@ -1,4 +1,4 @@
-$mnspver = "0.0.135"
+$mnspver = "0.0.136"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -123,7 +123,7 @@ $GroupexistCheck = @()
 $GoogleGroups = Import-csv -path $tempcsv7
 $GoogleGroupsHeader = $($GoogleGroups | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name)
 Write-Host "CSV header: $GoogleGroupsHeader"
-$GroupNameSearchString = $($GoogleGroupsHeader[0].substring(0,3)) #first element of array, first 3 chars
+$GroupNameSearchString = $($GoogleGroupsHeader[0].substring(0,4)) #first element of array, first 3 chars
 Write-Host "Group Search String: $GroupNameSearchString"
 
 
