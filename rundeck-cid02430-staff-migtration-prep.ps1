@@ -1,4 +1,4 @@
-$mnspver = "0.0.139"
+$mnspver = "0.0.140"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -63,6 +63,9 @@ Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceDestination save" # sw
 Invoke-Expression "$GamDir\gam.exe"
 start-sleep 3
 DashedLine
+
+#create user info destination gsheet
+$UserInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename "$GoogleWorkspaceDestinationMailDomain User Info" mimetype gsheet parentid $GfolderReportsID returnidonly")
 
 Write-Host "Create common shared drives security groups (Destination instance)..."
 $GoogleWorkspaceSecGroupSettings = ("whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","isArchived true","whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","whoCanMarkFavoriteReplyOnOwnTopic OWNERS_AND_MANAGERS","whoCanPostMessage ALL_MANAGERS_CAN_POST","whoCanTakeTopics OWNERS_AND_MANAGERS","whoCanViewGroup ALL_MANAGERS_CAN_VIEW","whoCanViewMembership ALL_MANAGERS_CAN_VIEW")
@@ -212,6 +215,9 @@ foreach ($user in $VerifiedUserData) {
 
     DashedLine
 }
+
+Write-Host "replacing content of existing google sheet with upto date data..."
+Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount update drivefile id $UserInfoGsheetID localfile $tempcsv2"
 
 
 #Set Google instance: legacy...
