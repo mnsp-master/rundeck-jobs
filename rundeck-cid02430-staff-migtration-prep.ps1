@@ -1,4 +1,4 @@
-$mnspver = "0.0.128"
+$mnspver = "0.0.129"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -58,16 +58,14 @@ start-sleep 3
 DashedLine
 
 Write-Host "Create common shared drives security groups (Destination instance)..."
-$GoogleWorkspaceGroupSettings = ("whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","isArchived true","whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","whoCanMarkFavoriteReplyOnOwnTopic OWNERS_AND_MANAGERS","whoCanPostMessage ALL_MANAGERS_CAN_POST","whoCanTakeTopics OWNERS_AND_MANAGERS","whoCanViewGroup ALL_MANAGERS_CAN_VIEW","whoCanViewMembership ALL_MANAGERS_CAN_VIEW")
+$GoogleWorkspaceSecGroupSettings = ("whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","isArchived true","whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","whoCanMarkFavoriteReplyOnOwnTopic OWNERS_AND_MANAGERS","whoCanPostMessage ALL_MANAGERS_CAN_POST","whoCanTakeTopics OWNERS_AND_MANAGERS","whoCanViewGroup ALL_MANAGERS_CAN_VIEW","whoCanViewMembership ALL_MANAGERS_CAN_VIEW")
 
 if (test-path $tempcsv6) { remove-item $tempcsv6 -force -verbose }
 start-sleep 2
 
 Write-Host "downloading gsheet ID: $GoogleSheetID tab: $GoogleSheetTab06"
-#Write-Host "Invoke-Expression $GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleSheetID format csv gsheet ""$GoogleSheetTab06"" targetfolder $DataDir targetname $tempcsv6"
 Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleSheetID format csv gsheet ""$GoogleSheetTab06"" targetfolder $DataDir targetname $tempcsv6"
 
-$GoogleWorkspaceGroupSettings = ("whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","isArchived true","whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","whoCanMarkFavoriteReplyOnOwnTopic OWNERS_AND_MANAGERS","whoCanPostMessage ALL_MANAGERS_CAN_POST","whoCanTakeTopics OWNERS_AND_MANAGERS","whoCanViewGroup ALL_MANAGERS_CAN_VIEW","whoCanViewMembership ALL_MANAGERS_CAN_VIEW")
 $GoogleGroups = @()
 $GoogleGroupsHeader = @()
 $member = @()
@@ -84,7 +82,38 @@ $GoogleGroupsHeader = $($GoogleGroups | Get-Member -MemberType NoteProperty | Se
 
     Start-sleep 2
 
-        foreach ($action in $GoogleWorkspaceGroupSettings) { 
+        foreach ($action in $GoogleWorkspaceSecGroupSettings) { 
+        Write-Host "Invoke-expression $GamDir\gam.exe update group $GoogleGroupFQDN $action"
+        
+        }
+
+    }
+
+Write-Host "Create email dist groups (Destination instance)..."
+$GoogleWorkspaceSecGroupSettings = ("whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","isArchived true","whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","whoCanMarkFavoriteReplyOnOwnTopic OWNERS_AND_MANAGERS","whoCanPostMessage ALL_MANAGERS_CAN_POST","whoCanTakeTopics OWNERS_AND_MANAGERS","whoCanViewGroup ALL_MANAGERS_CAN_VIEW","whoCanViewMembership ALL_MANAGERS_CAN_VIEW")
+
+if (test-path $tempcsv7) { remove-item $tempcsv7 -force -verbose }
+start-sleep 2
+
+Write-Host "downloading gsheet ID: $GoogleSheetID tab: $GoogleSheetTab07"
+Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleSheetID format csv gsheet ""$GoogleSheetTab07"" targetfolder $DataDir targetname $tempcsv7"
+
+$GoogleGroups = @()
+$GoogleGroupsHeader = @()
+$member = @()
+
+$GoogleGroups = Import-csv -path $tempcsv7
+$GoogleGroupsHeader = $($GoogleGroups | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name)
+
+    foreach ($member in $GoogleGroupsHeader) {
+
+    Write-Host "-----------Creating group: $member ----------"`n
+    $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain)
+    Write-Host "Invoke-expression $GamDir\gam.exe create group $GoogleGroupFQDN"
+
+    Start-sleep 2
+
+        foreach ($action in $GoogleWorkspaceSecGroupSettings) { 
         Write-Host "Invoke-expression $GamDir\gam.exe update group $GoogleGroupFQDN $action"
         
         }
@@ -264,13 +293,6 @@ foreach ($user in $VerifiedUserData) {
     }
 
 Write-Host "Add members to mail dist groups ..."
-
-        if (test-path $tempcsv7) { remove-item $tempcsv7 -force -verbose }
-        start-sleep 2
-
-        Write-Host "downloading gsheet ID: $GoogleSheetID tab: $GoogleSheetTab07"
-        Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleSheetID format csv gsheet ""$GoogleSheetTab07"" targetfolder $DataDir targetname $tempcsv7"
-
         if (test-path $DataDir\*.lst) { remove-item $DataDir\*.lst -force -verbose } #force delete any .lst files if exist...
 
         $GoogleGroupMembership = @()
