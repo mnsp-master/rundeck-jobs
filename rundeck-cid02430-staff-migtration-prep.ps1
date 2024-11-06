@@ -1,4 +1,4 @@
-$mnspver = "0.0.131"
+$mnspver = "0.0.132"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -104,7 +104,7 @@ $GroupexistCheck = import-csv -Path $tempcsv8 #check if group already exists...
     }
 
 Write-Host "Create email dist groups (Destination instance)..."
-$GoogleWorkspaceSecGroupSettings = ("whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","isArchived true","whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","whoCanMarkFavoriteReplyOnOwnTopic OWNERS_AND_MANAGERS","whoCanPostMessage ALL_MANAGERS_CAN_POST","whoCanTakeTopics OWNERS_AND_MANAGERS","whoCanViewGroup ALL_MANAGERS_CAN_VIEW","whoCanViewMembership ALL_MANAGERS_CAN_VIEW")
+$GoogleWorkspaceGroupSettings = ("whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","isArchived true","whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","whoCanMarkFavoriteReplyOnOwnTopic OWNERS_AND_MANAGERS","whoCanPostMessage ALL_MANAGERS_CAN_POST","whoCanTakeTopics OWNERS_AND_MANAGERS","whoCanViewGroup ALL_MANAGERS_CAN_VIEW","whoCanViewMembership ALL_MANAGERS_CAN_VIEW")
 
 if (test-path $tempcsv7) { remove-item $tempcsv7 -force -verbose }
 start-sleep 2
@@ -115,13 +115,14 @@ Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleS
 $GoogleGroups = @()
 $GoogleGroupsHeader = @()
 $member = @()
-$GroupexistCheck =@()
+$GroupexistCheck = @()
 
 $GoogleGroups = Import-csv -path $tempcsv7
 $GoogleGroupsHeader = $($GoogleGroups | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name)
 $GroupNameSearchString = $($GoogleGroupsHeader[0].substring(0,12)) #first element of array, first 12 chars
 
     foreach ($member in $GoogleGroupsHeader) {
+
              if ($GroupexistCheck.email.Contains($member)) {
         Write-Warning "Group: $member already exists skiping creation ..."
         } else { 
@@ -132,7 +133,7 @@ $GroupNameSearchString = $($GoogleGroupsHeader[0].substring(0,12)) #first elemen
 
     Start-sleep 2
 
-        foreach ($action in $GoogleWorkspaceSecGroupSettings) { 
+        foreach ($action in $GoogleWorkspaceGroupSettings) { 
         Write-Host "Invoke-expression $GamDir\gam.exe update group $GoogleGroupFQDN $action"
         
         }
