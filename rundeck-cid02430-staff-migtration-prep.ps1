@@ -1,4 +1,4 @@
-$mnspver = "0.0.130"
+$mnspver = "0.0.131"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -13,6 +13,7 @@ Write-host "-----------------------------------------------------------`n"
 #local sysadmins group mail address...
 $GoogleWorkspaceSourceSysadminGroupFQDN = ("$GoogleWorkspaceSourceSysadminGroup" + "@" + "$GoogleWorkspaceSourceMailDomain")
 
+#set google instance: legacy
 Write-Host "###### set google instance: legacy... ######"
 $GoogleSourceSvcAccount = ("$GoogleServiceAccountPrefix" + "$GoogleWorkSpaceSource" + "@" + "$GGoogleWorkspaceSourceMailDomain")
 Write-Host "Google Source Service Account: $GoogleSourceSvcAccount"
@@ -45,7 +46,9 @@ Start-sleep 2
 $VerifiedUserData = Get-Content -path $tempcsv4 | select-object -skip 1 | convertFrom-csv | where { $_.$FieldMatch01 -like $FieldString } #import where field like $FieldMatch01, and skip 1st line
 Write Host "Number of records matching selection criteria:" $VerifiedUserData.count
 
-#Set google instance: Destination
+#Set Google Instance: Destination...
+Write-Host "###### Set Google instance: Destination... ######"
+
 $GoogleSvcAccount = $GoogleWorkspaceMNSPsvcAccount
 Write-Host "Google Destination Service Account: $GoogleSvcAccount"
 
@@ -112,11 +115,16 @@ Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleS
 $GoogleGroups = @()
 $GoogleGroupsHeader = @()
 $member = @()
+$GroupexistCheck =@()
 
 $GoogleGroups = Import-csv -path $tempcsv7
 $GoogleGroupsHeader = $($GoogleGroups | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name)
+$GroupNameSearchString = $($GoogleGroupsHeader[0].substring(0,12)) #first element of array, first 12 chars
 
     foreach ($member in $GoogleGroupsHeader) {
+             if ($GroupexistCheck.email.Contains($member)) {
+        Write-Warning "Group: $member already exists skiping creation ..."
+        } else { 
 
     Write-Host "-----------Creating group: $member ----------"`n
     $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain)
@@ -130,7 +138,7 @@ $GoogleGroupsHeader = $($GoogleGroups | Get-Member -MemberType NoteProperty | Se
         }
 
     }
-
+    }
 
 Write-Host "Creating users in destination..."
 foreach ($user in $VerifiedUserData) {
@@ -255,7 +263,7 @@ foreach ($user in $VerifiedUserData) {
     DashedLine
 }
 
-#Set Google instance: Destination...
+#Set Google Instance: Destination...
 Write-Host "###### Set Google instance: Destination... ######"
 $GoogleSvcAccount = $GoogleWorkspaceMNSPsvcAccount
 Write-Host "Google Destination Service Account: $GoogleSvcAccount"
