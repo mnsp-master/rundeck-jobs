@@ -1,4 +1,4 @@
-$mnspver = "0.0.136"
+$mnspver = "0.0.137"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -91,7 +91,7 @@ $GroupexistCheck = import-csv -Path $tempcsv8 #check if group already exists...
         } else { 
 
     Write-Host "-----------Creating group: $member ----------"`n
-    $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain)
+    $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).ToLower()
     Write-Host "Invoke-expression $GamDir\gam.exe create group $GoogleGroupFQDN"
     Write-Host "Invoke-Expression $GamDir\gam.exe update cigroup $GoogleGroupFQDN makesecuritygroup"
 
@@ -138,7 +138,7 @@ $GroupexistCheck = import-csv -Path $tempcsv8 #check if group already exists...
         } else { 
 
     Write-Host "-----------Creating group: $member ----------"`n
-    $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain)
+    $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).ToLower()
     Write-Host "Invoke-expression $GamDir\gam.exe create group $GoogleGroupFQDN"
 
     Start-sleep 2
@@ -319,7 +319,7 @@ foreach ($user in $VerifiedUserData) {
         Write-Host "----------- $member ----------"`n
         $GoogleGroupMembership.$member | where { $_ -notlike "#N/A" } | out-file "$DataDir\$member.lst"
 
-        $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain)
+        $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).ToLower()
         Write-Host "Invoke-expression $GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
 
     }
@@ -339,7 +339,7 @@ Write-Host "Add members to mail dist groups ..."
         Write-Host "----------- $member ----------"`n
         $GoogleGroupMembership.$member | where { $_ -notlike "#N/A" } | out-file "$DataDir\$member.lst" # TODO confirm
 
-        $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain)
+        $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).toLower()
         Write-Host "Invoke-expression $GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
 
     }
