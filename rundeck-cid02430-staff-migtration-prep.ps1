@@ -1,4 +1,4 @@
-$mnspver = "0.0.149"
+$mnspver = "0.0.150"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -28,16 +28,6 @@ Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceSource save" # swap/se
 Invoke-Expression "$GamDir\gam.exe"
 
 DashedLine
-
-<#
-if ( $RunDeckDev -eq "true" ) { 
-    $GfolderReportsID = "1X4xdjK5fJLnXn5Q1sqqhBpKYJ1KJHVc9" } 
-    else {
-        Write-Host "creating destination gfolder for all existing shared drive association user reports..."
-        $GfolderReportsID = @()
-        $GfolderReportsID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSourceSvcAccount create drivefile drivefilename '$ReportsFolderName' mimetype gfolder parentid $ReportsFolderParentID returnidonly")
-}
-#>
 
 #get verified user data
 #if exist check & remove $tempcsv4
