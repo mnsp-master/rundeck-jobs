@@ -1,4 +1,4 @@
-$mnspver = "0.0.151"
+$mnspver = "0.0.152"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -76,7 +76,7 @@ $GroupexistCheck =@()
 $GoogleGroups = Import-csv -path $tempcsv6
 $GoogleGroupsHeader = $($GoogleGroups | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name)
 Write-Host "CSV header: $GoogleGroupsHeader"
-$GroupNameSearchString = $($GoogleGroupsHeader[0].substring(0,16)) #first element of array, first 12 chars TODO shorten to 12 chars once dev finished
+$GroupNameSearchString = $($GoogleGroupsHeader[0].substring(0,12)) #first element of array, first 12 chars
 Write-Host "Group Search String: $GroupNameSearchString"
 
 #
@@ -125,7 +125,7 @@ $GroupexistCheck = @()
 $GoogleGroups = Import-csv -path $tempcsv7
 $GoogleGroupsHeader = $($GoogleGroups | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name)
 Write-Host "CSV header: $GoogleGroupsHeader"
-$GroupNameSearchString = $($GoogleGroupsHeader[0].substring(0,7)) #first element of array, first 3 chars - TODO shorten to 3 chars once dev finished
+$GroupNameSearchString = $($GoogleGroupsHeader[0].substring(0,3)) #first element of array, first 3 chars
 Write-Host "Group Search String: $GroupNameSearchString"
 
 Invoke-Expression "$GamDir\gam.exe print groups query ""email:$GroupNameSearchString*"" > $tempcsv8" #check if group already exists...
