@@ -1,4 +1,4 @@
-$mnspver = "0.0.146"
+$mnspver = "0.0.147"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -68,7 +68,7 @@ DashedLine
 $UserInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
 
 Write-Host "Create common shared drives security groups (Destination instance)..."
-$GoogleWorkspaceSecGroupSettings = ("whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","isArchived true","whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","whoCanMarkFavoriteReplyOnOwnTopic OWNERS_AND_MANAGERS","whoCanPostMessage ALL_MANAGERS_CAN_POST","whoCanTakeTopics OWNERS_AND_MANAGERS","whoCanViewGroup ALL_MANAGERS_CAN_VIEW","whoCanViewMembership ALL_MANAGERS_CAN_VIEW")
+$GoogleWorkspaceSecGroupSettings = ("whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","isArchived true","whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","whoCanMarkFavoriteReplyOnOwnTopic OWNERS_AND_MANAGERS","whoCanPostMessage ALL_MANAGERS_CAN_POST","whoCanTakeTopics OWNERS_AND_MANAGERS","whoCanViewGroup ALL_MANAGERS_CAN_VIEW","whoCanViewMembership ALL_MANAGERS_CAN_VIEW","whoCanJoin INVITED_CAN_JOIN")
 
 if (test-path $tempcsv6) { remove-item $tempcsv6 -force -verbose }
 if (test-path $tempcsv8) { remove-item $tempcsv8 -force -verbose }
@@ -86,7 +86,7 @@ $GroupexistCheck =@()
 $GoogleGroups = Import-csv -path $tempcsv6
 $GoogleGroupsHeader = $($GoogleGroups | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name)
 Write-Host "CSV header: $GoogleGroupsHeader"
-$GroupNameSearchString = $($GoogleGroupsHeader[0].substring(0,16)) #first element of array, first 12 chars
+$GroupNameSearchString = $($GoogleGroupsHeader[0].substring(0,16)) #first element of array, first 12 chars TODO shorten to 12 chars once dev finished
 Write-Host "Group Search String: $GroupNameSearchString"
 
 #
@@ -97,7 +97,7 @@ $GroupexistCheck.email
 
     foreach ($member in $GoogleGroupsHeader) {
     
-     if ($GroupexistCheck.email.Contains($member)) {
+     if ($GroupexistCheck.email.Contains($member)) { #TODO logic not working group creation still being started, although GAM process does spot duplicate and skips actual creation...
         Write-Warning "Group: $member already exists skiping creation ..."
         } else { 
 
@@ -110,7 +110,7 @@ $GroupexistCheck.email
     Start-sleep 2
 
         foreach ($action in $GoogleWorkspaceSecGroupSettings) { 
-        Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN $action"
+        Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN $action" #TODO - Who can join group - cuurently default: Anyone in the organisation can ask
         
         }
 
@@ -118,7 +118,7 @@ $GroupexistCheck.email
     }
 
 Write-Host "Create email dist groups (Destination instance)..."
-$GoogleWorkspaceGroupSettings = ("whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","isArchived true","whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","whoCanMarkFavoriteReplyOnOwnTopic OWNERS_AND_MANAGERS","whoCanPostMessage ALL_MANAGERS_CAN_POST","whoCanTakeTopics OWNERS_AND_MANAGERS","whoCanViewGroup ALL_MANAGERS_CAN_VIEW","whoCanViewMembership ALL_MANAGERS_CAN_VIEW")
+$GoogleWorkspaceGroupSettings = ("isArchived true","whoCanContactOwner ALL_MEMBERS_CAN_CONTACT","whoCanMarkFavoriteReplyOnOwnTopic OWNERS_AND_MANAGERS","whoCanPostMessage ALL_MEMBERS_CAN_POST","whoCanTakeTopics OWNERS_AND_MANAGERS","whoCanViewGroup ALL_MEMBERS_CAN_VIEW","whoCanViewMembership ALL_MEMBERS_CAN_VIEW","whoCanJoin INVITED_CAN_JOIN")
 
 if (test-path $tempcsv7) { remove-item $tempcsv7 -force -verbose }
 if (test-path $tempcsv8) { remove-item $tempcsv8 -force -verbose }
@@ -135,7 +135,7 @@ $GroupexistCheck = @()
 $GoogleGroups = Import-csv -path $tempcsv7
 $GoogleGroupsHeader = $($GoogleGroups | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name)
 Write-Host "CSV header: $GoogleGroupsHeader"
-$GroupNameSearchString = $($GoogleGroupsHeader[0].substring(0,7)) #first element of array, first 3 chars
+$GroupNameSearchString = $($GoogleGroupsHeader[0].substring(0,7)) #first element of array, first 3 chars - TODO shorten to 3 chars once dev finished
 Write-Host "Group Search String: $GroupNameSearchString"
 
 Invoke-Expression "$GamDir\gam.exe print groups query ""email:$GroupNameSearchString*"" > $tempcsv8" #check if group already exists...
@@ -151,12 +151,12 @@ $GroupexistCheck.email
 
     Write-Host "-----------Creating group: $member ----------"`n
     $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).ToLower()
-    Write-Host "Invoke-expression $GamDir\gam.exe create group $GoogleGroupFQDN"
+    Invoke-expression "$GamDir\gam.exe create group $GoogleGroupFQDN"
 
     Start-sleep 2
 
         foreach ($action in $GoogleWorkspaceGroupSettings) { 
-        Write-Host "Invoke-expression $GamDir\gam.exe update group $GoogleGroupFQDN $action"
+        Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN $action"
         
         }
 
