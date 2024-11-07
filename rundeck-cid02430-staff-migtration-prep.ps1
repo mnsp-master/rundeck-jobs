@@ -1,4 +1,4 @@
-$mnspver = "0.0.153"
+$mnspver = "0.0.154"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -259,13 +259,11 @@ foreach ($user in $VerifiedUserData) {
     Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $GoogleWorkspaceSourceSysadminGroupFQDN role organizer" 
 
     Write-Host "Add internal user as manager: add drivefileacl $LegacyUserTeamDriveID user $LegacyUserMail role organizer ..."
-    Write-Host "Invoke-expression $GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $LegacyUserMail role organizer"
-    #Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $LegacyUserMail role organizer"
+    Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $LegacyUserMail role organizer"
     
     Write-Host "Add external user as manager: add drivefileacl $LegacyUserTeamDriveID user $ReplacementUserMail role organizer..."
     Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $ReplacementUserMail role organizer"
-    #Write-Host "Invoke-expression $GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $ReplacementUserMail role organizer"
-
+    
     Write-Host "report current shared drive folder associations for: $LegacyUserMail ..."
     Invoke-expression "$GamDir\gam.exe user $legacyUserMail print teamdrives todrive tdparent id:$GfolderReportsID tdnobrowser tdtitle '$LegacyUserMail shared drives summary as of $(get-date)'"
 
@@ -313,10 +311,10 @@ foreach ($user in $VerifiedUserData) {
         foreach ($member in $GroupMembershipHeader) {
 
         Write-Host "----------- $member ----------"`n
-        $GoogleGroupMembership.$member | where { $_ -notlike "#N/A" } | out-file "$DataDir\$member.lst"
+        $GoogleGroupMembership.$member | where { $_ -notlike "#N/A" } | out-file "$DataDir\$member.lst" #TODO UTF8 format needed
 
         $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).ToLower()
-        Write-Host "Invoke-expression $GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
+        Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
 
     }
 
@@ -333,10 +331,10 @@ Write-Host "Add members to mail dist groups ..."
         foreach ($member in $GroupMembershipHeader) {
 
         Write-Host "----------- $member ----------"`n
-        $GoogleGroupMembership.$member | where { $_ -notlike "#N/A" } | out-file "$DataDir\$member.lst"
+        $GoogleGroupMembership.$member | where { $_ -notlike "#N/A" } | out-file "$DataDir\$member.lst" #TODO UTF8 format needed
 
         $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).toLower()
-        Write-Host "Invoke-expression $GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
+        Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
 
     }
 
