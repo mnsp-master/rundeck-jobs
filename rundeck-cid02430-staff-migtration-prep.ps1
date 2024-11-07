@@ -1,4 +1,4 @@
-$mnspver = "0.0.152"
+$mnspver = "0.0.153"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -91,7 +91,7 @@ $GroupexistCheck.email
         Write-Warning "Group: $member already exists skiping creation ..."
         } else { 
 
-    Write-Host "-----------Creating group: $member ----------"`n
+    Write-Host "-----------Creating Security group: $member ----------"`n
     $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).ToLower()
     Invoke-expression "$GamDir\gam.exe create group $GoogleGroupFQDN"
     Start-Sleep 2
@@ -139,7 +139,7 @@ $GroupexistCheck.email
         Write-Warning "Group: $member already exists skiping creation ..."
         } else { 
 
-    Write-Host "-----------Creating group: $member ----------"`n
+    Write-Host "-----------Creating Dist group: $member ----------"`n
     $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).ToLower()
     Invoke-expression "$GamDir\gam.exe create group $GoogleGroupFQDN"
 
