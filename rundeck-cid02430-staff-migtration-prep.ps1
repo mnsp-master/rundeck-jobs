@@ -1,4 +1,4 @@
-$mnspver = "0.0.150"
+$mnspver = "0.0.151"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -16,7 +16,7 @@ Clear-Content $tempcsv2
 sleep 1
 $UserInfoCSVheader | out-file -filepath $tempcsv2 -Append #create blank csv with simple header
 
-#local sysadmins group mail address...
+#Set local sysadmins group mail address...
 $GoogleWorkspaceSourceSysadminGroupFQDN = ("$GoogleWorkspaceSourceSysadminGroup" + "@" + "$GoogleWorkspaceSourceMailDomain")
 
 #set google instance: legacy
@@ -189,11 +189,11 @@ foreach ($user in $VerifiedUserData) {
 
         start-sleep 1
 
-
     Write-Host "create destination account..."
     Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU' changepassword on" ###
     
-    "$firstname,$lastname,$ReplacementUserMail,$password" | out-file -filepath $tempcsv2 -Append #capture initial credentials
+    #capture initial credentials
+    "$firstname,$lastname,$ReplacementUserMail,$password" | out-file -filepath $tempcsv2 -Append 
 
     Write-Host "hide account from GAL.."
     Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail gal false"
@@ -207,6 +207,7 @@ foreach ($user in $VerifiedUserData) {
     DashedLine
 }
 
+#upload initial credentials to gsheet source $tempcsv2
 Write-Host "replacing content of existing google sheet with upto date data..."
 Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount update drivefile id $UserInfoGsheetID localfile $tempcsv2 newfilename '$GoogleWorkspaceDestinationMailDomain User Information' "
 
@@ -218,10 +219,6 @@ Write-Host "Setting workspace source: $GoogleWorkSpaceSource"
 Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceSource save" # swap/set google workspace
 Invoke-Expression "$GamDir\gam.exe"
 DashedLine
-
-#$GoogleWorkspaceSourceGroup = ("$GoogleWorkspaceSourceGroupPrefix" + "@" + "$GGoogleWorkspaceSourceMailDomain")
-#Write-Host "Getting members of users to process source group $GoogleWorkspaceSourceGroup"
-#Invoke-Expression "$GamDir\gam.exe print group-members group_ns $GoogleWorkspaceSourceGroup > $tempcsv"
 
 foreach ($user in $VerifiedUserData) {
     DashedLine
@@ -243,8 +240,6 @@ foreach ($user in $VerifiedUserData) {
 
     Write-Host "send current calendar invite: $LegacyUserMail add acls reader $ReplacementUserMail ..."
     Invoke-Expression "$GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail sendnotifications false"
-    #Invoke-Expression "$GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail"
-    #Write-Host "Invoke-Expression $GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail"
 
     Write-Host "shared drive creation (Legacy Source to Destination user)..."
     $TeamDriveName = "Migration $LegacyUserMail $(Get-Date)"
@@ -304,9 +299,7 @@ foreach ($user in $VerifiedUserData) {
 
     Write-Host "Accept calendar invite: user $LegacyUserMail add calendar $ReplacementUserMail selected true ..."
     Invoke-Expression "$GamDir\gam.exe user $ReplacementUserMail add calendar $LegacyUserMail selected true"
-    #Write-Host "Invoke-Expression $GamDir\gam.exe user $LegacyUserMail add calendar $ReplacementUserMail selected true"
 }
-
     Write-Host "Add members to security groups ..."
         if (test-path $DataDir\*.lst) { remove-item $DataDir\*.lst -force -verbose } #force delete any .lst files if exist...
 
