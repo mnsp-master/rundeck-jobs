@@ -1,4 +1,4 @@
-$mnspver = "0.0.147"
+$mnspver = "0.0.148"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -110,7 +110,7 @@ $GroupexistCheck.email
     Start-sleep 2
 
         foreach ($action in $GoogleWorkspaceSecGroupSettings) { 
-        Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN $action" #TODO - Who can join group - cuurently default: Anyone in the organisation can ask
+        Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN $action"
         
         }
 
