@@ -1,4 +1,4 @@
-$mnspver = "0.0.142"
+$mnspver = "0.0.143"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -183,7 +183,7 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Firstname: $FirstName"
     Write-Host "Lastname: $LastName"
 
-    Write-Host "Generating Random Password..." # TODO - Capturing and distribution mechanism
+    Write-Host "Generating Random Password..." 
         $pwd = $(Invoke-WebRequest -Uri $PwdWebRequestURI -UseBasicParsing)
         #    $pwd.Content
             #$pwd.StatusCode
@@ -217,7 +217,8 @@ foreach ($user in $VerifiedUserData) {
 }
 
 Write-Host "replacing content of existing google sheet with upto date data..."
-Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount update drivefile id $UserInfoGsheetID localfile $tempcsv2" #TODO new filename option needed...
+Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount update drivefile id $UserInfoGsheetID localfile $tempcsv2 newfilename '$GoogleWorkspaceDestinationMailDomain User Information' "
+newfilename 'Supply Staff passwords as of: $(Get-Date -Format "dd MMMM yyyy HHHH:mm:s")'
 
 
 #Set Google instance: legacy...
@@ -283,8 +284,6 @@ foreach ($user in $VerifiedUserData) {
 
     Write-Host "report current shared drive folder associations for: $LegacyUserMail ..."
     Invoke-expression "$GamDir\gam.exe user $legacyUserMail print teamdrives todrive tdparent id:$GfolderReportsID tdnobrowser tdtitle '$LegacyUserMail shared drives summary as of $(get-date)'"
-    
-    # TODO - add processed users to runonce control group...
 
     DashedLine
 }
