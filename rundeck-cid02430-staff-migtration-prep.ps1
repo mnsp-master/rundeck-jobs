@@ -1,4 +1,4 @@
-$mnspver = "0.0.144"
+$mnspver = "0.0.146"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -103,13 +103,14 @@ $GroupexistCheck.email
 
     Write-Host "-----------Creating group: $member ----------"`n
     $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).ToLower()
-    Write-Host "Invoke-expression $GamDir\gam.exe create group $GoogleGroupFQDN"
-    Write-Host "Invoke-Expression $GamDir\gam.exe update cigroup $GoogleGroupFQDN makesecuritygroup"
+    Invoke-expression "$GamDir\gam.exe create group $GoogleGroupFQDN"
+    Start-Sleep 2
+    Invoke-Expression "$GamDir\gam.exe update cigroup $GoogleGroupFQDN makesecuritygroup"
 
     Start-sleep 2
 
         foreach ($action in $GoogleWorkspaceSecGroupSettings) { 
-        Write-Host "Invoke-expression $GamDir\gam.exe update group $GoogleGroupFQDN $action"
+        Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN $action"
         
         }
 
@@ -218,8 +219,6 @@ foreach ($user in $VerifiedUserData) {
 
 Write-Host "replacing content of existing google sheet with upto date data..."
 Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount update drivefile id $UserInfoGsheetID localfile $tempcsv2 newfilename '$GoogleWorkspaceDestinationMailDomain User Information' "
-newfilename 'Supply Staff passwords as of: $(Get-Date -Format "dd MMMM yyyy HHHH:mm:s")'
-
 
 #Set Google instance: legacy...
 Write-Host "###### set google instance: legacy... ######"
