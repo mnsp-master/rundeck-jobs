@@ -1,4 +1,4 @@
-$mnspver = "0.0.155"
+$mnspver = "0.0.156"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -203,7 +203,9 @@ foreach ($user in $VerifiedUserData) {
 
     Write-Host "update Replacement account..."
     Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $HRid" #set HR ID 
-
+    
+    #TODO - update Job Title and Department from exported peopleXD data (Job Title Description and Division Description fields)
+    
     DashedLine
 }
 
