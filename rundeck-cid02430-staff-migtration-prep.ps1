@@ -1,4 +1,4 @@
-$mnspver = "0.0.157"
+$mnspver = "0.0.158"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -201,7 +201,7 @@ foreach ($user in $VerifiedUserData) {
     #Write-Host "generate MFA backup codes..." # Agreed  not to enforce imediate MFA - grace period of 2 days instead
     #Invoke-Expression "$GamDir\gam.exe user $ReplacementUserMail update backupcodes"
 
-    start-sleep 3 # - TODO updating of attribute is NOT consistent, may need a few seconds delay after account is created beforeready to accept custom attribute setting
+    start-sleep 3 # - TODO updating of attribute is NOT consistent, may need a few seconds delay after account is created beforeready to accept custom attribute setting: Update Failed: Invalid Schema Value 
     Write-Host "update Replacement account..."
     Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $HRid" #set HR ID - 
     
