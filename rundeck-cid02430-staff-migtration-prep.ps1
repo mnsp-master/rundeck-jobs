@@ -1,4 +1,4 @@
-$mnspver = "0.0.156"
+$mnspver = "0.0.157"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -201,8 +201,9 @@ foreach ($user in $VerifiedUserData) {
     #Write-Host "generate MFA backup codes..." # Agreed  not to enforce imediate MFA - grace period of 2 days instead
     #Invoke-Expression "$GamDir\gam.exe user $ReplacementUserMail update backupcodes"
 
+    start-sleep 3 # - TODO updating of attribute is NOT consistent, may need a few seconds delay after account is created beforeready to accept custom attribute setting
     Write-Host "update Replacement account..."
-    Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $HRid" #set HR ID 
+    Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $HRid" #set HR ID - 
     
     #TODO - update Job Title and Department from exported peopleXD data (Job Title Description and Division Description fields)
     
