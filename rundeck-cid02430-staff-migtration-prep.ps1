@@ -1,4 +1,4 @@
-$mnspver = "0.0.158"
+$mnspver = "0.0.159"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -76,7 +76,7 @@ $GroupexistCheck =@()
 $GoogleGroups = Import-csv -path $tempcsv6
 $GoogleGroupsHeader = $($GoogleGroups | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name)
 Write-Host "CSV header: $GoogleGroupsHeader"
-$GroupNameSearchString = $($GoogleGroupsHeader[0].substring(0,12)) #first element of array, first 12 chars
+$GroupNameSearchString = $($GoogleGroupsHeader[0].substring(0,11)) #first element of array, first 12 chars
 Write-Host "Group Search String: $GroupNameSearchString"
 
 #
@@ -201,7 +201,7 @@ foreach ($user in $VerifiedUserData) {
     #Write-Host "generate MFA backup codes..." # Agreed  not to enforce imediate MFA - grace period of 2 days instead
     #Invoke-Expression "$GamDir\gam.exe user $ReplacementUserMail update backupcodes"
 
-    start-sleep 3 # - TODO updating of attribute is NOT consistent, may need a few seconds delay after account is created beforeready to accept custom attribute setting: Update Failed: Invalid Schema Value 
+    start-sleep 3 # - TODO (confirm) updating of attribute is NOT consistent, may need a few seconds delay after account is created beforeready to accept custom attribute setting: Update Failed: Invalid Schema Value 
     Write-Host "update Replacement account..."
     Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $HRid" #set HR ID - 
     
