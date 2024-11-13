@@ -1,4 +1,4 @@
-$mnspver = "0.0.162"
+$mnspver = "0.0.163"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -10,22 +10,22 @@ function DashedLine {
 Write-host "-----------------------------------------------------------`n"
 }
 
-#prepare user details csv
+#prepare user details csv # will conatin all users initial credentials
 Write-Host "emptying $tempcsv2 of any existing data..."
 Clear-Content $tempcsv2
 sleep 1
 $UserInfoCSVheader | out-file -filepath $tempcsv2 -Append #create blank csv with simple header
 
-#Set local sysadmins group mail address...
+#Set local sysadmins group mail address... # any members of this group can see content of all local shared drives
 $GoogleWorkspaceSourceSysadminGroupFQDN = ("$GoogleWorkspaceSourceSysadminGroup" + "@" + "$GoogleWorkspaceSourceMailDomain")
 
 #set google instance: legacy
 Write-Host "###### set google instance: legacy... ######"
-$GoogleSourceSvcAccount = ("$GoogleServiceAccountPrefix" + "$GoogleWorkSpaceSource" + "@" + "$GGoogleWorkspaceSourceMailDomain")
+$GoogleSourceSvcAccount = ("$GoogleServiceAccountPrefix" + "$GoogleWorkSpaceSource" + "@" + "$GGoogleWorkspaceSourceMailDomain") # set service account to use to download gsheets
 Write-Host "Google Source Service Account: $GoogleSourceSvcAccount"
 Write-Host "Setting workspace source: $GoogleWorkSpaceSource"
 Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceSource save" # swap/set google workspace
-Invoke-Expression "$GamDir\gam.exe"
+Invoke-Expression "$GamDir\gam.exe" #get current google workspace
 
 DashedLine
 
@@ -74,9 +74,9 @@ $member = @()
 $GroupexistCheck =@()
 
 $GoogleGroups = Import-csv -path $tempcsv6
-$GoogleGroupsHeader = $($GoogleGroups | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name)
+$GoogleGroupsHeader = $($GoogleGroups | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name) # get all column headings
 Write-Host "CSV header: $GoogleGroupsHeader"
-$GroupNameSearchString = $($GoogleGroupsHeader[0].substring(0,11)) #first element of array, first 12 chars - TODO - better logic - also do not include names containing "security Group #"
+$GroupNameSearchString = $($GoogleGroupsHeader[0].substring(0,11)) #first element of array, first 11 chars - TODO - better logic - also do not include names containing "security Group #"
 Write-Host "Group Search String: $GroupNameSearchString"
 
 #
@@ -94,14 +94,14 @@ $GroupexistCheck.email
 
     Write-Host "-----------Creating Security group: $member ----------"`n
     $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).ToLower()
-    Invoke-expression "$GamDir\gam.exe create group $GoogleGroupFQDN"
+    Invoke-expression "$GamDir\gam.exe create group $GoogleGroupFQDN" # create group
     Start-Sleep 2
-    Invoke-Expression "$GamDir\gam.exe update cigroup $GoogleGroupFQDN makesecuritygroup"
+    Invoke-Expression "$GamDir\gam.exe update cigroup $GoogleGroupFQDN makesecuritygroup" # set group label/type to security
 
     Start-sleep 2
-
+        #set access controls for group from action array...
         foreach ($action in $GoogleWorkspaceSecGroupSettings) { 
-        Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN $action"
+        Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN $action" #set access controls for group from action array
         
         }
 
