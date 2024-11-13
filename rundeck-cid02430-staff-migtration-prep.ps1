@@ -1,4 +1,4 @@
-$mnspver = "0.0.159"
+$mnspver = "0.0.160"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -87,6 +87,7 @@ $GroupexistCheck.email
 
     foreach ($member in $GoogleGroupsHeader) {
     
+    ##### TODO - ########### at least one group matching criteria MUST exist ###### or ELSE loop fails - rewite required #######
      if ($GroupexistCheck.email.Contains($member)) { #TODO logic not working group creation still being started, although GAM process does spot duplicate and skips actual creation...
         Write-Warning "Group: $member already exists skiping creation ..."
         } else { 
