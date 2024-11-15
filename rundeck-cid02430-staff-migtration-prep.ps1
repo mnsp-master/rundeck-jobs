@@ -1,4 +1,4 @@
-$mnspver = "0.0.163"
+$mnspver = "0.0.164"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -26,6 +26,10 @@ Write-Host "Google Source Service Account: $GoogleSourceSvcAccount"
 Write-Host "Setting workspace source: $GoogleWorkSpaceSource"
 Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceSource save" # swap/set google workspace
 Invoke-Expression "$GamDir\gam.exe" #get current google workspace
+
+#create source user calendar info gsheet - TODO
+#$UserInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
+#gam ou_and_children_ns /Staff print calendars showhidden todrive
 
 DashedLine
 
@@ -99,7 +103,7 @@ $GroupexistCheck.email
     Invoke-Expression "$GamDir\gam.exe update cigroup $GoogleGroupFQDN makesecuritygroup" # set group label/type to security
 
     Start-sleep 2
-        #set access controls for group from action array...
+        #set access controls for group from action array... ENHANCEMENT - migrate this to a single JSON control file route
         foreach ($action in $GoogleWorkspaceSecGroupSettings) { 
         Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN $action" #set access controls for group from action array
         
