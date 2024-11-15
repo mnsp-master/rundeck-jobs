@@ -1,4 +1,4 @@
-$mnspver = "0.0.164"
+$mnspver = "0.0.165"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -206,9 +206,9 @@ foreach ($user in $VerifiedUserData) {
     #Write-Host "generate MFA backup codes..." # Agreed  not to enforce imediate MFA - grace period of 2 days instead
     #Invoke-Expression "$GamDir\gam.exe user $ReplacementUserMail update backupcodes"
 
-    start-sleep 3 # - ENHANCEMENT (confirm) updating of attribute is NOT consistent, may need a few seconds delay after account is created beforeready to accept custom attribute setting: Update Failed: Invalid Schema Value 
-    Write-Host "update Replacement account..."
-    Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $HRid" #set HR ID - 
+    #start-sleep 3 # - ENHANCEMENT (confirm) updating of attribute is NOT consistent, may need a few seconds delay after account is created beforeready to accept custom attribute setting: Update Failed: Invalid Schema Value 
+    #Write-Host "update Replacement account..."
+    #Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $HRid" #set HR ID - 
     
     #ENHANCEMENT - update Job Title and Department from exported peopleXD data (Job Title Description and Division Description fields)
     
@@ -305,6 +305,11 @@ foreach ($user in $VerifiedUserData) {
 
     Write-Host "Accept calendar invite: user $LegacyUserMail add calendar $ReplacementUserMail selected true ..."
     Invoke-Expression "$GamDir\gam.exe user $ReplacementUserMail add calendar $LegacyUserMail selected true"
+
+    
+    start-sleep 3 # #TODO - update HRID
+    Write-Host "update Replacement account..."
+    Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $HRid" #set HR ID - 
 }
     Write-Host "Add members to security groups ..."
         if (test-path $DataDir\*.lst) { remove-item $DataDir\*.lst -force -verbose } #force delete any .lst files if exist...
