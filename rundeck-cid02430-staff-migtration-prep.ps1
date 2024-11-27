@@ -1,4 +1,4 @@
-$mnspver = "0.0.167"
+$mnspver = "0.0.168"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -36,7 +36,7 @@ Invoke-Expression "$GamDir\gam.exe update cigroup $GoogleWorkspaceSourceSysadmin
 #create source user calendar info gsheet - TODO
 #$UserInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
 #$SourceUserCalendarsGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
-#gam ou_and_children_ns /Staff print calendars showhidden todrive
+#gam ou_and_children_ns $GoogleWorkspaceSourceUserOU print calendars showhidden todrive tdparent id:$GfolderReportsID
 
 DashedLine
 
