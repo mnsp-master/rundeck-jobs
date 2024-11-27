@@ -1,4 +1,4 @@
-$mnspver = "0.0.166"
+$mnspver = "0.0.167"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -10,7 +10,7 @@ function DashedLine {
 Write-host "-----------------------------------------------------------`n"
 }
 
-#prepare user details csv # will conatin all users initial credentials
+#prepare user details csv
 Write-Host "emptying $tempcsv2 of any existing data..."
 Clear-Content $tempcsv2
 sleep 1
@@ -27,8 +27,15 @@ Write-Host "Setting workspace source: $GoogleWorkSpaceSource"
 Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceSource save" # swap/set google workspace
 Invoke-Expression "$GamDir\gam.exe" #get current google workspace
 
+#create $GoogleWorkspaceSourceSysadminGroupFQDN security group...
+Write-Host "Creating local sysadmins security group: $GoogleWorkspaceSourceSysadminGroupFQDN"
+Invoke-expression "$GamDir\gam.exe create group $GoogleWorkspaceSourceSysadminGroupFQDN" # create group
+Start-Sleep 2
+Invoke-Expression "$GamDir\gam.exe update cigroup $GoogleWorkspaceSourceSysadminGroupFQDN makesecuritygroup" # set group label/type to security
+
 #create source user calendar info gsheet - TODO
 #$UserInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
+#$SourceUserCalendarsGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
 #gam ou_and_children_ns /Staff print calendars showhidden todrive
 
 DashedLine
@@ -45,6 +52,7 @@ Start-sleep 2
 
 $VerifiedUserData = Get-Content -path $tempcsv4 | select-object -skip 1 | convertFrom-csv | where { $_.$FieldMatch01 -like $FieldString } #import where field like $FieldMatch01, and skip 1st line
 Write Host "Number of records matching selection criteria:" $VerifiedUserData.count
+#TODO - if count 0 break out of script...
 
 #Set Google Instance: Destination...
 Write-Host "###### Set Google instance: Destination... ######"
