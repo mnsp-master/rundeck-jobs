@@ -1,4 +1,4 @@
-$mnspver = "0.0.168"
+$mnspver = "0.0.169"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -33,10 +33,9 @@ Invoke-expression "$GamDir\gam.exe create group $GoogleWorkspaceSourceSysadminGr
 Start-Sleep 2
 Invoke-Expression "$GamDir\gam.exe update cigroup $GoogleWorkspaceSourceSysadminGroupFQDN makesecuritygroup" # set group label/type to security
 
-#create source user calendar info gsheet - TODO
-#$UserInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
-#$SourceUserCalendarsGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
-#gam ou_and_children_ns $GoogleWorkspaceSourceUserOU print calendars showhidden todrive tdparent id:$GfolderReportsID
+#create source users calendar info gsheet
+Write-Host "Source users current calendar info..."
+Invoke-Expression "$GamDir\gam.exe ou_and_children_ns ""$GoogleWorkspaceSourceUserOU"" print calendars showhidden todrive tdparent id:$GfolderReportsID tdnobrowser"
 
 DashedLine
 
@@ -67,7 +66,7 @@ start-sleep 3
 DashedLine
 
 #create user info destination gsheet
-$UserInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
+#$UserInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
 
 Write-Host "Create common shared drives security groups (Destination instance)..."
 $GoogleWorkspaceSecGroupSettings = ("whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","isArchived true","whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","whoCanMarkFavoriteReplyOnOwnTopic OWNERS_AND_MANAGERS","whoCanPostMessage ALL_MANAGERS_CAN_POST","whoCanTakeTopics OWNERS_AND_MANAGERS","whoCanViewGroup ALL_MANAGERS_CAN_VIEW","whoCanViewMembership ALL_MANAGERS_CAN_VIEW","whoCanJoin INVITED_CAN_JOIN") #ENHANCEMENT - convert to json updating 
