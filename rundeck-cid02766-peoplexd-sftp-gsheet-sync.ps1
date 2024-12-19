@@ -1,4 +1,4 @@
-$mnspver = "0.0.14"
+$mnspver = "0.0.15"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -37,8 +37,6 @@ Start-sleep 2
 $gsheetsData = import-csv $tempcsv1
 Write Host "Number of rows to process:" $gsheetsData.count
 
-$gsheetsData
-
 foreach ( $report in $gsheetsData) {
     $GoogleSheetID = $report."Google sheet ID"
     $SourceSFTPfilename = $report."Source SFTP filename"
@@ -48,6 +46,6 @@ foreach ( $report in $gsheetsData) {
     write-host "Source SFTP filename:" $SourceSFTPfilename
     write-host "Environment:" $Environment
     write-host "Google sheet Report name: "$GoogleSheetReportName
-
+    DashedLine
 }
 
