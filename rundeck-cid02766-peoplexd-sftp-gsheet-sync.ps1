@@ -1,4 +1,4 @@
-$mnspver = "0.0.18"
+$mnspver = "0.0.19"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -36,7 +36,7 @@ Invoke-Expression "$GamDir\gam.exe user $GoogleWorkspaceMNSPsvcAccount get drive
 Start-sleep 1
 
 Write-Host "scp all csv's from SFTP server to local data folder..."
-Invoke-Expression "scp.exe -v $SecureCopyCmd $DataDir"
+Invoke-Expression "scp.exe -s $SecureCopyCmd $DataDir"
 
 $gsheetsData = import-csv $tempcsv1
 Write Host "Number of rows to process:" $gsheetsData.count
