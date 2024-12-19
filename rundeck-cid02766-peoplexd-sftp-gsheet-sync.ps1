@@ -1,4 +1,4 @@
-$mnspver = "0.0.19"
+$mnspver = "0.0.20"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -37,6 +37,8 @@ Start-sleep 1
 
 Write-Host "scp all csv's from SFTP server to local data folder..."
 Invoke-Expression "scp.exe -s $SecureCopyCmd $DataDir"
+start-sleep 1
+Get-ChildItem $DataDir -filter *.csv -recurse
 
 $gsheetsData = import-csv $tempcsv1
 Write Host "Number of rows to process:" $gsheetsData.count
