@@ -1,4 +1,4 @@
-$mnspver = "0.0.21"
+$mnspver = "0.0.22"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -48,12 +48,13 @@ foreach ( $report in $gsheetsData) {
     $SourceSFTPfilename = $report."Source SFTP filename"
     $Environment = $report."Production/UAT"
     $GoogleSheetReportName = $report."Google Sheet Report name"
+    $SourceSFTPFileNameComplete = "$Datadir + "\" + $SourceSFTPfilename"
     Write-Host "Google Sheet ID:" $GoogleSheetID
     write-host "Source SFTP filename:" $SourceSFTPfilename
     write-host "Environment:" $Environment
     write-host "Google sheet Report name:" $GoogleSheetReportName
 
-    Write-Host "Invoke-Expression $GamDir\gam.exe user $GoogleWorkspaceMNSPsvcAccount update drivefile id $GoogleSheetID localfile $SourceSFTPfilename newfilename '$GoogleSheetReportName as of $(get-date)' "
+    Write-Host "Invoke-Expression $GamDir\gam.exe user $GoogleWorkspaceMNSPsvcAccount update drivefile id $GoogleSheetID localfile $SourceSFTPFileNameComplete newfilename '$GoogleSheetReportName as of $(get-date)' "
 
     DashedLine
 }
