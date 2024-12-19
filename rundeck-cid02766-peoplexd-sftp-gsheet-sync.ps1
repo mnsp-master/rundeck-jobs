@@ -1,4 +1,4 @@
-$mnspver = "0.0.30"
+$mnspver = "0.0.32"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -24,13 +24,12 @@ Invoke-Expression "$GamDir\gam.exe"
 start-sleep 3
 DashedLine
 
-#get data
-#if exist check & remove $tempcsv1
-#if (test-path $tempcsv1) { remove-item $tempcsv1 -force -verbose }
+#get source data
+
 remove-item $DataDir\*.csv -force -verbose
 
 Write-Host "downloading gsheet ID: $GoogleSheetID"
-Write-Host "$GamDir\gam.exe user $GoogleWorkspaceMNSPsvcAccount get drivefile $GoogleSheetID format csv targetfolder $DataDir targetname $tempcsv1" 
+#Write-Host "$GamDir\gam.exe user $GoogleWorkspaceMNSPsvcAccount get drivefile $GoogleSheetID format csv targetfolder $DataDir targetname $tempcsv1" 
 Invoke-Expression "$GamDir\gam.exe user $GoogleWorkspaceMNSPsvcAccount get drivefile $GoogleSheetID format csv targetfolder $DataDir targetname $tempcsv1"
 
 Start-sleep 1
@@ -38,9 +37,9 @@ Start-sleep 1
 Write-Host "scp all csv's from SFTP server to local data folder..."
 Invoke-Expression "scp.exe -s $SecureCopyCmd $DataDir"
 start-sleep 1
-Get-ChildItem $DataDir -filter *.csv -recurse
+Get-ChildItem $DataDir -filter *.csv -recurse #list all csv's in $DataDir...
 
-$gsheetsData = import-csv $tempcsv1
+$gsheetsData = import-csv $tempcsv1 #create array of csv's/gsheets to process...
 Write Host "Number of rows to process:" $gsheetsData.count
 
 foreach ( $report in $gsheetsData) {
@@ -54,13 +53,11 @@ foreach ( $report in $gsheetsData) {
     write-host "Environment:" $Environment
     write-host "Google sheet Report name:" $GoogleSheetReportName
 
-    start-sleep 20
-
-        #confirm file exists and is > 0 bytes        
+        #confirm desired downloaded csv exists and is > 0 bytes        
 
         if ((Get-Item $SourceSFTPFileNameComplete).length -gt 0){
             Write-Host "File: $SourceSFTPFileNameComplete size: $((Get-Item $SourceSFTPFileNameComplete).length) bytes - proceeding with gsheet replacement"
-            Write-Host "Invoke-Expression $GamDir\gam.exe user $GoogleWorkspaceMNSPsvcAccount update drivefile id $GoogleSheetID localfile $SourceSFTPFileNameComplete newfilename '$GoogleSheetReportName as of $(get-date)' "
+            Invoke-Expression "$GamDir\gam.exe user $GoogleWorkspaceMNSPsvcAccount update drivefile id $GoogleSheetID localfile $SourceSFTPFileNameComplete newfilename '$GoogleSheetReportName as of $(get-date)' "
         } else {
             Write-Warning "File: $SourceSFTPFileNameComplete size 0 Bytes not proceeding with replacement of gsheet: $GoogleSheetID"
         } 
