@@ -1,4 +1,4 @@
-$mnspver = "0.0.3"
+$mnspver = "0.0.4"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -25,15 +25,15 @@ start-sleep 3
 DashedLine
 
 #get data
-#if exist check & remove $tempcsv4
-if (test-path $tempcsv4) { remove-item $tempcsv4 -force -verbose }
+#if exist check & remove $tempcsv1
+#if (test-path $tempcsv1) { remove-item $tempcsv1 -force -verbose }
 
 Write-Host "downloading gsheet ID: $GoogleSheetID"
-Invoke-Expression "$GamDir\gam.exe user $GoogleWorkspaceMNSPsvcAccount get drivefile $GoogleSheetID format csv gsheet targetfolder $DataDir targetname $tempcsv4"
+Invoke-Expression "$GamDir\gam.exe user $GoogleWorkspaceMNSPsvcAccount get drivefile $GoogleSheetID format csv gsheet targetfolder $DataDir targetname $tempcsv1"
 
 Start-sleep 2
 
-$gsheetsData = import-csv -path $tempcsv4
+$gsheetsData = import-csv -path $tempcsv1
 Write Host "Number of records matching selection criteria:" $gsheetsData.count
 
 
