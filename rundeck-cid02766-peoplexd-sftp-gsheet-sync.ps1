@@ -1,4 +1,4 @@
-$mnspver = "0.0.12"
+$mnspver = "0.0.13"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -40,7 +40,7 @@ Write Host "Number of rows to process:" $gsheetsData.count
 $gsheetsData
 
 foreach ( $report in $gsheetsData) {
-    Write-Host "$report."Google sheet ID"
+    Write-Host "$report."Google sheet ID""
 
 }
 
