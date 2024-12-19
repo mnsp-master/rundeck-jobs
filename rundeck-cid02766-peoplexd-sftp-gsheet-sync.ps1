@@ -1,4 +1,4 @@
-$mnspver = "0.0.4"
+$mnspver = "0.0.5"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -33,7 +33,7 @@ Invoke-Expression "$GamDir\gam.exe user $GoogleWorkspaceMNSPsvcAccount get drive
 
 Start-sleep 2
 
-$gsheetsData = import-csv -path $tempcsv1
+$gsheetsData = import-csv $tempcsv1
 Write Host "Number of records matching selection criteria:" $gsheetsData.count
 
 
