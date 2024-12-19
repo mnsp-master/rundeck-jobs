@@ -1,4 +1,4 @@
-$mnspver = "0.0.8"
+$mnspver = "0.0.9"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -25,8 +25,8 @@ start-sleep 3
 DashedLine
 
 #get data
-#if exist check & remove $tempcsv1
-#if (test-path $tempcsv1) { remove-item $tempcsv1 -force -verbose }
+if exist check & remove $tempcsv1
+if (test-path $tempcsv1) { remove-item $tempcsv1 -force -verbose }
 
 Write-Host "downloading gsheet ID: $GoogleSheetID"
 #Write-Host "$GamDir\gam.exe user $GoogleWorkspaceMNSPsvcAccount get drivefile $GoogleSheetID format csv targetfolder $DataDir targetname $tempcsv1" 
