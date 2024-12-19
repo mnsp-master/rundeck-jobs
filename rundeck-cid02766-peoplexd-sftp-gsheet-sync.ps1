@@ -1,4 +1,4 @@
-$mnspver = "0.0.15"
+$mnspver = "0.0.16"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -32,7 +32,10 @@ Write-Host "downloading gsheet ID: $GoogleSheetID"
 Write-Host "$GamDir\gam.exe user $GoogleWorkspaceMNSPsvcAccount get drivefile $GoogleSheetID format csv targetfolder $DataDir targetname $tempcsv1" 
 Invoke-Expression "$GamDir\gam.exe user $GoogleWorkspaceMNSPsvcAccount get drivefile $GoogleSheetID format csv targetfolder $DataDir targetname $tempcsv1"
 
-Start-sleep 2
+Start-sleep 1
+
+#scp all csv's from SFTP server to local data folder...
+Invoke-Expression "scp.exe $SecureCopyCmd $DataDir"
 
 $gsheetsData = import-csv $tempcsv1
 Write Host "Number of rows to process:" $gsheetsData.count
