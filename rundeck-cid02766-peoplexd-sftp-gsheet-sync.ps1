@@ -1,4 +1,4 @@
-$mnspver = "0.0.23"
+$mnspver = "0.0.24"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -54,7 +54,7 @@ foreach ( $report in $gsheetsData) {
     write-host "Environment:" $Environment
     write-host "Google sheet Report name:" $GoogleSheetReportName
 
-    Write-Host "Invoke-Expression $GamDir\gam.exe user $GoogleWorkspaceMNSPsvcAccount update drivefile id $GoogleSheetID localfile $SourceSFTPFileNameComplete newfilename '$GoogleSheetReportName as of $(get-date)' "
+    Invoke-Expression "$GamDir\gam.exe user $GoogleWorkspaceMNSPsvcAccount update drivefile id $GoogleSheetID localfile $SourceSFTPFileNameComplete newfilename '$GoogleSheetReportName as of $(get-date)' "
 
     DashedLine
 }
