@@ -1,4 +1,4 @@
-$mnspver = "0.0.32"
+$mnspver = "0.0.33"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -57,7 +57,9 @@ foreach ( $report in $gsheetsData) {
 
         if ((Get-Item $SourceSFTPFileNameComplete).length -gt 0){
             Write-Host "File: $SourceSFTPFileNameComplete size: $((Get-Item $SourceSFTPFileNameComplete).length) bytes - proceeding with gsheet replacement"
-            Invoke-Expression "$GamDir\gam.exe user $GoogleWorkspaceMNSPsvcAccount update drivefile id $GoogleSheetID localfile $SourceSFTPFileNameComplete newfilename '$GoogleSheetReportName as of $(get-date)' "
+            #Invoke-Expression "$GamDir\gam.exe user $GoogleWorkspaceMNSPsvcAccount update drivefile id $GoogleSheetID localfile $SourceSFTPFileNameComplete newfilename '$GoogleSheetReportName as of $(get-date)' "
+            #alternate delimeter as souce data has commas within fields...
+            Invoke-Expression "$GamDir\gam.exe user $GoogleWorkspaceMNSPsvcAccount update drivefile id $GoogleSheetID localfile $SourceSFTPFileNameComplete newfilename '$GoogleSheetReportName as of $(get-date)' columndelimiter ÿ"
         } else {
             Write-Warning "File: $SourceSFTPFileNameComplete size 0 Bytes not proceeding with replacement of gsheet: $GoogleSheetID"
         } 
