@@ -1,4 +1,4 @@
-$mnspver = "0.0.1"
+$mnspver = "0.0.3"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -28,12 +28,13 @@ Clear-Content $tempcsv2
 sleep 1
 $UserInfoCSVheader | out-file -filepath $tempcsv2 -Append #create blank csv with simple header
 
-<#
-#excluded as internal migration#
+
+<#excluded as internal migration#
 #Set local sysadmins group mail address... # any members of this group can see content of all local shared drives
 #$GoogleWorkspaceSourceSysadminGroupFQDN = ("$GoogleWorkspaceSourceSysadminGroup" + "@" + "$GoogleWorkspaceSourceMailDomain")
+#>
 
-#excluded as internal migration#
+<#excluded as internal migration#
 #set google instance: legacy
 Write-Host "###### set google instance: legacy... ######"
 $GoogleSourceSvcAccount = ("$GoogleServiceAccountPrefix" + "$GoogleWorkSpaceSource" + "@" + "$GGoogleWorkspaceSourceMailDomain") # set service account to use to download gsheets
@@ -43,8 +44,7 @@ Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceSource save" # swap/se
 Invoke-Expression "$GamDir\gam.exe" #get current google workspace
 #>
 
-<#
-#excluded as internal migration#
+<#excluded as internal migration#
 #create $GoogleWorkspaceSourceSysadminGroupFQDN security group...
 Write-Host "Creating local sysadmins security group: $GoogleWorkspaceSourceSysadminGroupFQDN"
 Invoke-expression "$GamDir\gam.exe create group $GoogleWorkspaceSourceSysadminGroupFQDN" # create group
@@ -187,6 +187,7 @@ $GroupexistCheck.email
     }
     }
 
+### MOD needed - rename/move existing users ###
 Write-Host "Creating users in destination..."
 foreach ($user in $VerifiedUserData) {
     DashedLine
@@ -208,6 +209,7 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Firstname: $FirstName"
     Write-Host "Lastname: $LastName"
 
+### MOD needed - existing users no password generation/updating required ###
     Write-Host "Generating Random Password..." 
         $pwd = $(Invoke-WebRequest -Uri $PwdWebRequestURI -UseBasicParsing)
         #    $pwd.Content
