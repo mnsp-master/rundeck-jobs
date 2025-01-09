@@ -10,15 +10,30 @@ function DashedLine {
 Write-host "-----------------------------------------------------------`n"
 }
 
+#Set Google Instance: Destination...
+Write-Host "###### Set Google instance: Destination... ######"
+
+$GoogleSvcAccount = $GoogleWorkspaceMNSPsvcAccount
+Write-Host "Google Destination Service Account: $GoogleSvcAccount"
+
+Write-Host "Setting workspace Destination: $GoogleWorkSpaceDestination"
+Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceDestination save" # swap/set google workspace
+Invoke-Expression "$GamDir\gam.exe"
+start-sleep 3
+DashedLine
+
 #prepare user details csv
 Write-Host "emptying $tempcsv2 of any existing data..."
 Clear-Content $tempcsv2
 sleep 1
 $UserInfoCSVheader | out-file -filepath $tempcsv2 -Append #create blank csv with simple header
 
+<#
+#excluded as internal migration#
 #Set local sysadmins group mail address... # any members of this group can see content of all local shared drives
-$GoogleWorkspaceSourceSysadminGroupFQDN = ("$GoogleWorkspaceSourceSysadminGroup" + "@" + "$GoogleWorkspaceSourceMailDomain")
+#$GoogleWorkspaceSourceSysadminGroupFQDN = ("$GoogleWorkspaceSourceSysadminGroup" + "@" + "$GoogleWorkspaceSourceMailDomain")
 
+#excluded as internal migration#
 #set google instance: legacy
 Write-Host "###### set google instance: legacy... ######"
 $GoogleSourceSvcAccount = ("$GoogleServiceAccountPrefix" + "$GoogleWorkSpaceSource" + "@" + "$GGoogleWorkspaceSourceMailDomain") # set service account to use to download gsheets
@@ -26,12 +41,17 @@ Write-Host "Google Source Service Account: $GoogleSourceSvcAccount"
 Write-Host "Setting workspace source: $GoogleWorkSpaceSource"
 Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceSource save" # swap/set google workspace
 Invoke-Expression "$GamDir\gam.exe" #get current google workspace
+#>
 
+<#
+#excluded as internal migration#
 #create $GoogleWorkspaceSourceSysadminGroupFQDN security group...
 Write-Host "Creating local sysadmins security group: $GoogleWorkspaceSourceSysadminGroupFQDN"
 Invoke-expression "$GamDir\gam.exe create group $GoogleWorkspaceSourceSysadminGroupFQDN" # create group
 Start-Sleep 2
 Invoke-Expression "$GamDir\gam.exe update cigroup $GoogleWorkspaceSourceSysadminGroupFQDN makesecuritygroup" # set group label/type to security
+#>
+
 
 #create source users calendar info gsheet
 Write-Host "Source users current calendar info..."
@@ -53,6 +73,7 @@ $VerifiedUserData = Get-Content -path $tempcsv4 | select-object -skip 1 | conver
 Write Host "Number of records matching selection criteria:" $VerifiedUserData.count
 #TODO - if count 0 break out of script...
 
+<#
 #Set Google Instance: Destination...
 Write-Host "###### Set Google instance: Destination... ######"
 
@@ -64,6 +85,7 @@ Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceDestination save" # sw
 Invoke-Expression "$GamDir\gam.exe"
 start-sleep 3
 DashedLine
+#>
 
 #create user info destination gsheet
 $UserInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
