@@ -1,4 +1,4 @@
-$mnspver = "0.0.3"
+$mnspver = "0.0.4"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -226,7 +226,9 @@ foreach ($user in $VerifiedUserData) {
         start-sleep 1
 
     Write-Host "create destination account..."
-    Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU' changepassword on" ###
+    #Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU' changepassword on" ###
+    Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU' changepassword off" ###
+    #TODO MOD CLI to rename existing email and move to $GoogleWorkspaceDestinationUserOU changepassword off
     
     #capture initial credentials
     "$firstname,$lastname,$ReplacementUserMail,$password" | out-file -filepath $tempcsv2 -Append 
@@ -359,6 +361,7 @@ foreach ($user in $VerifiedUserData) {
 
         $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).ToLower()
         Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
+        #TODO modify cli to use sync rather than append
 
     }
 
@@ -379,6 +382,7 @@ Write-Host "Add members to mail dist groups ..."
 
         $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).toLower()
         Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
+        #TODO modify cli to use sync rather than append
 
     }
 
