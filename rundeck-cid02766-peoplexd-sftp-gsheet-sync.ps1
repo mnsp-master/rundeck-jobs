@@ -1,4 +1,4 @@
-$mnspver = "0.0.34"
+$mnspver = "0.0.35"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -53,7 +53,11 @@ foreach ( $report in $gsheetsData) {
     write-host "Environment:" $Environment
     write-host "Google sheet Report name:" $GoogleSheetReportName
 
-        #confirm desired downloaded csv exists and is > 0 bytes        
+        #confirm desired downloaded csv exists and is > 0 bytes
+        #ENHANCEMENT
+            ## delimeter from Access Group now extended ascii char 152 ÿ
+            ## search for and delete any ; - send mail alert if any ; found
+            ## seach and replace all ÿ with ; for GAMXTD processing of csv to gsheet           
 
         if ((Get-Item $SourceSFTPFileNameComplete).length -gt 0){
             Write-Host "File: $SourceSFTPFileNameComplete size: $((Get-Item $SourceSFTPFileNameComplete).length) bytes - proceeding with gsheet replacement"
