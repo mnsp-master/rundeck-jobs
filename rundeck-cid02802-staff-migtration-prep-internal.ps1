@@ -1,4 +1,4 @@
-$mnspver = "0.0.7"
+$mnspver = "0.0.12"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -192,7 +192,7 @@ $GroupexistCheck.email
     }
 
 ### MOD needed - rename/move existing users ###
-Write-Host "Creating users in destination..."
+Write-Host "Updating existing users in destination..."
 foreach ($user in $VerifiedUserData) {
     DashedLine
     $LegacyUserMail= $user."Existing Email Address" #current mail address
@@ -237,7 +237,7 @@ foreach ($user in $VerifiedUserData) {
         
     #capture initial credentials
     #"$firstname,$lastname,$ReplacementUserMail,$password" | out-file -filepath $tempcsv2 -Append 
-    "$firstname,$lastname,$ReplacementUserMail" | out-file -filepath $tempcsv2 -Append #passwords not changing hence exclusion
+    #"$firstname,$lastname,$ReplacementUserMail" | out-file -filepath $tempcsv2 -Append #passwords not changing hence exclusion
 
     <# excluded as internal migration#
     Write-Host "hide account from GAL.."
