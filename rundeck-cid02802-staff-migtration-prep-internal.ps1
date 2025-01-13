@@ -1,4 +1,4 @@
-$mnspver = "0.0.14"
+$mnspver = "0.0.15"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -166,7 +166,7 @@ foreach ($user in $VerifiedUserData) {
     DashedLine
 }
 
-    Write-Host "Add members to security groups ..."
+    Write-Host "sync members of security groups ..."
         if (test-path $DataDir\*.lst) { remove-item $DataDir\*.lst -force -verbose } #force delete any .lst files if exist...
 
         $GoogleGroupMembership = @()
@@ -187,7 +187,7 @@ foreach ($user in $VerifiedUserData) {
 
     }
 
-Write-Host "Add members to mail dist groups ..."
+Write-Host "sync members of mail dist groups ..."
         if (test-path $DataDir\*.lst) { remove-item $DataDir\*.lst -force -verbose } #force delete any .lst files if exist...
 
         $GoogleGroupMembership = @()
