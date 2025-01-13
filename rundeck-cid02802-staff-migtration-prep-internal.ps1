@@ -52,12 +52,13 @@ Start-Sleep 2
 Invoke-Expression "$GamDir\gam.exe update cigroup $GoogleWorkspaceSourceSysadminGroupFQDN makesecuritygroup" # set group label/type to security
 #>
 
-
+<#excluded as internal migration#
 #create source users calendar info gsheet
 Write-Host "Source users current calendar info..."
 Invoke-Expression "$GamDir\gam.exe ou_and_children_ns ""$GoogleWorkspaceSourceUserOU"" print calendars showhidden todrive tdparent id:$GfolderReportsID tdnobrowser"
 
 DashedLine
+#>
 
 #get verified user data
 #if exist check & remove $tempcsv4
@@ -72,6 +73,7 @@ Start-sleep 2
 $VerifiedUserData = Get-Content -path $tempcsv4 | select-object -skip 1 | convertFrom-csv | where { $_.$FieldMatch01 -like $FieldString } #import where field like $FieldMatch01, and skip 1st line
 Write Host "Number of records matching selection criteria:" $VerifiedUserData.count
 #TODO - if count 0 break out of script...
+$VerifiedUserData
 
 Start-Sleep 10
 
@@ -92,7 +94,7 @@ DashedLine
 #create user info destination gsheet
 $UserInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
 
-Write-Host "Create common shared drives security groups (Destination instance)..."
+Write-Host "Create/update common shared drives security groups (Destination instance)..."
 $GoogleWorkspaceSecGroupSettings = ("whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","isArchived true","whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","whoCanMarkFavoriteReplyOnOwnTopic OWNERS_AND_MANAGERS","whoCanPostMessage ALL_MANAGERS_CAN_POST","whoCanTakeTopics OWNERS_AND_MANAGERS","whoCanViewGroup ALL_MANAGERS_CAN_VIEW","whoCanViewMembership ALL_MANAGERS_CAN_VIEW","whoCanJoin INVITED_CAN_JOIN") #ENHANCEMENT - convert to json updating 
 
 if (test-path $tempcsv6) { remove-item $tempcsv6 -force -verbose }
@@ -211,6 +213,7 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Firstname: $FirstName"
     Write-Host "Lastname: $LastName"
 
+<#
 ### MOD needed - existing users no password generation/updating required ###
     Write-Host "Generating Random Password..." 
         $pwd = $(Invoke-WebRequest -Uri $PwdWebRequestURI -UseBasicParsing)
@@ -226,13 +229,15 @@ foreach ($user in $VerifiedUserData) {
                 }
 
         start-sleep 1
+#>
 
     Write-Host "update destination (existing) account..."
     #Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU' changepassword on" ###
-    Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname $FirstName lastname $LastName org '$GoogleWorkspaceDestinationUserOU' " ###
+    Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname $FirstName lastname $LastName org '$GoogleWorkspaceDestinationUserOU' " ###move/update existing user
         
     #capture initial credentials
-    "$firstname,$lastname,$ReplacementUserMail,$password" | out-file -filepath $tempcsv2 -Append 
+    #"$firstname,$lastname,$ReplacementUserMail,$password" | out-file -filepath $tempcsv2 -Append 
+    "$firstname,$lastname,$ReplacementUserMail" | out-file -filepath $tempcsv2 -Append #passwords not changing hence exclusion
 
     <# excluded as internal migration#
     Write-Host "hide account from GAL.."
