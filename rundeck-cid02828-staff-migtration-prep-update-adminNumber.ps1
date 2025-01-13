@@ -1,4 +1,4 @@
-$mnspver = "0.0.10"
+$mnspver = "0.0.11"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -48,7 +48,7 @@ foreach ($user in $VerifiedUserData) {
     $LastName = $user."Staff Surname"
     $ReplacementUserMail = $user."new email"
 
-    Write-Host "Processing: $ReplacementUserMail"
+    Write-Host "Processing: $LegacyUserMail"
     Write-Host "HR ID: $HRid"
     Write-Host "Firstname: $FirstName"
     Write-Host "Lastname: $LastName"
