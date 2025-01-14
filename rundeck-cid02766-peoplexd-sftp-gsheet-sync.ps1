@@ -1,4 +1,4 @@
-$mnspver = "0.0.38"
+$mnspver = "0.0.39"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -60,11 +60,12 @@ foreach ( $report in $gsheetsData) {
                 $SEL = get-content $SourceSFTPFileNameComplete
                 if ( $SEL -imatch ";") {
                     Write-Warning "; present"
-                    get-content $SourceSFTPFileNameComplete | % { if($_ -match ";") {write-host $_}}
+                    get-content $SourceSFTPFileNameComplete | % { if($_ -match ";") {write-host $_}} | out-file $GmailAttachment
+                    #Invoke-Expression ".\gam.exe sendemail $GmailRecipient subject '$GmailSubject' attach $GmailAttachment"
 
                     #ENHANCEMENT - send offending line(s) to nominated mail recpient(s)
                 } else {
-                   Write-Host "No ; found in csv, replacing with all ÿ with ;"
+                   Write-Host "No ;'s found in csv, replacing with all ÿ with ; in gsheet: $GoogleSheetID"
                    (get-content $SourceSFTPFileNameComplete) | ForEach-Object {$_ -replace 'ÿ',';'} | Out-File $SourceSFTPFileNameComplete
                    Invoke-Expression ".\gam.exe user $GoogleWorkspaceMNSPsvcAccount update drivefile id $GoogleSheetID localfile $SourceSFTPFileNameComplete newfilename '$GoogleSheetReportName as of $(get-date)' columndelimiter ';'"
 
