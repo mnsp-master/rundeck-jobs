@@ -1,4 +1,4 @@
-$mnspver = "0.0.39"
+$mnspver = "0.0.40"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -60,7 +60,8 @@ foreach ( $report in $gsheetsData) {
                 $SEL = get-content $SourceSFTPFileNameComplete
                 if ( $SEL -imatch ";") {
                     Write-Warning "; present"
-                    get-content $SourceSFTPFileNameComplete | % { if($_ -match ";") {write-host $_}} | out-file $GmailAttachment
+                    #get-content $SourceSFTPFileNameComplete | % { if($_ -match ";") {write-host $_}} | out-file $GmailAttachment
+                    get-content $SourceSFTPFileNameComplete | % { if($_ -match ";") {write-host $_ | out-file $GmailAttachment }}
                     #Invoke-Expression ".\gam.exe sendemail $GmailRecipient subject '$GmailSubject' attach $GmailAttachment"
 
                     #ENHANCEMENT - send offending line(s) to nominated mail recpient(s)
