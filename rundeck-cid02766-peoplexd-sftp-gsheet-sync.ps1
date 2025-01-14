@@ -1,4 +1,4 @@
-$mnspver = "0.0.35"
+$mnspver = "0.0.36"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -54,19 +54,26 @@ foreach ( $report in $gsheetsData) {
     write-host "Google sheet Report name:" $GoogleSheetReportName
 
         #confirm desired downloaded csv exists and is > 0 bytes
-        #ENHANCEMENT
-            ## delimeter from Access Group now extended ascii char 152 ÿ
-            ## search for and delete any ; - send mail alert if any ; found
-            ## seach and replace all ÿ with ; for GAMXTD processing of csv to gsheet           
-
         if ((Get-Item $SourceSFTPFileNameComplete).length -gt 0){
             Write-Host "File: $SourceSFTPFileNameComplete size: $((Get-Item $SourceSFTPFileNameComplete).length) bytes - proceeding with gsheet replacement"
+
+                $SEL = get-content $SourceSFTPFileNameComplete
+                if ( $SEL -imatch ";") {
+                    Write-Warning "; present"
+                    #ENHANCEMENT - send offending line(s) to nominated mail recpient 
+                } else {
+                   Write-Host "No ; found in csv, replacing with all ÿ with ;"
+                   (get-content $SourceSFTPFileNameComplete) | ForEach-Object {$_ -replace 'ÿ',';'} | Out-File $SourceSFTPFileNameComplete
+                   Invoke-Expression ".\gam.exe user $GoogleWorkspaceMNSPsvcAccount update drivefile id $GoogleSheetID localfile $SourceSFTPFileNameComplete newfilename '$GoogleSheetReportName as of $(get-date)' columndelimiter ';'"
+
+                }
+
             #Invoke-Expression "$GamDir\gam.exe user $GoogleWorkspaceMNSPsvcAccount update drivefile id $GoogleSheetID localfile $SourceSFTPFileNameComplete newfilename '$GoogleSheetReportName as of $(get-date)' "
             #alternate delimeter as souce data has commas within fields...
-            Invoke-Expression "$GamDir\gam.exe user $GoogleWorkspaceMNSPsvcAccount update drivefile id $GoogleSheetID localfile $SourceSFTPFileNameComplete newfilename '$GoogleSheetReportName as of $(get-date)' columndelimiter 'ÿ'"
+            #Invoke-Expression "$GamDir\gam.exe user $GoogleWorkspaceMNSPsvcAccount update drivefile id $GoogleSheetID localfile $SourceSFTPFileNameComplete newfilename '$GoogleSheetReportName as of $(get-date)' columndelimiter 'ÿ'"
         } else {
             Write-Warning "File: $SourceSFTPFileNameComplete size 0 Bytes not proceeding with replacement of gsheet: $GoogleSheetID"
-        } 
+        }
 
     DashedLine
 }
