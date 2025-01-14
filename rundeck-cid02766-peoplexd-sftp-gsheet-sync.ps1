@@ -1,4 +1,4 @@
-$mnspver = "0.0.37"
+$mnspver = "0.0.38"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -60,6 +60,8 @@ foreach ( $report in $gsheetsData) {
                 $SEL = get-content $SourceSFTPFileNameComplete
                 if ( $SEL -imatch ";") {
                     Write-Warning "; present"
+                    get-content $SourceSFTPFileNameComplete | % { if($_ -match ";") {write-host $_}}
+
                     #ENHANCEMENT - send offending line(s) to nominated mail recpient(s)
                 } else {
                    Write-Host "No ; found in csv, replacing with all ÿ with ;"
