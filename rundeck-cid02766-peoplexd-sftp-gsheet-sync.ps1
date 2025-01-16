@@ -1,4 +1,4 @@
-$mnspver = "0.0.50"
+$mnspver = "0.0.51"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -74,8 +74,8 @@ foreach ( $report in $gsheetsData) {
                    #clear-content $tempcsv1 -force
                    #(get-content $SourceSFTPFileNameComplete) | ForEach-Object {$_ -replace 'ÿ',';'} | Out-File $SourceSFTPFileNameComplete
                    $tempcsv = $SourceSFTPFileNameComplete
-                   (get-content $SourceSFTPFileNameComplete) | ForEach-Object {$_ -replace 'ÿ',';' } | Out-File $SourceSFTPFileNameCompleteTMP -noclobber -force
-                   start-sleep 5
+                   (get-content $SourceSFTPFileNameComplete) | ForEach-Object {$_ -replace 'ÿ',';' } | Out-File $SourceSFTPFileNameCompleteTMP -noclobber -force -encoding UTF8
+                   start-sleep 2
                    Invoke-Expression ".\gam.exe user $GoogleWorkspaceMNSPsvcAccount update drivefile id $GoogleSheetID localfile $SourceSFTPFileNameCompleteTMP newfilename '$GoogleSheetReportName as of $(get-date)' columndelimiter ';'"
 
                 }
