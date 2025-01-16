@@ -1,4 +1,4 @@
-$mnspver = "0.0.43"
+$mnspver = "0.0.44"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -48,6 +48,7 @@ foreach ( $report in $gsheetsData) {
     $Environment = $report."Production/UAT"
     $GoogleSheetReportName = $report."Google Sheet Report name"
     $SourceSFTPFileNameComplete = "$Datadir\$SourceSFTPfilename"
+    $SourceSFTPFileNameCompleteTMP = "$Datadir\TMP_$SourceSFTPfilename"
     DashedLine
     Write-Host "Google Sheet ID:" $GoogleSheetID
     write-host "Source SFTP filename:" $SourceSFTPfilename
@@ -72,8 +73,9 @@ foreach ( $report in $gsheetsData) {
                    Write-Host "No ;'s found in csv, replacing with all ÿ with ; in gsheet: $GoogleSheetID"
                    clear-content $tempcsv1 -force
                    #(get-content $SourceSFTPFileNameComplete) | ForEach-Object {$_ -replace 'ÿ',';'} | Out-File $SourceSFTPFileNameComplete
-                   (get-content $SourceSFTPFileNameComplete) | ForEach-Object {$_ -replace 'ÿ',';'} | Out-File $tempcsv1
-                   Invoke-Expression ".\gam.exe user $GoogleWorkspaceMNSPsvcAccount update drivefile id $GoogleSheetID localfile $tempcsv1 newfilename '$GoogleSheetReportName as of $(get-date)' columndelimiter ';'"
+                   $tempcsv = $SourceSFTPFileNameComplete
+                   (get-content $SourceSFTPFileNameComplete) | ForEach-Object {$_ -replace 'ÿ',';'} | Out-File $SourceSFTPFileNameCompleteTMP
+                   Invoke-Expression ".\gam.exe user $GoogleWorkspaceMNSPsvcAccount update drivefile id $GoogleSheetID localfile $SourceSFTPFileNameCompleteTMP newfilename '$GoogleSheetReportName as of $(get-date)' columndelimiter ';'"
 
                 }
 
