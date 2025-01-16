@@ -1,4 +1,4 @@
-$mnspver = "0.0.45"
+$mnspver = "0.0.46"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -38,7 +38,7 @@ Write-Host "scp all csv's from SFTP server to local data folder..."
 Invoke-Expression "scp.exe -s $SecureCopyCmd $DataDir"
 start-sleep 1
 Get-ChildItem $DataDir -filter *.csv -recurse #list all csv's in $DataDir...
-
+start-sleep 3
 $gsheetsData = import-csv $tempcsv1 #create array of csv's/gsheets to process...
 #Write Host "Number of rows to process:" $gsheetsData.count
 
@@ -74,7 +74,8 @@ foreach ( $report in $gsheetsData) {
                    #clear-content $tempcsv1 -force
                    #(get-content $SourceSFTPFileNameComplete) | ForEach-Object {$_ -replace 'ÿ',';'} | Out-File $SourceSFTPFileNameComplete
                    $tempcsv = $SourceSFTPFileNameComplete
-                   (get-content $SourceSFTPFileNameComplete) | ForEach-Object {$_ -replace 'ÿ',';'} | Out-File $SourceSFTPFileNameCompleteTMP
+                   (get-content $SourceSFTPFileNameComplete) | ForEach-Object {$_ -replace 'ÿ',';'} | Out-File $SourceSFTPFileNameCompleteTMP -noclobber -force
+                   start-sleep 10
                    Invoke-Expression ".\gam.exe user $GoogleWorkspaceMNSPsvcAccount update drivefile id $GoogleSheetID localfile $SourceSFTPFileNameCompleteTMP newfilename '$GoogleSheetReportName as of $(get-date)' columndelimiter ';'"
 
                 }
