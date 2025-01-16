@@ -1,4 +1,4 @@
-$mnspver = "0.0.44"
+$mnspver = "0.0.45"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -71,7 +71,7 @@ foreach ( $report in $gsheetsData) {
                 } else {
                    DashedLine
                    Write-Host "No ;'s found in csv, replacing with all ÿ with ; in gsheet: $GoogleSheetID"
-                   clear-content $tempcsv1 -force
+                   #clear-content $tempcsv1 -force
                    #(get-content $SourceSFTPFileNameComplete) | ForEach-Object {$_ -replace 'ÿ',';'} | Out-File $SourceSFTPFileNameComplete
                    $tempcsv = $SourceSFTPFileNameComplete
                    (get-content $SourceSFTPFileNameComplete) | ForEach-Object {$_ -replace 'ÿ',';'} | Out-File $SourceSFTPFileNameCompleteTMP
