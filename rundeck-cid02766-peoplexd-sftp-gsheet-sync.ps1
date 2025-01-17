@@ -1,4 +1,4 @@
-$mnspver = "0.0.55"
+$mnspver = "0.0.56"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -63,8 +63,8 @@ foreach ( $report in $gsheetsData) {
                 if ( $SEL -imatch ";") {
                     DashedLine
                     Write-Warning "; or ""'s present"
-                    get-content $SourceSFTPFileNameComplete | % { if($_ -match ";") {write-host $_}}
-                    #get-content $SourceSFTPFileNameComplete | % { if($_ -match ";") {write-host $_ | out-file $GmailAttachment }}
+                    #get-content $SourceSFTPFileNameComplete | % { if($_ -match ";") {write-host $_}}
+                    get-content $SourceSFTPFileNameComplete | % { if($_ -match '"' -or $_ -match ";" ) {write-host $_}} # match semicolons or quotes
                     Invoke-Expression ".\gam.exe sendemail $GmailRecipient subject '$GmailSubject as of $(get-date)' attach $transcriptlog"
 
                     #ENHANCEMENT - send offending line(s) to nominated mail recpient(s)
