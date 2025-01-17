@@ -1,4 +1,4 @@
-$mnspver = "0.0.57"
+$mnspver = "0.0.58"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -60,7 +60,7 @@ foreach ( $report in $gsheetsData) {
             Write-Host "File: $SourceSFTPFileNameComplete size: $((Get-Item $SourceSFTPFileNameComplete).length) bytes - proceeding with gsheet replacement"
 
                 $SEL = get-content $SourceSFTPFileNameComplete
-                if ( $SEL -imatch ";") {
+                if ( $SEL -imatch ";" -or $SEL -imatch '"' ) {
                     DashedLine
                     Write-Warning "; or ""'s present"
                     #get-content $SourceSFTPFileNameComplete | % { if($_ -match ";") {write-host $_}}
