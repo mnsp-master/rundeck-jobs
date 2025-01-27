@@ -1,4 +1,4 @@
-$mnspver = "0.0.17"
+$mnspver = "0.0.18"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -48,8 +48,7 @@ Start-Sleep 10
 #create user info destination gsheet
 $UserInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
 
-<#
-## HR ID user TEMP data fix ##
+
 Write-Host "Create/update common shared drives security groups (Destination instance)..."
 $GoogleWorkspaceSecGroupSettings = ("whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","isArchived true","whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","whoCanMarkFavoriteReplyOnOwnTopic OWNERS_AND_MANAGERS","whoCanPostMessage ALL_MANAGERS_CAN_POST","whoCanTakeTopics OWNERS_AND_MANAGERS","whoCanViewGroup ALL_MANAGERS_CAN_VIEW","whoCanViewMembership ALL_MANAGERS_CAN_VIEW","whoCanJoin INVITED_CAN_JOIN") #ENHANCEMENT - convert to json updating 
 
@@ -147,8 +146,6 @@ $GroupexistCheck.email
     }
     }
 
-## HR ID user TEMP data fix ##
-#>
 
 Write-Host "Updating existing users in destination..."
 foreach ($user in $VerifiedUserData) {
@@ -171,8 +168,6 @@ foreach ($user in $VerifiedUserData) {
     DashedLine
 }
 
-<#
-## HR ID user TEMP data fix ##
     Write-Host "sync members of security groups ..."
         if (test-path $DataDir\*.lst) { remove-item $DataDir\*.lst -force -verbose } #force delete any .lst files if exist...
 
@@ -214,8 +209,7 @@ Write-Host "sync members of mail dist groups ..."
         Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN sync members file $DataDir\$member.lst"
 
     }
-## HR ID user TEMP data fix ##
-#>
+
 
 
 <#
