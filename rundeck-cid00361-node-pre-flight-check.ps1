@@ -1,7 +1,7 @@
 #create common file/folder structure that may/will be required for all jobs in rundeck library
 
 Clear-Host
-$mnspver = "0.0.0.0.0.1"
+$mnspver = "1.0.1"
 
 #$Root = "D:"
 $Root = "@option.root@"
@@ -53,7 +53,7 @@ Write-Host "Looking for file: " $DataDir\$file
         else
             {
   
-            #PowerShell Create file(s) if not exists
+            #Create file(s) if not exists
             Write-Host "creating file:" $DataDir\$file
             New-Item $DataDir\$file -ItemType file -Verbose
 
