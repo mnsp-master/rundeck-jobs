@@ -1,4 +1,4 @@
-$mnspver = "0.0.173"
+$mnspver = "0.0.174"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -9,6 +9,9 @@ Set-Location $GamDir
 function DashedLine {
 Write-host "-----------------------------------------------------------`n"
 }
+
+Write-Host "gsheet Personel number column heading:" $FieldMatch01
+Start-sleep 10
 
 #prepare user details csv
 Write-Host "emptying $tempcsv2 of any existing data..."
