@@ -1,4 +1,4 @@
-$mnspver = "0.0.1"
+$mnspver = "0.0.2"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -68,15 +68,3 @@ Write-Host "Thanks..."
 
 
 
-=VLOOKUP(C3,'7. MIS Import'!A1:C24,3)
-
-=IF(AND(C3='7. MIS Import'!A2,D3='7. MIS Import'!B2,"Match"))
-=IF(AND(C3='7. MIS Import'!A2,D3='7. MIS Import'!B2),"Match","no match")
-
-=IF(AND(K3=I3,J3=L3),"Match","no match")
-
-=QUERY({IMPORTRANGE("https://docs.google.com/spreadsheets/d/1pzJclT8TWNvek-SFQzlb8MdQIXN7BmIMOaW7y9hCVCU","'7. MIS Import'!B1:B") ; IMPORTRANGE("https://docs.google.com/spreadsheets/d/1pzJclT8TWNvek-SFQzlb8MdQIXN7BmIMOaW7y9hCVCU","'7. MIS Import'!C2:C")}, "select Col1 where not(Col1=")")"
-
-={FILTER (IMPORTRANGE("https://docs.google.com/spreadsheets/d/1pzJclT8TWNvek-SFQzlb8MdQIXN7BmIMOaW7y9hCVCU","'7. MIS Import'!A2:A"),IMPORTRANGE("https://docs.google.com/spreadsheets/d/1pzJclT8TWNvek-SFQzlb8MdQIXN7BmIMOaW7y9hCVCU","'7. MIS Import'!A2:A") <> "") ; IMPORTRANGE("https://docs.google.com/spreadsheets/d/1pzJclT8TWNvek-SFQzlb8MdQIXN7BmIMOaW7y9hCVCU","'7. MIS Import'!B2:B"),IMPORTRANGE("https://docs.google.com/spreadsheets/d/1pzJclT8TWNvek-SFQzlb8MdQIXN7BmIMOaW7y9hCVCU","'7. MIS Import'!B2:B") <> ""}
-
-=CONCATENATE(ARRAYFORMULA('7. MIS Import'!A2:A)," ",ARRAYFORMULA ('7. MIS Import'!B2:B))
