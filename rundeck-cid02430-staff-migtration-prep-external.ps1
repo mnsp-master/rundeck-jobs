@@ -1,4 +1,4 @@
-$mnspver = "0.0.175"
+$mnspver = "0.0.176"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -259,6 +259,7 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "send current calendar invite: $LegacyUserMail add acls reader $ReplacementUserMail ..."
     Invoke-Expression "$GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail sendnotifications false"
 
+    <# #uncomment to create shared drive(s)
     #create/manage shared drives...
         Write-Host "shared drive creation (Legacy Source to Destination user)..."
         $TeamDriveName = "Migration $LegacyUserMail $(Get-Date)"
@@ -287,6 +288,7 @@ foreach ($user in $VerifiedUserData) {
     Invoke-expression "$GamDir\gam.exe user $legacyUserMail print teamdrives todrive tdparent id:$GfolderReportsID tdnobrowser tdtitle '$LegacyUserMail shared drives summary as of $(get-date)'"
 
     DashedLine
+    #>
 }
 
 #Set Google Instance: Destination...
