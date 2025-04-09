@@ -1,4 +1,4 @@
-$mnspver = "0.0.176"
+$mnspver = "0.0.177"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -284,11 +284,12 @@ foreach ($user in $VerifiedUserData) {
         Write-Host "Add external user as manager: add drivefileacl $LegacyUserTeamDriveID user $ReplacementUserMail role organizer..."
         Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $ReplacementUserMail role organizer"
         
+    #>
     Write-Host "report current shared drive folder associations for: $LegacyUserMail ..."
     Invoke-expression "$GamDir\gam.exe user $legacyUserMail print teamdrives todrive tdparent id:$GfolderReportsID tdnobrowser tdtitle '$LegacyUserMail shared drives summary as of $(get-date)'"
 
     DashedLine
-    #>
+
 }
 
 #Set Google Instance: Destination...
