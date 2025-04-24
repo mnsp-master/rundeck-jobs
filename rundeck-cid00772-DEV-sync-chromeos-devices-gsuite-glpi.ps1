@@ -1,4 +1,4 @@
-$mnspver = "0.1.6"
+$mnspver = "0.1.7"
 $GlobalGamBaseOU = "/ZZ Chrome Devices/" # MNSP root base OU
 
 Write-Host $(Get-Date)
@@ -74,6 +74,13 @@ foreach ( $entity in $entities ) {
    #<#
     # Check if not empty or null
     Write-Host "Checking for Null/Empty Google Workspace OU variable..."
+    Write-host "-------------------------------------`n"
+    Write-Host "Processing entitiyID :" $entityID
+    Write-Host "Entity name          :" $entityName
+    Write-Host "Google workspace OU  :" $entityGoogleBaseOu
+    Write-Host "Complete OU Path var :" $gamOU
+    Write-host "-------------------------------------`n"
+
     if (-not [String]::IsNullOrEmpty($entityGoogleBaseOu)) {
             #    write-host "Striong is Not empty"
             #}
@@ -82,12 +89,7 @@ foreach ( $entity in $entities ) {
             $gamParams = "cros_ou_and_children ""$gamOu"" print cros fields serialNumber,annotatedAssetId,ou,annotatedLocation,ethernetMacAddress,firmwareVersion,lastEnrollmentTime,lastSync,macAddress,model,notes,osVersion,status,meid,autoUpdateExpiration"
 
             #
-            Write-host "-------------------------------------`n"
-            Write-Host "Processing entitiyID :" $entityID
-            Write-Host "Entity name          :" $entityName
-            Write-Host "Google workspace OU  :" $entityGoogleBaseOu
-            Write-Host "Complete OU Path var :" $gamOU
-            Write-host "-------------------------------------`n"
+            
 
             clear-content -Path $tempcsv -Verbose
             start-sleep 10
@@ -227,7 +229,8 @@ foreach ( $entity in $entities ) {
             }
             Write-Host "sleeping before next entity...."
     } else {
-        Write-Warning "Google workspace OU NOT defined - value"
+        Write-Warning "Google workspace OU NOT defined!"
+        Write-Warning "-------------------------------------`n"
     }
 }
 
