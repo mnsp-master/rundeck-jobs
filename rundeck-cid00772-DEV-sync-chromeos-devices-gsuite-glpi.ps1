@@ -1,4 +1,4 @@
-$mnspver = "0.1.5"
+$mnspver = "0.1.6"
 $GlobalGamBaseOU = "/ZZ Chrome Devices/" # MNSP root base OU
 
 Write-Host $(Get-Date)
@@ -73,6 +73,7 @@ foreach ( $entity in $entities ) {
 
    #<#
     # Check if not empty or null
+    Write-Host "Checking for Null/Empty Google Workspace OU variable..."
     if (-not [String]::IsNullOrEmpty($entityGoogleBaseOu)) {
             #    write-host "Striong is Not empty"
             #}
@@ -226,7 +227,7 @@ foreach ( $entity in $entities ) {
             }
             Write-Host "sleeping before next entity...."
     } else {
-        Write-Warning "Google workspace OU NOT defined - value:" $entityGoogleBaseOu 
+        Write-Warning "Google workspace OU NOT defined - value"
     }
 }
 
