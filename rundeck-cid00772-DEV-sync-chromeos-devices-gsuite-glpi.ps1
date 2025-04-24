@@ -1,4 +1,4 @@
-$mnspver = "0.1.7"
+$mnspver = "0.1.8"
 $GlobalGamBaseOU = "/ZZ Chrome Devices/" # MNSP root base OU
 
 Write-Host $(Get-Date)
@@ -230,6 +230,7 @@ foreach ( $entity in $entities ) {
             Write-Host "sleeping before next entity...."
     } else {
         Write-Warning "Google workspace OU NOT defined!"
+        Write-Warning "-------------------------------------`n"
         Write-Warning "-------------------------------------`n"
     }
 }
