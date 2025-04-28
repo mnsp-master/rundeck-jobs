@@ -1,4 +1,4 @@
-$mnspver = "0.1.9"
+$mnspver = "0.1.10"
 $GlobalGamBaseOU = "/ZZ Chrome Devices/" # MNSP root base OU
 
 Write-Host $(Get-Date)
@@ -84,6 +84,7 @@ foreach ( $entity in $entities ) {
 
             if ($Result -eq "56") {
             Write-Warning "OU $gamOU does NOT exist!!!"
+            continue #skip to next fornext loop object 
             } else {
             Write-Host "OU $gamOU exists..."
             }
