@@ -1,4 +1,4 @@
-$mnspver = "0.0.177.1"
+$mnspver = "0.0.177.2"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -18,27 +18,6 @@ Write-Host "emptying $tempcsv2 of any existing data..."
 Clear-Content $tempcsv2
 sleep 1
 $UserInfoCSVheader | out-file -filepath $tempcsv2 -Append #create blank csv with simple header
-
-#Set local sysadmins group mail address... # any members of this group can see content of all local shared drives
-$GoogleWorkspaceSourceSysadminGroupFQDN = ("$GoogleWorkspaceSourceSysadminGroup" + "@" + "$GoogleWorkspaceSourceMailDomain")
-
-#set google instance: legacy
-Write-Host "###### set google instance: legacy... ######"
-$GoogleSourceSvcAccount = ("$GoogleServiceAccountPrefix" + "$GoogleWorkSpaceSource" + "@" + "$GGoogleWorkspaceSourceMailDomain") # set service account to use to download gsheets
-Write-Host "Google Source Service Account: $GoogleSourceSvcAccount"
-Write-Host "Setting workspace source: $GoogleWorkSpaceSource"
-Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceSource save" # swap/set google workspace
-Invoke-Expression "$GamDir\gam.exe" #get current google workspace
-
-#create $GoogleWorkspaceSourceSysadminGroupFQDN security group...
-Write-Host "Creating local sysadmins security group: $GoogleWorkspaceSourceSysadminGroupFQDN"
-Invoke-expression "$GamDir\gam.exe create group $GoogleWorkspaceSourceSysadminGroupFQDN" # create group
-Start-Sleep 2
-Invoke-Expression "$GamDir\gam.exe update cigroup $GoogleWorkspaceSourceSysadminGroupFQDN makesecuritygroup" # set group label/type to security
-
-#create source users calendar info gsheet
-Write-Host "Source users current calendar info..."
-Invoke-Expression "$GamDir\gam.exe ou_and_children_ns ""$GoogleWorkspaceSourceUserOU"" print calendars showhidden todrive tdparent id:$GfolderReportsID tdnobrowser"
 
 DashedLine
 
@@ -68,11 +47,13 @@ Invoke-Expression "$GamDir\gam.exe"
 start-sleep 3
 DashedLine
 
+<#
 #create user info destination gsheet
 $UserInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
 
 Write-Host "Create common shared drives security groups (Destination instance)..."
 $GoogleWorkspaceSecGroupSettings = ("whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","isArchived true","whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","whoCanMarkFavoriteReplyOnOwnTopic OWNERS_AND_MANAGERS","whoCanPostMessage ALL_MANAGERS_CAN_POST","whoCanTakeTopics OWNERS_AND_MANAGERS","whoCanViewGroup ALL_MANAGERS_CAN_VIEW","whoCanViewMembership ALL_MANAGERS_CAN_VIEW","whoCanJoin INVITED_CAN_JOIN") #ENHANCEMENT - convert to json updating 
+#>
 
 if (test-path $tempcsv6) { remove-item $tempcsv6 -force -verbose }
 if (test-path $tempcsv8) { remove-item $tempcsv8 -force -verbose }
@@ -106,6 +87,111 @@ $GroupexistCheck.email
         Write-Warning "Group: $member already exists skiping creation ..."
         } else { 
 
+
+#Set Google Instance: Destination...
+Write-Host "###### Set Google instance: Destination... ######"
+$GoogleSvcAccount = $GoogleWorkspaceMNSPsvcAccount
+Write-Host "Google Destination Service Account: $GoogleSvcAccount"
+Write-Host "Setting workspace Destination: $GoogleWorkSpaceDestination"
+Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceDestination save" # swap/set google workspace
+Invoke-Expression "$GamDir\gam.exe"
+start-sleep 3
+DashedLine
+
+
+#>
+    Write-Host "Add members to security groups ..."
+        if (test-path $DataDir\*.lst) { remove-item $DataDir\*.lst -force -verbose } #force delete any .lst files if exist...
+
+        $GoogleGroupMembership = @()
+        $GroupMembershipHeader = @()
+        $member = @()
+
+        $GoogleGroupMembership = Import-csv -path $tempcsv6
+        $GroupMembershipHeader = $($GoogleGroupMembership | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name)
+
+        foreach ($member in $GroupMembershipHeader) {
+
+        Write-Host "----------- $member ----------"`n
+        $GoogleGroupMembership.$member | where { $_ -notlike "#N/A" } | out-file -Encoding utf8 "$DataDir\$member.lst"
+
+        $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).ToLower()
+        Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
+
+    }
+
+Write-Host "Add members to mail dist groups ..."
+        if (test-path $DataDir\*.lst) { remove-item $DataDir\*.lst -force -verbose } #force delete any .lst files if exist...
+
+        $GoogleGroupMembership = @()
+        $GroupMembershipHeader = @()
+        $member = @()
+
+        $GoogleGroupMembership = Import-csv -path $tempcsv7
+        $GroupMembershipHeader = $($GoogleGroupMembership | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name)
+
+        foreach ($member in $GroupMembershipHeader) {
+
+        Write-Host "----------- $member ----------"`n
+        $GoogleGroupMembership.$member | where { $_ -notlike "#N/A" } | out-file -Encoding utf8 "$DataDir\$member.lst"
+
+        $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).toLower()
+        Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
+
+    }
+
+
+<#
+<#
+foreach ($user in $VerifiedUserData) {
+    DashedLine
+    $LegacyUserMail = $user."Existing Email Address" #current mail address
+    $HRid = $user."Staff full name" # HR id
+    $FirstName = $user."Staff first name" #prefered firstname
+    $LastName = $user."Staff Surname"
+    $ReplacementUserMail = $user."new email"
+
+    #if ( $RunDeckDev -eq "true" ) { $ReplacementUserMail = $RundeckDevMail } #script dev check...
+    
+    Write-Host "Processing: $LegacyUserMail"
+    Write-Host "HR ID: $HRid"
+    Write-Host "Firstname: $FirstName"
+    Write-Host "Lastname: $LastName"
+
+    Write-Host "Accept calendar invite: user $LegacyUserMail add calendar $ReplacementUserMail selected true ..."
+    Invoke-Expression "$GamDir\gam.exe user $ReplacementUserMail add calendar $LegacyUserMail selected true"
+
+    
+    start-sleep 3 # #TODO - update HRID
+    Write-Host "update Replacement account HR ID..."
+    Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $HRid" #set HR ID - 
+    #>
+#}
+
+<#
+#Set local sysadmins group mail address... # any members of this group can see content of all local shared drives
+$GoogleWorkspaceSourceSysadminGroupFQDN = ("$GoogleWorkspaceSourceSysadminGroup" + "@" + "$GoogleWorkspaceSourceMailDomain")
+
+#set google instance: legacy
+Write-Host "###### set google instance: legacy... ######"
+$GoogleSourceSvcAccount = ("$GoogleServiceAccountPrefix" + "$GoogleWorkSpaceSource" + "@" + "$GGoogleWorkspaceSourceMailDomain") # set service account to use to download gsheets
+Write-Host "Google Source Service Account: $GoogleSourceSvcAccount"
+Write-Host "Setting workspace source: $GoogleWorkSpaceSource"
+Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceSource save" # swap/set google workspace
+Invoke-Expression "$GamDir\gam.exe" #get current google workspace
+
+#create $GoogleWorkspaceSourceSysadminGroupFQDN security group...
+Write-Host "Creating local sysadmins security group: $GoogleWorkspaceSourceSysadminGroupFQDN"
+Invoke-expression "$GamDir\gam.exe create group $GoogleWorkspaceSourceSysadminGroupFQDN" # create group
+Start-Sleep 2
+Invoke-Expression "$GamDir\gam.exe update cigroup $GoogleWorkspaceSourceSysadminGroupFQDN makesecuritygroup" # set group label/type to security
+
+#create source users calendar info gsheet
+Write-Host "Source users current calendar info..."
+Invoke-Expression "$GamDir\gam.exe ou_and_children_ns ""$GoogleWorkspaceSourceUserOU"" print calendars showhidden todrive tdparent id:$GfolderReportsID tdnobrowser"
+#>
+
+<#
     Write-Host "-----------Creating Security group:$member----------"`n
     $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).ToLower()
     Invoke-expression "$GamDir\gam.exe create group $GoogleGroupFQDN" # create group
@@ -168,6 +254,9 @@ $GroupexistCheck.email
     }
     }
 
+#>
+
+<#
 Write-Host "Creating users in destination..."
 foreach ($user in $VerifiedUserData) {
     DashedLine
@@ -284,7 +373,7 @@ foreach ($user in $VerifiedUserData) {
         Write-Host "Add external user as manager: add drivefileacl $LegacyUserTeamDriveID user $ReplacementUserMail role organizer..."
         Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $ReplacementUserMail role organizer"
         
-    #>
+    
     Write-Host "report current shared drive folder associations for: $LegacyUserMail ..."
     Invoke-expression "$GamDir\gam.exe user $legacyUserMail print teamdrives todrive tdparent id:$GfolderReportsID tdnobrowser tdtitle '$LegacyUserMail shared drives summary as of $(get-date)'"
 
@@ -292,79 +381,6 @@ foreach ($user in $VerifiedUserData) {
 
 }
 
-#Set Google Instance: Destination...
-Write-Host "###### Set Google instance: Destination... ######"
-$GoogleSvcAccount = $GoogleWorkspaceMNSPsvcAccount
-Write-Host "Google Destination Service Account: $GoogleSvcAccount"
-Write-Host "Setting workspace Destination: $GoogleWorkSpaceDestination"
-Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceDestination save" # swap/set google workspace
-Invoke-Expression "$GamDir\gam.exe"
-start-sleep 3
-DashedLine
+#>
 
-foreach ($user in $VerifiedUserData) {
-    DashedLine
-    $LegacyUserMail = $user."Existing Email Address" #current mail address
-    $HRid = $user."Staff full name" # HR id
-    $FirstName = $user."Staff first name" #prefered firstname
-    $LastName = $user."Staff Surname"
-    $ReplacementUserMail = $user."new email"
-
-    #if ( $RunDeckDev -eq "true" ) { $ReplacementUserMail = $RundeckDevMail } #script dev check...
-    
-    Write-Host "Processing: $LegacyUserMail"
-    Write-Host "HR ID: $HRid"
-    Write-Host "Firstname: $FirstName"
-    Write-Host "Lastname: $LastName"
-
-    Write-Host "Accept calendar invite: user $LegacyUserMail add calendar $ReplacementUserMail selected true ..."
-    Invoke-Expression "$GamDir\gam.exe user $ReplacementUserMail add calendar $LegacyUserMail selected true"
-
-    
-    start-sleep 3 # #TODO - update HRID
-    Write-Host "update Replacement account HR ID..."
-    Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $HRid" #set HR ID - 
-}
-    Write-Host "Add members to security groups ..."
-        if (test-path $DataDir\*.lst) { remove-item $DataDir\*.lst -force -verbose } #force delete any .lst files if exist...
-
-        $GoogleGroupMembership = @()
-        $GroupMembershipHeader = @()
-        $member = @()
-
-        $GoogleGroupMembership = Import-csv -path $tempcsv6
-        $GroupMembershipHeader = $($GoogleGroupMembership | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name)
-
-        foreach ($member in $GroupMembershipHeader) {
-
-        Write-Host "----------- $member ----------"`n
-        $GoogleGroupMembership.$member | where { $_ -notlike "#N/A" } | out-file -Encoding utf8 "$DataDir\$member.lst"
-
-        $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).ToLower()
-        Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
-
-    }
-
-Write-Host "Add members to mail dist groups ..."
-        if (test-path $DataDir\*.lst) { remove-item $DataDir\*.lst -force -verbose } #force delete any .lst files if exist...
-
-        $GoogleGroupMembership = @()
-        $GroupMembershipHeader = @()
-        $member = @()
-
-        $GoogleGroupMembership = Import-csv -path $tempcsv7
-        $GroupMembershipHeader = $($GoogleGroupMembership | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name)
-
-        foreach ($member in $GroupMembershipHeader) {
-
-        Write-Host "----------- $member ----------"`n
-        $GoogleGroupMembership.$member | where { $_ -notlike "#N/A" } | out-file -Encoding utf8 "$DataDir\$member.lst"
-
-        $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).toLower()
-        Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
-
-    }
-
-
-<#
 #>
