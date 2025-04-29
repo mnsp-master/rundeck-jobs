@@ -1,4 +1,4 @@
-$mnspver = "0.0.177.3"
+$mnspver = "0.0.177.4"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -53,8 +53,9 @@ Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleS
         $GoogleGroupMembership.$member | where { $_ -notlike "#N/A" } | out-file -Encoding utf8 "$DataDir\$member.lst"
 
         $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).ToLower()
-        #Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
         Write-host "Invoke-expression $GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
+        Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
+        
 
     }
 
@@ -74,8 +75,9 @@ Write-Host "Add members to mail dist groups ..."
         $GoogleGroupMembership.$member | where { $_ -notlike "#N/A" } | out-file -Encoding utf8 "$DataDir\$member.lst"
 
         $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).toLower()
-        #Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
         Write-Host "Invoke-expression $GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
+        Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
+        
 
     }
 
