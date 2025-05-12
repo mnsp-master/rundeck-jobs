@@ -1,4 +1,4 @@
-$mnspver = "0.0.177"
+$mnspver = "0.0.178"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -259,7 +259,7 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "send current calendar invite: $LegacyUserMail add acls reader $ReplacementUserMail ..."
     Invoke-Expression "$GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail sendnotifications false"
 
-    <# #uncomment to create shared drive(s)
+    #<# #(un)comment to (not)create shared drive(s)
     #create/manage shared drives...
         Write-Host "shared drive creation (Legacy Source to Destination user)..."
         $TeamDriveName = "Migration $LegacyUserMail $(Get-Date)"
