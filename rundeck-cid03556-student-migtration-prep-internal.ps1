@@ -1,4 +1,4 @@
-$mnspver = "0.0.2"
+$mnspver = "0.0.3"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -19,14 +19,16 @@ Clear-Content $tempcsv2
 sleep 1
 $UserInfoCSVheader | out-file -filepath $tempcsv2 -Append #create blank csv with simple header
 
-#set google instance: legacy
-Write-Host "###### set google instance: legacy... ######"
-$GoogleSourceSvcAccount = ("$GoogleServiceAccountPrefix" + "$GoogleWorkSpaceSource" + "@" + "$GGoogleWorkspaceSourceMailDomain") # set service account to use to download gsheets
-Write-Host "Google Source Service Account: $GoogleSourceSvcAccount"
-Write-Host "Setting workspace source: $GoogleWorkSpaceSource"
-Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceSource save" # swap/set google workspace
-Invoke-Expression "$GamDir\gam.exe" #get current google workspace
+#Set Google Instance: Destination...
+Write-Host "###### Set Google instance: Destination... ######"
 
+$GoogleSvcAccount = $GoogleWorkspaceMNSPsvcAccount
+Write-Host "Google Destination Service Account: $GoogleSvcAccount"
+
+Write-Host "Setting workspace Destination: $GoogleWorkSpaceDestination"
+Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceDestination save" # swap/set google workspace
+Invoke-Expression "$GamDir\gam.exe"
+start-sleep 3
 DashedLine
 
 #get verified user data
@@ -43,17 +45,6 @@ $VerifiedUserData = Get-Content -path $tempcsv4 | select-object -skip 1 | conver
 Write Host "Number of records matching selection criteria:" $VerifiedUserData.count
 #TODO - if count 0 break out of script...
 
-#Set Google Instance: Destination...
-Write-Host "###### Set Google instance: Destination... ######"
-
-$GoogleSvcAccount = $GoogleWorkspaceMNSPsvcAccount
-Write-Host "Google Destination Service Account: $GoogleSvcAccount"
-
-Write-Host "Setting workspace Destination: $GoogleWorkSpaceDestination"
-Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceDestination save" # swap/set google workspace
-Invoke-Expression "$GamDir\gam.exe"
-start-sleep 3
-DashedLine
 
 #create user info destination gsheet
 $UserInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
@@ -63,14 +54,18 @@ if (test-path $tempcsv8) { remove-item $tempcsv8 -force -verbose }
 
 start-sleep 2
 
-Write-Host "Creating users in destination..."
+Write-Host "Updating users in destination..."
 foreach ($user in $VerifiedUserData) {
     DashedLine
-    $LegacyUserMail= $user."Existing Email Address" #current mail address
-    $HRid = $user."Staff full name" # student UID (encrypted UPN) ## UPDATE NEEDED ##
-    $FirstName = $user."Staff first name" #prefered firstname ## UPDATE NEEDED ##
-    $LastName = $user."Staff Surname" ## UPDATE NEEDED ##
+    $LegacyUserMail = $user."Email Address (Main)" #current mail address
+    $UPN = $user."UPN" # student UID (encrypted UPN) ## UPDATE NEEDED ##
+    $FirstName = $user."Modified_Preferred_firstname" #prefered firstname ## UPDATE NEEDED ##
+    $LastName = $user."Modified_Preferred_Lastname" ## UPDATE NEEDED ##
     $ReplacementUserMail = $user."new email"
+    $DestOU = $user."NC Year(s) for today"
+
+    #add leading zero if required:
+    if ( $DestOU.count -le 1 ) {}
 
     #script dev check...
     #if ( $RunDeckDev -eq "true" ) {
@@ -80,10 +75,11 @@ foreach ($user in $VerifiedUserData) {
     #    }
 
     Write-Host "Processing: $ReplacementUserMail"
-    Write-Host "HR ID: $HRid" ## UPDATE NEEDED ##
+    Write-Host "UPN: $UPN" ## UPDATE NEEDED ##
     Write-Host "Firstname: $FirstName"
     Write-Host "Lastname: $LastName"
 
+    <#
     Write-Host "Generating Random Password..." 
         $pwd = $(Invoke-WebRequest -Uri $PwdWebRequestURI -UseBasicParsing)
         #    $pwd.Content
@@ -98,14 +94,20 @@ foreach ($user in $VerifiedUserData) {
                 }
 
         start-sleep 1
+    #>
 #>
 
-    Write-Host "create destination account..."
+    Write-Host "modify destination account..."
     #Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU' changepassword on" ### ## UPDATE NEEDED ##
-    write-Host "Invoke-Expression $GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU' changepassword on" ### ## UPDATE NEEDED ##
+    write-Host "Invoke-Expression $GamDir\gam.exe update user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU' " ### ## UPDATE NEEDED ##
+
+    start-sleep 3 # #TODO - update HRID
+    Write-Host "update Replacement account UPN..."
+    #Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $UPN" #set UPN - 
+    Write-Host "Invoke-Expression $GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $UPN" #set UPN - 
 
     #capture initial credentials
-    "$firstname,$lastname,$ReplacementUserMail,$password" | out-file -filepath $tempcsv2 -Append 
+    #"$firstname,$lastname,$ReplacementUserMail,$password" | out-file -filepath $tempcsv2 -Append 
 
     Write-Host "hide account from GAL.."
     Write-Host "Invoke-Expression $GamDir\gam.exe update user $ReplacementUserMail gal false" ## UPDATE NEEDED##
@@ -114,9 +116,10 @@ foreach ($user in $VerifiedUserData) {
 }
 
 #upload initial credentials to gsheet source $tempcsv2
-Write-Host "replacing content of existing google sheet with upto date data..."
-Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount update drivefile id $UserInfoGsheetID localfile $tempcsv2 newfilename '$GoogleWorkspaceDestinationMailDomain User Information' " ##UPDATE NEEDED## student folder/filename
+#Write-Host "replacing content of existing google sheet with upto date data..."
+#Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount update drivefile id $UserInfoGsheetID localfile $tempcsv2 newfilename '$GoogleWorkspaceDestinationMailDomain User Information' " ##UPDATE NEEDED## student folder/filename
 
+<#
 #Set Google instance: legacy...
 Write-Host "###### set google instance: legacy... ######"
 $GoogleSourceSvcAccount = ("$GoogleServiceAccountPrefix" + "$GoogleWorkSpaceSource" + "@" + "$GGoogleWorkspaceSourceMailDomain")
@@ -129,23 +132,25 @@ DashedLine
 foreach ($user in $VerifiedUserData) {
     DashedLine
     $LegacyUserMail = $user."Existing Email Address" #current mail address
-    $HRid = $user."Staff full name" # HR id ##UPDATE NEEDED##
+    $UPN = $user."Staff full name" # UPN ##UPDATE NEEDED##
     $FirstName = $user."Staff first name" #prefered firstname ##UPDATE NEEDED##
     $LastName = $user."Staff Surname" ##UPDATE NEEDED##
     $ReplacementUserMail = $user."new email"
 
         
     Write-Host "Processing: $LegacyUserMail"
-    Write-Host "HR ID: $HRid"
+    Write-Host "UPN: $UPN"
     Write-Host "Firstname: $FirstName"
     Write-Host "Lastname: $LastName"
 
     Write-Host "update legacy accounts..."
-    Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail $GoogleCustomAttribute01 $HRid" #set LDAP adminNumber ##UPDATE NEEDED##
+    Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail $GoogleCustomAttribute01 $UPN" #set LDAP adminNumber ##UPDATE NEEDED##
 
         DashedLine
 }
+#>
 
+<#
 #Set Google Instance: Destination...
 Write-Host "###### Set Google instance: Destination... ######"
 $GoogleSvcAccount = $GoogleWorkspaceMNSPsvcAccount
@@ -159,7 +164,7 @@ DashedLine
 foreach ($user in $VerifiedUserData) {
     DashedLine
     $LegacyUserMail = $user."Existing Email Address" #current mail address
-    $HRid = $user."Staff full name" # HR id
+    $UPN = $user."Staff full name" # UPN
     $FirstName = $user."Staff first name" #prefered firstname
     $LastName = $user."Staff Surname"
     $ReplacementUserMail = $user."new email"
@@ -167,7 +172,7 @@ foreach ($user in $VerifiedUserData) {
     #if ( $RunDeckDev -eq "true" ) { $ReplacementUserMail = $RundeckDevMail } #script dev check...
     
     Write-Host "Processing: $LegacyUserMail"
-    Write-Host "HR ID: $HRid"
+    Write-Host "UPN: $UPN"
     Write-Host "Firstname: $FirstName"
     Write-Host "Lastname: $LastName"
 
@@ -176,9 +181,12 @@ foreach ($user in $VerifiedUserData) {
 
     
     start-sleep 3 # #TODO - update HRID
-    Write-Host "update Replacement account HR ID..."
-    Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $HRid" #set HR ID - 
+    Write-Host "update Replacement account UPN..."
+    Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $UPN" #set UPN - 
 }
+#>
+
+<#
     Write-Host "Add members to security groups ..."
         if (test-path $DataDir\*.lst) { remove-item $DataDir\*.lst -force -verbose } #force delete any .lst files if exist...
 
@@ -218,9 +226,20 @@ Write-Host "Add members to mail dist groups ..."
         Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
 
     }
-
+#>
 
 <#
+
+
+#set google instance: legacy
+Write-Host "###### set google instance: legacy... ######"
+$GoogleSourceSvcAccount = ("$GoogleServiceAccountPrefix" + "$GoogleWorkSpaceSource" + "@" + "$GGoogleWorkspaceSourceMailDomain") # set service account to use to download gsheets
+Write-Host "Google Source Service Account: $GoogleSourceSvcAccount"
+Write-Host "Setting workspace source: $GoogleWorkSpaceSource"
+Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceSource save" # swap/set google workspace
+Invoke-Expression "$GamDir\gam.exe" #get current google workspace
+
+
 #Set local sysadmins group mail address... # any members of this group can see content of all local shared drives
 #$GoogleWorkspaceSourceSysadminGroupFQDN = ("$GoogleWorkspaceSourceSysadminGroup" + "@" + "$GoogleWorkspaceSourceMailDomain")
 
@@ -334,7 +353,7 @@ $GroupexistCheck.email
 
     #start-sleep 3 # - ENHANCEMENT (confirm) updating of attribute is NOT consistent, may need a few seconds delay after account is created beforeready to accept custom attribute setting: Update Failed: Invalid Schema Value 
     #Write-Host "update Replacement account..."
-    #Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $HRid" #set HR ID - 
+    #Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $UPN" #set UPN - 
     
     #ENHANCEMENT - update Job Title and Department from exported peopleXD data (Job Title Description and Division Description fields)
 
