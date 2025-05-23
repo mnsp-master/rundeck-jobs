@@ -1,4 +1,4 @@
-$mnspver = "0.0.4"
+$mnspver = "0.0.5"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -107,9 +107,9 @@ foreach ($user in $VerifiedUserData) {
 
     Write-Host "modify destination account..."
     #Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU' changepassword on" ### ## UPDATE NEEDED ##
-    write-Host "Invoke-Expression $GamDir\gam.exe update user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU' " ### ## UPDATE NEEDED ##
+    write-Host "Invoke-Expression $GamDir\gam.exe update user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' " ### ## UPDATE NEEDED ##
 
-    start-sleep 3 # #TODO - update HRID
+    start-sleep 3 # 
     Write-Host "update Replacement account UPN..."
     #Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $UPN" #set UPN - 
     Write-Host "Invoke-Expression $GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $UPN" #set UPN - 
