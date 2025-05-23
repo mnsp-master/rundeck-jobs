@@ -1,4 +1,4 @@
-$mnspver = "0.0.3"
+$mnspver = "0.0.4"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -64,8 +64,15 @@ foreach ($user in $VerifiedUserData) {
     $ReplacementUserMail = $user."new email"
     $DestOU = $user."NC Year(s) for today"
 
-    #add leading zero if required:
-    if ( $DestOU.count -le 1 ) {}
+    #add leading zero if required: to create consitent OUs YEAR07 not YEAR7: 
+        if ( $DestOU -le 9) {
+            Write-host "Target Year group less than or equal to 9..."
+            $UpdatedDestOU = @()
+            $UpdatedDestOU = $("YEAR" + "0" + $DestOU)
+            } else {
+            $UpdatedDestOU = $("YEAR" + $DestOU)
+            }
+        
 
     #script dev check...
     #if ( $RunDeckDev -eq "true" ) {
@@ -75,9 +82,10 @@ foreach ($user in $VerifiedUserData) {
     #    }
 
     Write-Host "Processing: $ReplacementUserMail"
-    Write-Host "UPN: $UPN" ## UPDATE NEEDED ##
+    Write-Host "UPN: $UPN"
     Write-Host "Firstname: $FirstName"
     Write-Host "Lastname: $LastName"
+    Write-Host "Destination OU name:" $UpdatedDestOU
 
     <#
     Write-Host "Generating Random Password..." 
