@@ -1,4 +1,4 @@
-$mnspver = "0.0.14"
+$mnspver = "0.0.15"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -91,7 +91,7 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "UPN: $UPN"
     Write-Host "Firstname: $FirstName"
     Write-Host "Lastname: $LastName"
-    Write-Host "Source Year : $DestOU" 
+    Write-Host "Source Year: $DestOU" 
     Write-Host "Destination OU name: $UpdatedDestOU"
 
     <#
@@ -112,6 +112,7 @@ foreach ($user in $VerifiedUserData) {
     #>
 #>
 
+<#SNO
     Write-Host "modify destination account..."
     #Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU' changepassword on" ### ## UPDATE NEEDED ##
     #write-Host "Invoke-Expression $GamDir\gam.exe update user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' " ### ## UPDATE NEEDED ##
@@ -129,6 +130,7 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Invoke-Expression $GamDir\gam.exe update user $ReplacementUserMail gal false" ## UPDATE NEEDED##
     
     DashedLine
+    #>
 }
 
 #upload initial credentials to gsheet source $tempcsv2
