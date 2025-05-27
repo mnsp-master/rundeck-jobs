@@ -1,4 +1,4 @@
-$mnspver = "0.0.11"
+$mnspver = "0.0.12"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -86,11 +86,13 @@ foreach ($user in $VerifiedUserData) {
     #    $ReplacementUserMail = $RundeckDevMail
     #    }
 
-    Write-Host "Processing: $ReplacementUserMail"
+    Write-Host "Processing (SRC email): $LegacyUserMail"
+    Write-Host "Processing (DEST email): $ReplacementUserMail"
     Write-Host "UPN: $UPN"
     Write-Host "Firstname: $FirstName"
     Write-Host "Lastname: $LastName"
-    Write-Host "Destination OU name:" $UpdatedDestOU
+    Write-Host "Source Year : $DestOU" 
+    Write-Host "Destination OU name:" $UpdatedDestOU"
 
     <#
     Write-Host "Generating Random Password..." 
