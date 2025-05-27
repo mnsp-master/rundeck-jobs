@@ -1,4 +1,4 @@
-$mnspver = "0.0.17"
+$mnspver = "0.0.18"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -118,13 +118,22 @@ foreach ($user in $VerifiedUserData) {
     #>
 #>
 
-#<#SNO
-    Write-Host "modify destination account..."
+    if ( $LegacyUserMail -like $GoogleWorkspaceSourceMailDomain ) {
+        Write-Host "modify existing legacy account to reflect desired target domain account..."
+        Write-Host "Invoke-Expression $GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname $FirstName lastname $LastName org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN gal false"
+
+        else {
+            Write-Host "Creating desired target mail domain email address..."
+            Write-Host "Invoke-Expression $GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN gal false"
+
+        }
+
+    }
+    
     #Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU' changepassword on" ### ## UPDATE NEEDED ##
     #write-Host "Invoke-Expression $GamDir\gam.exe update user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' " ### ## UPDATE NEEDED ##
     #write-Host "Invoke-Expression $GamDir\gam.exe update user $ReplacementUserMail firstname $FirstName lastname $LastName org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' " ### ## UPDATE NEEDED ##
 
-    write-Host "Invoke-Expression $GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname $FirstName lastname $LastName org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN gal false" ### ## UPDATE NEEDED ##
 
     <#
     #start-sleep 3 # 
