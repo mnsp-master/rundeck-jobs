@@ -1,4 +1,4 @@
-$mnspver = "0.0.21"
+$mnspver = "0.0.22"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -117,16 +117,14 @@ foreach ($user in $VerifiedUserData) {
         start-sleep 1
     #>
 #>
-    Write-Host "Checking if legacy mail like: $GoogleWorkspaceSourceMailDomain"
-    if ( $LegacyUserMail -contains $GoogleWorkspaceSourceMailDomain ) {
+  Write-Host "Checking if legacy mail: $LegacyUserMail  like: $GoogleWorkspaceSourceMailDomain"
+    if ( $LegacyUserMail -like "*$GoogleWorkspaceSourceMailDomain" ) {
         Write-Host "modify existing legacy account to reflect desired target domain account..."
         Write-Host "Invoke-Expression $GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname $FirstName lastname $LastName org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN gal false"
 
-        else {
-            Write-Host "Creating desired target mail domain email address..."
+        } else {
+            Write-Warning "Creating desired target mail domain email address..."
             Write-Host "Invoke-Expression $GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN gal false"
-
-        }
 
     }
     
