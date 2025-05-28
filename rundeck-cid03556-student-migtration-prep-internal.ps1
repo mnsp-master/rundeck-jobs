@@ -1,4 +1,4 @@
-$mnspver = "0.0.23"
+$mnspver = "0.0.24"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -81,9 +81,9 @@ foreach ($user in $VerifiedUserData) {
         if ( $DestOU -le 9) {
             Write-host "Target Year group less than or equal to 9..."
             $UpdatedDestOU = @()
-            $UpdatedDestOU = $("YEAR" + "0" + $DestOU)
+            $UpdatedDestOU = $("Year" + "0" + $DestOU)
             } else {
-            $UpdatedDestOU = $("YEAR" + $DestOU)
+            $UpdatedDestOU = $("Year" + $DestOU)
             }
         
 
