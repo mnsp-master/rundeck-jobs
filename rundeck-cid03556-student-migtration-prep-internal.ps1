@@ -1,4 +1,4 @@
-$mnspver = "0.0.27"
+$mnspver = "0.0.28"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -32,7 +32,7 @@ start-sleep 3
 DashedLine
 
 Write-Host "Report on all current users from base OU: $GoogleWorkspaceSourceUserOU"
-Invoke-expression "$GamDir\gam.exe ou_and_children '$GoogleWorkspaceSourceUserOU' print allfields todrive tdparent id:$GfolderReportsID tdtitle 'User info - Pre-Migration for domain: $GoogleWorkspaceSourceMailDomain'"
+Invoke-expression "$GamDir\gam.exe ou_and_children '$GoogleWorkspaceSourceUserOU' print allfields todrive tdparent id:$GfolderReportsID tdtitle 'User info - Pre-Migration for domain: $GoogleWorkspaceSourceMailDomain as of: $(Get-date)'"
 
 #get verified user data
 #if exist check & remove $tempcsv4
