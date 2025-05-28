@@ -1,4 +1,4 @@
-$mnspver = "0.0.24"
+$mnspver = "0.0.25"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -31,7 +31,8 @@ Invoke-Expression "$GamDir\gam.exe"
 start-sleep 3
 DashedLine
 
-###### TODO - Check/create target OUs ######
+Write-Host "Report on all current users from base OU: $GoogleWorkspaceSourceUserOU"
+Invoke-expression "$GamDir\gam.exe gam ou_and_children '$GoogleWorkspaceSourceUserOU' print allfields todrive tdparent id:$GfolderReportsID"
 
 #get verified user data
 #if exist check & remove $tempcsv4
@@ -119,9 +120,11 @@ foreach ($user in $VerifiedUserData) {
         start-sleep 1
     #>
 #>
+  
+
   Write-Host "Checking if legacy mail: $LegacyUserMail  like: $GoogleWorkspaceSourceMailDomain"
     if ( $LegacyUserMail -like "*$GoogleWorkspaceSourceMailDomain" ) {
-        Write-Host "modify existing legacy account to reflect desired target domain account..."
+        Write-Host "modify existing legacy account to reflect replacement target domain..."
         Write-Host "Invoke-Expression $GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname $FirstName lastname $LastName org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN gal false"
 
         } else {
