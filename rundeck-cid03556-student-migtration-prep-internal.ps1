@@ -1,4 +1,4 @@
-$mnspver = "0.0.28"
+$mnspver = "0.0.29"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -128,8 +128,24 @@ foreach ($user in $VerifiedUserData) {
         Write-Host "Invoke-Expression $GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname $FirstName lastname $LastName org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN gal false"
 
         } else {
+
+            Write-Host "Generating Random Password..." 
+                $pwd = $(Invoke-WebRequest -Uri $PwdWebRequestURI -UseBasicParsing)
+                #    $pwd.Content
+                    #$pwd.StatusCode
+                        if ($pwd.StatusCode -eq 200) {
+                        Write-Host "proceed with pwd reservation"
+                        $password = $($pwd.Content)
+                        #Write-Host "Password: " $password
+                        } else {
+                        Write-Error "No Webserver, or pwd received"
+                        $password = $PwdFailsafe
+                        }
+
+                start-sleep 1
+
             Write-Warning "Creating desired target mail domain email address..."
-            Write-Host "Invoke-Expression $GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN gal false"
+            Write-Host "Invoke-Expression $GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN password $password gal false"
 
     }
     
