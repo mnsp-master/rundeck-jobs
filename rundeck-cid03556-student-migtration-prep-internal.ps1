@@ -1,4 +1,4 @@
-$mnspver = "0.0.22"
+$mnspver = "0.0.23"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -30,6 +30,8 @@ Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceDestination save" # sw
 Invoke-Expression "$GamDir\gam.exe"
 start-sleep 3
 DashedLine
+
+###### TODO - Check/create target OUs ######
 
 #get verified user data
 #if exist check & remove $tempcsv4
