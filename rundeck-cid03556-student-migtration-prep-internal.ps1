@@ -1,4 +1,4 @@
-$mnspver = "0.0.36"
+$mnspver = "0.0.37"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -137,11 +137,9 @@ foreach ($user in $VerifiedUserData) {
             Write-Warning "!!WARNING $LegacyUserMail DOES NOT EXIST!! - update MIS data"
         }
         
-        #if ($uuids.Contains($uuid)) { # check if uuid is a
-        #}
-
         Write-Host "Invoke-Expression $GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN gal false"
         $password = "N/A - unchanged"
+        $AccountHistory = "Migrated"
 
         } else {
 
@@ -162,13 +160,25 @@ foreach ($user in $VerifiedUserData) {
             
             Write-Warning "Creating desired target mail domain email address..."
             Write-Host "Invoke-Expression $GamDir\gam.exe create user $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN password $password gal false"
+            $AccountHistory = "New"
 
     }
     
     #capture initial credentials
-    "$firstname,$lastname,$legacyUserMail,$ReplacementUserMail,$password" | out-file -filepath $tempcsv2 -Append 
+    "$firstname,$lastname,$legacyUserMail,$ReplacementUserMail,$password,$AccountHistory" | out-file -filepath $tempcsv2 -Append 
     
-    #Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU' changepassword on" ### ## UPDATE NEEDED ##
+    
+    DashedLine
+    #>
+}
+
+#upload initial credentials to gsheet source $tempcsv2
+#Write-Host "replacing content of existing google sheet with upto date data..."
+#Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount update drivefile id $UserInfoGsheetID localfile $tempcsv2 newfilename '$GoogleWorkspaceDestinationMailDomain User Information' " ##UPDATE NEEDED## student folder/filename
+
+<#
+
+#Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU' changepassword on" ### ## UPDATE NEEDED ##
     #write-Host "Invoke-Expression $GamDir\gam.exe update user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' " ### ## UPDATE NEEDED ##
     #write-Host "Invoke-Expression $GamDir\gam.exe update user $ReplacementUserMail firstname $FirstName lastname $LastName org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' " ### ## UPDATE NEEDED ##
 
@@ -184,15 +194,7 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "hide account from GAL.."
     Write-Host "Invoke-Expression $GamDir\gam.exe update user $ReplacementUserMail gal false" ## UPDATE NEEDED##
     #>
-    DashedLine
-    #>
-}
 
-#upload initial credentials to gsheet source $tempcsv2
-#Write-Host "replacing content of existing google sheet with upto date data..."
-#Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount update drivefile id $UserInfoGsheetID localfile $tempcsv2 newfilename '$GoogleWorkspaceDestinationMailDomain User Information' " ##UPDATE NEEDED## student folder/filename
-
-<#
 #Set Google instance: legacy...
 Write-Host "###### set google instance: legacy... ######"
 $GoogleSourceSvcAccount = ("$GoogleServiceAccountPrefix" + "$GoogleWorkSpaceSource" + "@" + "$GGoogleWorkspaceSourceMailDomain")
