@@ -1,4 +1,4 @@
-$mnspver = "0.0.39"
+$mnspver = "0.0.40"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -195,7 +195,7 @@ foreach ($user in $VerifiedUserData) {
 
     Write-Host "hide account from GAL.."
     Write-Host "Invoke-Expression $GamDir\gam.exe update user $ReplacementUserMail gal false" ## UPDATE NEEDED##
-    #>
+
 
 #Set Google instance: legacy...
 Write-Host "###### set google instance: legacy... ######"
