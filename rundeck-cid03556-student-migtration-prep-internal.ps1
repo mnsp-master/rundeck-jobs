@@ -1,4 +1,4 @@
-$mnspver = "0.0.31"
+$mnspver = "0.0.32"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -126,6 +126,7 @@ foreach ($user in $VerifiedUserData) {
     if ( $LegacyUserMail -like "*$GoogleWorkspaceSourceMailDomain" ) {
         Write-Host "modify existing legacy account to reflect replacement target domain..."
         Write-Host "Invoke-Expression $GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN gal false"
+        $password = "N/A - unchanged"
 
         } else {
 
@@ -149,6 +150,9 @@ foreach ($user in $VerifiedUserData) {
 
     }
     
+    #capture initial credentials
+    "$firstname,$lastname,$legacyUserMail,$ReplacementUserMail,$password" | out-file -filepath $tempcsv2 -Append 
+    
     #Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU' changepassword on" ### ## UPDATE NEEDED ##
     #write-Host "Invoke-Expression $GamDir\gam.exe update user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' " ### ## UPDATE NEEDED ##
     #write-Host "Invoke-Expression $GamDir\gam.exe update user $ReplacementUserMail firstname $FirstName lastname $LastName org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' " ### ## UPDATE NEEDED ##
@@ -160,8 +164,7 @@ foreach ($user in $VerifiedUserData) {
     #Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $UPN" #set UPN - 
     Write-Host "Invoke-Expression $GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $UPN" #set UPN - 
 
-    #capture initial credentials
-    #"$firstname,$lastname,$ReplacementUserMail,$password" | out-file -filepath $tempcsv2 -Append 
+    
 
     Write-Host "hide account from GAL.."
     Write-Host "Invoke-Expression $GamDir\gam.exe update user $ReplacementUserMail gal false" ## UPDATE NEEDED##
