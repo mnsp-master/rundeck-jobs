@@ -1,4 +1,4 @@
-$mnspver = "0.0.34"
+$mnspver = "0.0.35"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -131,7 +131,7 @@ foreach ($user in $VerifiedUserData) {
         Write-Host "modify existing legacy account to reflect replacement target domain..."
         
         Write-host "confirm MIS email data email address actually exists..."
-        if ($GoogleWorkspaceSourceUsers.Contains($LegacyUserMail)) {
+        if ($GoogleWorkspaceSourceUsers.primaryEmail.Contains($LegacyUserMail)) {
             Write-Host "$LegacyUserMail exists..."
         } else {
             Write-Warning "!!WARNING $LegacyUserMail DOES NOT EXIST!! - update MIS data"
