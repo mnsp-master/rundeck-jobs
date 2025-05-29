@@ -1,4 +1,4 @@
-$mnspver = "0.0.37"
+$mnspver = "0.0.38"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -160,6 +160,7 @@ foreach ($user in $VerifiedUserData) {
             
             Write-Warning "Creating desired target mail domain email address..."
             Write-Host "Invoke-Expression $GamDir\gam.exe create user $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN password $password gal false"
+            $LegacyUserMail = "N/A"
             $AccountHistory = "New"
 
     }
