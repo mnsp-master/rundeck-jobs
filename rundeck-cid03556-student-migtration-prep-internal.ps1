@@ -1,4 +1,4 @@
-$mnspver = "0.0.40"
+$mnspver = "0.0.41"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -167,11 +167,12 @@ foreach ($user in $VerifiedUserData) {
     
     #capture initial credentials
     "$firstname,$lastname,$legacyUserMail,$ReplacementUserMail,$password,$AccountHistory" | out-file -filepath $tempcsv2 -Append
-    $UpdatedUsersInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain Migrated User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
-    Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount update drivefile id $UpdatedUsersInfoGsheetID localfile $tempcsv2" -ErrorAction SilentlyContinue 
     
     DashedLine
-    #>
+    
+    $UpdatedUsersInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain Migrated User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
+    Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount update drivefile id $UpdatedUsersInfoGsheetID localfile $tempcsv2" -ErrorAction SilentlyContinue 
+
 }
 
 #upload initial credentials to gsheet source $tempcsv2
