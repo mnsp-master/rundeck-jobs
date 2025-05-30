@@ -1,4 +1,4 @@
-$mnspver = "0.0.46"
+$mnspver = "0.0.47"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -32,7 +32,6 @@ start-sleep 3
 DashedLine
 
 #OUS to create:
-$OUsToCreate = ("Year07","Year08","Year09")
 
 $CurrentOUsCSV =@()
 $CurrentOUsCSV = $(Invoke-expression "$GamDir\gam.exe print orgs fromparent '$GoogleworkspaceDestinationUserOU' | Out-file $tempcsv10" )
