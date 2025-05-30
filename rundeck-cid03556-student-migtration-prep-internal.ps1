@@ -1,4 +1,4 @@
-$mnspver = "0.0.47"
+$mnspver = "0.0.48"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -32,7 +32,7 @@ start-sleep 3
 DashedLine
 
 #OUS to create:
-
+if (test-path $tempcsv10) { remove-item $tempcsv10 -force -verbose }
 $CurrentOUsCSV =@()
 $CurrentOUsCSV = $(Invoke-expression "$GamDir\gam.exe print orgs fromparent '$GoogleworkspaceDestinationUserOU' | Out-file $tempcsv10" )
 
@@ -49,7 +49,7 @@ foreach ($OUtoCreate in $OUsToCreate) {
     DashedLine
     } else {
     Write-Warning "OU: $OUtoCreate does not exist, creating..."
-    Write-Host "invoke-expression $GamDir\gam.exe create org '$OutoCreate' parent '$GoogleWorkspaceDestinationUserOU'"
+    invoke-expression "$GamDir\gam.exe create org '$OutoCreate' parent '$GoogleWorkspaceDestinationUserOU'"
     DashedLine
     }
 }
