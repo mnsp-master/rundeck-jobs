@@ -1,4 +1,4 @@
-$mnspver = "0.0.44"
+$mnspver = "0.0.45"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -182,6 +182,34 @@ foreach ($user in $VerifiedUserData) {
 #Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount update drivefile id $UserInfoGsheetID localfile $tempcsv2 newfilename '$GoogleWorkspaceDestinationMailDomain User Information' " ##UPDATE NEEDED## student folder/filename
 
 <#
+
+OUS to create:
+$OUsToCreate = ("Year07","Year08","Year09")
+
+$GoogleWorkspaceDestinationUserOU = "/Students/Special and AP/CID003556-DEST"
+
+$CurrentOUsCSV =@()
+$CurrentOUsCSV = $(Invoke-expression "$GamDir\gam.exe print orgs fromparent '$GoogleworkspaceDestinationUserOU' | Out-file $tempcsv10" )
+
+$CurrentOUs =@()
+DashedLine
+$CurrentOUs = Import-Csv -Path $tempcsv10
+
+Write-Host "Current OUs:" $CurrentOUs.name
+DashedLine
+
+foreach ($OUtoCreate in $OUsToCreate) {
+    if ($CurrentOUs.name.contains($OUtoCreate)) {
+    Write-host "OU: $OUtoCreate already exists"
+    DashedLine
+    } else {
+    Write-Warning "OU: $OUtoCreate does not exist, creating..."
+    invoke-expression "$GamDir\gam.exe create org '$OutoCreate' parent '$GoogleWorkspaceDestinationUserOU'"
+    DashedLine
+    }
+}
+
+
 
 #Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU' changepassword on" ### ## UPDATE NEEDED ##
     #write-Host "Invoke-Expression $GamDir\gam.exe update user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' " ### ## UPDATE NEEDED ##
