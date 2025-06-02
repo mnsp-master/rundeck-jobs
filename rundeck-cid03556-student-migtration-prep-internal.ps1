@@ -1,10 +1,11 @@
-$mnspver = "0.0.63"
+$mnspver = "0.0.64"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 Start-Sleep 10
 $ErrorActionPreference="Continue"
 Set-Location $GamDir
+$FormatEnumerationLimit = "-1"
 
 function DashedLine {
 Write-host "-----------------------------------------------------------`n"
