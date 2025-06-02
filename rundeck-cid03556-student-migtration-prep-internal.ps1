@@ -1,4 +1,4 @@
-$mnspver = "0.0.52"
+$mnspver = "0.0.53"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -57,7 +57,7 @@ foreach ($OUtoCreate in $OUsToCreate) {
 if (test-path $tempcsv9) { remove-item $tempcsv9 -force -verbose }
 Write-Host "Report on all current users from base OU: $GoogleWorkspaceSourceUserOU"
 Invoke-expression "$GamDir\gam.exe ou_and_children '$GoogleWorkspaceSourceUserOU' print allfields >> $tempcsv9" 
-Invoke-expression "$GamDir\gam.exe ou_and_children '$GoogleWorkspaceSourceUserOU' print allfields todrive tdparent id:$GfolderReportsID tdtitle 'User info - Pre-Migration for domain: $GoogleWorkspaceSourceMailDomain as of: $(Get-date)'"
+Invoke-expression "$GamDir\gam.exe ou_and_children '$GoogleWorkspaceSourceUserOU' print allfields todrive tdparent id:$GfolderReportsID tdtitle 'User info - Pre Migration for domain: $GoogleWorkspaceSourceMailDomain as of: $(Get-date)'"
 
 $GoogleWorkspaceSourceUsers = import-csv -path $tempcsv9
 
@@ -88,7 +88,7 @@ Write Host "Number of records matching selection criteria:" $VerifiedUserData.co
 
 
 #create user info destination gsheet
-$UserInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
+#$UserInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
 
 if (test-path $tempcsv6) { remove-item $tempcsv6 -force -verbose }
 if (test-path $tempcsv8) { remove-item $tempcsv8 -force -verbose }
