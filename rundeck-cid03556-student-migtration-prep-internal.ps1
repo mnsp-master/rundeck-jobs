@@ -1,4 +1,4 @@
-$mnspver = "0.0.69"
+$mnspver = "0.0.70"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -70,17 +70,7 @@ foreach ($OUtoCreate in $OUsToCreate) {
 }
 #>
 
-foreach ($OUtoCreate in $OUsToCreate) {
-    if ( -not ($CurrentOUs.name.contains($OUtoCreate))) { 
-    Write-Warning "OU: $OUtoCreate does not exist, creating..."
-    #invoke-expression "$GamDir\gam.exe create org '$OutoCreate' parent '$GoogleWorkspaceDestinationUserOU'"
-    Write-Host "invoke-expression $GamDir\gam.exe create org '$OutoCreate' parent '$GoogleWorkspaceDestinationUserOU'"
-    DashedLine
-    } else {  
-    Write-host "OU: $OUtoCreate already exists"
-    DashedLine
-    }
-}
+
 
 
 exit ###SNO DEBUG###
