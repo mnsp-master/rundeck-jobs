@@ -1,4 +1,4 @@
-$mnspver = "0.0.67"
+$mnspver = "0.0.68"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -13,7 +13,7 @@ function DashedLine {
 Write-host "-----------------------------------------------------------`n"
 }
 
-Get-Variable -ft -autosize
+Get-Variable
 
 Write-Host "gsheet Student number column heading:" $FieldMatch01
 Start-sleep 10
