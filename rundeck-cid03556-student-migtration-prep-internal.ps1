@@ -1,4 +1,4 @@
-$mnspver = "0.0.68"
+$mnspver = "0.0.69"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -6,14 +6,14 @@ Start-Sleep 10
 $ErrorActionPreference="Continue"
 Set-Location $GamDir
 
-$FormatEnumerationLimit=-1
-$FormatEnumerationLimit
+#$FormatEnumerationLimit=-1
+#$FormatEnumerationLimit
 
 function DashedLine {
 Write-host "-----------------------------------------------------------`n"
 }
 
-Get-Variable
+#Get-Variable
 
 Write-Host "gsheet Student number column heading:" $FieldMatch01
 Start-sleep 10
@@ -56,8 +56,9 @@ Write-Host "Current OUs:" $CurrentOUs.name
 DashedLine
 ### ENHANCEMENT : School short name now required: DRA-Year07 etc ###
 
+<#
 foreach ($OUtoCreate in $OUsToCreate) {
-    if ($CurrentOUs.name.contains($OUtoCreate)) {
+    if ($CurrentOUs.name.contains($OUtoCreate)) { #logic does not work if NO sub OU's currently exist...
     Write-host "OU: $OUtoCreate already exists"
     DashedLine
     } else {
@@ -67,6 +68,20 @@ foreach ($OUtoCreate in $OUsToCreate) {
     DashedLine
     }
 }
+#>
+
+foreach ($OUtoCreate in $OUsToCreate) {
+    if ( -not ($CurrentOUs.name.contains($OUtoCreate))) { 
+    Write-Warning "OU: $OUtoCreate does not exist, creating..."
+    #invoke-expression "$GamDir\gam.exe create org '$OutoCreate' parent '$GoogleWorkspaceDestinationUserOU'"
+    Write-Host "invoke-expression $GamDir\gam.exe create org '$OutoCreate' parent '$GoogleWorkspaceDestinationUserOU'"
+    DashedLine
+    } else {  
+    Write-host "OU: $OUtoCreate already exists"
+    DashedLine
+    }
+}
+
 
 exit ###SNO DEBUG###
 
