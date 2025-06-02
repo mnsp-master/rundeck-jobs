@@ -1,17 +1,18 @@
-$mnspver = "0.0.65"
+$mnspver = "0.0.66"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 Start-Sleep 10
 $ErrorActionPreference="Continue"
 Set-Location $GamDir
-$FormatEnumerationLimit =-1
+$FormatEnumerationLimit=-1
+$FormatEnumerationLimit
 
 function DashedLine {
 Write-host "-----------------------------------------------------------`n"
 }
 
-Get-Variable
+Get-Variable -ft -autosize
 
 Write-Host "gsheet Student number column heading:" $FieldMatch01
 Start-sleep 10
