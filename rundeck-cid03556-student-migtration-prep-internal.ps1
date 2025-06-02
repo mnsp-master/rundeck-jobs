@@ -1,4 +1,4 @@
-$mnspver = "0.0.56"
+$mnspver = "0.0.57"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -55,7 +55,7 @@ foreach ($OUtoCreate in $OUsToCreate) {
     }
 }
 
-<#
+
 if (test-path $tempcsv9) { remove-item $tempcsv9 -force -verbose }
 Write-Host "Report on all current users from base OU: $GoogleWorkspaceSourceUserOU"
 Invoke-expression "$GamDir\gam.exe ou_and_children '$GoogleWorkspaceSourceUserOU' print allfields >> $tempcsv9" 
@@ -182,7 +182,7 @@ foreach ($user in $VerifiedUserData) {
     $UpdatedUsersInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain Migrated User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
     Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount update drivefile id $UpdatedUsersInfoGsheetID localfile $tempcsv2 newfilename 'User info - Post Migration for domain: $GoogleWorkspaceDestinationMailDomain as of: $(Get-date)'" #-ErrorAction SilentlyContinue 
 
-#>
+
 #######################
 
 
