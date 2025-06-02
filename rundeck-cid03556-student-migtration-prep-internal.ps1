@@ -1,4 +1,4 @@
-$mnspver = "0.0.60"
+$mnspver = "0.0.61"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -33,6 +33,7 @@ DashedLine
 
 #OUS to create:
 if (test-path $tempcsv10) { remove-item $tempcsv10 -force -verbose }
+Write-Host "Getting OU's from parent: $GoogleworkspaceDestinationUserOU"
 $CurrentOUsCSV =@()
 $CurrentOUsCSV = $(Invoke-expression "$GamDir\gam.exe print orgs fromparent '$GoogleworkspaceDestinationUserOU' | Out-file $tempcsv10" )
 
@@ -40,9 +41,11 @@ $CurrentOUs =@()
 DashedLine
 $CurrentOUs = Import-Csv -Path $tempcsv10
 
+#<#
 if ($CurrentOus.count -le "0") { 
     Write-Warning "No existing OU's Found exiting"
     exit }
+#>
 
 Write-Host "Current OUs:" $CurrentOUs.name
 DashedLine
