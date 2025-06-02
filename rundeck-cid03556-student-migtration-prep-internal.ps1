@@ -1,4 +1,4 @@
-$mnspver = "0.0.59"
+$mnspver = "0.0.60"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -39,6 +39,10 @@ $CurrentOUsCSV = $(Invoke-expression "$GamDir\gam.exe print orgs fromparent '$Go
 $CurrentOUs =@()
 DashedLine
 $CurrentOUs = Import-Csv -Path $tempcsv10
+
+if ($CurrentOus.count -le "0") { 
+    Write-Warning "No existing OU's Found exiting"
+    exit }
 
 Write-Host "Current OUs:" $CurrentOUs.name
 DashedLine
