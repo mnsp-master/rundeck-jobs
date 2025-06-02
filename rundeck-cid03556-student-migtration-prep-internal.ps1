@@ -1,4 +1,4 @@
-$mnspver = "0.0.62"
+$mnspver = "0.0.63"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -9,6 +9,8 @@ Set-Location $GamDir
 function DashedLine {
 Write-host "-----------------------------------------------------------`n"
 }
+
+Get-Variable
 
 Write-Host "gsheet Student number column heading:" $FieldMatch01
 Start-sleep 10
@@ -41,7 +43,7 @@ $CurrentOUs =@()
 DashedLine
 $CurrentOUs = Import-Csv -Path $tempcsv10
 
-<#
+#<#
 if ($CurrentOus.count -le "0") { 
     Write-Warning "No existing OU's Found exiting"
     exit }
