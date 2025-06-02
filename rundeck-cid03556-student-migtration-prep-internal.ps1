@@ -1,10 +1,11 @@
-$mnspver = "0.0.66"
+$mnspver = "0.0.67"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 Start-Sleep 10
 $ErrorActionPreference="Continue"
 Set-Location $GamDir
+
 $FormatEnumerationLimit=-1
 $FormatEnumerationLimit
 
@@ -45,7 +46,7 @@ $CurrentOUs =@()
 DashedLine
 $CurrentOUs = Import-Csv -Path $tempcsv10
 
-#<#
+<#
 if ($CurrentOus.count -le "0") { 
     Write-Warning "No existing OU's Found exiting"
     exit }
@@ -61,11 +62,13 @@ foreach ($OUtoCreate in $OUsToCreate) {
     DashedLine
     } else {
     Write-Warning "OU: $OUtoCreate does not exist, creating..."
-    invoke-expression "$GamDir\gam.exe create org '$OutoCreate' parent '$GoogleWorkspaceDestinationUserOU'"
+    #invoke-expression "$GamDir\gam.exe create org '$OutoCreate' parent '$GoogleWorkspaceDestinationUserOU'"
+    Write-Host "invoke-expression $GamDir\gam.exe create org '$OutoCreate' parent '$GoogleWorkspaceDestinationUserOU'"
     DashedLine
     }
 }
 
+exit ###SNO DEBUG###
 
 if (test-path $tempcsv9) { remove-item $tempcsv9 -force -verbose }
 Write-Host "Report on all current users from base OU: $GoogleWorkspaceSourceUserOU"
