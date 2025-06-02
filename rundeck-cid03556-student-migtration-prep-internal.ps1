@@ -1,4 +1,4 @@
-$mnspver = "0.0.53"
+$mnspver = "0.0.54"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -86,7 +86,6 @@ $VerifiedUserData = Get-Content -path $tempcsv4 | convertFrom-csv | where-object
 Write Host "Number of records matching selection criteria:" $VerifiedUserData.count
 #TODO - if count 0 break out of script...
 
-
 #create user info destination gsheet
 #$UserInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
 
@@ -130,24 +129,6 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Source Year: $DestOU" 
     Write-Host "Destination OU name: $UpdatedDestOU"
 
-    <#
-    Write-Host "Generating Random Password..." 
-        $pwd = $(Invoke-WebRequest -Uri $PwdWebRequestURI -UseBasicParsing)
-        #    $pwd.Content
-            #$pwd.StatusCode
-                if ($pwd.StatusCode -eq 200) {
-                Write-Host "proceed with pwd reservation"
-                $password = $($pwd.Content)
-                #Write-Host "Password: " $password
-                } else {
-                Write-Error "No Webserver, or pwd received"
-                $password = $PwdFailsafe
-                }
-
-        start-sleep 1
-    #>
-#>
-  
 
   Write-Host "Checking if legacy mail: $LegacyUserMail  like: $GoogleWorkspaceSourceMailDomain"
     if ( $LegacyUserMail -like "*$GoogleWorkspaceSourceMailDomain" ) {
@@ -195,7 +176,7 @@ foreach ($user in $VerifiedUserData) {
     
 
 }
-
+    #upload post migtation data in gsheet...
     $UpdatedUsersInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain Migrated User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
     Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount update drivefile id $UpdatedUsersInfoGsheetID localfile $tempcsv2 newfilename 'User info - Post Migration for domain: $GoogleWorkspaceDestinationMailDomain as of: $(Get-date)'" #-ErrorAction SilentlyContinue 
 
@@ -206,6 +187,23 @@ foreach ($user in $VerifiedUserData) {
 
 <#
 
+    <#
+    Write-Host "Generating Random Password..." 
+        $pwd = $(Invoke-WebRequest -Uri $PwdWebRequestURI -UseBasicParsing)
+        #    $pwd.Content
+            #$pwd.StatusCode
+                if ($pwd.StatusCode -eq 200) {
+                Write-Host "proceed with pwd reservation"
+                $password = $($pwd.Content)
+                #Write-Host "Password: " $password
+                } else {
+                Write-Error "No Webserver, or pwd received"
+                $password = $PwdFailsafe
+                }
+
+        start-sleep 1
+    #>
+#>
 
 
 
