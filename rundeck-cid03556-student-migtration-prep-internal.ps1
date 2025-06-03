@@ -1,4 +1,4 @@
-$mnspver = "0.0.70"
+$mnspver = "0.0.71"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -44,21 +44,12 @@ $CurrentOUsCSV = $(Invoke-expression "$GamDir\gam.exe print orgs fromparent '$Go
 
 $CurrentOUs =@()
 DashedLine
+$OUplaceHolder | out-file $tempcsv10 -Append
 $CurrentOUs = Import-Csv -Path $tempcsv10
 
-<#
-if ($CurrentOus.count -le "0") { 
-    Write-Warning "No existing OU's Found exiting"
-    exit }
-#>
 
-Write-Host "Current OUs:" $CurrentOUs.name
-DashedLine
-### ENHANCEMENT : School short name now required: DRA-Year07 etc ###
-
-<#
 foreach ($OUtoCreate in $OUsToCreate) {
-    if ($CurrentOUs.name.contains($OUtoCreate)) { #logic does not work if NO sub OU's currently exist...
+    if ($CurrentOUs.name.contains($OUtoCreate)) { #logic does not work if NO sub OU's currently exist, hence $OUplaceHolder fix...
     Write-host "OU: $OUtoCreate already exists"
     DashedLine
     } else {
@@ -68,10 +59,6 @@ foreach ($OUtoCreate in $OUsToCreate) {
     DashedLine
     }
 }
-#>
-
-
-
 
 exit ###SNO DEBUG###
 
