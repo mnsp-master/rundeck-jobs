@@ -1,4 +1,4 @@
-$mnspver = "0.0.19"
+$mnspver = "0.0.20"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -137,12 +137,12 @@ $GroupexistCheck.email
 
     Write-Host "-----------Creating Dist group: $member ----------"`n
     $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).ToLower()
-    Invoke-expression "$GamDir\gam.exe create group $GoogleGroupFQDN"
+    Write-host "Invoke-expression $GamDir\gam.exe create group $GoogleGroupFQDN" #SNODEV06062025
 
     Start-sleep 2
 
         foreach ($action in $GoogleWorkspaceGroupSettings) { 
-        Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN $action"
+        Write-host "Invoke-expression $GamDir\gam.exe update group $GoogleGroupFQDN $action" #SNODEV06062025
         
         }
 
@@ -166,7 +166,7 @@ foreach ($user in $VerifiedUserData) {
 
     Write-Host "update/move/rename destination (existing) account..."
     #Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU' changepassword on" ###
-    Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname $FirstName lastname $LastName org '$GoogleWorkspaceDestinationUserOU' " ###move/update existing user
+    Write-Host "Invoke-Expression $GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname $FirstName lastname $LastName org '$GoogleWorkspaceDestinationUserOU' " ###move/update existing user #SNODEV06062025
   
     DashedLine
 }
@@ -211,7 +211,7 @@ Write-Host "sync members of mail dist groups ..."
 
         $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).toLower()
         #Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
-        Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN sync members file $DataDir\$member.lst"
+        Write-host "Invoke-expression $GamDir\gam.exe update group $GoogleGroupFQDN sync members file $DataDir\$member.lst" #SNODEV06062025
 
     }
 
