@@ -1,4 +1,4 @@
-$mnspver = "0.0.20"
+$mnspver = "0.0.21"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -39,7 +39,7 @@ Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleS
 Start-sleep 2
 
 $VerifiedUserData = Get-Content -path $tempcsv4 | select-object -skip 1 | convertFrom-csv | where { $_.$FieldMatch01 -like $FieldString } #import where field like $FieldMatch01, and skip 1st line
-Write Host "Number of records matching selection criteria:" $VerifiedUserData.count
+Write-Host "Number of records matching selection criteria:" $VerifiedUserData.count
 #TODO - if count 0 break out of script...
 $VerifiedUserData
 
@@ -137,12 +137,12 @@ $GroupexistCheck.email
 
     Write-Host "-----------Creating Dist group: $member ----------"`n
     $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).ToLower()
-    Write-host "Invoke-expression $GamDir\gam.exe create group $GoogleGroupFQDN" #SNODEV06062025
+    Invoke-expression "$GamDir\gam.exe create group $GoogleGroupFQDN"
 
     Start-sleep 2
 
         foreach ($action in $GoogleWorkspaceGroupSettings) { 
-        Write-host "Invoke-expression $GamDir\gam.exe update group $GoogleGroupFQDN $action" #SNODEV06062025
+        Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN $action"
         
         }
 
@@ -166,7 +166,7 @@ foreach ($user in $VerifiedUserData) {
 
     Write-Host "update/move/rename destination (existing) account..."
     #Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU' changepassword on" ###
-    Write-Host "Invoke-Expression $GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname $FirstName lastname $LastName org '$GoogleWorkspaceDestinationUserOU' " ###move/update existing user #SNODEV06062025
+    Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname $FirstName lastname $LastName org '$GoogleWorkspaceDestinationUserOU' " ###move/update existing user
   
     DashedLine
 }
@@ -211,7 +211,7 @@ Write-Host "sync members of mail dist groups ..."
 
         $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).toLower()
         #Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
-        Write-host "Invoke-expression $GamDir\gam.exe update group $GoogleGroupFQDN sync members file $DataDir\$member.lst" #SNODEV06062025
+        Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN sync members file $DataDir\$member.lst"
 
     }
 
