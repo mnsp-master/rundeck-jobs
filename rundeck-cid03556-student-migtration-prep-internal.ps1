@@ -1,4 +1,4 @@
-$mnspver = "0.0.73"
+$mnspver = "0.0.74"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -54,7 +54,7 @@ foreach ($OUtoCreate in $OUsToCreate) {
     DashedLine
     } else {
     Write-Warning "OU: $OUtoCreate does not exist, creating..."
-    Write-Host "invoke-expression $GamDir\gam.exe create org '$OutoCreate' parent '$GoogleWorkspaceDestinationUserOU'" #SNODEV06062025
+    invoke-expression "$GamDir\gam.exe create org '$OutoCreate' parent '$GoogleWorkspaceDestinationUserOU'" #SNODEV06062025
     DashedLine
     }
 }
@@ -148,7 +148,7 @@ foreach ($user in $VerifiedUserData) {
             Write-Warning "!!WARNING $LegacyUserMail DOES NOT EXIST!! - update MIS data"
         }
         
-        Write-Host "Invoke-Expression $GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN gal $GoogleIncludeInGal" #SNODEV06062025
+        Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN gal $GoogleIncludeInGal" #SNODEV06062025
         $password = "N/A - unchanged"
         $AccountHistory = "Migrated"
 
@@ -170,7 +170,7 @@ foreach ($user in $VerifiedUserData) {
                 start-sleep 1
             
             Write-Warning "Creating desired target mail domain email address..."
-            Write-host "Invoke-Expression $GamDir\gam.exe create user $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN password $password gal $GoogleIncludeInGal" #SNODEV06062025
+            Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN password $password gal $GoogleIncludeInGal" #SNODEV06062025
             $LegacyUserMail = "N/A"
             $AccountHistory = "New"
 
