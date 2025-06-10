@@ -1,4 +1,4 @@
-$mnspver = "0.0.5"
+$mnspver = "0.0.6"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -62,8 +62,6 @@ $VerifiedUserData = Get-Content -path $tempcsv4 | convertFrom-csv | where { $_.$
 Write Host "Number of records matching selection criteria:" $VerifiedUserData.count
 #TODO - if count 0 break out of script...
 
-exit #SNO DEBUG
-
 #create user info destination gsheet
 #$UserInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
 
@@ -81,6 +79,7 @@ foreach ($user in $VerifiedUserData) {
     $LastName = $user."Modified_Preferred_Lastname" ## UPDATE NEEDED ##
     $ReplacementUserMail = $user."new email"
     $DestOU = [int] $user."NC Year(s) for today" #set var as interger
+    #$MisID = #vlookup needed...
 
     #add leading zero if required: to create consitent OUs YEAR07 not YEAR7: 
         if ( $DestOU -le 9) {
@@ -107,16 +106,20 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Source Year: $DestOU" 
     Write-Host "Destination OU name: $UpdatedDestOU"
 
-    
+    $UserToProcess = @()
+    $UserToProcess = $( get-aduser -filter {emailaddress -eq $LegacyUserMail} | properties * | select-object $ADattribs )
+    $UserToProcess
+
+
     #capture initial credentials
-    "$firstname,$lastname,$legacyUserMail,$ReplacementUserMail,$password,$AccountHistory,$UPN" | out-file -filepath $tempcsv2 -Append
+    #"$firstname,$lastname,$legacyUserMail,$ReplacementUserMail,$password,$AccountHistory,$UPN" | out-file -filepath $tempcsv2 -Append
     
     DashedLine
     
 }
     #upload post migtation data in gsheet...
-    $UpdatedUsersInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain Migrated User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
-    Write-Host "Invoke-Expression $GamDir\gam.exe user $GoogleSvcAccount update drivefile id $UpdatedUsersInfoGsheetID localfile $tempcsv2 newfilename 'User info - Post Migration for domain: $GoogleWorkspaceDestinationMailDomain as of: $(Get-date)'" #-ErrorAction SilentlyContinue 
+    #$UpdatedUsersInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain Migrated User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
+    #Write-Host "Invoke-Expression $GamDir\gam.exe user $GoogleSvcAccount update drivefile id $UpdatedUsersInfoGsheetID localfile $tempcsv2 newfilename 'User info - Post Migration for domain: $GoogleWorkspaceDestinationMailDomain as of: $(Get-date)'" #-ErrorAction SilentlyContinue 
 
 
 #######################
