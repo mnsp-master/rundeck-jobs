@@ -1,4 +1,4 @@
-$mnspver = "0.0.2"
+$mnspver = "0.0.3"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -47,17 +47,22 @@ Start-sleep 2
 
 Write-Host "Field match:  " $FieldMatch01
 Write-Host "Field String: " $FieldString
-#Write-Host "$VerifiedUserData = Get-Content -path $tempcsv4 | select-object -skip 1 | convertFrom-csv | where { $_.$FieldMatch01 -like $FieldString } "
+$VerifiedUserData = Get-Content -path $tempcsv4 | where { $_.$FieldMatch01 -like $FieldString }
 #$VerifiedUserData = Get-Content -path $tempcsv4 | convertFrom-csv | where { $_.$FieldMatch01 -like $FieldString } #import where field like $FieldMatch01
 
-$VerifiedUserData = Get-Content -path $tempcsv4 | convertFrom-csv | where-object { 
-    $_.$FieldMatch01 -like $FieldString -and 
-    $_.$Fieldmatch02 -match '^[0-9]+$' #Numeric values only - excludes - R N1 N2 etc
-    } #import where field like $FieldMatch01
+#$VerifiedUserData = Get-Content -path $tempcsv4 | convertFrom-csv | where-object { 
+#    $_.$FieldMatch01 -like $FieldString -and 
+#    $_.$Fieldmatch02 -match '^[0-9]+$' #Numeric values only - excludes - R N1 N2 etc
+#    } #import where field like $FieldMatch01
+
+
+
 
 #$VerifiedUserData = Get-Content -path $tempcsv4 | select-object -skip 1 | convertFrom-csv | where { $_.$FieldMatch01 -like $FieldString } #import where field like $FieldMatch01, and skip 1st line
 Write Host "Number of records matching selection criteria:" $VerifiedUserData.count
 #TODO - if count 0 break out of script...
+
+exit #SNO DEBUG
 
 #create user info destination gsheet
 #$UserInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
@@ -108,7 +113,6 @@ foreach ($user in $VerifiedUserData) {
     
     DashedLine
     
-
 }
     #upload post migtation data in gsheet...
     $UpdatedUsersInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain Migrated User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
