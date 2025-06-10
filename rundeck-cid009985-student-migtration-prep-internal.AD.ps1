@@ -1,13 +1,10 @@
-$mnspver = "0.0.1"
+$mnspver = "0.0.2"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 Start-Sleep 10
 $ErrorActionPreference="Continue"
 Set-Location $GamDir
-
-#$FormatEnumerationLimit=-1
-#$FormatEnumerationLimit
 
 function DashedLine {
 Write-host "-----------------------------------------------------------`n"
@@ -36,37 +33,6 @@ Invoke-Expression "$GamDir\gam.exe"
 start-sleep 3
 DashedLine
 
-#OUS to create:
-if (test-path $tempcsv10) { remove-item $tempcsv10 -force -verbose }
-Write-Host "Getting OU's from parent: $GoogleworkspaceDestinationUserOU"
-$CurrentOUsCSV =@()
-$CurrentOUsCSV = $(Invoke-expression "$GamDir\gam.exe print orgs fromparent '$GoogleworkspaceDestinationUserOU' | Out-file $tempcsv10" )
-
-$CurrentOUs =@()
-DashedLine
-$OUplaceHolder | out-file $tempcsv10 -Append
-$CurrentOUs = Import-Csv -Path $tempcsv10
-
-
-foreach ($OUtoCreate in $OUsToCreate) {
-    if ($CurrentOUs.name.contains($OUtoCreate)) { #logic does not work if NO sub OU's currently exist, hence $OUplaceHolder fix...
-    Write-host "OU: $OUtoCreate already exists"
-    DashedLine
-    } else {
-    Write-Warning "OU: $OUtoCreate does not exist, creating..."
-    Write-Host "invoke-expression $GamDir\gam.exe create org '$OutoCreate' parent '$GoogleWorkspaceDestinationUserOU'" #SNODEV06062025
-    DashedLine
-    }
-}
-
-#exit ###SNO DEBUG###
-
-if (test-path $tempcsv9) { remove-item $tempcsv9 -force -verbose }
-Write-Host "Report on all current users from base OU: $GoogleWorkspaceSourceUserOU"
-Invoke-expression "$GamDir\gam.exe ou_and_children '$GoogleWorkspaceSourceUserOU' print allfields >> $tempcsv9" 
-Invoke-expression "$GamDir\gam.exe ou_and_children '$GoogleWorkspaceSourceUserOU' print allfields todrive tdparent id:$GfolderReportsID tdtitle 'User info - Pre Migration for domain: $GoogleWorkspaceSourceMailDomain as of: $(Get-date)'"
-
-$GoogleWorkspaceSourceUsers = import-csv -path $tempcsv9
 
 #get verified user data
 #if exist check & remove $tempcsv4
@@ -136,6 +102,21 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Source Year: $DestOU" 
     Write-Host "Destination OU name: $UpdatedDestOU"
 
+    
+    #capture initial credentials
+    "$firstname,$lastname,$legacyUserMail,$ReplacementUserMail,$password,$AccountHistory,$UPN" | out-file -filepath $tempcsv2 -Append
+    
+    DashedLine
+    
+
+}
+    #upload post migtation data in gsheet...
+    $UpdatedUsersInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain Migrated User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
+    Write-Host "Invoke-Expression $GamDir\gam.exe user $GoogleSvcAccount update drivefile id $UpdatedUsersInfoGsheetID localfile $tempcsv2 newfilename 'User info - Post Migration for domain: $GoogleWorkspaceDestinationMailDomain as of: $(Get-date)'" #-ErrorAction SilentlyContinue 
+
+
+#######################
+<#
 
   Write-Host "Checking if legacy mail: $LegacyUserMail  like: $GoogleWorkspaceSourceMailDomain"
     if ( $LegacyUserMail -like "*$GoogleWorkspaceSourceMailDomain" ) {
@@ -175,22 +156,38 @@ foreach ($user in $VerifiedUserData) {
             $AccountHistory = "New"
 
     }
-    
-    #capture initial credentials
-    "$firstname,$lastname,$legacyUserMail,$ReplacementUserMail,$password,$AccountHistory,$UPN" | out-file -filepath $tempcsv2 -Append
-    
+
+if (test-path $tempcsv9) { remove-item $tempcsv9 -force -verbose }
+Write-Host "Report on all current users from base OU: $GoogleWorkspaceSourceUserOU"
+Invoke-expression "$GamDir\gam.exe ou_and_children '$GoogleWorkspaceSourceUserOU' print allfields >> $tempcsv9" 
+Invoke-expression "$GamDir\gam.exe ou_and_children '$GoogleWorkspaceSourceUserOU' print allfields todrive tdparent id:$GfolderReportsID tdtitle 'User info - Pre Migration for domain: $GoogleWorkspaceSourceMailDomain as of: $(Get-date)'"
+
+$GoogleWorkspaceSourceUsers = import-csv -path $tempcsv9
+
+
+#OUS to create:
+if (test-path $tempcsv10) { remove-item $tempcsv10 -force -verbose }
+Write-Host "Getting OU's from parent: $GoogleworkspaceDestinationUserOU"
+$CurrentOUsCSV =@()
+$CurrentOUsCSV = $(Invoke-expression "$GamDir\gam.exe print orgs fromparent '$GoogleworkspaceDestinationUserOU' | Out-file $tempcsv10" )
+
+$CurrentOUs =@()
+DashedLine
+$OUplaceHolder | out-file $tempcsv10 -Append
+$CurrentOUs = Import-Csv -Path $tempcsv10
+
+
+foreach ($OUtoCreate in $OUsToCreate) {
+    if ($CurrentOUs.name.contains($OUtoCreate)) { #logic does not work if NO sub OU's currently exist, hence $OUplaceHolder fix...
+    Write-host "OU: $OUtoCreate already exists"
     DashedLine
-    
-
+    } else {
+    Write-Warning "OU: $OUtoCreate does not exist, creating..."
+    Write-Host "invoke-expression $GamDir\gam.exe create org '$OutoCreate' parent '$GoogleWorkspaceDestinationUserOU'" #SNODEV06062025
+    DashedLine
+    }
 }
-    #upload post migtation data in gsheet...
-    $UpdatedUsersInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain Migrated User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
-    Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount update drivefile id $UpdatedUsersInfoGsheetID localfile $tempcsv2 newfilename 'User info - Post Migration for domain: $GoogleWorkspaceDestinationMailDomain as of: $(Get-date)'" #-ErrorAction SilentlyContinue 
-
-
-#######################
-
-
+#>
 
 #upload initial credentials to gsheet source $tempcsv2
 #Write-Host "replacing content of existing google sheet with upto date data..."
