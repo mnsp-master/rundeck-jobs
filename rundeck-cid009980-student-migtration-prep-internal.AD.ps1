@@ -1,4 +1,4 @@
-$mnspver = "0.0.4"
+$mnspver = "0.0.5"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -47,8 +47,8 @@ Start-sleep 2
 
 Write-Host "Field match:  " $FieldMatch01
 Write-Host "Field String: " $FieldString
-$VerifiedUserData = Get-Content -path $tempcsv4 | where { $_.$FieldMatch01 -like $FieldString }
-#$VerifiedUserData = Get-Content -path $tempcsv4 | convertFrom-csv | where { $_.$FieldMatch01 -like $FieldString } #import where field like $FieldMatch01
+#$VerifiedUserData = Get-Content -path $tempcsv4 | where { $_.$FieldMatch01 -like $FieldString }
+$VerifiedUserData = Get-Content -path $tempcsv4 | convertFrom-csv | where { $_.$FieldMatch01 -like $FieldString } #import where field like $FieldMatch01
 
 #$VerifiedUserData = Get-Content -path $tempcsv4 | convertFrom-csv | where-object { 
 #    $_.$FieldMatch01 -like $FieldString -and 
