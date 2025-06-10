@@ -1,4 +1,4 @@
-$mnspver = "0.0.8"
+$mnspver = "0.0.9"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -107,7 +107,7 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Destination OU name: $UpdatedDestOU"
 
     $UserToProcess = @()
-    Write-Host "$UserToProcess = $( get-aduser -filter {emailaddress -eq $LegacyUserMail} | -Properties * | select-object $ADattribs )"
+    Write-Host "$UserToProcess = $( get-aduser -filter {emailaddress -eq '$LegacyUserMail'} | -Properties * | select-object $ADattribs )"
     #$UserToProcess
 
 
