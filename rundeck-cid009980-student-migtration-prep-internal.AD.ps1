@@ -1,4 +1,4 @@
-$mnspver = "0.0.12"
+$mnspver = "0.0.13"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -79,6 +79,7 @@ foreach ($user in $VerifiedUserData) {
     $LastName = $user."Modified_Preferred_Lastname" ## UPDATE NEEDED ##
     $ReplacementUserMail = $user."new email"
     $DestOU = [int] $user."NC Year(s) for today" #set var as interger
+    $MISid = [int] $user."Arbor ID"
     #$MisID = #vlookup needed...
 
     #add leading zero if required: to create consitent OUs YEAR07 not YEAR7: 
@@ -105,6 +106,7 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Lastname: $LastName"
     Write-Host "Source Year: $DestOU" 
     Write-Host "Destination OU name: $UpdatedDestOU"
+    Write-Host "MIS ID: $MISid"
 
     $UserToProcess = @()
     $UserToProcess = $( get-aduser -filter {emailaddress -eq $LegacyUserMail} -Properties * | select-object $ADattribs )
