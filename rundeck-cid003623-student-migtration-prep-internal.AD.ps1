@@ -1,4 +1,4 @@
-$mnspver = "0.0.15"
+$mnspver = "0.0.16"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -109,8 +109,8 @@ foreach ($user in $VerifiedUserData) {
 
     $UserToProcess = @()
     $UserToProcess = $(Get-ADUser -Filter "EmployeeNumber -like '*$MISid'" -Properties * | select-object $ADattribs) #functional
-    #$UserToProcess = $( get-aduser -filter {emailaddress -eq $LegacyUserMail} -Properties * | select-object $ADattribs )
-    #$UserToProcess = $( get-aduser -filter {employeeNumber -eq $LegacyUserMail} -Properties * | select-object $ADattribs )
+    Write-Host "AD attributes found by searching for user with MIS ID:"
+   
     $UserToProcess
 
 
@@ -127,6 +127,8 @@ foreach ($user in $VerifiedUserData) {
 
 #######################
 <#
+ #$UserToProcess = $( get-aduser -filter {emailaddress -eq $LegacyUserMail} -Properties * | select-object $ADattribs )
+    #$UserToProcess = $( get-aduser -filter {employeeNumber -eq $LegacyUserMail} -Properties * | select-object $ADattribs )
 
   Write-Host "Checking if legacy mail: $LegacyUserMail  like: $GoogleWorkspaceSourceMailDomain"
     if ( $LegacyUserMail -like "*$GoogleWorkspaceSourceMailDomain" ) {
