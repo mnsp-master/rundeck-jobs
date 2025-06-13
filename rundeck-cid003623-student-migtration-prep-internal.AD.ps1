@@ -1,4 +1,4 @@
-$mnspver = "0.0.22"
+$mnspver = "0.0.24"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -80,7 +80,7 @@ foreach ($user in $VerifiedUserData) {
     $ReplacementUserMail = $user."new email"
     $DestOU = [int] $user."NC Year(s) for today" #set var as interger
     $MISid = $user."Arbor ID" # DEV 
-    $MISidComplete = "$GoogleWorkSpaceSource + '-' + $MISid"
+    $MISidComplete = "$MISsitePrefix-$MISid" #concatenate sitename hyphen and MIS id number
     #$MISid = $user."Arbor Student ID" #Production
 
     #add leading zero if required: to create consitent OUs YEAR07 not YEAR7: 
