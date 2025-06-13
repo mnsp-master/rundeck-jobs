@@ -1,4 +1,4 @@
-$mnspver = "0.0.24"
+$mnspver = "0.0.25"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -111,7 +111,7 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Complete MIS ID: $MISidComplete"
 
     $UserToProcess = @()
-    $UserToProcess = $(Get-ADUser -Filter "EmployeeNumber -like '$MISidComplete" -Properties * | select-object $ADattribs) #functional
+    $UserToProcess = $(Get-ADUser -Filter "EmployeeNumber -like $MISidComplete" -Properties * | select-object $ADattribs) #functional
     
     Write-Host "AD attributes found by searching for user with MIS ID:"
    
