@@ -1,4 +1,4 @@
-$mnspver = "0.0.20"
+$mnspver = "0.0.21"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -79,8 +79,8 @@ foreach ($user in $VerifiedUserData) {
     $LastName = $user."Modified_Preferred_Lastname" ## UPDATE NEEDED ##
     $ReplacementUserMail = $user."new email"
     $DestOU = [int] $user."NC Year(s) for today" #set var as interger
-    #$MISid = $user."Arbor ID" # DEV 
-    $MISid = $user."Arbor Student ID" #Production
+    $MISid = $user."Arbor ID" # DEV 
+    #$MISid = $user."Arbor Student ID" #Production
 
     #add leading zero if required: to create consitent OUs YEAR07 not YEAR7: 
         if ( $DestOU -le 9) {
