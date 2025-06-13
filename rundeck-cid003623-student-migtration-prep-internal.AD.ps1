@@ -1,4 +1,4 @@
-$mnspver = "0.0.27"
+$mnspver = "0.0.28"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -38,6 +38,8 @@ DashedLine
 #if exist check & remove $tempcsv4
 if (test-path $tempcsv4) { remove-item $tempcsv4 -force -verbose }
 
+
+##### ERROR TO ADDRESS - Duplicate fileds Value with production gsheet #####
 Write-Host "downloading gsheet ID: $GoogleSheetID tab: $GoogleSheetTab01"
 #Write-Host "$GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleSheetID format csv gsheet ""$GoogleSheetTab01"" targetfolder $DataDir targetname $tempcsv4"
 Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleSheetID format csv gsheet ""$GoogleSheetTab01"" targetfolder $DataDir targetname $tempcsv4"
