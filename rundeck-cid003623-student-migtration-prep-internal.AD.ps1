@@ -1,4 +1,4 @@
-$mnspver = "0.0.29"
+$mnspver = "0.0.30"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -6,8 +6,12 @@ Start-Sleep 10
 $ErrorActionPreference="Continue"
 Set-Location $GamDir
 
-function DashedLine {
+function DashedLine01 {
 Write-host "-----------------------------------------------------------`n"
+}
+
+function DashedLine02 {
+Write-host "---------`n"
 }
 
 #Get-Variable
@@ -31,7 +35,7 @@ Write-Host "Setting workspace Destination: $GoogleWorkSpaceDestination"
 Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceDestination save" # swap/set google workspace
 Invoke-Expression "$GamDir\gam.exe"
 start-sleep 3
-DashedLine
+DashedLine01
 
 
 #get verified user data
@@ -74,7 +78,7 @@ start-sleep 2
 
 Write-Host "Updating users in destination..."
 foreach ($user in $VerifiedUserData) {
-    DashedLine
+    DashedLine01
     $LegacyUserMail = $user."Email Address (Main)" #current mail address
     $UPN = $user."UPN" # student UID (encrypted UPN) ## UPDATE NEEDED ##
     $FirstName = $user."Modified_Preferred_firstname" #prefered firstname ## UPDATE NEEDED ##
@@ -110,7 +114,8 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Source Year: $DestOU" 
     Write-Host "Destination OU name: $UpdatedDestOU"
     Write-Host "MIS ID: $MISid"
-    Write-Host "Complete MIS ID: $MISidComplete `n"
+    Write-Host "Complete MIS ID: $MISidComplete"
+    DashedLine02
 
     $UserToProcess = @()
     $UserToProcess = $(Get-ADUser -Filter "EmployeeNumber -like '$MISidComplete'" -Properties * | select-object $ADattribs) #functional
@@ -119,7 +124,7 @@ foreach ($user in $VerifiedUserData) {
     } else {
             Write-Host "AD attributes found by searching for user with MIS ID: $MISidComplete"
             $UserToProcess
-            DashedLine
+            DashedLine01
 }
 }
     #upload post migtation data in gsheet...
@@ -189,7 +194,7 @@ $CurrentOUsCSV =@()
 $CurrentOUsCSV = $(Invoke-expression "$GamDir\gam.exe print orgs fromparent '$GoogleworkspaceDestinationUserOU' | Out-file $tempcsv10" )
 
 $CurrentOUs =@()
-DashedLine
+DashedLine01
 $OUplaceHolder | out-file $tempcsv10 -Append
 $CurrentOUs = Import-Csv -Path $tempcsv10
 
@@ -197,11 +202,11 @@ $CurrentOUs = Import-Csv -Path $tempcsv10
 foreach ($OUtoCreate in $OUsToCreate) {
     if ($CurrentOUs.name.contains($OUtoCreate)) { #logic does not work if NO sub OU's currently exist, hence $OUplaceHolder fix...
     Write-host "OU: $OUtoCreate already exists"
-    DashedLine
+    DashedLine01
     } else {
     Write-Warning "OU: $OUtoCreate does not exist, creating..."
     Write-Host "invoke-expression $GamDir\gam.exe create org '$OutoCreate' parent '$GoogleWorkspaceDestinationUserOU'" #SNODEV06062025
-    DashedLine
+    DashedLine01
     }
 }
 #>
@@ -257,10 +262,10 @@ Write-Host "Google Source Service Account: $GoogleSourceSvcAccount"
 Write-Host "Setting workspace source: $GoogleWorkSpaceSource"
 Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceSource save" # swap/set google workspace
 Invoke-Expression "$GamDir\gam.exe"
-DashedLine
+DashedLine01
 
 foreach ($user in $VerifiedUserData) {
-    DashedLine
+    DashedLine01
     $LegacyUserMail = $user."Existing Email Address" #current mail address
     $UPN = $user."Staff full name" # UPN ##UPDATE NEEDED##
     $FirstName = $user."Staff first name" #prefered firstname ##UPDATE NEEDED##
@@ -276,7 +281,7 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "update legacy accounts..."
     Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail $GoogleCustomAttribute01 $UPN" #set LDAP adminNumber ##UPDATE NEEDED##
 
-        DashedLine
+        DashedLine01
 }
 #>
 
@@ -289,10 +294,10 @@ Write-Host "Setting workspace Destination: $GoogleWorkSpaceDestination"
 Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceDestination save" # swap/set google workspace
 Invoke-Expression "$GamDir\gam.exe"
 start-sleep 3
-DashedLine
+DashedLine01
 
 foreach ($user in $VerifiedUserData) {
-    DashedLine
+    DashedLine01
     $LegacyUserMail = $user."Existing Email Address" #current mail address
     $UPN = $user."Staff full name" # UPN
     $FirstName = $user."Staff first name" #prefered firstname
