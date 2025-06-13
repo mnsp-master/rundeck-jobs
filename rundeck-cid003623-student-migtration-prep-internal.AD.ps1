@@ -1,4 +1,4 @@
-$mnspver = "0.0.28"
+$mnspver = "0.0.29"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -110,14 +110,14 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Source Year: $DestOU" 
     Write-Host "Destination OU name: $UpdatedDestOU"
     Write-Host "MIS ID: $MISid"
-    Write-Host "Complete MIS ID: $MISidComplete"
+    Write-Host "Complete MIS ID: $MISidComplete `n"
 
     $UserToProcess = @()
     $UserToProcess = $(Get-ADUser -Filter "EmployeeNumber -like '$MISidComplete'" -Properties * | select-object $ADattribs) #functional
     if ($UserToProcess.count -gt 1) {
         Write-Warning "Not an singular match..."
     } else {
-            Write-Host "AD attributes found by searching for user with MIS ID:"
+            Write-Host "AD attributes found by searching for user with MIS ID: $MISidComplete"
             $UserToProcess
             DashedLine
 }
