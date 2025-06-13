@@ -1,4 +1,4 @@
-$mnspver = "0.0.21"
+$mnspver = "0.0.22"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -80,6 +80,7 @@ foreach ($user in $VerifiedUserData) {
     $ReplacementUserMail = $user."new email"
     $DestOU = [int] $user."NC Year(s) for today" #set var as interger
     $MISid = $user."Arbor ID" # DEV 
+    $MISidComplete = "$GoogleWorkSpaceSource + '-' + $MISid"
     #$MISid = $user."Arbor Student ID" #Production
 
     #add leading zero if required: to create consitent OUs YEAR07 not YEAR7: 
@@ -107,9 +108,11 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Source Year: $DestOU" 
     Write-Host "Destination OU name: $UpdatedDestOU"
     Write-Host "MIS ID: $MISid"
+    Write-Host "Complete MIS ID: $MISidComplete"
 
     $UserToProcess = @()
-    $UserToProcess = $(Get-ADUser -Filter "EmployeeNumber -like '*$MISid'" -Properties * | select-object $ADattribs) #functional
+    $UserToProcess = $(Get-ADUser -Filter "EmployeeNumber -like '$MISidComplete" -Properties * | select-object $ADattribs) #functional
+    
     Write-Host "AD attributes found by searching for user with MIS ID:"
    
     $UserToProcess
