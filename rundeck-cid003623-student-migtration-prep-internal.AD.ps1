@@ -1,4 +1,4 @@
-$mnspver = "0.0.26"
+$mnspver = "0.0.27"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -112,17 +112,13 @@ foreach ($user in $VerifiedUserData) {
 
     $UserToProcess = @()
     $UserToProcess = $(Get-ADUser -Filter "EmployeeNumber -like '$MISidComplete'" -Properties * | select-object $ADattribs) #functional
-    
-    Write-Host "AD attributes found by searching for user with MIS ID:"
-   
-    $UserToProcess
-
-
-    #capture initial credentials
-    #"$firstname,$lastname,$legacyUserMail,$ReplacementUserMail,$password,$AccountHistory,$UPN" | out-file -filepath $tempcsv2 -Append
-    
-    DashedLine
-    
+    if ($UserToProcess.count -gt 1) {
+        Write-Warning "Not an singular match..."
+    } else {
+            Write-Host "AD attributes found by searching for user with MIS ID:"
+            $UserToProcess
+            DashedLine
+}
 }
     #upload post migtation data in gsheet...
     #$UpdatedUsersInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain Migrated User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
@@ -131,6 +127,9 @@ foreach ($user in $VerifiedUserData) {
 
 #######################
 <#
+
+        #capture initial credentials
+            #"$firstname,$lastname,$legacyUserMail,$ReplacementUserMail,$password,$AccountHistory,$UPN" | out-file -filepath $tempcsv2 -Append
  #$UserToProcess = $( get-aduser -filter {emailaddress -eq $LegacyUserMail} -Properties * | select-object $ADattribs )
     #$UserToProcess = $( get-aduser -filter {employeeNumber -eq $LegacyUserMail} -Properties * | select-object $ADattribs )
 
