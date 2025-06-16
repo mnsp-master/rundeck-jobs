@@ -1,4 +1,4 @@
-$mnspver = "0.0.40"
+$mnspver = "0.0.41"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -168,6 +168,7 @@ foreach ($user in $VerifiedUserData) {
                 $test.$using:LegacyShare[6] = "ShareName=$using:ReplacementShare"
                 $test.$using:LegacyShare[3] = "$PathToAlterRegItem"
 
+                Write-host "---------`n"
                 Write-Host "updated multivalue registry key"
                 $test.$using:LegacyShare
 
@@ -182,11 +183,11 @@ foreach ($user in $VerifiedUserData) {
                 $test.$using:LegacyShare[6] = "ShareName=$using:ReplacementShare"
                 $test.$using:LegacyShare[3] = "$PathToAlterRegItem"
 
-                Write-host "---------`n"
+                Write-host "`n---------`n"
 
                 Write-Host "updated multivalue registry key"
                 $test.$using:LegacyShare
-                Write-host "---------`n"
+                Write-host "`n---------`n"
 
                 Write-Host "Rename-ItemProperty -Path $using:RegPath -Name $using:Legacyshare -NewName $using:ReplacementShare -verbose" #rename registry key
                 Write-Host "Set-ItemProperty -path $test.PSPath -name $using:ReplacementShare -Value $test.$using:LegacyShare -verbose" # update reg key item multi values
