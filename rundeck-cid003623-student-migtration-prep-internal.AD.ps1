@@ -1,4 +1,4 @@
-$mnspver = "0.0.31"
+$mnspver = "0.0.32"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -147,6 +147,10 @@ foreach ($user in $VerifiedUserData) {
             DashedLine01
 }
 }
+
+Write-Host "Closing all remote PSSessions..."
+Get-PSSession | Remove-PSSession
+
     #upload post migtation data in gsheet...
     #$UpdatedUsersInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain Migrated User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
     #Write-Host "Invoke-Expression $GamDir\gam.exe user $GoogleSvcAccount update drivefile id $UpdatedUsersInfoGsheetID localfile $tempcsv2 newfilename 'User info - Post Migration for domain: $GoogleWorkspaceDestinationMailDomain as of: $(Get-date)'" #-ErrorAction SilentlyContinue 
