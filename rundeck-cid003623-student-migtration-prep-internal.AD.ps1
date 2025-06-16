@@ -1,4 +1,4 @@
-$mnspver = "0.0.37"
+$mnspver = "0.0.38"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -60,8 +60,6 @@ $VerifiedUserData = Get-Content -path $tempcsv4 | convertFrom-csv | where { $_.$
 #    $_.$FieldMatch01 -like $FieldString -and 
 #    $_.$Fieldmatch02 -match '^[0-9]+$' #Numeric values only - excludes - R N1 N2 etc
 #    } #import where field like $FieldMatch01
-
-
 
 
 #$VerifiedUserData = Get-Content -path $tempcsv4 | select-object -skip 1 | convertFrom-csv | where { $_.$FieldMatch01 -like $FieldString } #import where field like $FieldMatch01, and skip 1st line
@@ -173,14 +171,10 @@ foreach ($user in $VerifiedUserData) {
                 Write-Host "updated multivalue registry key"
                 $test.$using:LegacyShare
 
-                $using:DashedLine02
-
                 $PathToAlter = $test.$using:Legacyshare[3] #local path of share
                 $PathToAlterVar1 = $PathToAlter.Substring(0, $PathToAlter.lastIndexOf('\')) #split using \ upto last delimeter
                 $PathToAlterVar2 = $PathToAlter.split("\")[-1] #split using \ return last element (username)
                 $PathToAlterOS = $PathToAlter.split("=")[-1] #remove $ from sharename
-
-                $using:DashedLine02
 
                 #build new path item
                 $PathToAlterRegItem = $PathToAlterVar1 + "\" + $using:ReplacementShareNoDollar
@@ -190,8 +184,6 @@ foreach ($user in $VerifiedUserData) {
 
                 Write-Host "updated multivalue registry key"
                 $test.$using:LegacyShare
-
-                $using:DashedLine02
 
                 Write-Host "Rename-ItemProperty -Path $using:RegPath -Name $using:Legacyshare -NewName $using:ReplacementShare -verbose" #rename registry key
                 Write-Host "Set-ItemProperty -path $test.PSPath -name $using:ReplacementShare -Value $test.$using:LegacyShare -verbose" # update reg key item multi values
