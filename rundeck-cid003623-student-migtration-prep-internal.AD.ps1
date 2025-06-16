@@ -1,4 +1,4 @@
-$mnspver = "0.0.34"
+$mnspver = "0.0.35"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -93,7 +93,8 @@ foreach ($user in $VerifiedUserData) {
     $UPN = $user."UPN" # student UID (encrypted UPN) ## UPDATE NEEDED ##
     $FirstName = $user."Modified_Preferred_firstname" #prefered firstname ## UPDATE NEEDED ##
     $LastName = $user."Modified_Preferred_Lastname" ## UPDATE NEEDED ##
-    $ReplacementUserMail = $user."new email"
+    #$ReplacementUserMail = $user."new email"
+    $ReplacementUserMail = $user."new email 20 chars" #UPDATE NEEDED ### Column heading needs agreeing
     $DestOU = [int] $user."NC Year(s) for today" #set var as interger
     $MISid = $user."Arbor ID" # DEV 
     $MISidComplete = "$MISsitePrefix-$MISid" #concatenate sitename hyphen and MIS id number
@@ -138,9 +139,18 @@ foreach ($user in $VerifiedUserData) {
             $UserToProcess
             $UsersFileServer = @()
             $UsersFileServer = $UserToProcess.HomeDirectory.Split("\")[2]
+            $Legacyshare = $UserToProcess.HomeDirectory.Split("\")[3]
+            $ReplacementShare = $ReplacementUserMail.split("@")[0]
+            $ReplacementShareNoDollar = $ReplacementShare.split('$')[0]
 
+            Write-host "Legacy Share: $Legacyshare"
+            Write-host "Replacement Share: $ReplacementShare"
+            Write-Host "Replacement Share no Dollar: $ReplacementShareNoDollar"
+
+                DashedLine02
+                Write-Host "Remote Session Info:"
                 Invoke-Command -computer  $UsersFileServer -ScriptBlock { #remote share rename scriptblock
-                $RemoteHost = $env:COMPUTERNAME
+                $env:COMPUTERNAME
                 Get-Date
                 }
 
