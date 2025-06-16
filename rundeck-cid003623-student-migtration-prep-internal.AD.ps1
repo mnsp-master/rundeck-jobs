@@ -1,4 +1,4 @@
-$mnspver = "0.0.32"
+$mnspver = "0.0.33"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -137,7 +137,7 @@ foreach ($user in $VerifiedUserData) {
             Write-Host "AD attributes found by searching for user with MIS ID: $MISidComplete"
             $UserToProcess
             $UsersFileServer = @()
-            $UsersFileServer = $UserToProcess.HomeDirectory.Split("\")[1]
+            $UsersFileServer = $UserToProcess.HomeDirectory.Split("\")[2]
 
                 Invoke-Command -computer  $UsersFileServer -ScriptBlock { #remote share rename scriptblock
                 $env:COMPUTERNAME
