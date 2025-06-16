@@ -1,4 +1,4 @@
-$mnspver = "0.0.42"
+$mnspver = "0.0.43"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -192,13 +192,13 @@ foreach ($user in $VerifiedUserData) {
                 $test.$using:LegacyShare
                 Write-host "`n---------`n"
 
-                Write-Host "Rename-ItemProperty -Path $using:RegPath -Name $using:Legacyshare -NewName $using:ReplacementShare -verbose" #rename registry key
-                Write-Host "Set-ItemProperty -path $test.PSPath -name $using:ReplacementShare -Value $test.$using:LegacyShare -verbose" # update reg key item multi values
+                Rename-ItemProperty -Path $using:RegPath -Name $using:Legacyshare -NewName $using:ReplacementShare -verbose #rename registry key
+                Set-ItemProperty -path $test.PSPath -name $using:ReplacementShare -Value $test.$using:LegacyShare -verbose # update reg key item multi values
 
                 #rename existing folder:
-                write-Host "rename-item -path $PathToAlterOS -NewName $using:ReplacementShareNoDollar -verbose"
+                rename-item -path $PathToAlterOS -NewName $using:ReplacementShareNoDollar -verbose
 
-                Write-Host "Get-smbshare -name $using:ReplacementShare"
+                Write-Host Get-smbshare -name $using:ReplacementShare
 
                 }
 
