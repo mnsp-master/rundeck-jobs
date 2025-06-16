@@ -1,4 +1,4 @@
-$mnspver = "0.0.30"
+$mnspver = "0.0.31"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -71,6 +71,16 @@ Write-Host "Number of records matching selection criteria:" $VerifiedUserData.co
 #create user info destination gsheet
 #$UserInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
 
+Write-Host "creating remote PSSEssions for all Fileservers: $FileServers"
+$FileServers = ("wri-sr-003","wri-sr-004","wrisch-mgmt02")
+    foreach ($fileServer in $fileServers) {
+    Write-host "Creating PSSession to $Fileserver"
+    $PSsessionFileserver = New-PSSession -computer $fileserver -verbose
+}
+Write-host "Current remote PSsessions:"
+Get-PSSession
+DashedLine01
+
 if (test-path $tempcsv6) { remove-item $tempcsv6 -force -verbose }
 if (test-path $tempcsv8) { remove-item $tempcsv8 -force -verbose }
 
@@ -121,9 +131,19 @@ foreach ($user in $VerifiedUserData) {
     $UserToProcess = $(Get-ADUser -Filter "EmployeeNumber -like '$MISidComplete'" -Properties * | select-object $ADattribs) #functional
     if ($UserToProcess.count -gt 1) {
         Write-Warning "Not an singular match..."
+        $UserToProcess
+        DashedLine02
     } else {
             Write-Host "AD attributes found by searching for user with MIS ID: $MISidComplete"
             $UserToProcess
+            $UsersFileServer = @()
+            $UsersFileServer = $UserToProcess.HomeDirectory.Split("\")[1]
+
+                Invoke-Command -computer  $UsersFileServer -ScriptBlock { #remote share rename scriptblock
+                $env:COMPUTERNAME
+                Get-Date
+                }
+
             DashedLine01
 }
 }
