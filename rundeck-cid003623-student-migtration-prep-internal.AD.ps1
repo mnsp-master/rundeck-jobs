@@ -1,4 +1,4 @@
-$mnspver = "0.0.35"
+$mnspver = "0.0.36"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -94,7 +94,7 @@ foreach ($user in $VerifiedUserData) {
     $FirstName = $user."Modified_Preferred_firstname" #prefered firstname ## UPDATE NEEDED ##
     $LastName = $user."Modified_Preferred_Lastname" ## UPDATE NEEDED ##
     #$ReplacementUserMail = $user."new email"
-    $ReplacementUserMail = $user."new email 20 chars" #UPDATE NEEDED ### Column heading needs agreeing
+    $ReplacementUserMail = $user."newEmail20Chars" #UPDATE NEEDED ### Column heading needs agreeing
     $DestOU = [int] $user."NC Year(s) for today" #set var as interger
     $MISid = $user."Arbor ID" # DEV 
     $MISidComplete = "$MISsitePrefix-$MISid" #concatenate sitename hyphen and MIS id number
