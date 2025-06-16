@@ -1,4 +1,4 @@
-$mnspver = "0.0.36"
+$mnspver = "0.0.37"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -173,14 +173,14 @@ foreach ($user in $VerifiedUserData) {
                 Write-Host "updated multivalue registry key"
                 $test.$using:LegacyShare
 
-                DashedLine02
+                $using:DashedLine02
 
                 $PathToAlter = $test.$using:Legacyshare[3] #local path of share
                 $PathToAlterVar1 = $PathToAlter.Substring(0, $PathToAlter.lastIndexOf('\')) #split using \ upto last delimeter
                 $PathToAlterVar2 = $PathToAlter.split("\")[-1] #split using \ return last element (username)
                 $PathToAlterOS = $PathToAlter.split("=")[-1] #remove $ from sharename
 
-                DashedLine02
+                $using:DashedLine02
 
                 #build new path item
                 $PathToAlterRegItem = $PathToAlterVar1 + "\" + $using:ReplacementShareNoDollar
@@ -191,7 +191,7 @@ foreach ($user in $VerifiedUserData) {
                 Write-Host "updated multivalue registry key"
                 $test.$using:LegacyShare
 
-                DashedLine02
+                $using:DashedLine02
 
                 Write-Host "Rename-ItemProperty -Path $using:RegPath -Name $using:Legacyshare -NewName $using:ReplacementShare -verbose" #rename registry key
                 Write-Host "Set-ItemProperty -path $test.PSPath -name $using:ReplacementShare -Value $test.$using:LegacyShare -verbose" # update reg key item multi values
