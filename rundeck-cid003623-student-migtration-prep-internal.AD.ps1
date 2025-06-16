@@ -1,4 +1,4 @@
-$mnspver = "0.0.49"
+$mnspver = "0.0.50"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -126,6 +126,8 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Complete MIS ID: $MISidComplete"
     DashedLine02
 
+    ####CHECK NEEDED ##### if MIS ID is NOT NULL....
+
     $UserToProcess = @()
     $UserToProcess = $(Get-ADUser -Filter "EmployeeNumber -like '$MISidComplete'" -Properties * | select-object $ADattribs) #functional
     if ($UserToProcess.count -gt 1) {
@@ -217,7 +219,7 @@ foreach ($user in $VerifiedUserData) {
 
 }
 
-Write-Host "restart-service LanmanServer -verbose"
+restart-service LanmanServer -verbose
 
 Write-Host "Closing all remote PSSessions..."
 Get-PSSession | Remove-PSSession
