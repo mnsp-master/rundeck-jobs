@@ -1,4 +1,4 @@
-$mnspver = "0.0.33"
+$mnspver = "0.0.34"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -140,7 +140,7 @@ foreach ($user in $VerifiedUserData) {
             $UsersFileServer = $UserToProcess.HomeDirectory.Split("\")[2]
 
                 Invoke-Command -computer  $UsersFileServer -ScriptBlock { #remote share rename scriptblock
-                $env:COMPUTERNAME
+                $RemoteHost = $env:COMPUTERNAME
                 Get-Date
                 }
 
