@@ -1,4 +1,4 @@
-$mnspver = "0.0.37"
+$mnspver = "0.0.36"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -148,15 +148,67 @@ foreach ($user in $VerifiedUserData) {
             Write-Host "Replacement Share no Dollar: $ReplacementShareNoDollar"
 
                 DashedLine02
+
                 Write-Host "Remote Session Info:"
                 Invoke-Command -computer  $UsersFileServer -ScriptBlock { #remote share rename scriptblock
                 $env:COMPUTERNAME
-                Get-Date
+                
+               #Get-ItemProperty $using:RegPath
+                Write-Host "Checking for share: $using:Legacyshare"
+                Get-smbshare -name $using:Legacyshare
+
+                $test = Get-ItemProperty $using:RegPath -Name $using:Legacyshare
+                $test.$using:Legacyshare
+
+                $PathToAlter = $test.$using:Legacyshare[3] #local path of share
+                $PathToAlterVar1 = $PathToAlter.Substring(0, $PathToAlter.lastIndexOf('\')) #split using \ upto last delimeter
+                $PathToAlterVar2 = $PathToAlter.split("\")[-1] #split using \ return last element (username)
+                $PathToAlterOS = $PathToAlter.split("=")[-1] #remove $ from sharename
+
+                #build new path item
+                $PathToAlterRegItem = $PathToAlterVar1 + "\" + $using:ReplacementShareNoDollar
+                $test.$using:LegacyShare[6] = "ShareName=$using:ReplacementShare"
+                $test.$using:LegacyShare[3] = "$PathToAlterRegItem"
+
+                Write-Host "updated multivalue registry key"
+                $test.$using:LegacyShare
+
+                DashedLine02
+
+                $PathToAlter = $test.$using:Legacyshare[3] #local path of share
+                $PathToAlterVar1 = $PathToAlter.Substring(0, $PathToAlter.lastIndexOf('\')) #split using \ upto last delimeter
+                $PathToAlterVar2 = $PathToAlter.split("\")[-1] #split using \ return last element (username)
+                $PathToAlterOS = $PathToAlter.split("=")[-1] #remove $ from sharename
+
+                DashedLine02
+
+                #build new path item
+                $PathToAlterRegItem = $PathToAlterVar1 + "\" + $using:ReplacementShareNoDollar
+
+                $test.$using:LegacyShare[6] = "ShareName=$using:ReplacementShare"
+                $test.$using:LegacyShare[3] = "$PathToAlterRegItem"
+
+                Write-Host "updated multivalue registry key"
+                $test.$using:LegacyShare
+
+                DashedLine02
+
+                Write-Host "Rename-ItemProperty -Path $using:RegPath -Name $using:Legacyshare -NewName $using:ReplacementShare -verbose" #rename registry key
+                Write-Host "Set-ItemProperty -path $test.PSPath -name $using:ReplacementShare -Value $test.$using:LegacyShare -verbose" # update reg key item multi values
+
+                #rename existing folder:
+                write-Host "rename-item -path $PathToAlterOS -NewName $using:ReplacementShareNoDollar -verbose"
+
+                Write-Host "Get-smbshare -name $using:ReplacementShare"
+
                 }
 
             DashedLine01
+    }
+
 }
-}
+
+Write-Host "restart-service LanmanServer -verbose"
 
 Write-Host "Closing all remote PSSessions..."
 Get-PSSession | Remove-PSSession
