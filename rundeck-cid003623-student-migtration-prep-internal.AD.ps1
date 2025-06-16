@@ -1,4 +1,4 @@
-$mnspver = "0.0.46"
+$mnspver = "0.0.47"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -165,6 +165,7 @@ foreach ($user in $VerifiedUserData) {
                 $PathToAlterVar1 = $PathToAlter.Substring(0, $PathToAlter.lastIndexOf('\')) #split using \ upto last delimeter
                 $PathToAlterVar2 = $PathToAlter.split("\")[-1] #split using \ return last element (username)
                 $PathToAlterOS = $PathToAlter.split("=")[-1] #remove $ from sharename
+                $LegacyPathOS = @()
                 $LegacyPathOS = $test.$using:LegacyShare[3]
                 Write-Host "LegacyPathOS: " $LegacyPathOS
                 Write-Host "PathToAlterOS:" $PathToAlterOS
@@ -199,6 +200,7 @@ foreach ($user in $VerifiedUserData) {
                 #Set-ItemProperty -path $test.PSPath -name $using:ReplacementShare -Value $test.$using:LegacyShare -verbose # update reg key item multi values
 
                 #rename existing folder:
+                Write-host "rename existing folder: $LegacyPathOS to $using:ReplacementShareNoDollar"
                 Write-Host "PathToAlterOS:" $PathToAlterOS
                 write-host "rename-item -path $LegacyPathOS -NewName $using:ReplacementShareNoDollar -verbose"
 
