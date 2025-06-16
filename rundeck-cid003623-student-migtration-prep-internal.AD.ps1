@@ -1,4 +1,4 @@
-$mnspver = "0.0.43"
+$mnspver = "0.0.44"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -165,6 +165,7 @@ foreach ($user in $VerifiedUserData) {
                 $PathToAlterVar1 = $PathToAlter.Substring(0, $PathToAlter.lastIndexOf('\')) #split using \ upto last delimeter
                 $PathToAlterVar2 = $PathToAlter.split("\")[-1] #split using \ return last element (username)
                 $PathToAlterOS = $PathToAlter.split("=")[-1] #remove $ from sharename
+                Write-Host "PathToAlterOS:" $PathToAlterOS
 
                 #build new path items
                 $PathToAlterRegItem = $PathToAlterVar1 + "\" + $using:ReplacementShareNoDollar
@@ -192,11 +193,12 @@ foreach ($user in $VerifiedUserData) {
                 $test.$using:LegacyShare
                 Write-host "`n---------`n"
 
-                Rename-ItemProperty -Path $using:RegPath -Name $using:Legacyshare -NewName $using:ReplacementShare -verbose #rename registry key
-                Set-ItemProperty -path $test.PSPath -name $using:ReplacementShare -Value $test.$using:LegacyShare -verbose # update reg key item multi values
+                #Rename-ItemProperty -Path $using:RegPath -Name $using:Legacyshare -NewName $using:ReplacementShare -verbose #rename registry key
+                #Set-ItemProperty -path $test.PSPath -name $using:ReplacementShare -Value $test.$using:LegacyShare -verbose # update reg key item multi values
 
                 #rename existing folder:
-                rename-item -path $PathToAlterOS -NewName $using:ReplacementShareNoDollar -verbose
+                Write-Host "PathToAlterOS:" $PathToAlterOS
+                write-host "rename-item -path $PathToAlterOS -NewName $using:ReplacementShareNoDollar -verbose"
 
                 Write-Host Get-smbshare -name $using:ReplacementShare
 
