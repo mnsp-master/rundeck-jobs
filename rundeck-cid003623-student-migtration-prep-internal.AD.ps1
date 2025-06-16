@@ -1,4 +1,4 @@
-$mnspver = "0.0.41"
+$mnspver = "0.0.42"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -156,14 +156,17 @@ foreach ($user in $VerifiedUserData) {
                 Get-smbshare -name $using:Legacyshare
 
                 $test = Get-ItemProperty $using:RegPath -Name $using:Legacyshare
+                
+                Write-Host "Existing Multi vale registry key:"
                 $test.$using:Legacyshare
+                Write-host "---------`n"
 
                 $PathToAlter = $test.$using:Legacyshare[3] #local path of share
                 $PathToAlterVar1 = $PathToAlter.Substring(0, $PathToAlter.lastIndexOf('\')) #split using \ upto last delimeter
                 $PathToAlterVar2 = $PathToAlter.split("\")[-1] #split using \ return last element (username)
                 $PathToAlterOS = $PathToAlter.split("=")[-1] #remove $ from sharename
 
-                #build new path item
+                #build new path items
                 $PathToAlterRegItem = $PathToAlterVar1 + "\" + $using:ReplacementShareNoDollar
                 $test.$using:LegacyShare[6] = "ShareName=$using:ReplacementShare"
                 $test.$using:LegacyShare[3] = "$PathToAlterRegItem"
