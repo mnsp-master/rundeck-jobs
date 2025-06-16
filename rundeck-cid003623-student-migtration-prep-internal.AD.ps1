@@ -1,4 +1,4 @@
-$mnspver = "0.0.48"
+$mnspver = "0.0.49"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -165,8 +165,13 @@ foreach ($user in $VerifiedUserData) {
                 $PathToAlterVar1 = $PathToAlter.Substring(0, $PathToAlter.lastIndexOf('\')) #split using \ upto last delimeter
                 $PathToAlterVar2 = $PathToAlter.split("\")[-1] #split using \ return last element (username)
                 $PathToAlterOS = $PathToAlter.split("=")[-1] #remove $ from sharename
+                
                 $LegacyPathOS = @()
-                $LegacyPathOS = $test.$using:LegacyShare[3]
+                $LegacyPathOStemp = @()
+                $LegacyPathOStemp = $test.$using:LegacyShare[3]
+                $LegacyPathOS = $LegacyPathOStemp.split("=")[1]
+                
+                
                 Write-Host "LegacyPathOS: " $LegacyPathOS
                 Write-Host "PathToAlterOS:" $PathToAlterOS
 
