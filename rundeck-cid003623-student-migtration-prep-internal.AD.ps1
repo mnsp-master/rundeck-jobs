@@ -1,4 +1,4 @@
-$mnspver = "0.0.61"
+$mnspver = "0.0.62"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -93,6 +93,7 @@ foreach ($user in $VerifiedUserData) {
     $DestOU = [int] $user."NC Year(s) for today" #set var as interger
     $MISid = $user."Arbor ID" # DEV 
     $MISidComplete = "$MISsitePrefix-$MISid" #concatenate sitename hyphen and MIS id number
+    $Yearprefix = $user."New prefix"
     #$MISid = $user."Arbor Student ID" #Production
 
     #add leading zero if required: to create consitent OUs YEAR07 not YEAR7: 
@@ -212,7 +213,7 @@ foreach ($user in $VerifiedUserData) {
                         $ReplacementUserPrincipalName = $ReplacementShareNoDollar + "@" + $ReplacementUserPrincipalNameDomain
                         $ReplacementShareFull = "\\" + $UsersFileServer + "\" + $ReplacementShare
                         set-aduser -Identity $UserToProcess.ObjectGUID -GivenName "$FirstName" -surname "$LastName" -email "$ReplacementUserMail" -SamAccountName "$ReplacementShareNoDollar" -DisplayName "$FirstName $LastName" -homeDirectory "$ReplacementShareFull" -userPrincipalName "$ReplacementUserPrincipalName" -verbose 
-                        get-aduser -Identity $UserToProcess.ObjectGUID | rename-ADobject -NewName "$FirstName.$LastName" -verbose
+                        get-aduser -Identity $UserToProcess.ObjectGUID | rename-ADobject -NewName "$Yearprefix $FirstName.$LastName" -verbose
 
 
                     DashedLine01
