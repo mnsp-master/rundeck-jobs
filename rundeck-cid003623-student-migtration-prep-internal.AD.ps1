@@ -1,4 +1,4 @@
-$mnspver = "0.0.55"
+$mnspver = "0.0.57"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -201,7 +201,9 @@ foreach ($user in $VerifiedUserData) {
                         Write-host "rename existing folder: $LegacyPathOS to $using:ReplacementShareNoDollar"
                         rename-item -path $LegacyPathOS -NewName $using:ReplacementShareNoDollar -verbose
 
-                        Get-smbshare -name $using:ReplacementShare
+                        restart-service LanmanServer -verbose
+
+                        Get-smbshare -name $using:ReplacementShare # Cannot be used here as lanman service will need to be restarted, this is now done once all shares renamed
                         Write-host "`n---------`n"
 
                         }
@@ -222,7 +224,7 @@ foreach ($user in $VerifiedUserData) {
     }
 }
 
-restart-service LanmanServer -verbose
+
 
 Write-Host "Closing all remote PSSessions..."
 Get-PSSession | Remove-PSSession
