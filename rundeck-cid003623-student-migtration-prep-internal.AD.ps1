@@ -1,4 +1,4 @@
-$mnspver = "0.0.57"
+$mnspver = "0.0.58"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -208,8 +208,8 @@ foreach ($user in $VerifiedUserData) {
 
                         }
                     Write-Host "updating AD user: "
-                        set-aduser -Identity $UserToProcess.ObjectGUID -GivenName "$FirstName" -surname "$LastName" -email "$ReplacementUserMail" -SamAccountName "$ReplacementShareNoDollar" -DisplayName "$DestOU $FirstName $LastName"  -verbose 
-                        get-aduser -Identity $UserToProcess.ObjectGUID | rename-adobject -NewName "$DestOU $FirstName $LastName" -verbose
+                        set-aduser -Identity $UserToProcess.ObjectGUID -GivenName "$FirstName" -surname "$LastName" -email "$ReplacementUserMail" -SamAccountName "$ReplacementShareNoDollar" -DisplayName "$FirstName $LastName" -homeDirectory "$ReplacementShare" -verbose 
+                        get-aduser -Identity $UserToProcess.ObjectGUID | rename-ADobject -NewName "$FirstName.$LastName" -verbose
 
 
                     DashedLine01
