@@ -1,4 +1,4 @@
-$mnspver = "0.0.51"
+$mnspver = "0.0.52"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -118,7 +118,7 @@ foreach ($user in $VerifiedUserData) {
 
     ####CHECK NEEDED ##### if MIS ID is NOT NULL....
 
-    if ($MISid) {
+    #if ($MISid) {
         $UserToProcess = @()
         $UserToProcess = $(Get-ADUser -Filter "EmployeeNumber -like '$MISidComplete'" -Properties * | select-object $ADattribs) #functional
         if ($UserToProcess.count -gt 1) {
@@ -207,14 +207,14 @@ foreach ($user in $VerifiedUserData) {
 
                     DashedLine01
                 }
-    } else {
+    #} else {
         Write-Warning "No MIS ID found for:"
         Write-host "Legacy email: $LegacyUserMail"
         Write-Host "Replacement email: $ReplacementUserMail"
         Write-Host "UPN: $UPN"
         Write-Host "Firstname: $FirstName"
         Write-Host "Lastname: $LastName"
-    }
+    #}
 }
 
 restart-service LanmanServer -verbose
