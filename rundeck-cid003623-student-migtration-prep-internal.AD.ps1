@@ -1,4 +1,4 @@
-$mnspver = "0.0.63"
+$mnspver = "0.0.64"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -85,9 +85,9 @@ Write-Host "Updating users in destination..."
 foreach ($user in $VerifiedUserData) {
     DashedLine01
     $LegacyUserMail = $user."Email Address (Main)" #current mail address
-    $UPN = $user."UPN" # student UID (encrypted UPN) ## UPDATE NEEDED ##
-    $FirstName = $user."Modified_Preferred_firstname" #prefered firstname ## UPDATE NEEDED ##
-    $LastName = $user."Modified_Preferred_Lastname" ## UPDATE NEEDED ##
+    $UPN = $user."UPN" # student MIS UPN)
+    $FirstName = $user."Modified_Preferred_firstname" #prefered firstname 
+    $LastName = $user."Modified_Preferred_Lastname" #prefered lastname
     #$ReplacementUserMail = $user."new email"
     $ReplacementUserMail = $user."Email20Chars" #UPDATE NEEDED ### Column heading needs agreeing
     $DestOU = [int] $user."NC Year(s) for today" #set var as interger
@@ -105,7 +105,7 @@ foreach ($user in $VerifiedUserData) {
             $UpdatedDestOU = $($GoogleWorkSpaceDest + "-Year" + $DestOU)
             }
 
-
+    #user info/attributes:
     Write-Host "Legacy email: $LegacyUserMail"
     Write-Host "Replacement email: $ReplacementUserMail"
     Write-Host "UPN: $UPN"
@@ -117,11 +117,9 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Complete MIS ID: $MISidComplete"
     DashedLine02
 
-    ####CHECK NEEDED ##### if MIS ID is NOT NULL....
-
-    if ($MISid) {
+    if ($MISid) { #check value is not null...
         $UserToProcess = @()
-        $UserToProcess = $(Get-ADUser -Filter "EmployeeNumber -like '$MISidComplete'" -Properties * | select-object $ADattribs) #functional
+        $UserToProcess = $(Get-ADUser -Filter "EmployeeNumber -like '$MISidComplete'" -Properties * | select-object $ADattribs)
         if ($UserToProcess.count -gt 1) {
             Write-Warning "Not an singular match..."
             $UserToProcess
@@ -140,7 +138,8 @@ foreach ($user in $VerifiedUserData) {
                     Write-Host "Replacement Share no Dollar: $ReplacementShareNoDollar"
 
                         DashedLine02
-
+                        
+                        #create remote PS session to users file share host...
                         Write-Host "Remote Session Info:"
                         Invoke-Command -computer  $UsersFileServer -ScriptBlock { #remote share rename scriptblock
                         $env:COMPUTERNAME
@@ -149,7 +148,7 @@ foreach ($user in $VerifiedUserData) {
                         Write-Host "Checking for share: $using:Legacyshare"
                         Get-smbshare -name $using:Legacyshare
 
-                        $test = Get-ItemProperty $using:RegPath -Name $using:Legacyshare
+                        $test = Get-ItemProperty $using:RegPath -Name $using:Legacyshare #get current multi value reg key/values
                         
                         Write-Host "Existing Multi vale registry key:"
                         $test.$using:Legacyshare
@@ -169,7 +168,7 @@ foreach ($user in $VerifiedUserData) {
                         Write-Host "LegacyPathOS: " $LegacyPathOS
                         Write-Host "PathToAlterOS:" $PathToAlterOS
 
-                        #build new path items
+                        #build new registry path items...
                         $PathToAlterRegItem = $PathToAlterVar1 + "\" + $using:ReplacementShareNoDollar
                         $test.$using:LegacyShare[6] = "ShareName=$using:ReplacementShare"
                         $test.$using:LegacyShare[3] = "$PathToAlterRegItem"
@@ -198,11 +197,11 @@ foreach ($user in $VerifiedUserData) {
                         Rename-ItemProperty -Path $using:RegPath -Name $using:Legacyshare -NewName $using:ReplacementShare -verbose #rename registry key
                         Set-ItemProperty -path $test.PSPath -name $using:ReplacementShare -Value $test.$using:LegacyShare -verbose # update reg key item multi values
 
-                        #rename existing folder:
+                        #rename existing user home drive folder:
                         Write-host "rename existing folder: $LegacyPathOS to $using:ReplacementShareNoDollar"
                         rename-item -path $LegacyPathOS -NewName $using:ReplacementShareNoDollar -verbose
 
-                        restart-service LanmanServer -verbose
+                        restart-service LanmanServer -verbose #restart service to reflect updated registry keys/values to present renamed share
 
                         Write-Host "Replacement Share info:"
                         Get-smbshare -name $using:ReplacementShare
@@ -211,8 +210,8 @@ foreach ($user in $VerifiedUserData) {
                         }
                     Write-Host "updating AD user: "
                         $ReplacementUserPrincipalNameDomain = $UserToProcess.userPrincipalName.split("@")[1] #split using @ select 2nd element
-                        $ReplacementUserPrincipalName = $ReplacementShareNoDollar + "@" + $ReplacementUserPrincipalNameDomain
-                        $ReplacementShareFull = "\\" + $UsersFileServer + "\" + $ReplacementShare
+                        $ReplacementUserPrincipalName = $ReplacementShareNoDollar + "@" + $ReplacementUserPrincipalNameDomain #rebuild replacement userPrincipalName
+                        $ReplacementShareFull = "\\" + $UsersFileServer + "\" + $ReplacementShare 
                         set-aduser -Identity $UserToProcess.ObjectGUID -GivenName "$FirstName" -surname "$LastName" -email "$ReplacementUserMail" -SamAccountName "$ReplacementShareNoDollar" -DisplayName "$FirstName $LastName" -homeDirectory "$ReplacementShareFull" -userPrincipalName "$ReplacementUserPrincipalName" -verbose 
                         $NewName = ($Yearprefix + $FirstName + "." + $LastName).ToLower()
                         get-aduser -Identity $UserToProcess.ObjectGUID | rename-ADobject -NewName "$NewName" -verbose
@@ -220,7 +219,7 @@ foreach ($user in $VerifiedUserData) {
 
                     DashedLine01
                 }
-    } else {
+    } else { #if MIS id is NULL...
         Write-Warning "No MIS ID found for:"
         Write-host "Legacy email: $LegacyUserMail"
         Write-Host "Replacement email: $ReplacementUserMail"
