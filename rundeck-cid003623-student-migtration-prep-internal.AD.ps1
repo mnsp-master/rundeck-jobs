@@ -1,4 +1,4 @@
-$mnspver = "0.0.50"
+$mnspver = "0.0.51"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -43,7 +43,7 @@ DashedLine01
 if (test-path $tempcsv4) { remove-item $tempcsv4 -force -verbose }
 
 
-##### ERROR TO ADDRESS - Duplicate fileds Value with production gsheet #####
+##### ENHANCEMENT ##### ERROR TO ADDRESS - Duplicate fileds Value with production gsheet #####
 Write-Host "downloading gsheet ID: $GoogleSheetID tab: $GoogleSheetTab01"
 #Write-Host "$GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleSheetID format csv gsheet ""$GoogleSheetTab01"" targetfolder $DataDir targetname $tempcsv4"
 Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleSheetID format csv gsheet ""$GoogleSheetTab01"" targetfolder $DataDir targetname $tempcsv4"
@@ -64,20 +64,17 @@ $VerifiedUserData = Get-Content -path $tempcsv4 | convertFrom-csv | where { $_.$
 
 #$VerifiedUserData = Get-Content -path $tempcsv4 | select-object -skip 1 | convertFrom-csv | where { $_.$FieldMatch01 -like $FieldString } #import where field like $FieldMatch01, and skip 1st line
 Write-Host "Number of records matching selection criteria:" $VerifiedUserData.count
-#TODO - if count 0 break out of script...
+#ENHANCEMENT - if count 0 break out of script...
 
-#create user info destination gsheet
-#$UserInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
 
 Write-Host "creating remote PSSEssions for all Fileservers: $FileServers"
-$FileServers = ("wri-sr-003","wri-sr-004","wrisch-mgmt02")
     foreach ($fileServer in $fileServers) {
-    Write-host "Creating PSSession to $Fileserver"
+    Write-host "Creating PSSession to $Fileserver" #### ENHANCEMENT #### try/catch needed
     $PSsessionFileserver = New-PSSession -computer $fileserver -verbose
-}
-Write-host "Current remote PSsessions:"
-Get-PSSession
-DashedLine01
+    }
+    Write-host "Current remote PSsessions:"
+    Get-PSSession
+    DashedLine01
 
 if (test-path $tempcsv6) { remove-item $tempcsv6 -force -verbose }
 if (test-path $tempcsv8) { remove-item $tempcsv8 -force -verbose }
@@ -106,14 +103,7 @@ foreach ($user in $VerifiedUserData) {
             } else {
             $UpdatedDestOU = $($GoogleWorkSpaceDest + "-Year" + $DestOU)
             }
-        
 
-    #script dev check...
-    #if ( $RunDeckDev -eq "true" ) {
-    #    Write-Host "Setting random dev mail address..."
-    #    $RundeckDevMail = ("SNO-" + $([int64](Get-Date -UFormat %s)) + "@" + "$GoogleWorkspaceDestinationMailDomain")
-    #    $ReplacementUserMail = $RundeckDevMail
-    #    }
 
     Write-Host "Legacy email: $LegacyUserMail"
     Write-Host "Replacement email: $ReplacementUserMail"
@@ -128,95 +118,103 @@ foreach ($user in $VerifiedUserData) {
 
     ####CHECK NEEDED ##### if MIS ID is NOT NULL....
 
-    $UserToProcess = @()
-    $UserToProcess = $(Get-ADUser -Filter "EmployeeNumber -like '$MISidComplete'" -Properties * | select-object $ADattribs) #functional
-    if ($UserToProcess.count -gt 1) {
-        Write-Warning "Not an singular match..."
-        $UserToProcess
-        DashedLine02
-    } else {
-            Write-Host "AD attributes found by searching for user with MIS ID: $MISidComplete"
+    if ($MISid) {
+        $UserToProcess = @()
+        $UserToProcess = $(Get-ADUser -Filter "EmployeeNumber -like '$MISidComplete'" -Properties * | select-object $ADattribs) #functional
+        if ($UserToProcess.count -gt 1) {
+            Write-Warning "Not an singular match..."
             $UserToProcess
-            $UsersFileServer = @()
-            $UsersFileServer = $UserToProcess.HomeDirectory.Split("\")[2]
-            $Legacyshare = $UserToProcess.HomeDirectory.Split("\")[3]
-            $ReplacementShare = $ReplacementUserMail.split("@")[0] + "$"
-            $ReplacementShareNoDollar = $ReplacementShare.split('$')[0]
+            DashedLine02
+                } else {
+                    Write-Host "AD attributes found by searching for user with MIS ID: $MISidComplete"
+                    $UserToProcess
+                    $UsersFileServer = @()
+                    $UsersFileServer = $UserToProcess.HomeDirectory.Split("\")[2]
+                    $Legacyshare = $UserToProcess.HomeDirectory.Split("\")[3]
+                    $ReplacementShare = $ReplacementUserMail.split("@")[0] + "$"
+                    $ReplacementShareNoDollar = $ReplacementShare.split('$')[0]
 
-            Write-host "Legacy Share: $Legacyshare"
-            Write-host "Replacement Share: $ReplacementShare"
-            Write-Host "Replacement Share no Dollar: $ReplacementShareNoDollar"
+                    Write-host "Legacy Share: $Legacyshare"
+                    Write-host "Replacement Share: $ReplacementShare"
+                    Write-Host "Replacement Share no Dollar: $ReplacementShareNoDollar"
 
-                DashedLine02
+                        DashedLine02
 
-                Write-Host "Remote Session Info:"
-                Invoke-Command -computer  $UsersFileServer -ScriptBlock { #remote share rename scriptblock
-                $env:COMPUTERNAME
-                
-               #Get-ItemProperty $using:RegPath
-                Write-Host "Checking for share: $using:Legacyshare"
-                Get-smbshare -name $using:Legacyshare
+                        Write-Host "Remote Session Info:"
+                        Invoke-Command -computer  $UsersFileServer -ScriptBlock { #remote share rename scriptblock
+                        $env:COMPUTERNAME
+                        
+                        #Get-ItemProperty $using:RegPath
+                        Write-Host "Checking for share: $using:Legacyshare"
+                        Get-smbshare -name $using:Legacyshare
 
-                $test = Get-ItemProperty $using:RegPath -Name $using:Legacyshare
-                
-                Write-Host "Existing Multi vale registry key:"
-                $test.$using:Legacyshare
-                Write-host "---------`n"
+                        $test = Get-ItemProperty $using:RegPath -Name $using:Legacyshare
+                        
+                        Write-Host "Existing Multi vale registry key:"
+                        $test.$using:Legacyshare
+                        Write-host "---------`n"
 
-                $PathToAlter = $test.$using:Legacyshare[3] #local path of share
-                $PathToAlterVar1 = $PathToAlter.Substring(0, $PathToAlter.lastIndexOf('\')) #split using \ upto last delimeter
-                $PathToAlterVar2 = $PathToAlter.split("\")[-1] #split using \ return last element (username)
-                $PathToAlterOS = $PathToAlter.split("=")[-1] #remove $ from sharename
-                
-                $LegacyPathOS = @()
-                $LegacyPathOStemp = @()
-                $LegacyPathOStemp = $test.$using:LegacyShare[3]
-                $LegacyPathOS = $LegacyPathOStemp.split("=")[1]
-                
-                
-                Write-Host "LegacyPathOS: " $LegacyPathOS
-                Write-Host "PathToAlterOS:" $PathToAlterOS
+                        $PathToAlter = $test.$using:Legacyshare[3] #local path of share
+                        $PathToAlterVar1 = $PathToAlter.Substring(0, $PathToAlter.lastIndexOf('\')) #split using \ upto last delimeter
+                        $PathToAlterVar2 = $PathToAlter.split("\")[-1] #split using \ return last element (username)
+                        $PathToAlterOS = $PathToAlter.split("=")[-1] #remove $ from sharename
+                        
+                        $LegacyPathOS = @()
+                        $LegacyPathOStemp = @()
+                        $LegacyPathOStemp = $test.$using:LegacyShare[3]
+                        $LegacyPathOS = $LegacyPathOStemp.split("=")[1]
+                        
+                        
+                        Write-Host "LegacyPathOS: " $LegacyPathOS
+                        Write-Host "PathToAlterOS:" $PathToAlterOS
 
-                #build new path items
-                $PathToAlterRegItem = $PathToAlterVar1 + "\" + $using:ReplacementShareNoDollar
-                $test.$using:LegacyShare[6] = "ShareName=$using:ReplacementShare"
-                $test.$using:LegacyShare[3] = "$PathToAlterRegItem"
+                        #build new path items
+                        $PathToAlterRegItem = $PathToAlterVar1 + "\" + $using:ReplacementShareNoDollar
+                        $test.$using:LegacyShare[6] = "ShareName=$using:ReplacementShare"
+                        $test.$using:LegacyShare[3] = "$PathToAlterRegItem"
 
-                Write-host "---------`n"
-                Write-Host "updated multivalue registry key"
-                $test.$using:LegacyShare
+                        Write-host "---------`n"
+                        Write-Host "updated multivalue registry key"
+                        $test.$using:LegacyShare
 
-                $PathToAlter = $test.$using:Legacyshare[3] #local path of share
-                $PathToAlterVar1 = $PathToAlter.Substring(0, $PathToAlter.lastIndexOf('\')) #split using \ upto last delimeter
-                $PathToAlterVar2 = $PathToAlter.split("\")[-1] #split using \ return last element (username)
-                $PathToAlterOS = $PathToAlter.split("=")[-1] #remove $ from sharename
+                        $PathToAlter = $test.$using:Legacyshare[3] #local path of share
+                        $PathToAlterVar1 = $PathToAlter.Substring(0, $PathToAlter.lastIndexOf('\')) #split using \ upto last delimeter
+                        $PathToAlterVar2 = $PathToAlter.split("\")[-1] #split using \ return last element (username)
+                        $PathToAlterOS = $PathToAlter.split("=")[-1] #remove $ from sharename
 
-                #build new path item
-                $PathToAlterRegItem = $PathToAlterVar1 + "\" + $using:ReplacementShareNoDollar
+                        #build new path item
+                        $PathToAlterRegItem = $PathToAlterVar1 + "\" + $using:ReplacementShareNoDollar
 
-                $test.$using:LegacyShare[6] = "ShareName=$using:ReplacementShare"
-                $test.$using:LegacyShare[3] = "$PathToAlterRegItem"
+                        $test.$using:LegacyShare[6] = "ShareName=$using:ReplacementShare"
+                        $test.$using:LegacyShare[3] = "$PathToAlterRegItem"
 
-                Write-host "`n---------`n"
+                        Write-host "`n---------`n"
 
-                Write-Host "updated multivalue registry key"
-                $test.$using:LegacyShare
-                Write-host "`n---------`n"
+                        Write-Host "updated multivalue registry key"
+                        $test.$using:LegacyShare
+                        Write-host "`n---------`n"
 
-                Rename-ItemProperty -Path $using:RegPath -Name $using:Legacyshare -NewName $using:ReplacementShare -verbose #rename registry key
-                Set-ItemProperty -path $test.PSPath -name $using:ReplacementShare -Value $test.$using:LegacyShare -verbose # update reg key item multi values
+                        Rename-ItemProperty -Path $using:RegPath -Name $using:Legacyshare -NewName $using:ReplacementShare -verbose #rename registry key
+                        Set-ItemProperty -path $test.PSPath -name $using:ReplacementShare -Value $test.$using:LegacyShare -verbose # update reg key item multi values
 
-                #rename existing folder:
-                Write-host "rename existing folder: $LegacyPathOS to $using:ReplacementShareNoDollar"
-                rename-item -path $LegacyPathOS -NewName $using:ReplacementShareNoDollar -verbose
+                        #rename existing folder:
+                        Write-host "rename existing folder: $LegacyPathOS to $using:ReplacementShareNoDollar"
+                        rename-item -path $LegacyPathOS -NewName $using:ReplacementShareNoDollar -verbose
 
-                Write-Host Get-smbshare -name $using:ReplacementShare
+                        Write-Host Get-smbshare -name $using:ReplacementShare
 
+                        }
+
+                    DashedLine01
                 }
-
-            DashedLine01
+    } else {
+        Write-Warning "No MIS ID found for:"
+        Write-host "Legacy email: $LegacyUserMail"
+        Write-Host "Replacement email: $ReplacementUserMail"
+        Write-Host "UPN: $UPN"
+        Write-Host "Firstname: $FirstName"
+        Write-Host "Lastname: $LastName"
     }
-
 }
 
 restart-service LanmanServer -verbose
@@ -231,6 +229,17 @@ Get-PSSession | Remove-PSSession
 
 #######################
 <#
+
+   #create user info destination gsheet
+#$UserInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
+     
+
+    #script dev check...
+    #if ( $RunDeckDev -eq "true" ) {
+    #    Write-Host "Setting random dev mail address..."
+    #    $RundeckDevMail = ("SNO-" + $([int64](Get-Date -UFormat %s)) + "@" + "$GoogleWorkspaceDestinationMailDomain")
+    #    $ReplacementUserMail = $RundeckDevMail
+    #    }
 
         #capture initial credentials
             #"$firstname,$lastname,$legacyUserMail,$ReplacementUserMail,$password,$AccountHistory,$UPN" | out-file -filepath $tempcsv2 -Append
