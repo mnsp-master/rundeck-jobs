@@ -1,4 +1,4 @@
-$mnspver = "0.0.62"
+$mnspver = "0.0.63"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -204,7 +204,8 @@ foreach ($user in $VerifiedUserData) {
 
                         restart-service LanmanServer -verbose
 
-                        Get-smbshare -name $using:ReplacementShare # Cannot be used here as lanman service will need to be restarted, this is now done once all shares renamed
+                        Write-Host "Replacement Share info:"
+                        Get-smbshare -name $using:ReplacementShare
                         Write-host "`n---------`n"
 
                         }
@@ -213,7 +214,8 @@ foreach ($user in $VerifiedUserData) {
                         $ReplacementUserPrincipalName = $ReplacementShareNoDollar + "@" + $ReplacementUserPrincipalNameDomain
                         $ReplacementShareFull = "\\" + $UsersFileServer + "\" + $ReplacementShare
                         set-aduser -Identity $UserToProcess.ObjectGUID -GivenName "$FirstName" -surname "$LastName" -email "$ReplacementUserMail" -SamAccountName "$ReplacementShareNoDollar" -DisplayName "$FirstName $LastName" -homeDirectory "$ReplacementShareFull" -userPrincipalName "$ReplacementUserPrincipalName" -verbose 
-                        get-aduser -Identity $UserToProcess.ObjectGUID | rename-ADobject -NewName "$Yearprefix $FirstName.$LastName" -verbose
+                        $NewName = ($Yearprefix + $FirstName + "." + $LastName).ToLower()
+                        get-aduser -Identity $UserToProcess.ObjectGUID | rename-ADobject -NewName "$NewName" -verbose
 
 
                     DashedLine01
