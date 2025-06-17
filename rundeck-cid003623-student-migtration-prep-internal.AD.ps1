@@ -1,4 +1,4 @@
-$mnspver = "0.0.53"
+$mnspver = "0.0.54"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -201,7 +201,7 @@ foreach ($user in $VerifiedUserData) {
                         Write-host "rename existing folder: $LegacyPathOS to $using:ReplacementShareNoDollar"
                         rename-item -path $LegacyPathOS -NewName $using:ReplacementShareNoDollar -verbose
 
-                        Write-Host Get-smbshare -name $using:ReplacementShare
+                        Get-smbshare -name $using:ReplacementShare
 
                         }
 
