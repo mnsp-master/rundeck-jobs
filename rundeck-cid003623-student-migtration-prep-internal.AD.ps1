@@ -1,4 +1,4 @@
-$mnspver = "0.0.65"
+$mnspver = "0.0.66"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -92,7 +92,7 @@ foreach ($user in $VerifiedUserData) {
     $ReplacementUserMail = $user."Email20Chars" #UPDATE NEEDED ### Column heading needs agreeing
     $DestOU = [int] $user."NC Year(s) for today" #set var as interger
     $MISid = $user."Arbor ID" # DEV 
-    $MISidComplete = "$MISsitePrefix-$MISid" #concatenate sitename hyphen and MIS id number
+    $MISidComplete = "$MISsitePrefix-$MISid" #concatenate sitename hyphen and MIS id number e.g: SCH-292 students SCH-Stf_34
     $Yearprefix = $user."New prefix"
     #$MISid = $user."Arbor Student ID" #Production
 
@@ -214,7 +214,8 @@ foreach ($user in $VerifiedUserData) {
                         $ReplacementShareFull = "\\" + $UsersFileServer + "\" + $ReplacementShare 
                         set-aduser -Identity $UserToProcess.ObjectGUID -GivenName "$FirstName" -surname "$LastName" -email "$ReplacementUserMail" -SamAccountName "$ReplacementShareNoDollar" -DisplayName "$FirstName $LastName" -homeDirectory "$ReplacementShareFull" -userPrincipalName "$ReplacementUserPrincipalName" -verbose 
                         
-                        #### ENHANCEMENT #### update mnspAdminNumber attribute ##########
+                        # update mnspAdminNumber attribute
+                        Set-ADUser -Identity $UserToProcess.ObjectGUID -Add @{mnspAdminNumber="$MISid"}
 
                         $NewName = ($Yearprefix + $FirstName + "." + $LastName).ToLower()
                         get-aduser -Identity $UserToProcess.ObjectGUID | rename-ADobject -NewName "$NewName" -verbose
