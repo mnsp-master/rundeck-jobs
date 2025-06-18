@@ -1,4 +1,4 @@
-$mnspver = "0.0.64"
+$mnspver = "0.0.65"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -213,6 +213,9 @@ foreach ($user in $VerifiedUserData) {
                         $ReplacementUserPrincipalName = $ReplacementShareNoDollar + "@" + $ReplacementUserPrincipalNameDomain #rebuild replacement userPrincipalName
                         $ReplacementShareFull = "\\" + $UsersFileServer + "\" + $ReplacementShare 
                         set-aduser -Identity $UserToProcess.ObjectGUID -GivenName "$FirstName" -surname "$LastName" -email "$ReplacementUserMail" -SamAccountName "$ReplacementShareNoDollar" -DisplayName "$FirstName $LastName" -homeDirectory "$ReplacementShareFull" -userPrincipalName "$ReplacementUserPrincipalName" -verbose 
+                        
+                        #### ENHANCEMENT #### update mnspAdminNumber attribute ##########
+
                         $NewName = ($Yearprefix + $FirstName + "." + $LastName).ToLower()
                         get-aduser -Identity $UserToProcess.ObjectGUID | rename-ADobject -NewName "$NewName" -verbose
 
