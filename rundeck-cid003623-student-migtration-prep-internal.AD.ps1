@@ -1,9 +1,9 @@
-$mnspver = "0.0.76"
+$mnspver = "0.0.77"
 
 <#
 Overall process to:
 - Begin trarscript logging
-- Download google sheet containing all necessary information (MAT wide export from central arbor), filtered based on desired school or use local CSV
+- Download google sheet - or use local/manually saved CSV, containing all necessary information (MAT wide export from central arbor), data filtered - based on desired school 
 - Create any necessary remote Powershell sessions on any file servers where required
 - Create a user array (from downloaded/filtered csv data)
     - Loop through the user array, finding the AD object that matches Arbor ID (employeeNumber AD attribute previously synchronised by salamander)
