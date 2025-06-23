@@ -1,4 +1,4 @@
-$mnspver = "0.0.78"
+$mnspver = "0.0.79"
 
 <#
 Overall process to:
@@ -209,7 +209,7 @@ foreach ($user in $VerifiedUserData) {
                         Write-Host "updated multivalue registry key"
                         $test.$using:LegacyShare
 
-                        ##### ENHANCEMENT ##### - appears to be a duplicate of lines 137 - 140
+                        ##### ENHANCEMENT ##### - appears to be a duplicate of lines 189 - 192
                         $PathToAlter = $test.$using:Legacyshare[3] #local path of share 
                         $PathToAlterVar1 = $PathToAlter.Substring(0, $PathToAlter.lastIndexOf('\')) #split using \ upto last delimeter
                         $PathToAlterVar2 = $PathToAlter.split("\")[-1] #split using \ return last element (username)
