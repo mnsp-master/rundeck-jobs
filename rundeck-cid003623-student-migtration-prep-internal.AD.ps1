@@ -1,4 +1,4 @@
-$mnspver = "0.0.73"
+$mnspver = "0.0.74"
 
 ##### ENHANCEMENT ##### general whatif's required to run in dry mode
 ##### ENHANCEMENT ##### general environment/vars area required to enable PS run outside of rundeck environment
@@ -28,6 +28,7 @@ Clear-Content $tempcsv2
 sleep 1
 $UserInfoCSVheader | out-file -filepath $tempcsv2 -Append #create blank csv with simple header
 
+##### ENHANCEMENT ##### toggle between local previously manually downloaded gsheet/csv, and geting gsheet each time
 #Set Google Instance: Destination...
 Write-Host "###### Set Google instance: Destination... ######"
 
