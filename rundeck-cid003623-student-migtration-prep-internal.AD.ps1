@@ -1,6 +1,7 @@
-$mnspver = "0.0.71"
+$mnspver = "0.0.73"
 
 ##### ENHANCEMENT ##### general whatif's required to run in dry mode
+##### ENHANCEMENT ##### general environment/vars area required to enable PS run outside of rundeck environment
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -203,14 +204,14 @@ foreach ($user in $VerifiedUserData) {
                         $test.$using:LegacyShare
                         Write-host "`n---------`n"
 
-                        Rename-ItemProperty -Path $using:RegPath -Name $using:Legacyshare -NewName $using:ReplacementShare -verbose #rename registry key
-                        Set-ItemProperty -path $test.PSPath -name $using:ReplacementShare -Value $test.$using:LegacyShare -verbose # update reg key item multi values
+                        Rename-ItemProperty -Path $using:RegPath -Name $using:Legacyshare -NewName $using:ReplacementShare -verbose #rename registry key ##### ENHANCEMENT ##### whatif required
+                        Set-ItemProperty -path $test.PSPath -name $using:ReplacementShare -Value $test.$using:LegacyShare -verbose # update reg key item multi values ##### ENHANCEMENT ##### whatif required
 
                         #rename existing user home drive folder:
                         Write-host "rename existing folder: $LegacyPathOS to $using:ReplacementShareNoDollar"
-                        rename-item -path $LegacyPathOS -NewName $using:ReplacementShareNoDollar -verbose
+                        rename-item -path $LegacyPathOS -NewName $using:ReplacementShareNoDollar -verbose ##### ENHANCEMENT ##### whatif required
 
-                        restart-service LanmanServer -verbose #restart service to reflect updated registry keys/values to present renamed share
+                        restart-service LanmanServer -verbose #restart service to reflect updated registry keys/values to present renamed share ##### ENHANCEMENT ##### highly inefficient consider restart of sevice once post mods per server
 
                         Write-Host "Replacement Share info:"
                         Get-smbshare -name $using:ReplacementShare
@@ -221,13 +222,13 @@ foreach ($user in $VerifiedUserData) {
                         $ReplacementUserPrincipalNameDomain = $UserToProcess.userPrincipalName.split("@")[1] #split using @ select 2nd element
                         $ReplacementUserPrincipalName = $ReplacementShareNoDollar + "@" + $ReplacementUserPrincipalNameDomain #rebuild replacement userPrincipalName
                         $ReplacementShareFull = "\\" + $UsersFileServer + "\" + $ReplacementShare 
-                        set-aduser -Identity $UserToProcess.ObjectGUID -GivenName "$FirstName" -surname "$LastName" -email "$ReplacementUserMail" -SamAccountName "$ReplacementShareNoDollar" -DisplayName "$FirstName $LastName" -homeDirectory "$ReplacementShareFull" -userPrincipalName "$ReplacementUserPrincipalName" -verbose 
+                        set-aduser -Identity $UserToProcess.ObjectGUID -GivenName "$FirstName" -surname "$LastName" -email "$ReplacementUserMail" -SamAccountName "$ReplacementShareNoDollar" -DisplayName "$FirstName $LastName" -homeDirectory "$ReplacementShareFull" -userPrincipalName "$ReplacementUserPrincipalName" -verbose ##### ENHANCEMENT ##### whatif required
                         
                         # update mnspAdminNumber attribute
-                        Set-ADUser -Identity $UserToProcess.ObjectGUID -Add @{mnspAdminNumber="$UPN"}
+                        Set-ADUser -Identity $UserToProcess.ObjectGUID -Add @{mnspAdminNumber="$UPN"} ##### ENHANCEMENT ##### whatif required
 
                         $NewName = ($Yearprefix + $FirstName + "." + $LastName).ToLower()
-                        get-aduser -Identity $UserToProcess.ObjectGUID | rename-ADobject -NewName "$NewName" -verbose
+                        get-aduser -Identity $UserToProcess.ObjectGUID | rename-ADobject -NewName "$NewName" -verbose ##### ENHANCEMENT ##### whatif required
 
 
                     DashedLine01
