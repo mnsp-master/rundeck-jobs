@@ -1,4 +1,4 @@
-$mnspver = "0.0.79"
+$mnspver = "0.0.80"
 
 <#
 Overall process to:
@@ -13,7 +13,7 @@ Overall process to:
         - Update local registry setting representing existing share to reflect any updated username (year number firstname.lastname,renamed homedrive local path (H:\Rmusers\.....\old username etc))
         - Rename local filesystem path to reflect/sync username change
         - Exit remote session
-    - Update existing user’s AD attributes to set firstname,lastname,homedir path (renamed share), displayname, usePrincipalName,replacement email address
+    - Update existing users AD attributes to set firstname,lastname,homedir path (renamed share), displayname, usePrincipalName,replacement email address
     - Set custom confidential attribute (mnspAdminNumber)
     - Rename AD object to reflect desired name
     - Repeat for as many users that are in the array
