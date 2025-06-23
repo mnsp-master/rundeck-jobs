@@ -1,4 +1,4 @@
-$mnspver = "0.0.69"
+$mnspver = "0.0.70"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -98,7 +98,7 @@ foreach ($user in $VerifiedUserData) {
     $ReplacementUserMail = $user."Email20Chars" #UPDATE NEEDED ### Column heading needs agreeing
     $DestOU = [int] $user."NC Year(s) for today" #set var as interger
     $MISid = $user."Arbor ID" # DEV 
-    $MISidComplete = "$MISsitePrefix-$MISid" #concatenate sitename hyphen and MIS id number e.g: SCH-292 students SCH-Stf_34
+    $MISidComplete = "$MISsitePrefix-$MISid" #concatenate sitename hyphen and MIS id number e.g: SCH-292 students SCH-Stf_34 ##### ENHANCEMENT ##### if staff/student var needed as MISID's are of dirrent construction
     $Yearprefix = $user."New prefix"
     #$MISid = $user."Arbor Student ID" #Production
 
