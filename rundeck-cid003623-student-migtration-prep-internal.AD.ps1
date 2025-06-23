@@ -1,4 +1,26 @@
-$mnspver = "0.0.74"
+$mnspver = "0.0.75"
+
+<#
+Overall process to:
+- Download google sheet containing all necessary information (MAT wide export from central arbor), filtered based on desired school or use local CSV
+- Begin trarscript logging
+- Create any necessary remote Powershell sessions on any file servers where required
+- Create a user array (from downloaded/filtered csv data)
+    - Loop through the user array, finding the AD object that matches Arbor ID (employeeNumber AD attribute previously synchronised by salamander)
+    - Return matched AD user and attributes
+    - Use these to determine share hosting server
+    - Remotely connect to that file server
+        - Update local registry setting representing existing share to reflect any updated username (year number firstname.lastname,renamed homedrive local path (H:\Rmusers\.....\old username etc))
+        - Rename local filesystem path to reflect/sync username change
+        - Exit remote session
+    - Update existing user’s AD attributes to set firstname,lastname,homedir path (renamed share), displayname, usePrincipalName,replacement email address
+    - Set custom confidential attribute (mnspAdminNumber)
+    - Rename AD object to reflect desired name
+    - Repeat for as many users that are in the array
+- Close all remote PS sessions
+- Stop transcript logging
+- Exit PS script
+#>
 
 ##### ENHANCEMENT ##### general whatif's required to run in dry mode
 ##### ENHANCEMENT ##### general environment/vars area required to enable PS run outside of rundeck environment
