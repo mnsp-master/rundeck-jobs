@@ -1,4 +1,4 @@
-$mnspver = "0.0.67"
+$mnspver = "0.0.68"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -69,8 +69,14 @@ Write-Host "Number of records matching selection criteria:" $VerifiedUserData.co
 
 Write-Host "creating remote PSSEssions for all Fileservers: $FileServers"
     foreach ($fileServer in $fileServers) {
-    Write-host "Creating PSSession to $Fileserver" #### ENHANCEMENT #### try/catch needed
-    $PSsessionFileserver = New-PSSession -computer $fileserver -verbose
+    Write-host "Creating PSSession to $Fileserver"
+    try {
+    $PSsessionFileserver = New-PSSession -computer $fileserver -verbose }
+        catch {
+            Write-Warning "Unable to create remote PS session to: $fileserver"
+            Get-PSSession | Remove-PSSession #cleanup any open sessions
+            throw #exiting script
+        }
     }
     Write-host "Current remote PSsessions:"
     Get-PSSession
