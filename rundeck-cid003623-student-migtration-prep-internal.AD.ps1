@@ -1,4 +1,4 @@
-$mnspver = "0.0.95"
+$mnspver = "0.0.96"
 
 <#
 Overall process to:
@@ -262,20 +262,25 @@ foreach ($user in $VerifiedUserData) {
                             $ReplacementUserPrincipalNameDomain = $UserToProcess.userPrincipalName.split("@")[1] #split using @ select 2nd element
                             $ReplacementUserPrincipalName = $ReplacementShareNoDollar + "@" + $ReplacementUserPrincipalNameDomain #rebuild replacement userPrincipalName
                             $ReplacementShareFull = "\\" + $UsersFileServer + "\" + $ReplacementShare 
-                            Write-Host "PS to process: set-aduser -Identity $UserToProcess.ObjectGUID -GivenName "$FirstName" -surname "$LastName" -email "$ReplacementUserMail" -SamAccountName "$ReplacementShareNoDollar" -DisplayName "$FirstName $LastName" -homeDirectory "$ReplacementShareFull" -userPrincipalName "$ReplacementUserPrincipalName" -verbose`n"
+                            
+                            # update multiple existing user attributes...
+                            Write-Host "PS to process: set-aduser -Identity $UserToProcess.ObjectGUID -GivenName "$FirstName" -surname "$LastName" -email "$ReplacementUserMail" -SamAccountName "$ReplacementShareNoDollar" -DisplayName "$FirstName $LastName" -homeDirectory "$ReplacementShareFull" -userPrincipalName "$ReplacementUserPrincipalName" -verbose"
                             Write-host "`n---`n"
                             set-aduser -Identity $UserToProcess.ObjectGUID -GivenName "$FirstName" -surname "$LastName" -email "$ReplacementUserMail" -SamAccountName "$ReplacementShareNoDollar" -DisplayName "$FirstName $LastName" -homeDirectory "$ReplacementShareFull" -userPrincipalName "$ReplacementUserPrincipalName" -verbose -whatif ## Comment Whatif to Action
+                            Write-host "`n---`n"
                             
-                            # update mnspAdminNumber attribute
+                            # update mnspAdminNumber attribute...
                             Write-Host "PS to process: Set-ADUser -Identity $UserToProcess.ObjectGUID -Add @{mnspAdminNumber="$UPN"} -verbose`n"
                             Write-host "`n---`n"
                             Set-ADUser -Identity $UserToProcess.ObjectGUID -Add @{mnspAdminNumber="$UPN"} -verbose -whatif ## Comment Whatif to Action
-
+                            Write-host "`n---`n"
+                            
+                            # rename existing AD user object...
                             $NewName = ($Yearprefix + $FirstName + "." + $LastName).ToLower()
                             Write-Host "PS to process: get-aduser -Identity $UserToProcess.ObjectGUID | rename-ADobject -NewName $NewName -verbose`n"
                             Write-host "`n---`n"
                             get-aduser -Identity $UserToProcess.ObjectGUID | rename-ADobject -NewName "$NewName" -verbose -whatif ## Comment Whatif to Action
-
+                            Write-host "`n---`n"
 
                         DashedLine01
                     } else {
