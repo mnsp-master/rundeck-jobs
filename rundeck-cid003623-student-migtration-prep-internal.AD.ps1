@@ -1,4 +1,4 @@
-$mnspver = "0.0.90"
+$mnspver = "0.0.91"
 
 <#
 Overall process to:
@@ -260,7 +260,7 @@ foreach ($user in $VerifiedUserData) {
                             $ReplacementUserPrincipalName = $ReplacementShareNoDollar + "@" + $ReplacementUserPrincipalNameDomain #rebuild replacement userPrincipalName
                             $ReplacementShareFull = "\\" + $UsersFileServer + "\" + $ReplacementShare 
                             #Write-Host "PS to process: set-aduser -Identity $UserToProcess.ObjectGUID -GivenName "$FirstName" -surname "$LastName" -email "$ReplacementUserMail" -SamAccountName "$ReplacementShareNoDollar" -DisplayName "$FirstName $LastName" -homeDirectory "$ReplacementShareFull" -userPrincipalName "$ReplacementUserPrincipalName" -verbose"
-                            set-aduser -Identity $UserToProcess.ObjectGUID -GivenName "$FirstName" -surname "$LastName" -email "$ReplacementUserMail" -SamAccountName "$ReplacementShareNoDollar" -DisplayName "$FirstName $LastName" -homeDirectory "$ReplacementShareFull" -userPrincipalName "$ReplacementUserPrincipalName" -verbose ##### ENHANCEMENT ##### whatif required
+                            set-aduser -Identity $UserToProcess.ObjectGUID -GivenName "$FirstName" -surname "$LastName" -email "$ReplacementUserMail" -SamAccountName "$ReplacementShareNoDollar" -DisplayName "$FirstName $LastName" -homeDirectory "$ReplacementShareFull" -userPrincipalName "$ReplacementUserPrincipalName" -verbose -whatif ##### ENHANCEMENT ##### whatif required
                             
                             # update mnspAdminNumber attribute
                             #Write-Host "PS to process: Set-ADUser -Identity $UserToProcess.ObjectGUID -Add @{mnspAdminNumber="$UPN"} -verbose"
