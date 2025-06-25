@@ -1,4 +1,4 @@
-$mnspver = "0.0.82"
+$mnspver = "0.0.83"
 
 <#
 Overall process to:
@@ -174,7 +174,7 @@ foreach ($user in $VerifiedUserData) {
                         #create remote PS session to users file share host...
                         Write-Host "Remote Session Info:"
                         Invoke-Command -computer  $UsersFileServer -ScriptBlock { #remote share rename scriptblock
-                        $env:COMPUTERNAME
+                        Write-Host "Local hostname:" $env:COMPUTERNAME
                         
                         #Get-ItemProperty $using:RegPath
                         Write-Host "Checking for share: $using:Legacyshare"
@@ -210,10 +210,10 @@ foreach ($user in $VerifiedUserData) {
                         $test.$using:LegacyShare
 
                         ##### ENHANCEMENT ##### - appears to be a duplicate of lines 189 - 192
-                        $PathToAlter = $test.$using:Legacyshare[3] #local path of share 
-                        $PathToAlterVar1 = $PathToAlter.Substring(0, $PathToAlter.lastIndexOf('\')) #split using \ upto last delimeter
-                        $PathToAlterVar2 = $PathToAlter.split("\")[-1] #split using \ return last element (username)
-                        $PathToAlterOS = $PathToAlter.split("=")[-1] #remove $ from sharename
+                        #$PathToAlter = $test.$using:Legacyshare[3] #local path of share 
+                        #$PathToAlterVar1 = $PathToAlter.Substring(0, $PathToAlter.lastIndexOf('\')) #split using \ upto last delimeter
+                        #$PathToAlterVar2 = $PathToAlter.split("\")[-1] #split using \ return last element (username)
+                        #$PathToAlterOS = $PathToAlter.split("=")[-1] #remove $ from sharename
 
                         #build new path item
                         $PathToAlterRegItem = $PathToAlterVar1 + "\" + $using:ReplacementShareNoDollar
