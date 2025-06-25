@@ -1,4 +1,4 @@
-$mnspver = "0.0.91"
+$mnspver = "0.0.92"
 
 <#
 Overall process to:
@@ -175,6 +175,7 @@ foreach ($user in $VerifiedUserData) {
                     #smb openfile check #### ENHANCEMENT #### consider killing session to free file system locks, permititng folder renames
                     $SMBopenfilesChk = @()
                     $sessn = new-cimsession -ComputerName $UsersFileServer
+                    Write-Host "CIM session details:"
                     Get-CimSession
                     $SMBopenFilesChk =$( Get-SmbOpenFile -CimSession $sessn | where {$_.Path -like "*$LegacyShareNoDollar*"})
                     Remove-CimSession $sessn
@@ -185,89 +186,90 @@ foreach ($user in $VerifiedUserData) {
 
                             DashedLine02
                             
-                            #create remote PS session to users file share host...
-                            Write-Host "Remote Session Info:"
-                            Invoke-Command -computer  $UsersFileServer -ScriptBlock { #remote share rename scriptblock
-                            Write-Host "Local hostname:" $env:COMPUTERNAME
-                            
-                            #Get-ItemProperty $using:RegPath
-                            Write-Host "Checking for share: $using:Legacyshare"
-                            Get-smbshare -name $using:Legacyshare
+                                #create remote PS session to users file share host...
+                                Write-Host "Remote Session Info:"
+                                Invoke-Command -computer  $UsersFileServer -ScriptBlock { #remote share rename scriptblock
+                                Write-Host "Local hostname:" $env:COMPUTERNAME
+                                
+                                #Get-ItemProperty $using:RegPath
+                                Write-Host "Checking for share: $using:Legacyshare"
+                                Get-smbshare -name $using:Legacyshare
 
-                            $test = Get-ItemProperty $using:RegPath -Name $using:Legacyshare #get current multi value reg key/values
-                            
-                            Write-Host "Existing Multi vale registry key:"
-                            $test.$using:Legacyshare
-                            Write-host "---------`n"
+                                $test = Get-ItemProperty $using:RegPath -Name $using:Legacyshare #get current multi value reg key/values
+                                
+                                Write-Host "Existing Multi vale registry key:"
+                                $test.$using:Legacyshare
+                                Write-host "---------`n"
 
-                            $PathToAlter = $test.$using:Legacyshare[3] #local path of share
-                            $PathToAlterVar1 = $PathToAlter.Substring(0, $PathToAlter.lastIndexOf('\')) #split using \ upto last delimeter
-                            $PathToAlterVar2 = $PathToAlter.split("\")[-1] #split using \ return last element (username)
-                            $PathToAlterOS = $PathToAlter.split("=")[-1] #remove $ from sharename
-                            
-                            $LegacyPathOS = @()
-                            $LegacyPathOStemp = @()
-                            $LegacyPathOStemp = $test.$using:LegacyShare[3]
-                            $LegacyPathOS = $LegacyPathOStemp.split("=")[1]
-                            
-                            
-                            Write-Host "LegacyPathOS: " $LegacyPathOS
-                            Write-Host "PathToAlterOS:" $PathToAlterOS
+                                $PathToAlter = $test.$using:Legacyshare[3] #local path of share
+                                $PathToAlterVar1 = $PathToAlter.Substring(0, $PathToAlter.lastIndexOf('\')) #split using \ upto last delimeter
+                                $PathToAlterVar2 = $PathToAlter.split("\")[-1] #split using \ return last element (username)
+                                $PathToAlterOS = $PathToAlter.split("=")[-1] #remove $ from sharename
+                                
+                                $LegacyPathOS = @()
+                                $LegacyPathOStemp = @()
+                                $LegacyPathOStemp = $test.$using:LegacyShare[3]
+                                $LegacyPathOS = $LegacyPathOStemp.split("=")[1]
+                                
+                                
+                                Write-Host "LegacyPathOS: " $LegacyPathOS
+                                Write-Host "PathToAlterOS:" $PathToAlterOS
 
-                            #build new registry path items...
-                            $PathToAlterRegItem = $PathToAlterVar1 + "\" + $using:ReplacementShareNoDollar
-                            $test.$using:LegacyShare[6] = "ShareName=$using:ReplacementShare"
-                            $test.$using:LegacyShare[3] = "$PathToAlterRegItem"
+                                #build new registry path items...
+                                $PathToAlterRegItem = $PathToAlterVar1 + "\" + $using:ReplacementShareNoDollar
+                                $test.$using:LegacyShare[6] = "ShareName=$using:ReplacementShare"
+                                $test.$using:LegacyShare[3] = "$PathToAlterRegItem"
 
-                            Write-host "---------`n"
-                            Write-Host "updated multivalue registry key"
-                            $test.$using:LegacyShare
+                                Write-host "---------`n"
+                                Write-Host "updated multivalue registry key"
+                                $test.$using:LegacyShare
 
-                            ##### ENHANCEMENT ##### - appears to be a duplicate of lines 189 - 192
-                            #$PathToAlter = $test.$using:Legacyshare[3] #local path of share 
-                            #$PathToAlterVar1 = $PathToAlter.Substring(0, $PathToAlter.lastIndexOf('\')) #split using \ upto last delimeter
-                            #$PathToAlterVar2 = $PathToAlter.split("\")[-1] #split using \ return last element (username)
-                            #$PathToAlterOS = $PathToAlter.split("=")[-1] #remove $ from sharename
+                                ##### ENHANCEMENT ##### - appears to be a duplicate of lines 189 - 192
+                                #$PathToAlter = $test.$using:Legacyshare[3] #local path of share 
+                                #$PathToAlterVar1 = $PathToAlter.Substring(0, $PathToAlter.lastIndexOf('\')) #split using \ upto last delimeter
+                                #$PathToAlterVar2 = $PathToAlter.split("\")[-1] #split using \ return last element (username)
+                                #$PathToAlterOS = $PathToAlter.split("=")[-1] #remove $ from sharename
 
-                            #build new path item
-                            $PathToAlterRegItem = $PathToAlterVar1 + "\" + $using:ReplacementShareNoDollar
+                                #build new path item
+                                $PathToAlterRegItem = $PathToAlterVar1 + "\" + $using:ReplacementShareNoDollar
 
-                            $test.$using:LegacyShare[6] = "ShareName=$using:ReplacementShare"
-                            $test.$using:LegacyShare[3] = "$PathToAlterRegItem"
+                                $test.$using:LegacyShare[6] = "ShareName=$using:ReplacementShare"
+                                $test.$using:LegacyShare[3] = "$PathToAlterRegItem"
 
-                            Write-host "`n---------`n"
+                                Write-host "`n---------`n"
 
-                            Write-Host "updated multivalue registry key"
-                            $test.$using:LegacyShare
-                            Write-host "`n---------`n"
+                                Write-Host "updated multivalue registry key"
+                                $test.$using:LegacyShare
+                                Write-host "`n---------`n"
 
-                            Rename-ItemProperty -Path $using:RegPath -Name $using:Legacyshare -NewName $using:ReplacementShare -verbose -whatif #rename registry key ##### ENHANCEMENT ##### whatif required
-                            Set-ItemProperty -path $test.PSPath -name $using:ReplacementShare -Value $test.$using:LegacyShare -verbose -whatif # update reg key item multi values ##### ENHANCEMENT ##### whatif required
+                                Rename-ItemProperty -Path $using:RegPath -Name $using:Legacyshare -NewName $using:ReplacementShare -verbose -whatif #rename registry key ##### ENHANCEMENT ##### whatif required
+                                Set-ItemProperty -path $test.PSPath -name $using:ReplacementShare -Value $test.$using:LegacyShare -verbose -whatif # update reg key item multi values ##### ENHANCEMENT ##### whatif required
 
-                            #rename existing user home drive folder:
-                            Write-host "rename existing folder: $LegacyPathOS to $using:ReplacementShareNoDollar"
-                            rename-item -path $LegacyPathOS -NewName $using:ReplacementShareNoDollar -verbose -whatif ##### ENHANCEMENT ##### whatif required
+                                #rename existing user home drive folder:
+                                Write-host "rename existing folder: $LegacyPathOS to $using:ReplacementShareNoDollar"
+                                rename-item -path $LegacyPathOS -NewName $using:ReplacementShareNoDollar -verbose -whatif ##### ENHANCEMENT ##### whatif required
 
-                            restart-service LanmanServer -verbose -whatif #restart service to reflect updated registry keys/values to present renamed share ##### ENHANCEMENT ##### highly inefficient consider restart of sevice once post mods per server
+                                restart-service LanmanServer -verbose -whatif #restart service to reflect updated registry keys/values to present renamed share ##### ENHANCEMENT ##### highly inefficient consider restart of sevice once post mods per server
 
-                            Write-Host "Replacement Share info:"
-                            Get-smbshare -name $using:ReplacementShare -whatif
-                            Write-host "`n---------`n"
+                                Write-Host "Replacement Share info:"
+                                Get-smbshare -name $using:ReplacementShare
+                                Write-host "`n---------`n"
 
-                            }
+                                } #end of remote pssession
+
                             Write-Host "updating AD user: "
                             $ReplacementUserPrincipalNameDomain = $UserToProcess.userPrincipalName.split("@")[1] #split using @ select 2nd element
                             $ReplacementUserPrincipalName = $ReplacementShareNoDollar + "@" + $ReplacementUserPrincipalNameDomain #rebuild replacement userPrincipalName
                             $ReplacementShareFull = "\\" + $UsersFileServer + "\" + $ReplacementShare 
-                            #Write-Host "PS to process: set-aduser -Identity $UserToProcess.ObjectGUID -GivenName "$FirstName" -surname "$LastName" -email "$ReplacementUserMail" -SamAccountName "$ReplacementShareNoDollar" -DisplayName "$FirstName $LastName" -homeDirectory "$ReplacementShareFull" -userPrincipalName "$ReplacementUserPrincipalName" -verbose"
+                            Write-Host "PS to process: set-aduser -Identity $UserToProcess.ObjectGUID -GivenName "$FirstName" -surname "$LastName" -email "$ReplacementUserMail" -SamAccountName "$ReplacementShareNoDollar" -DisplayName "$FirstName $LastName" -homeDirectory "$ReplacementShareFull" -userPrincipalName "$ReplacementUserPrincipalName" -verbose"
                             set-aduser -Identity $UserToProcess.ObjectGUID -GivenName "$FirstName" -surname "$LastName" -email "$ReplacementUserMail" -SamAccountName "$ReplacementShareNoDollar" -DisplayName "$FirstName $LastName" -homeDirectory "$ReplacementShareFull" -userPrincipalName "$ReplacementUserPrincipalName" -verbose -whatif ##### ENHANCEMENT ##### whatif required
                             
                             # update mnspAdminNumber attribute
-                            #Write-Host "PS to process: Set-ADUser -Identity $UserToProcess.ObjectGUID -Add @{mnspAdminNumber="$UPN"} -verbose"
+                            Write-Host "PS to process: Set-ADUser -Identity $UserToProcess.ObjectGUID -Add @{mnspAdminNumber="$UPN"} -verbose"
                             Set-ADUser -Identity $UserToProcess.ObjectGUID -Add @{mnspAdminNumber="$UPN"} -verbose -whatif ##### ENHANCEMENT ##### whatif required
 
                             $NewName = ($Yearprefix + $FirstName + "." + $LastName).ToLower()
-                            #Write-Host "PS to process: get-aduser -Identity $UserToProcess.ObjectGUID | rename-ADobject -NewName $NewName -verbose"
+                            Write-Host "PS to process: get-aduser -Identity $UserToProcess.ObjectGUID | rename-ADobject -NewName $NewName -verbose"
                             get-aduser -Identity $UserToProcess.ObjectGUID | rename-ADobject -NewName "$NewName" -verbose -whatif ##### ENHANCEMENT ##### whatif required
 
 
