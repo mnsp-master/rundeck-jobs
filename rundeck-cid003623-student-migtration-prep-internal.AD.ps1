@@ -1,4 +1,4 @@
-$mnspver = "0.0.81"
+$mnspver = "0.0.82"
 
 <#
 Overall process to:
@@ -12,7 +12,7 @@ Overall process to:
     - Remotely connect to that file server
         - Update local registry setting representing existing share to reflect any updated username (year number firstname.lastname,renamed homedrive local path (H:\Rmusers\.....\old username etc))
         - Rename local filesystem path to reflect/sync username change
-        - Exit remote session
+        - Exit PS remote session
     - Update existing users AD attributes to set firstname,lastname,homedir path (renamed share), displayname, usePrincipalName,replacement email address
     - Set custom confidential attribute (mnspAdminNumber)
     - Rename AD object to reflect desired name
@@ -50,7 +50,7 @@ Clear-Content $tempcsv2
 sleep 1
 $UserInfoCSVheader | out-file -filepath $tempcsv2 -Append #create blank csv with simple header
 
-##### ENHANCEMENT ##### toggle between local previously manually downloaded gsheet/csv, and geting gsheet each time
+##### ENHANCEMENT ##### toggle between local previously manually downloaded gsheet/csv, and downloading gsheet each time
 #Set Google Instance: Destination...
 Write-Host "###### Set Google instance: Destination... ######"
 
@@ -90,7 +90,7 @@ $VerifiedUserData = Get-Content -path $tempcsv4 | convertFrom-csv | where { $_.$
 
 #$VerifiedUserData = Get-Content -path $tempcsv4 | select-object -skip 1 | convertFrom-csv | where { $_.$FieldMatch01 -like $FieldString } #import where field like $FieldMatch01, and skip 1st line
 Write-Host "Number of records matching selection criteria:" $VerifiedUserData.count
-#ENHANCEMENT - if count 0 break out of script...
+##### ENHANCEMENT ##### - if count 0 break out of script...
 
 
 Write-Host "creating remote PSSEssions for all Fileservers: $FileServers"
@@ -113,11 +113,11 @@ if (test-path $tempcsv8) { remove-item $tempcsv8 -force -verbose }
 
 start-sleep 2
 
-Write-Host "Updating users in destination..."
+Write-Host "Updating users..."
 foreach ($user in $VerifiedUserData) {
     DashedLine01
     $LegacyUserMail = $user."Email Address (Main)" #current mail address
-    $UPN = $user."UPN" # student MIS UPN)
+    $UPN = $user."UPN" # student MIS UPN
     $FirstName = $user."Modified_Preferred_firstname" #prefered firstname 
     $LastName = $user."Modified_Preferred_Lastname" #prefered lastname
     #$ReplacementUserMail = $user."new email"
@@ -227,17 +227,17 @@ foreach ($user in $VerifiedUserData) {
                         $test.$using:LegacyShare
                         Write-host "`n---------`n"
 
-                        Rename-ItemProperty -Path $using:RegPath -Name $using:Legacyshare -NewName $using:ReplacementShare -verbose #rename registry key ##### ENHANCEMENT ##### whatif required
-                        Set-ItemProperty -path $test.PSPath -name $using:ReplacementShare -Value $test.$using:LegacyShare -verbose # update reg key item multi values ##### ENHANCEMENT ##### whatif required
+                        Rename-ItemProperty -Path $using:RegPath -Name $using:Legacyshare -NewName $using:ReplacementShare -verbose -whatif #rename registry key ##### ENHANCEMENT ##### whatif required
+                        Set-ItemProperty -path $test.PSPath -name $using:ReplacementShare -Value $test.$using:LegacyShare -verbose -whatif # update reg key item multi values ##### ENHANCEMENT ##### whatif required
 
                         #rename existing user home drive folder:
                         Write-host "rename existing folder: $LegacyPathOS to $using:ReplacementShareNoDollar"
-                        rename-item -path $LegacyPathOS -NewName $using:ReplacementShareNoDollar -verbose ##### ENHANCEMENT ##### whatif required
+                        rename-item -path $LegacyPathOS -NewName $using:ReplacementShareNoDollar -verbose -whatif ##### ENHANCEMENT ##### whatif required
 
-                        restart-service LanmanServer -verbose #restart service to reflect updated registry keys/values to present renamed share ##### ENHANCEMENT ##### highly inefficient consider restart of sevice once post mods per server
+                        restart-service LanmanServer -verbose -whatif #restart service to reflect updated registry keys/values to present renamed share ##### ENHANCEMENT ##### highly inefficient consider restart of sevice once post mods per server
 
                         Write-Host "Replacement Share info:"
-                        Get-smbshare -name $using:ReplacementShare
+                        Get-smbshare -name $using:ReplacementShare -whatif
                         Write-host "`n---------`n"
 
                         }
@@ -248,10 +248,10 @@ foreach ($user in $VerifiedUserData) {
                         set-aduser -Identity $UserToProcess.ObjectGUID -GivenName "$FirstName" -surname "$LastName" -email "$ReplacementUserMail" -SamAccountName "$ReplacementShareNoDollar" -DisplayName "$FirstName $LastName" -homeDirectory "$ReplacementShareFull" -userPrincipalName "$ReplacementUserPrincipalName" -verbose ##### ENHANCEMENT ##### whatif required
                         
                         # update mnspAdminNumber attribute
-                        Set-ADUser -Identity $UserToProcess.ObjectGUID -Add @{mnspAdminNumber="$UPN"} ##### ENHANCEMENT ##### whatif required
+                        Set-ADUser -Identity $UserToProcess.ObjectGUID -Add @{mnspAdminNumber="$UPN"} -verbose -whatif ##### ENHANCEMENT ##### whatif required
 
                         $NewName = ($Yearprefix + $FirstName + "." + $LastName).ToLower()
-                        get-aduser -Identity $UserToProcess.ObjectGUID | rename-ADobject -NewName "$NewName" -verbose ##### ENHANCEMENT ##### whatif required
+                        get-aduser -Identity $UserToProcess.ObjectGUID | rename-ADobject -NewName "$NewName" -verbose -whatif ##### ENHANCEMENT ##### whatif required
 
 
                     DashedLine01
