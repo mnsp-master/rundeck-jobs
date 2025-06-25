@@ -1,4 +1,4 @@
-$mnspver = "0.0.98"
+$mnspver = "0.0.99"
 
 <#
 Overall process to:
@@ -22,9 +22,7 @@ Overall process to:
 - Exit PS script
 #>
 
-##### ENHANCEMENT ##### general whatif's required to run in dry mode
 ##### ENHANCEMENT ##### general environment/vars area required to enable PS execution outside of rundeck environment
-##### ENHANCEMENT ##### home dir share - open file check before making changes
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
