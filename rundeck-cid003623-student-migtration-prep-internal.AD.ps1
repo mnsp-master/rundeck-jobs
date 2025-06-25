@@ -1,4 +1,4 @@
-$mnspver = "0.0.97"
+$mnspver = "0.0.98"
 
 <#
 Overall process to:
@@ -286,7 +286,7 @@ foreach ($user in $VerifiedUserData) {
                         DashedLine01
                     } else {
                         Write-Warning "user: $($UserToProcess.samAccountName) has $($SMBopenfilesChk.count) files Open, abandoning any processing of account..."
-                        $SMBopenfilesChk
+                        #$SMBopenfilesChk
                     }
                     DashedLine01
                 }
