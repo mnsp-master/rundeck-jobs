@@ -1,4 +1,4 @@
-$mnspver = "0.0.96"
+$mnspver = "0.0.97"
 
 <#
 Overall process to:
@@ -259,6 +259,7 @@ foreach ($user in $VerifiedUserData) {
                                 } #end of remote pssession
 
                             Write-Host "updating AD user: "
+                            Write-host "`n---`n"
                             $ReplacementUserPrincipalNameDomain = $UserToProcess.userPrincipalName.split("@")[1] #split using @ select 2nd element
                             $ReplacementUserPrincipalName = $ReplacementShareNoDollar + "@" + $ReplacementUserPrincipalNameDomain #rebuild replacement userPrincipalName
                             $ReplacementShareFull = "\\" + $UsersFileServer + "\" + $ReplacementShare 
