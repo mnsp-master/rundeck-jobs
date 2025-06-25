@@ -1,4 +1,4 @@
-$mnspver = "0.0.85"
+$mnspver = "0.0.86"
 
 <#
 Overall process to:
@@ -168,11 +168,13 @@ foreach ($user in $VerifiedUserData) {
                     $ReplacementShareNoDollar = $ReplacementShare.split('$')[0]
 
                     Write-host "Legacy Share: $Legacyshare"
+                    Write-Host "Legacy Share no Dollar:" $LegacyShareNoDollar
                     Write-host "Replacement Share: $ReplacementShare"
                     Write-Host "Replacement Share no Dollar: $ReplacementShareNoDollar"
 
                     #smb openfile check
                     $SMBopenfilesChk = @()
+                    Write-Host "invoke-command -computername $UsersFileServer -Scriptblock {Get-SmbOpenFile | where-object {$_.Path -like "*$LegacyShareNoDollar*"} }"
                     $SMBopenfilesChk = $(invoke-command -computername $UsersFileServer -Scriptblock {Get-SmbOpenFile | where-object {$_.Path -like "*$LegacyShareNoDollar*"} })
                     Write-Host "Current share open file count:" $SMBopenfilesChk.count
 
