@@ -1,4 +1,4 @@
-$mnspver = "0.0.88"
+$mnspver = "0.0.89"
 
 <#
 Overall process to:
@@ -259,12 +259,15 @@ foreach ($user in $VerifiedUserData) {
                             $ReplacementUserPrincipalNameDomain = $UserToProcess.userPrincipalName.split("@")[1] #split using @ select 2nd element
                             $ReplacementUserPrincipalName = $ReplacementShareNoDollar + "@" + $ReplacementUserPrincipalNameDomain #rebuild replacement userPrincipalName
                             $ReplacementShareFull = "\\" + $UsersFileServer + "\" + $ReplacementShare 
+                            Write-Host "PS to process: set-aduser -Identity $UserToProcess.ObjectGUID -GivenName "$FirstName" -surname "$LastName" -email "$ReplacementUserMail" -SamAccountName "$ReplacementShareNoDollar" -DisplayName "$FirstName $LastName" -homeDirectory "$ReplacementShareFull" -userPrincipalName "$ReplacementUserPrincipalName" -verbose"
                             set-aduser -Identity $UserToProcess.ObjectGUID -GivenName "$FirstName" -surname "$LastName" -email "$ReplacementUserMail" -SamAccountName "$ReplacementShareNoDollar" -DisplayName "$FirstName $LastName" -homeDirectory "$ReplacementShareFull" -userPrincipalName "$ReplacementUserPrincipalName" -verbose ##### ENHANCEMENT ##### whatif required
                             
                             # update mnspAdminNumber attribute
+                            Write-Host "PS to process: Set-ADUser -Identity $UserToProcess.ObjectGUID -Add @{mnspAdminNumber="$UPN"} -verbose"
                             Set-ADUser -Identity $UserToProcess.ObjectGUID -Add @{mnspAdminNumber="$UPN"} -verbose -whatif ##### ENHANCEMENT ##### whatif required
 
                             $NewName = ($Yearprefix + $FirstName + "." + $LastName).ToLower()
+                            Write-Host "PS to process: get-aduser -Identity $UserToProcess.ObjectGUID | rename-ADobject -NewName $NewName -verbose"
                             get-aduser -Identity $UserToProcess.ObjectGUID | rename-ADobject -NewName "$NewName" -verbose -whatif ##### ENHANCEMENT ##### whatif required
 
 
