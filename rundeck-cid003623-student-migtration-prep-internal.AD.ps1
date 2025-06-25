@@ -1,4 +1,4 @@
-$mnspver = "0.0.93"
+$mnspver = "0.0.94"
 
 <#
 Overall process to:
@@ -242,14 +242,15 @@ foreach ($user in $VerifiedUserData) {
                                 $test.$using:LegacyShare
                                 Write-host "`n---------`n"
 
-                                Rename-ItemProperty -Path $using:RegPath -Name $using:Legacyshare -NewName $using:ReplacementShare -verbose -whatif #rename registry key ##### ENHANCEMENT ##### whatif required
-                                Set-ItemProperty -path $test.PSPath -name $using:ReplacementShare -Value $test.$using:LegacyShare -verbose -whatif # update reg key item multi values ##### ENHANCEMENT ##### whatif required
+                                Rename-ItemProperty -Path $using:RegPath -Name $using:Legacyshare -NewName $using:ReplacementShare -verbose -whatif ## Comment Whatif to Action
+                                Set-ItemProperty -path $test.PSPath -name $using:ReplacementShare -Value $test.$using:LegacyShare -verbose -whatif ## Comment Whatif to Action
 
                                 #rename existing user home drive folder:
                                 Write-host "rename existing folder: $LegacyPathOS to $using:ReplacementShareNoDollar"
-                                rename-item -path $LegacyPathOS -NewName $using:ReplacementShareNoDollar -verbose -whatif ##### ENHANCEMENT ##### whatif required
+                                rename-item -path $LegacyPathOS -NewName $using:ReplacementShareNoDollar -verbose -whatif ## Comment Whatif to Action
 
-                                restart-service LanmanServer -verbose -whatif #restart service to reflect updated registry keys/values to present renamed share ##### ENHANCEMENT ##### highly inefficient consider restart of sevice once post mods per server
+                                #restart service to reflect updated registry keys/values to present renamed share ##### ENHANCEMENT ##### highly inefficient consider restart of sevice once post mods per server
+                                restart-service LanmanServer -verbose -whatif ## Comment Whatif to Action 
 
                                 Write-Host "Replacement Share info:"
                                 Get-smbshare -name $using:ReplacementShare
@@ -262,15 +263,15 @@ foreach ($user in $VerifiedUserData) {
                             $ReplacementUserPrincipalName = $ReplacementShareNoDollar + "@" + $ReplacementUserPrincipalNameDomain #rebuild replacement userPrincipalName
                             $ReplacementShareFull = "\\" + $UsersFileServer + "\" + $ReplacementShare 
                             Write-Host "PS to process: set-aduser -Identity $UserToProcess.ObjectGUID -GivenName "$FirstName" -surname "$LastName" -email "$ReplacementUserMail" -SamAccountName "$ReplacementShareNoDollar" -DisplayName "$FirstName $LastName" -homeDirectory "$ReplacementShareFull" -userPrincipalName "$ReplacementUserPrincipalName" -verbose`n"
-                            set-aduser -Identity $UserToProcess.ObjectGUID -GivenName "$FirstName" -surname "$LastName" -email "$ReplacementUserMail" -SamAccountName "$ReplacementShareNoDollar" -DisplayName "$FirstName $LastName" -homeDirectory "$ReplacementShareFull" -userPrincipalName "$ReplacementUserPrincipalName" -verbose -whatif ##### ENHANCEMENT ##### whatif required
+                            set-aduser -Identity $UserToProcess.ObjectGUID -GivenName "$FirstName" -surname "$LastName" -email "$ReplacementUserMail" -SamAccountName "$ReplacementShareNoDollar" -DisplayName "$FirstName $LastName" -homeDirectory "$ReplacementShareFull" -userPrincipalName "$ReplacementUserPrincipalName" -verbose -whatif ## Comment Whatif to Action
                             
                             # update mnspAdminNumber attribute
                             Write-Host "PS to process: Set-ADUser -Identity $UserToProcess.ObjectGUID -Add @{mnspAdminNumber="$UPN"} -verbose`n"
-                            Set-ADUser -Identity $UserToProcess.ObjectGUID -Add @{mnspAdminNumber="$UPN"} -verbose -whatif ##### ENHANCEMENT ##### whatif required
+                            Set-ADUser -Identity $UserToProcess.ObjectGUID -Add @{mnspAdminNumber="$UPN"} -verbose -whatif ## Comment Whatif to Action
 
                             $NewName = ($Yearprefix + $FirstName + "." + $LastName).ToLower()
                             Write-Host "PS to process: get-aduser -Identity $UserToProcess.ObjectGUID | rename-ADobject -NewName $NewName -verbose`n"
-                            get-aduser -Identity $UserToProcess.ObjectGUID | rename-ADobject -NewName "$NewName" -verbose -whatif ##### ENHANCEMENT ##### whatif required
+                            get-aduser -Identity $UserToProcess.ObjectGUID | rename-ADobject -NewName "$NewName" -verbose -whatif ## Comment Whatif to Action
 
 
                         DashedLine01
