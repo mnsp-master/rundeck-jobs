@@ -1,4 +1,4 @@
-$mnspver = "0.0.100"
+$mnspver = "0.0.101"
 
 <#
 Overall process to:
@@ -283,9 +283,10 @@ foreach ($user in $VerifiedUserData) {
 
                         DashedLine01
                     } else {
-                        Write-Warning "user: $($UserToProcess.samAccountName) has $($SMBopenfilesChk.count) files Open from share: $($UserToProcess.HomeDirectory), ABANDONING any processing of account, users MUST be logged out to sucessfulluy rename/update share configuration..."
+                        Write-Warning "user: $($UserToProcess.samAccountName) has $($SMBopenfilesChk.count) files Open from share: $($UserToProcess.HomeDirectory), ABANDONING any processing of account, users MUST be logged out to sucessfully rename/update share configuration..."
                         #$SMBopenfilesChk
                     }
+                    #### EHNANCEMENT #### report updated AD users attributes using GUID as reference...
                     DashedLine01
                 }
     } else { #if MIS id is NULL...
