@@ -1,4 +1,4 @@
-$mnspver = "0.0.87"
+$mnspver = "0.0.88"
 
 <#
 Overall process to:
@@ -172,10 +172,12 @@ foreach ($user in $VerifiedUserData) {
                     Write-host "Replacement Share: $ReplacementShare"
                     Write-Host "Replacement Share no Dollar: $ReplacementShareNoDollar"
 
-                    #smb openfile check
+                    #smb openfile check #### ENHANCEMENT #### consider killing session to free file system locks, permititng folder renames
                     $SMBopenfilesChk = @()
-                    Write-Host "invoke-command -computername $UsersFileServer -Scriptblock {Get-SmbOpenFile | where-object {$_.Path -like "*$LegacyShareNoDollar*"} }"
-                    $SMBopenfilesChk = $(invoke-command -computername $UsersFileServer -Scriptblock {Get-SmbOpenFile | where-object {$_.Path -like "*$LegacyShareNoDollar*"} })
+                    $sessn = new-cimsession -ComputerName $UsersFileServer
+                    Get-CimSession
+                    $SMBopenFilesChk =$( Get-SmbOpenFile -CimSession $sessn | where {$_.Path -like "*$LegacyShareNoDollar*"})
+                    Remove-CimSession $sessn
                     Write-Host "Current share open file count:" $SMBopenfilesChk.count
 
                     if (!$SMBopenfilesChk.count -ge 1 ) {
@@ -287,4 +289,10 @@ foreach ($user in $VerifiedUserData) {
 
 Write-Host "Closing all remote PSSessions..."
 Get-PSSession | Remove-PSSession
+
+<#
+#Write-Host "invoke-command -computername $UsersFileServer -Scriptblock {Get-SmbOpenFile | where-object {$_.Path -like "*$LegacyShareNoDollar*"} }"
+                    #$SMBopenfilesChk = $(invoke-command -computername $UsersFileServer -Scriptblock {Get-SmbOpenFile | where-object {$_.Path -like "*$LegacyShareNoDollar*"} })
+
+#>
 
