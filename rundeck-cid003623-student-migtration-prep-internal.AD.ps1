@@ -1,4 +1,4 @@
-$mnspver = "0.0.99"
+$mnspver = "0.0.100"
 
 <#
 Overall process to:
@@ -177,7 +177,7 @@ foreach ($user in $VerifiedUserData) {
                     Get-CimSession
                     $SMBopenFilesChk =$( Get-SmbOpenFile -CimSession $sessn | where {$_.Path -like "*$LegacyShareNoDollar*"})
                     Remove-CimSession $sessn
-                    Write-Host "Current share open file count:" $SMBopenfilesChk.count
+                    Write-Host "Current share: $($UserToProcess.HomeDirectory) open file count:" $SMBopenfilesChk.count
 
                     if (!$SMBopenfilesChk.count -ge 1 ) {
                     Write-Host "no files currently open from share, proceeding...."
@@ -283,7 +283,7 @@ foreach ($user in $VerifiedUserData) {
 
                         DashedLine01
                     } else {
-                        Write-Warning "user: $($UserToProcess.samAccountName) has $($SMBopenfilesChk.count) files Open, abandoning any processing of account..."
+                        Write-Warning "user: $($UserToProcess.samAccountName) has $($SMBopenfilesChk.count) files Open from share: $($UserToProcess.HomeDirectory), ABANDONING any processing of account, users MUST be logged out to sucessfulluy rename/update share configuration..."
                         #$SMBopenfilesChk
                     }
                     DashedLine01
