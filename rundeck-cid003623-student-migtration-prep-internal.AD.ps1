@@ -1,4 +1,4 @@
-$mnspver = "0.0.92"
+$mnspver = "0.0.93"
 
 <#
 Overall process to:
@@ -187,7 +187,7 @@ foreach ($user in $VerifiedUserData) {
                             DashedLine02
                             
                                 #create remote PS session to users file share host...
-                                Write-Host "Remote Session Info:"
+                                Write-Host "Remote Session Progress..."
                                 Invoke-Command -computer  $UsersFileServer -ScriptBlock { #remote share rename scriptblock
                                 Write-Host "Local hostname:" $env:COMPUTERNAME
                                 
@@ -261,15 +261,15 @@ foreach ($user in $VerifiedUserData) {
                             $ReplacementUserPrincipalNameDomain = $UserToProcess.userPrincipalName.split("@")[1] #split using @ select 2nd element
                             $ReplacementUserPrincipalName = $ReplacementShareNoDollar + "@" + $ReplacementUserPrincipalNameDomain #rebuild replacement userPrincipalName
                             $ReplacementShareFull = "\\" + $UsersFileServer + "\" + $ReplacementShare 
-                            Write-Host "PS to process: set-aduser -Identity $UserToProcess.ObjectGUID -GivenName "$FirstName" -surname "$LastName" -email "$ReplacementUserMail" -SamAccountName "$ReplacementShareNoDollar" -DisplayName "$FirstName $LastName" -homeDirectory "$ReplacementShareFull" -userPrincipalName "$ReplacementUserPrincipalName" -verbose"
+                            Write-Host "PS to process: set-aduser -Identity $UserToProcess.ObjectGUID -GivenName "$FirstName" -surname "$LastName" -email "$ReplacementUserMail" -SamAccountName "$ReplacementShareNoDollar" -DisplayName "$FirstName $LastName" -homeDirectory "$ReplacementShareFull" -userPrincipalName "$ReplacementUserPrincipalName" -verbose`n"
                             set-aduser -Identity $UserToProcess.ObjectGUID -GivenName "$FirstName" -surname "$LastName" -email "$ReplacementUserMail" -SamAccountName "$ReplacementShareNoDollar" -DisplayName "$FirstName $LastName" -homeDirectory "$ReplacementShareFull" -userPrincipalName "$ReplacementUserPrincipalName" -verbose -whatif ##### ENHANCEMENT ##### whatif required
                             
                             # update mnspAdminNumber attribute
-                            Write-Host "PS to process: Set-ADUser -Identity $UserToProcess.ObjectGUID -Add @{mnspAdminNumber="$UPN"} -verbose"
+                            Write-Host "PS to process: Set-ADUser -Identity $UserToProcess.ObjectGUID -Add @{mnspAdminNumber="$UPN"} -verbose`n"
                             Set-ADUser -Identity $UserToProcess.ObjectGUID -Add @{mnspAdminNumber="$UPN"} -verbose -whatif ##### ENHANCEMENT ##### whatif required
 
                             $NewName = ($Yearprefix + $FirstName + "." + $LastName).ToLower()
-                            Write-Host "PS to process: get-aduser -Identity $UserToProcess.ObjectGUID | rename-ADobject -NewName $NewName -verbose"
+                            Write-Host "PS to process: get-aduser -Identity $UserToProcess.ObjectGUID | rename-ADobject -NewName $NewName -verbose`n"
                             get-aduser -Identity $UserToProcess.ObjectGUID | rename-ADobject -NewName "$NewName" -verbose -whatif ##### ENHANCEMENT ##### whatif required
 
 
