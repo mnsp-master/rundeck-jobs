@@ -1,4 +1,4 @@
-$mnspver = "0.0.113"
+$mnspver = "0.0.114"
 
 <#
 Overall process to:
@@ -285,26 +285,26 @@ foreach ($user in $VerifiedUserData) {
                                     get-aduser -Identity $($UserToProcess.ObjectGUID) | rename-ADobject -NewName "$NewName" -verbose -whatif ## Comment Whatif to Action
                                     Write-host "`n---`n"
 
+                                    ####ENHANCEMENT#### move user to replacement AD OU
+                                    $DestADOU = $OUS | where-object {$_ -like "*$UpdatedDestOU*"}
+                                    Write-Host "Moving user to Destination OU: $($DestADOU.DistinguishedName)"
+                                    Write-Host "PS to process: Move-ADobject -id $($UserToProcess.ObjectGUID) -TargetPath $($DestADOU.DistinguishedName) -verbose"
+                                    Write-host "`n---`n"
+                                    Move-ADobject -id $($UserToProcess.ObjectGUID) -TargetPath $($DestADOU.DistinguishedName) -verbose -whatif ## Comment Whatif to Action
+
+                                    Write-Host "Updated AD users attributes using GUID:"
+                                    $UserToProcessPostupdate = $(Get-ADUser -id $($UserToProcess.ObjectGUID) -Properties * | select-object $ADattribs)
+                                    $UserToProcessPostupdate
+                                    DashedLine01
+                                    Write-Host "PROCESSING next user..."
+
                                 DashedLine01
                             } else {
-                        Write-Warning "user: $($UserToProcess.samAccountName) has $($SMBopenfilesChk.count) files Open from share: $($UserToProcess.HomeDirectory), ABANDONING any processing of account, users MUST be logged out to sucessfully rename/update share configuration..."
-                        break # skip to next for next loop 
-                        #$SMBopenfilesChk
+                                Write-Warning "user: $($UserToProcess.samAccountName) has $($SMBopenfilesChk.count) files Open from share: $($UserToProcess.HomeDirectory), ABANDONING any processing of account, users MUST be logged out to sucessfully rename/update share configuration..."
+                                #$SMBopenfilesChk
                     }
                     DashedLine02
 
-                    ####ENHANCEMENT#### move user to replacement AD OU
-                    $DestADOU = $OUS | where-object {$_ -like "*$UpdatedDestOU*"}
-                    Write-Host "Moving user to Destination OU: $($DestADOU.DistinguishedName)"
-                    Write-Host "PS to process: Move-ADobject -id $($UserToProcess.ObjectGUID) -TargetPath $($DestADOU.DistinguishedName) -verbose"
-                    Write-host "`n---`n"
-                    Move-ADobject -id $($UserToProcess.ObjectGUID) -TargetPath $($DestADOU.DistinguishedName) -verbose -whatif ## Comment Whatif to Action
-
-                    Write-Host "Updated AD users attributes using GUID:"
-                    $UserToProcessPostupdate = $(Get-ADUser -id $($UserToProcess.ObjectGUID) -Properties * | select-object $ADattribs)
-                    $UserToProcessPostupdate
-                    DashedLine01
-                    Write-Host "PROCESSING next user..."
                 }
     } else { #if MIS id is NULL...
         Write-Warning "No MIS ID found for:"
