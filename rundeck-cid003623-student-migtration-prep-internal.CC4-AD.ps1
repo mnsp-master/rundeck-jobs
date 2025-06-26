@@ -1,4 +1,4 @@
-$mnspver = "0.0.112"
+$mnspver = "0.0.113"
 
 <#
 Overall process to:
@@ -195,7 +195,7 @@ foreach ($user in $VerifiedUserData) {
                                         
                                         #Get-ItemProperty $using:RegPath
                                         Write-Host "Checking for share: $using:Legacyshare"
-                                        Get-smbshare -name $using:Legacyshare
+                                        #Get-smbshare -name $using:Legacyshare
 
                                         $test = Get-ItemProperty $using:RegPath -Name $using:Legacyshare #get current multi value reg key/values
                                         
@@ -285,14 +285,10 @@ foreach ($user in $VerifiedUserData) {
                                     get-aduser -Identity $($UserToProcess.ObjectGUID) | rename-ADobject -NewName "$NewName" -verbose -whatif ## Comment Whatif to Action
                                     Write-host "`n---`n"
 
-                                    
-                                    
-
-
-
                                 DashedLine01
                             } else {
                         Write-Warning "user: $($UserToProcess.samAccountName) has $($SMBopenfilesChk.count) files Open from share: $($UserToProcess.HomeDirectory), ABANDONING any processing of account, users MUST be logged out to sucessfully rename/update share configuration..."
+                        break # skip to next for next loop 
                         #$SMBopenfilesChk
                     }
                     DashedLine02
@@ -308,6 +304,7 @@ foreach ($user in $VerifiedUserData) {
                     $UserToProcessPostupdate = $(Get-ADUser -id $($UserToProcess.ObjectGUID) -Properties * | select-object $ADattribs)
                     $UserToProcessPostupdate
                     DashedLine01
+                    Write-Host "PROCESSING next user..."
                 }
     } else { #if MIS id is NULL...
         Write-Warning "No MIS ID found for:"
