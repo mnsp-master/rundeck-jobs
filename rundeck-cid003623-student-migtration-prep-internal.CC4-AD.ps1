@@ -1,4 +1,4 @@
-$mnspver = "0.0.114"
+$mnspver = "0.0.115"
 
 <#
 Overall process to:
@@ -117,6 +117,7 @@ $OUS = $(Get-AdOrganizationalUnit -searchbase $OUBaseDn -Filter *) # get all OU'
 Write-Host "Updating users..."
 foreach ($user in $VerifiedUserData) {
     DashedLine01
+    Write-Host "PROCESSING next user..."
     $LegacyUserMail = $user."Email Address (Main)" #current mail address
     $UPN = $user."UPN" # student MIS UPN
     $FirstName = $user."Modified_Preferred_firstname" #prefered firstname 
@@ -296,11 +297,12 @@ foreach ($user in $VerifiedUserData) {
                                     $UserToProcessPostupdate = $(Get-ADUser -id $($UserToProcess.ObjectGUID) -Properties * | select-object $ADattribs)
                                     $UserToProcessPostupdate
                                     DashedLine01
-                                    Write-Host "PROCESSING next user..."
+                                    
 
                                 DashedLine01
                             } else {
                                 Write-Warning "user: $($UserToProcess.samAccountName) has $($SMBopenfilesChk.count) files Open from share: $($UserToProcess.HomeDirectory), ABANDONING any processing of account, users MUST be logged out to sucessfully rename/update share configuration..."
+                                
                                 #$SMBopenfilesChk
                     }
                     DashedLine02
