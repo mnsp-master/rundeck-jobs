@@ -1,4 +1,4 @@
-$mnspver = "0.0.103"
+$mnspver = "0.0.104"
 
 <#
 Overall process to:
@@ -286,8 +286,9 @@ foreach ($user in $VerifiedUserData) {
                         Write-Warning "user: $($UserToProcess.samAccountName) has $($SMBopenfilesChk.count) files Open from share: $($UserToProcess.HomeDirectory), ABANDONING any processing of account, users MUST be logged out to sucessfully rename/update share configuration..."
                         #$SMBopenfilesChk
                     }
-                    #### EHNANCEMENT #### report updated AD users attributes using GUID as reference...
-                    $UserToProcessPostupdate = $(Get-ADUser -Filter "ObjectGUID -like '$($UserToProcess.ObjectGUID)'" -Properties * | select-object $ADattribs)
+                    DashedLine02
+                    Write-Host "Updated AD users attributes using GUID:"
+                    $UserToProcessPostupdate = $(Get-ADUser -id $($UserToProcess.ObjectGUID) -Properties * | select-object $ADattribs)
                     $UserToProcessPostupdate
                     DashedLine01
                 }
