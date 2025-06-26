@@ -1,4 +1,4 @@
-$mnspver = "0.0.101"
+$mnspver = "0.0.102"
 
 <#
 Overall process to:
