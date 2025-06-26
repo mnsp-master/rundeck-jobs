@@ -1,4 +1,4 @@
-$mnspver = "0.0.107"
+$mnspver = "0.0.108"
 
 <#
 Overall process to:
@@ -111,6 +111,7 @@ if (test-path $tempcsv8) { remove-item $tempcsv8 -force -verbose }
 start-sleep 2
 
 #OU information to ultimetly move updated user:
+Write-Host "AD search base DN: $OUBaseDn"
 $OUS = $(Get-AdOrganizationalUnit -searchbase $OUBaseDn - Filter *) # get all OU's from baseDN
 
 Write-Host "Updating users..."
