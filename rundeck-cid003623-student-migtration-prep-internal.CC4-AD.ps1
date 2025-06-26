@@ -1,4 +1,4 @@
-$mnspver = "0.0.106"
+$mnspver = "0.0.107"
 
 <#
 Overall process to:
@@ -297,7 +297,7 @@ foreach ($user in $VerifiedUserData) {
                     DashedLine02
 
                     ####ENHANCEMENT#### move user to replacement AD OU
-                    $DestADOU = $OUS | where-object {$_. -like "*$UpdatedDestOU*"}
+                    $DestADOU = $OUS | where-object {$_ -like "*$UpdatedDestOU*"}
                     Write-Host "Moving user to Destination OU: $($DestADOU.DistinguishedName)"
                     Move-ADobject -id $($UserToProcess.ObjectGUID) -TargetPath $($DestADOU.DistinguishedName) -verbose -whatif ## Comment Whatif to Action
 
