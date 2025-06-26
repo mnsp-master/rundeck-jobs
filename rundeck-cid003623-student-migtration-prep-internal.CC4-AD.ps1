@@ -1,4 +1,4 @@
-$mnspver = "0.0.115"
+$mnspver = "0.0.116"
 
 <#
 Overall process to:
@@ -301,7 +301,7 @@ foreach ($user in $VerifiedUserData) {
 
                                 DashedLine01
                             } else {
-                                Write-Warning "user: $($UserToProcess.samAccountName) has $($SMBopenfilesChk.count) files Open from share: $($UserToProcess.HomeDirectory), ABANDONING any processing of account, users MUST be logged out to sucessfully rename/update share configuration..."
+                                Write-Warning "user: $($UserToProcess.samAccountName) has $($SMBopenfilesChk.count) files Open from share: $($UserToProcess.HomeDirectory) `n ABANDONING any processing of account, users MUST be logged out to sucessfully rename/update share configuration..."
                                 
                                 #$SMBopenfilesChk
                     }
