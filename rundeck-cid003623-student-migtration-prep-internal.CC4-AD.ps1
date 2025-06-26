@@ -1,4 +1,4 @@
-$mnspver = "0.0.108"
+$mnspver = "0.0.109"
 
 <#
 Overall process to:
@@ -112,7 +112,7 @@ start-sleep 2
 
 #OU information to ultimetly move updated user:
 Write-Host "AD search base DN: $OUBaseDn"
-$OUS = $(Get-AdOrganizationalUnit -searchbase $OUBaseDn - Filter *) # get all OU's from baseDN
+$OUS = $(Get-AdOrganizationalUnit -searchbase $OUBaseDn -Filter *) # get all OU's from baseDN
 
 Write-Host "Updating users..."
 foreach ($user in $VerifiedUserData) {
