@@ -1,4 +1,4 @@
-$mnspver = "0.0.105"
+$mnspver = "0.0.106"
 
 <#
 Overall process to:
@@ -62,11 +62,9 @@ Invoke-Expression "$GamDir\gam.exe"
 start-sleep 3
 DashedLine01
 
-
 #get verified user data
 #if exist check & remove $tempcsv4
 if (test-path $tempcsv4) { remove-item $tempcsv4 -force -verbose }
-
 
 ##### ENHANCEMENT ##### ERROR TO ADDRESS - Duplicate fileds Value with production gsheet #####
 Write-Host "downloading gsheet ID: $GoogleSheetID tab: $GoogleSheetTab01"
@@ -111,6 +109,9 @@ if (test-path $tempcsv6) { remove-item $tempcsv6 -force -verbose }
 if (test-path $tempcsv8) { remove-item $tempcsv8 -force -verbose }
 
 start-sleep 2
+
+#OU information to ultimetly move updated user:
+$OUS = $(Get-AdOrganizationalUnit -searchbase $OUBaseDn - Filter *) # get all OU's from baseDN
 
 Write-Host "Updating users..."
 foreach ($user in $VerifiedUserData) {
@@ -171,6 +172,7 @@ foreach ($user in $VerifiedUserData) {
                     Write-Host "Replacement Share no Dollar: $ReplacementShareNoDollar"
 
                     #smb openfile check...
+                    Write-Host "Checking for open files from share: $($UserToProcess.HomeDirectory)"
                     $SMBopenfilesChk = @()
                     $sessn = @()
                     $sessn = new-cimsession -ComputerName $UsersFileServer
@@ -282,12 +284,23 @@ foreach ($user in $VerifiedUserData) {
                                     get-aduser -Identity $UserToProcess.ObjectGUID | rename-ADobject -NewName "$NewName" -verbose -whatif ## Comment Whatif to Action
                                     Write-host "`n---`n"
 
+                                    
+                                    
+
+
+
                                 DashedLine01
                             } else {
                         Write-Warning "user: $($UserToProcess.samAccountName) has $($SMBopenfilesChk.count) files Open from share: $($UserToProcess.HomeDirectory), ABANDONING any processing of account, users MUST be logged out to sucessfully rename/update share configuration..."
                         #$SMBopenfilesChk
                     }
                     DashedLine02
+
+                    ####ENHANCEMENT#### move user to replacement AD OU
+                    $DestADOU = $OUS | where-object {$_. -like "*$UpdatedDestOU*"}
+                    Write-Host "Moving user to Destination OU: $($DestADOU.DistinguishedName)"
+                    Move-ADobject -id $($UserToProcess.ObjectGUID) -TargetPath $($DestADOU.DistinguishedName) -verbose -whatif ## Comment Whatif to Action
+
                     Write-Host "Updated AD users attributes using GUID:"
                     $UserToProcessPostupdate = $(Get-ADUser -id $($UserToProcess.ObjectGUID) -Properties * | select-object $ADattribs)
                     $UserToProcessPostupdate
