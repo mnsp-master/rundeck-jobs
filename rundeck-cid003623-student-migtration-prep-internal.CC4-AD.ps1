@@ -1,4 +1,4 @@
-$mnspver = "0.0.102"
+$mnspver = "0.0.103"
 
 <#
 Overall process to:
@@ -287,6 +287,8 @@ foreach ($user in $VerifiedUserData) {
                         #$SMBopenfilesChk
                     }
                     #### EHNANCEMENT #### report updated AD users attributes using GUID as reference...
+                    $UserToProcessPostupdate = $(Get-ADUser -Filter "ObjectGUID -like '$($UserToProcess.ObjectGUID)'" -Properties * | select-object $ADattribs)
+                    $UserToProcessPostupdate
                     DashedLine01
                 }
     } else { #if MIS id is NULL...
