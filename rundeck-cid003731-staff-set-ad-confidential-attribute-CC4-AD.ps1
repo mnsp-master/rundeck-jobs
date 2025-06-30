@@ -1,4 +1,4 @@
-$mnspver = "0.0.5"
+$mnspver = "0.0.6"
 
 <#
 Overall process to:
@@ -29,7 +29,7 @@ function DashedLine02 {
 Write-host "---------`n"
 }
 
-#Get-Variable
+Get-Variable
 
 #Set Google Instance: Destination...
 Write-Host "###### Set Google instance: Destination... ######"
