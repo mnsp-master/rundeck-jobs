@@ -1,4 +1,4 @@
-$mnspver = "0.0.3"
+$mnspver = "0.0.4"
 
 <#
 Overall process to:
@@ -31,9 +31,21 @@ Write-host "---------`n"
 
 #Get-Variable
 
+#Set Google Instance: Destination...
+Write-Host "###### Set Google instance: Destination... ######"
+
+$GoogleSvcAccount = $GoogleWorkspaceMNSPsvcAccount
+Write-Host "Google Destination Service Account: $GoogleSvcAccount"
+
+Write-Host "Setting workspace Destination: $GoogleWorkSpaceDestination"
+Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceDestination save" # swap/set google workspace
+Invoke-Expression "$GamDir\gam.exe"
+start-sleep 3
+
 Write-Host "gsheet Student number column heading:" $FieldMatch01
 Start-sleep 10
 
+<#
 #prepare user details csv
 Write-Host "emptying $tempcsv2 of any existing data..."
 Clear-Content $tempcsv2
@@ -41,6 +53,7 @@ sleep 1
 $UserInfoCSVheader | out-file -filepath $tempcsv2 -Append #create blank csv with simple header
 
 ##### ENHANCEMENT ##### toggle between local previously manually downloaded gsheet/csv, and downloading gsheet each time
+#>
 
 DashedLine01
 
@@ -320,16 +333,7 @@ Write-Host "creating remote PSSEssions for all Fileservers: $FileServers"
             $UpdatedDestOU = $($GoogleWorkSpaceDest + "-Year" + $DestOU)
             }
 
-#Set Google Instance: Destination...
-Write-Host "###### Set Google instance: Destination... ######"
 
-$GoogleSvcAccount = $GoogleWorkspaceMNSPsvcAccount
-Write-Host "Google Destination Service Account: $GoogleSvcAccount"
-
-Write-Host "Setting workspace Destination: $GoogleWorkSpaceDestination"
-Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceDestination save" # swap/set google workspace
-Invoke-Expression "$GamDir\gam.exe"
-start-sleep 3
 
 #Write-Host "invoke-command -computername $UsersFileServer -Scriptblock {Get-SmbOpenFile | where-object {$_.Path -like "*$LegacyShareNoDollar*"} }"
                     #$SMBopenfilesChk = $(invoke-command -computername $UsersFileServer -Scriptblock {Get-SmbOpenFile | where-object {$_.Path -like "*$LegacyShareNoDollar*"} })
