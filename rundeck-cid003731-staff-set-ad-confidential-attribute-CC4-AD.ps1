@@ -1,4 +1,4 @@
-$mnspver = "0.0.4"
+$mnspver = "0.0.5"
 
 <#
 Overall process to:
@@ -44,6 +44,8 @@ start-sleep 3
 
 Write-Host "gsheet Student number column heading:" $FieldMatch01
 Start-sleep 10
+
+exit
 
 <#
 #prepare user details csv
