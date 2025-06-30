@@ -1,4 +1,4 @@
-$mnspver = "0.0.6"
+$mnspver = "0.0.7"
 
 <#
 Overall process to:
@@ -39,7 +39,7 @@ Write-Host "Google Destination Service Account: $GoogleSvcAccount"
 
 Write-Host "Setting workspace Destination: $GoogleWorkSpaceDestination"
 Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceDestination save" # swap/set google workspace
-Invoke-Expression "$GamDir\gam.exe"
+Invoke-Expression "$GamDir\gam.exe info domain"
 start-sleep 3
 
 Write-Host "gsheet Student number column heading:" $FieldMatch01
