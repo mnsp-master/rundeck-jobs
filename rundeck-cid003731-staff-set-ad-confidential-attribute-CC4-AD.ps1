@@ -1,4 +1,4 @@
-$mnspver = "0.0.16"
+$mnspver = "0.0.17"
 
 <#
 Overall process to:
@@ -74,7 +74,7 @@ Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleS
 if (test-path $tempcsv6) { remove-item $tempcsv6 -force -verbose }
 Write-Host "downloading gsheet ID: $GoogleSheetID02 tab: $GoogleSheetTab02"
 Write-Host "Invoke-Expression $GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleSheetID02 format csv gsheet ""$GoogleSheetTab02"" targetfolder $DataDir targetname $tempcsv6"
-Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleSheetID format csv gsheet ""$GoogleSheetTab02"" targetfolder $DataDir targetname $tempcsv6"
+Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleSheetID02 format csv gsheet ""$GoogleSheetTab02"" targetfolder $DataDir targetname $tempcsv6"
 
 
 Start-sleep 2
