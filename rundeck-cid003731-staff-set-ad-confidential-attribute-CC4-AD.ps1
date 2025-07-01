@@ -1,4 +1,4 @@
-$mnspver = "0.0.7"
+$mnspver = "0.0.8"
 
 <#
 Overall process to:
@@ -45,8 +45,6 @@ start-sleep 3
 Write-Host "gsheet Student number column heading:" $FieldMatch01
 Start-sleep 10
 
-exit
-
 <#
 #prepare user details csv
 Write-Host "emptying $tempcsv2 of any existing data..."
@@ -65,9 +63,11 @@ if (test-path $tempcsv4) { remove-item $tempcsv4 -force -verbose }
 
 ##### ENHANCEMENT ##### ERROR TO ADDRESS - Duplicate fileds Value with production gsheet #####
 Write-Host "downloading gsheet ID: $GoogleSheetID tab: $GoogleSheetTab01"
-#Write-Host "$GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleSheetID format csv gsheet ""$GoogleSheetTab01"" targetfolder $DataDir targetname $tempcsv4"
+Write-Host "Invoke-Expression $GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleSheetID format csv gsheet ""$GoogleSheetTab01"" targetfolder $DataDir targetname $tempcsv4"
 Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleSheetID format csv gsheet ""$GoogleSheetTab01"" targetfolder $DataDir targetname $tempcsv4"
 #Write-Host "Invoke-Expression $GamDir\gam.exe user $GoogleSourceSvcAccount get drivefile $GoogleSheetID format csv gsheet ""$GoogleSheetTab01"" targetfolder $DataDir targetname $tempcsv4"
+
+exit
 
 Start-sleep 2
 
