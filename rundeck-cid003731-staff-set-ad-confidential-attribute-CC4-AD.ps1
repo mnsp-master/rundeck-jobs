@@ -1,4 +1,4 @@
-$mnspver = "0.0.21"
+$mnspver = "0.0.22"
 
 <#
 Overall process to:
@@ -88,7 +88,10 @@ $VerifiedUserData = Get-Content -path $tempcsv4 | convertFrom-csv | where { $_.$
 Write-Host "Field match 02:" $Fieldmatch02
 Write-Host "Field String 02:" $FieldString02
 $VerifiedUserData2 = Get-Content -path $tempcsv6 | select-object -skip 1 | convertFrom-csv | where { $_.$FieldMatch02 -like $FieldString02 } #import where field like $FieldMatch02, and skip 1st line
-Write-Host "Number of records matching selection criteria:" $VerifiedUserData2.count
+
+
+Write-Host "Number of records matching selection criteria $FieldMatch01 and $FieldString:" $VerifiedUserData.count
+Write-Host "Number of records matching selection criteria $FieldMatch02 and $FieldString02 :" $VerifiedUserData2.count
 #TODO - if count 0 break out of script...
 #$VerifiedUserData2
 
@@ -100,12 +103,12 @@ Write-Host "Number of records matching selection criteria:" $VerifiedUserData2.c
 
 
 #$VerifiedUserData = Get-Content -path $tempcsv4 | select-object -skip 1 | convertFrom-csv | where { $_.$FieldMatch01 -like $FieldString } #import where field like $FieldMatch01, and skip 1st line
-Write-Host "Number of records matching selection criteria:" $VerifiedUserData.count
+
 ##### ENHANCEMENT ##### - if count 0 break out of script...
 
 
 
-if (test-path $tempcsv8) { remove-item $tempcsv8 -force -verbose }
+
 
 start-sleep 2
 
@@ -166,6 +169,9 @@ foreach ($user in $VerifiedUserData) {
                                         Write-Host "updating AD user: "
                                                                                 
                                         # update mnspAdminNumber attribute...
+                                        if (!$HRid) { #NULL check...
+                                            Write-Warning "No HR ID found for $($UserToProcess.SamAccountName)  - check data source... "
+                                            } else {
                                         Write-Host "PS to process: Set-ADUser -Identity $($UserToProcess.ObjectGUID) -Add @{mnspAdminNumber="$HRid"} -verbose`n"
                                         Write-host "`n---`n"
                                         Set-ADUser -Identity $($UserToProcess.ObjectGUID) -Add @{mnspAdminNumber="$MISidComplete"} -verbose -whatif ## Comment Whatif to Action
@@ -175,6 +181,7 @@ foreach ($user in $VerifiedUserData) {
                                         $UserToProcessPostupdate = $(Get-ADUser -id $($UserToProcess.ObjectGUID) -Properties * | select-object $ADattribs)
                                         $UserToProcessPostupdate
                                         DashedLine01
+                                            }
                         }
                         DashedLine02
 
@@ -188,6 +195,8 @@ foreach ($user in $VerifiedUserData) {
 }
 
 <#
+#if (test-path $tempcsv8) { remove-item $tempcsv8 -force -verbose }
+
 Write-Host "Closing all remote PSSessions..."
 Get-PSSession | Remove-PSSession
 #>
