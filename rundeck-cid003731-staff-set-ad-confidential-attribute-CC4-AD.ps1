@@ -1,4 +1,4 @@
-$mnspver = "0.0.24"
+$mnspver = "0.0.25"
 
 <#
 Overall process to:
@@ -158,7 +158,7 @@ foreach ($user in $VerifiedUserData) {
                 DashedLine02
                     } else {
                         Write-Host "AD attributes found by searching for user with MIS ID: $MISidComplete"
-                        $UserToProcess
+                        $UserToProcess | format-list
 
                         #user lookup using legacy mail address...
                             $UserLookup = @()
