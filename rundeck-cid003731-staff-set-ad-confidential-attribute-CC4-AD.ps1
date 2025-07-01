@@ -1,12 +1,14 @@
-$mnspver = "0.0.15"
+$mnspver = "0.0.16"
 
 <#
 Overall process to:
 - Begin transcript logging
 - Download google sheet - or use local/manually saved CSV, containing all necessary information (MAT wide export from central arbor), data will be filtered based on desired school
+- Download google sheet - or use local/manually saved CSV, containing all necessary information (user migration information containing HR ID (M00######))
 - Create a user array (from downloaded/filtered csv data)
     - Loop through the user array, finding the AD object that matches Arbor ID (employeeNumber AD attribute previously synchronised by salamander)
     - Return matched AD user and attributes
+    - match legacy email with returned AD search result to cross refernce with HR ID source data - return HR ID for email address
     - Set custom confidential attribute (mnspAdminNumber)
     - Repeat for as many users that are in the array
 - Stop transcript logging
@@ -67,7 +69,13 @@ Write-Host "Invoke-Expression $GamDir\gam.exe user $GoogleSvcAccount get drivefi
 Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleSheetID format csv gsheet ""$GoogleSheetTab01"" targetfolder $DataDir targetname $tempcsv4"
 #Write-Host "Invoke-Expression $GamDir\gam.exe user $GoogleSourceSvcAccount get drivefile $GoogleSheetID format csv gsheet ""$GoogleSheetTab01"" targetfolder $DataDir targetname $tempcsv4"
 
-#exit
+#get verified user data (HR + mail)
+#if exist check & remove $tempcsv6
+if (test-path $tempcsv6) { remove-item $tempcsv6 -force -verbose }
+Write-Host "downloading gsheet ID: $GoogleSheetID02 tab: $GoogleSheetTab02"
+Write-Host "Invoke-Expression $GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleSheetID02 format csv gsheet ""$GoogleSheetTab02"" targetfolder $DataDir targetname $tempcsv6"
+Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleSheetID format csv gsheet ""$GoogleSheetTab02"" targetfolder $DataDir targetname $tempcsv6"
+
 
 Start-sleep 2
 
@@ -87,7 +95,7 @@ Write-Host "Number of records matching selection criteria:" $VerifiedUserData.co
 ##### ENHANCEMENT ##### - if count 0 break out of script...
 
 
-if (test-path $tempcsv6) { remove-item $tempcsv6 -force -verbose }
+
 if (test-path $tempcsv8) { remove-item $tempcsv8 -force -verbose }
 
 start-sleep 2
@@ -144,7 +152,7 @@ foreach ($user in $VerifiedUserData) {
                                         Write-Host "updating AD user: "
                                                                                 
                                         # update mnspAdminNumber attribute...
-                                        Write-Host "PS to process: Set-ADUser -Identity $($UserToProcess.ObjectGUID) -Add @{mnspAdminNumber="$MISidComplete"} -verbose`n"
+                                        Write-Host "PS to process: Set-ADUser -Identity $($UserToProcess.ObjectGUID) -Add @{mnspAdminNumber="$HRid"} -verbose`n"
                                         Write-host "`n---`n"
                                         Set-ADUser -Identity $($UserToProcess.ObjectGUID) -Add @{mnspAdminNumber="$MISidComplete"} -verbose -whatif ## Comment Whatif to Action
                                         Write-host "`n---`n"
