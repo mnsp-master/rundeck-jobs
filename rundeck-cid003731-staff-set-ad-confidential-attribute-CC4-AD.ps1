@@ -1,4 +1,4 @@
-$mnspver = "0.0.18"
+$mnspver = "0.0.19"
 
 <#
 Overall process to:
@@ -85,10 +85,12 @@ Write-Host "Field String: " $FieldString
 $VerifiedUserData = Get-Content -path $tempcsv4 | convertFrom-csv | where { $_.$FieldMatch01 -like $FieldString } #import where field like $FieldMatch01
 
 
-$VerifiedUserData2 = Get-Content -path $tempcsv6 | select-object -skip 1 | convertFrom-csv | where { $_.$FieldMatch01 -like $FieldString } #import where field like $FieldMatch01, and skip 1st line
+Write-Host "Field match 02:" $Fieldmatch02
+Write-Host "Field String 02:" $FiledString02
+$VerifiedUserData2 = Get-Content -path $tempcsv6 | select-object -skip 1 | convertFrom-csv | where { $_.$FieldMatch02 -like $FieldString02 } #import where field like $FieldMatch01, and skip 1st line
 Write-Host "Number of records matching selection criteria:" $VerifiedUserData2.count
 #TODO - if count 0 break out of script...
-$VerifiedUserData
+$VerifiedUserData2
 
 
 #$VerifiedUserData = Get-Content -path $tempcsv4 | convertFrom-csv | where-object { 
