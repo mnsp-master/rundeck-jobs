@@ -1,4 +1,4 @@
-$mnspver = "0.0.17"
+$mnspver = "0.0.18"
 
 <#
 Overall process to:
@@ -84,6 +84,13 @@ Write-Host "Field String: " $FieldString
 #$VerifiedUserData = Get-Content -path $tempcsv4 | where { $_.$FieldMatch01 -like $FieldString }
 $VerifiedUserData = Get-Content -path $tempcsv4 | convertFrom-csv | where { $_.$FieldMatch01 -like $FieldString } #import where field like $FieldMatch01
 
+
+$VerifiedUserData2 = Get-Content -path $tempcsv6 | select-object -skip 1 | convertFrom-csv | where { $_.$FieldMatch01 -like $FieldString } #import where field like $FieldMatch01, and skip 1st line
+Write-Host "Number of records matching selection criteria:" $VerifiedUserData2.count
+#TODO - if count 0 break out of script...
+$VerifiedUserData
+
+
 #$VerifiedUserData = Get-Content -path $tempcsv4 | convertFrom-csv | where-object { 
 #    $_.$FieldMatch01 -like $FieldString -and 
 #    $_.$Fieldmatch02 -match '^[0-9]+$' #Numeric values only - excludes - R N1 N2 etc
@@ -147,6 +154,11 @@ foreach ($user in $VerifiedUserData) {
                     } else {
                         Write-Host "AD attributes found by searching for user with MIS ID: $MISidComplete"
                         $UserToProcess
+
+                        #user lookup using legacy mail address...
+                            $UserLookup = @()
+                            $UserLookup = $($VerifiedUserData2 | where-object ({ $_.$CSVheaderObject -eq $LegacyUserMail })) ####ENHANCEMENT#### deifne 
+                            $HRid = $UserLookup.'Staff full name'
                         
                                         DashedLine02                             
                                         Write-Host "updating AD user: "
