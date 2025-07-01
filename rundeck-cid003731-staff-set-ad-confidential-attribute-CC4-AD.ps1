@@ -1,4 +1,4 @@
-$mnspver = "0.0.19"
+$mnspver = "0.0.20"
 
 <#
 Overall process to:
@@ -44,7 +44,7 @@ Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceDestination save" # sw
 Invoke-Expression "$GamDir\gam.exe info domain"
 start-sleep 3
 
-Write-Host "gsheet Student number column heading:" $FieldMatch01
+Write-Host "gsheet Staff number column heading:" $FieldMatch01
 Start-sleep 10
 
 <#
@@ -86,12 +86,13 @@ $VerifiedUserData = Get-Content -path $tempcsv4 | convertFrom-csv | where { $_.$
 
 
 Write-Host "Field match 02:" $Fieldmatch02
-Write-Host "Field String 02:" $FiledString02
-$VerifiedUserData2 = Get-Content -path $tempcsv6 | select-object -skip 1 | convertFrom-csv | where { $_.$FieldMatch02 -like $FieldString02 } #import where field like $FieldMatch01, and skip 1st line
+Write-Host "Field String 02:" $FieldString02
+$VerifiedUserData2 = Get-Content -path $tempcsv6 | select-object -skip 1 | convertFrom-csv | where { $_.$FieldMatch02 -like $FieldString02 } #import where field like $FieldMatch02, and skip 1st line
 Write-Host "Number of records matching selection criteria:" $VerifiedUserData2.count
 #TODO - if count 0 break out of script...
 $VerifiedUserData2
 
+exit
 
 #$VerifiedUserData = Get-Content -path $tempcsv4 | convertFrom-csv | where-object { 
 #    $_.$FieldMatch01 -like $FieldString -and 
