@@ -1,4 +1,4 @@
-$mnspver = "0.0.14"
+$mnspver = "0.0.15"
 
 <#
 Overall process to:
@@ -159,13 +159,11 @@ foreach ($user in $VerifiedUserData) {
     } else { #if MIS id is NULL...
                         Write-Warning "No MIS ID found for:"
                         Write-host "Legacy email: $LegacyUserMail"
-                        Write-Host "Replacement email: $ReplacementUserMail"
-                        Write-Host "UPN: $UPN"
                         Write-Host "Firstname: $FirstName"
                         Write-Host "Lastname: $LastName"
 }
 
-
+}
 
 <#
 Write-Host "Closing all remote PSSessions..."
