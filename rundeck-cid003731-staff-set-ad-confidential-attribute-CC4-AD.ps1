@@ -1,4 +1,4 @@
-$mnspver = "0.0.8"
+$mnspver = "0.0.9"
 
 <#
 Overall process to:
@@ -67,7 +67,7 @@ Write-Host "Invoke-Expression $GamDir\gam.exe user $GoogleSvcAccount get drivefi
 Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleSheetID format csv gsheet ""$GoogleSheetTab01"" targetfolder $DataDir targetname $tempcsv4"
 #Write-Host "Invoke-Expression $GamDir\gam.exe user $GoogleSourceSvcAccount get drivefile $GoogleSheetID format csv gsheet ""$GoogleSheetTab01"" targetfolder $DataDir targetname $tempcsv4"
 
-exit
+#exit
 
 Start-sleep 2
 
