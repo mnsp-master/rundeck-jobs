@@ -1,4 +1,4 @@
-$mnspver = "0.0.11"
+$mnspver = "0.0.12"
 
 <#
 Overall process to:
@@ -111,7 +111,7 @@ foreach ($user in $VerifiedUserData) {
     #$ReplacementUserMail = $user."Email20Chars" #UPDATE NEEDED ### Column heading needs agreeing
     #$DestOU = [int] $user."NC Year(s) for today" #set var as interger
     $MISid = $user."Arbor Staff ID" # DEV 
-    $MISidComplete = "$MISsitePrefix-$MISrolePrefix_$MISid" #concatenate sitename hyphen and MIS id number e.g: SCH-Stf_34
+    $MISidComplete = "$MISsitePrefix + '-' + $MISrolePrefix + '_' + $MISid" #concatenate sitename hyphen and MIS id number e.g: SCH-Stf_34
     #$Yearprefix = $user."New prefix"
     #$MISid = $user."Arbor Student ID" #Production
 
