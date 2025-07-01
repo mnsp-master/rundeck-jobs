@@ -1,4 +1,4 @@
-$mnspver = "0.0.23"
+$mnspver = "0.0.24"
 
 <#
 Overall process to:
@@ -170,16 +170,18 @@ foreach ($user in $VerifiedUserData) {
                                                                                 
                                         # update mnspAdminNumber attribute...
                                         if (!$HRid) { #NULL check...
-                                            Write-Warning "No HR ID found for $($UserToProcess.SamAccountName)  - check data source... "
+                                            Write-Warning "No HR ID found for $($UserToProcess.SamAccountName)  - check data source(s)... "
                                             } else {
                                         Write-Host "PS to process: Set-ADUser -Identity $($UserToProcess.ObjectGUID) -Add @{mnspAdminNumber="$HRid"} -verbose`n"
                                         Write-host "`n---`n"
                                         Set-ADUser -Identity $($UserToProcess.ObjectGUID) -Add @{mnspAdminNumber="$MISidComplete"} -verbose -whatif ## Comment Whatif to Action
                                         Write-host "`n---`n"
                                         
+                                        <#
                                         Write-Host "Updated AD users attributes using GUID:"
                                         $UserToProcessPostupdate = $(Get-ADUser -id $($UserToProcess.ObjectGUID) -Properties * | select-object $ADattribs)
                                         $UserToProcessPostupdate
+                                        #>
                                         DashedLine01
                                             }
                         }
