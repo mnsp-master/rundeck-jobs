@@ -1,4 +1,4 @@
-$mnspver = "0.0.25"
+$mnspver = "0.0.26"
 
 <#
 Overall process to:
@@ -162,11 +162,12 @@ foreach ($user in $VerifiedUserData) {
 
                         #user lookup using legacy mail address...
                             $UserLookup = @()
-                            $UserLookup = $($VerifiedUserData2 | where-object ({ $_.$CSVheaderObject -eq $LegacyUserMail })) ####ENHANCEMENT#### deifne 
-                            $HRid = $UserLookup.'Staff full name'
+                            $UserLookup = $($VerifiedUserData2 | where-object ({ $_.$CSVheaderObject -eq $LegacyUserMail })) 
+                            #$HRid = $UserLookup.'Staff full name' ####ENHANCEMENT#### define as var...
+                            $HRid = $UserLookup.$FieldMatch02 
                         
                                         DashedLine02                             
-                                        Write-Host "updating AD user: "
+                                        Write-Host "updating AD user: $($UserToProcess.SamAccountName)"
                                                                                 
                                         # update mnspAdminNumber attribute...
                                         if (!$HRid) { #NULL check...
@@ -178,7 +179,7 @@ foreach ($user in $VerifiedUserData) {
                                         Write-host "`n---`n"
                                         
                                         <#
-                                        Write-Host "Updated AD users attributes using GUID:"
+                                        Write-Host "Updated AD users attributes using GUID: $($UserToProcess.ObjectGUID)"
                                         $UserToProcessPostupdate = $(Get-ADUser -id $($UserToProcess.ObjectGUID) -Properties * | select-object $ADattribs)
                                         $UserToProcessPostupdate
                                         #>
