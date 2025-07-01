@@ -1,4 +1,4 @@
-$mnspver = "0.0.13"
+$mnspver = "0.0.14"
 
 <#
 Overall process to:
@@ -140,8 +140,7 @@ foreach ($user in $VerifiedUserData) {
                         Write-Host "AD attributes found by searching for user with MIS ID: $MISidComplete"
                         $UserToProcess
                         
-                                        DashedLine02
-                                        
+                                        DashedLine02                             
                                         Write-Host "updating AD user: "
                                                                                 
                                         # update mnspAdminNumber attribute...
@@ -157,14 +156,13 @@ foreach ($user in $VerifiedUserData) {
                         }
                         DashedLine02
 
-                }
     } else { #if MIS id is NULL...
-    Write-Warning "No MIS ID found for:"
-    Write-host "Legacy email: $LegacyUserMail"
-    Write-Host "Replacement email: $ReplacementUserMail"
-    Write-Host "UPN: $UPN"
-    Write-Host "Firstname: $FirstName"
-    Write-Host "Lastname: $LastName"
+                        Write-Warning "No MIS ID found for:"
+                        Write-host "Legacy email: $LegacyUserMail"
+                        Write-Host "Replacement email: $ReplacementUserMail"
+                        Write-Host "UPN: $UPN"
+                        Write-Host "Firstname: $FirstName"
+                        Write-Host "Lastname: $LastName"
 }
 
 
