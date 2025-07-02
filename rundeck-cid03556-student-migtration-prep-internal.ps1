@@ -1,4 +1,4 @@
-$mnspver = "0.0.76"
+$mnspver = "0.0.77"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -149,7 +149,7 @@ foreach ($user in $VerifiedUserData) {
             Write-Warning "!!WARNING $LegacyUserMail DOES NOT EXIST!! - update MIS data"
         }
         
-        #Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN gal $GoogleIncludeInGal" #SNODEV06062025
+        Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN gal $GoogleIncludeInGal" #SNODEV06062025
         Write-Host "$GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN gal $GoogleIncludeInGal"
         $password = "N/A - unchanged"
         $AccountHistory = "Migrated"
@@ -172,7 +172,7 @@ foreach ($user in $VerifiedUserData) {
                 start-sleep 1
             
             Write-Warning "Creating desired target mail domain email address..."
-            #Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN password $password gal $GoogleIncludeInGal" #SNODEV06062025
+            Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN password $password gal $GoogleIncludeInGal" #SNODEV06062025
             Write-Host "$GamDir\gam.exe create user $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN password $password gal $GoogleIncludeInGal"
             $LegacyUserMail = "N/A"
             $AccountHistory = "New"
