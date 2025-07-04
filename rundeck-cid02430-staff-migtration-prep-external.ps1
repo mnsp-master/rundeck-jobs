@@ -1,4 +1,4 @@
-$mnspver = "0.0.180"
+$mnspver = "0.0.181"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -38,7 +38,7 @@ Invoke-Expression "$GamDir\gam.exe update cigroup $GoogleWorkspaceSourceSysadmin
 
 #create source users calendar info gsheet
 Write-Host "Source users current calendar info..."
-# Invoke-Expression "$GamDir\gam.exe ou_and_children_ns ""$GoogleWorkspaceSourceUserOU"" print calendars showhidden todrive tdparent id:$GfolderReportsID tdnobrowser" ###ENHANCEMENT taking excessive time MEN - needs query match domain
+Invoke-Expression "$GamDir\gam.exe ou_and_children_ns ""$GoogleWorkspaceSourceUserOU"" print calendars showhidden todrive tdparent id:$GfolderReportsID tdnobrowser" ###ENHANCEMENT taking excessive time MEN - needs query match domain
 
 DashedLine
 
