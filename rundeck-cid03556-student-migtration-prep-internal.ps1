@@ -1,4 +1,4 @@
-$mnspver = "0.0.77"
+$mnspver = "0.0.78"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -86,7 +86,8 @@ Write-Host "Field String: " $FieldString
 
 $VerifiedUserData = Get-Content -path $tempcsv4 | convertFrom-csv | where-object { 
     $_.$FieldMatch01 -like $FieldString -and 
-    $_.$Fieldmatch02 -match '^[0-9]+$' #Numeric values only - excludes - R N1 N2 etc
+    #$_.$Fieldmatch02 -match '^[0-9]+$' #Numeric values only - excludes - R N1 N2 etc
+    $_.$Fieldmatch02 -like "12" #limit to one year group
     } #import where field like $FieldMatch01
 
 #$VerifiedUserData = Get-Content -path $tempcsv4 | select-object -skip 1 | convertFrom-csv | where { $_.$FieldMatch01 -like $FieldString } #import where field like $FieldMatch01, and skip 1st line
@@ -149,7 +150,7 @@ foreach ($user in $VerifiedUserData) {
             Write-Warning "!!WARNING $LegacyUserMail DOES NOT EXIST!! - update MIS data"
         }
         
-        Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN gal $GoogleIncludeInGal" #SNODEV06062025
+        #Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN gal $GoogleIncludeInGal" #SNODEV06062025
         Write-Host "$GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN gal $GoogleIncludeInGal"
         $password = "N/A - unchanged"
         $AccountHistory = "Migrated"
@@ -172,7 +173,7 @@ foreach ($user in $VerifiedUserData) {
                 start-sleep 1
             
             Write-Warning "Creating desired target mail domain email address..."
-            Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN password $password gal $GoogleIncludeInGal" #SNODEV06062025
+            #Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN password $password gal $GoogleIncludeInGal" #SNODEV06062025
             Write-Host "$GamDir\gam.exe create user $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN password $password gal $GoogleIncludeInGal"
             $LegacyUserMail = "N/A"
             $AccountHistory = "New"
