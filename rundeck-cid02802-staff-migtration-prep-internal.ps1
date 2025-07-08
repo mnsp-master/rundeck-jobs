@@ -1,4 +1,4 @@
-$mnspver = "0.0.22"
+$mnspver = "0.0.23"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -168,8 +168,8 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Lastname: $LastName"
 
     Write-Host "update/move/rename destination (existing) account..."
-    #Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU' changepassword on" ###
-    Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname $FirstName lastname $LastName org '$GoogleWorkspaceDestinationUserOU' " ###move/update existing user
+    Write-Host "$GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname $FirstName lastname $LastName org '$GoogleWorkspaceDestinationUserOU' "
+    #Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname $FirstName lastname $LastName org '$GoogleWorkspaceDestinationUserOU' " ###move/update existing user #CID003752 dry run
   
     DashedLine
 }
