@@ -1,4 +1,4 @@
-$mnspver = "0.0.23"
+$mnspver = "0.0.24"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -48,7 +48,7 @@ Start-Sleep 10
 #create user info destination gsheet
 $UserInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
 
-<# KNO no security groups required: START #
+<# SOU no security groups required: START #
 
 Write-Host "Create/update common shared drives security groups (Destination instance)..."
 $GoogleWorkspaceSecGroupSettings = ("whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","isArchived true","whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","whoCanMarkFavoriteReplyOnOwnTopic OWNERS_AND_MANAGERS","whoCanPostMessage ALL_MANAGERS_CAN_POST","whoCanTakeTopics OWNERS_AND_MANAGERS","whoCanViewGroup ALL_MANAGERS_CAN_VIEW","whoCanViewMembership ALL_MANAGERS_CAN_VIEW","whoCanJoin INVITED_CAN_JOIN") #ENHANCEMENT - convert to json updating 
@@ -101,9 +101,9 @@ $GroupexistCheck.email
     }
     }
 
-# KNO no security groups required: END #>
+# SOU no security groups required: END #>
 
-<# KNO no distribution groups required: START #
+<# SOU no distribution groups required: START #
 Write-Host "Create email dist groups (Destination instance)..."
 $GoogleWorkspaceGroupSettings = ("isArchived true","whoCanContactOwner ALL_MEMBERS_CAN_CONTACT","whoCanMarkFavoriteReplyOnOwnTopic OWNERS_AND_MANAGERS","whoCanPostMessage ALL_MEMBERS_CAN_POST","whoCanTakeTopics OWNERS_AND_MANAGERS","whoCanViewGroup ALL_MEMBERS_CAN_VIEW","whoCanViewMembership ALL_MEMBERS_CAN_VIEW","whoCanJoin INVITED_CAN_JOIN") #ENHANCEMENT convert to json updating 
 
@@ -149,7 +149,7 @@ $GroupexistCheck.email
 
     }
     }
-># KNO no distribution groups required: END #
+># SOU no distribution groups required: END #
 
 <##>
 
