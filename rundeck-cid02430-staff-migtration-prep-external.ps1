@@ -1,4 +1,4 @@
-$mnspver = "0.0.182"
+$mnspver = "0.0.183"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -212,8 +212,8 @@ foreach ($user in $VerifiedUserData) {
         start-sleep 1
 
     Write-Host "create destination account..."
-    #Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU' changepassword on" #CID00#### dry run
-    Write-Host "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU' changepassword on"
+    #Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname '$FirstName' lastname '$LastName' password $password org '$GoogleWorkspaceDestinationUserOU' changepassword on" #CID00#### dry run
+    Write-Host "$GamDir\gam.exe create user $ReplacementUserMail firstname '$FirstName' lastname '$LastName' password $password org '$GoogleWorkspaceDestinationUserOU' changepassword on"
 
     #capture initial credentials
     "$firstname,$lastname,$ReplacementUserMail,$password" | out-file -filepath $tempcsv2 -Append 
