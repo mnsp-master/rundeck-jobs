@@ -1,4 +1,4 @@
-$mnspver = "0.0.89"
+$mnspver = "0.0.90"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -54,15 +54,10 @@ foreach ($OUtoCreate in $OUsToCreate) {
     DashedLine
     } else {
     Write-Warning "OU: $OUtoCreate does not exist, creating..."
-    $CLI001 =@()
-    $CLI001 = "$GamDir\gam.exe create org '$OutoCreate' parent '$GoogleWorkspaceDestinationUserOU'"
-    Write-Host "CLI to execute:" $CLI001
-    
-    if ($DryRun -eq "FALSE") {
-        Write-Host "Proceeding with CLI:"
-        #invoke-expression "$GamDir\gam.exe create org '$OutoCreate' parent '$GoogleWorkspaceDestinationUserOU'" #CID00#### dry run
-        invoke-expression "$CLI001"
-        }
+    Write-Host "$GamDir\gam.exe create org '$OutoCreate' parent '$GoogleWorkspaceDestinationUserOU'"
+
+    #invoke-expression "$GamDir\gam.exe create org '$OutoCreate' parent '$GoogleWorkspaceDestinationUserOU'" #CID00#### dry run
+
     DashedLine
     }
 }
