@@ -1,4 +1,4 @@
-$mnspver = "0.0.83"
+$mnspver = "0.0.84"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -55,7 +55,11 @@ foreach ($OUtoCreate in $OUsToCreate) {
     } else {
     Write-Warning "OU: $OUtoCreate does not exist, creating..."
     Write-Host "$GamDir\gam.exe create org '$OutoCreate' parent '$GoogleWorkspaceDestinationUserOU'"
+    
+    if ($DryRun -eq "FALSE") {
+        Write-Host "Proceeding with Action: TESTING..."
     #invoke-expression "$GamDir\gam.exe create org '$OutoCreate' parent '$GoogleWorkspaceDestinationUserOU'" #CID00#### dry run
+    }
     DashedLine
     }
 }
@@ -150,6 +154,7 @@ foreach ($user in $VerifiedUserData) {
         } else {
             Write-Warning "!!WARNING $LegacyUserMail DOES NOT EXIST!! - update MIS data"
         }
+        
         
         #Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN gal $GoogleIncludeInGal" #CID00#### dry run
         Write-Host "$GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN gal $GoogleIncludeInGal"
