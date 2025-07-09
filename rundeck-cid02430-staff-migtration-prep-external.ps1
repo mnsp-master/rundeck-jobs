@@ -1,4 +1,4 @@
-$mnspver = "0.0.181"
+$mnspver = "0.0.182"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -38,7 +38,8 @@ Invoke-Expression "$GamDir\gam.exe update cigroup $GoogleWorkspaceSourceSysadmin
 
 #create source users calendar info gsheet
 Write-Host "Source users current calendar info..."
-Invoke-Expression "$GamDir\gam.exe ou_and_children_ns ""$GoogleWorkspaceSourceUserOU"" print calendars showhidden todrive tdparent id:$GfolderReportsID tdnobrowser" ###ENHANCEMENT taking excessive time MEN - needs query match domain
+#Invoke-Expression "$GamDir\gam.exe ou_and_children_ns ""$GoogleWorkspaceSourceUserOU"" print calendars showhidden todrive tdparent id:$GfolderReportsID tdnobrowser" ##CID00#### dry run ###ENHANCEMENT taking excessive time MEN - needs query match domain
+Write-Host "$GamDir\gam.exe ou_and_children_ns ""$GoogleWorkspaceSourceUserOU"" print calendars showhidden todrive tdparent id:$GfolderReportsID tdnobrowser"
 
 DashedLine
 
@@ -108,15 +109,19 @@ $GroupexistCheck.email
 
     Write-Host "-----------Creating Security group:$member----------"`n
     $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).ToLower()
-    Invoke-expression "$GamDir\gam.exe create group $GoogleGroupFQDN" # create group
+    #Invoke-expression "$GamDir\gam.exe create group $GoogleGroupFQDN" #CID00#### dry run # create group 
+    Write-Host "$GamDir\gam.exe create group $GoogleGroupFQDN"
     Start-Sleep 2
-    Invoke-Expression "$GamDir\gam.exe update cigroup $GoogleGroupFQDN makesecuritygroup" # set group label/type to security
+    
+    #Invoke-Expression "$GamDir\gam.exe update cigroup $GoogleGroupFQDN makesecuritygroup" #CID00#### dry run # set group label/type to security
+    Write-Host "$GamDir\gam.exe update cigroup $GoogleGroupFQDN makesecuritygroup"
 
     Start-sleep 2
         #set access controls for group from action array... ENHANCEMENT - migrate this to a single JSON control file route
         foreach ($action in $GoogleWorkspaceSecGroupSettings) { 
-        Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN $action" #set access controls for group from action array
-        
+        #Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN $action" #CID00#### dry run #set access controls for group from action array
+        Write-Host "$GamDir\gam.exe update group $GoogleGroupFQDN $action"
+
         }
 
     }
@@ -156,12 +161,14 @@ $GroupexistCheck.email
 
     Write-Host "-----------Creating Dist group:$member----------"`n
     $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).ToLower()
-    Invoke-expression "$GamDir\gam.exe create group $GoogleGroupFQDN"
+    #Invoke-expression "$GamDir\gam.exe create group $GoogleGroupFQDN" #CID00#### dry run
+    Write-Host "$GamDir\gam.exe create group $GoogleGroupFQDN"
 
     Start-sleep 2
 
         foreach ($action in $GoogleWorkspaceGroupSettings) { 
-        Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN $action"
+        #Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN $action" #CID00#### dry run
+        Write-Host "$GamDir\gam.exe update group $GoogleGroupFQDN $action"
         
         }
 
@@ -205,13 +212,15 @@ foreach ($user in $VerifiedUserData) {
         start-sleep 1
 
     Write-Host "create destination account..."
-    Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU' changepassword on" ###
-    
+    #Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU' changepassword on" #CID00#### dry run
+    Write-Host "$GamDir\gam.exe create user $ReplacementUserMail firstname $FirstName lastname $LastName password $password org '$GoogleWorkspaceDestinationUserOU' changepassword on"
+
     #capture initial credentials
     "$firstname,$lastname,$ReplacementUserMail,$password" | out-file -filepath $tempcsv2 -Append 
 
     Write-Host "hide account from GAL.."
-    Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail gal false"
+    #Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail gal false" #CID00#### dry run
+    Write-Host "$GamDir\gam.exe update user $ReplacementUserMail gal false"
 
     #Write-Host "generate MFA backup codes..." # Agreed  not to enforce imediate MFA - grace period of 2 days instead
     #Invoke-Expression "$GamDir\gam.exe user $ReplacementUserMail update backupcodes"
@@ -254,39 +263,47 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Lastname: $LastName"
 
     Write-Host "update legacy accounts..."
-    Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail $GoogleCustomAttribute01 $HRid" #set HR ID - Confirm if this can be replicated to helpdesk user objects
+    #Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail $GoogleCustomAttribute01 $HRid" #CID00#### dry run #set HR ID - Confirm if this can be replicated to helpdesk user objects
+    Write-Host "$GamDir\gam.exe update user $LegacyUserMail $GoogleCustomAttribute01 $HRid"
 
     Write-Host "send current calendar invite: $LegacyUserMail add acls reader $ReplacementUserMail ..."
-    Invoke-Expression "$GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail sendnotifications false"
+    #Invoke-Expression "$GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail sendnotifications false" #CID00#### dry run
+    Write-Host "$GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail sendnotifications false"
 
     #<# #(un)comment to (not)create shared drive(s)
     #create/manage shared drives...
         Write-Host "shared drive creation (Legacy Source to Destination user)..."
         $TeamDriveName = "Migration $LegacyUserMail $(Get-Date)"
-        $LegacyUserTeamDriveID = $(Invoke-expression "$GamDir\gam.exe user $GoogleSourceSvcAccount create teamdrive '$TeamDriveName' adminmanagedrestrictions true asadmin returnidonly")
+        #$LegacyUserTeamDriveID = $(Invoke-expression "$GamDir\gam.exe user $GoogleSourceSvcAccount create teamdrive '$TeamDriveName' adminmanagedrestrictions true asadmin returnidonly") #CID00#### dry run
+        Write-Host "$(Invoke-expression "$GamDir\gam.exe user $GoogleSourceSvcAccount create teamdrive '$TeamDriveName' adminmanagedrestrictions true asadmin returnidonly")"
+
         Write-Host "Shared Drive ID: $LegacyUserTeamDriveID "
 
         Write-Host "Allow outside sharing..."
-        Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin domainUsersOnly False"
+        #Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin domainUsersOnly False" #CID00#### dry run
+        Write-Host "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin domainUsersOnly False"
 
         Write-Host "Allow people who aren't shared drive members to access files - false..."
-        Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin sharingFoldersRequiresOrganizerPermission True"
+        #Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin sharingFoldersRequiresOrganizerPermission True" #CID00#### dry run
+        Write-Host "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin sharingFoldersRequiresOrganizerPermission True"
 
         #Write-Host "move shared drive to move enabled OU..."
         #Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin ou '$LegacyUserTeamDriveOU'" #location needs confirming
 
         Write-Host "Add internal sysadmins group as manager: add drivefileacl $LegacyUserTeamDriveID user $GoogleWorkspaceSourceSysadminGroupFQDN role organizer"
-        Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $GoogleWorkspaceSourceSysadminGroupFQDN role organizer" 
+        #Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $GoogleWorkspaceSourceSysadminGroupFQDN role organizer" #CID00#### dry run
+        Write-Host "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $GoogleWorkspaceSourceSysadminGroupFQDN role organizer"
 
         Write-Host "Add internal user as manager: add drivefileacl $LegacyUserTeamDriveID user $LegacyUserMail role organizer ..."
-        Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $LegacyUserMail role organizer"
+        #Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $LegacyUserMail role organizer" #CID00#### dry run
         
         Write-Host "Add external user as manager: add drivefileacl $LegacyUserTeamDriveID user $ReplacementUserMail role organizer..."
-        Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $ReplacementUserMail role organizer"
+        #Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $ReplacementUserMail role organizer" #CID00#### dry run
         
     #>
     Write-Host "report current shared drive folder associations for: $LegacyUserMail ..."
-    Invoke-expression "$GamDir\gam.exe user $legacyUserMail print teamdrives todrive tdparent id:$GfolderReportsID tdnobrowser tdtitle '$LegacyUserMail shared drives summary as of $(get-date)'"
+    #Invoke-expression "$GamDir\gam.exe user $legacyUserMail print teamdrives todrive tdparent id:$GfolderReportsID tdnobrowser tdtitle '$LegacyUserMail shared drives summary as of $(get-date)'" #CID00#### dry run
+    Write-Host "$GamDir\gam.exe user $legacyUserMail print teamdrives todrive tdparent id:$GfolderReportsID tdnobrowser tdtitle '$LegacyUserMail shared drives summary as of $(get-date)'"
 
     DashedLine
 
@@ -318,12 +335,12 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Lastname: $LastName"
 
     Write-Host "Accept calendar invite: user $LegacyUserMail add calendar $ReplacementUserMail selected true ..."
-    Invoke-Expression "$GamDir\gam.exe user $ReplacementUserMail add calendar $LegacyUserMail selected true"
+    #Invoke-Expression "$GamDir\gam.exe user $ReplacementUserMail add calendar $LegacyUserMail selected true" #CID00#### dry run
 
     
     start-sleep 3 # #TODO - update HRID
     Write-Host "update Replacement account HR ID..."
-    Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $HRid" #set HR ID - 
+    #Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $HRid" #CID00#### dry run #set HR ID - 
 }
     Write-Host "Add members to security groups ..."
         if (test-path $DataDir\*.lst) { remove-item $DataDir\*.lst -force -verbose } #force delete any .lst files if exist...
@@ -341,7 +358,8 @@ foreach ($user in $VerifiedUserData) {
         $GoogleGroupMembership.$member | where { $_ -notlike "#N/A" } | out-file -Encoding utf8 "$DataDir\$member.lst"
 
         $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).ToLower()
-        Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
+        #Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst" #CID00#### dry run
+        Write-Host "$GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
 
     }
 
@@ -361,7 +379,8 @@ Write-Host "Add members to mail dist groups ..."
         $GoogleGroupMembership.$member | where { $_ -notlike "#N/A" } | out-file -Encoding utf8 "$DataDir\$member.lst"
 
         $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).toLower()
-        Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
+        #Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst" #CID00#### dry run
+        Write-Host "$GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
 
     }
 
