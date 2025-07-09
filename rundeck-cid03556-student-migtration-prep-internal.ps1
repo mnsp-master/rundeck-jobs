@@ -1,4 +1,4 @@
-$mnspver = "0.0.85"
+$mnspver = "0.0.86"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -91,8 +91,8 @@ Write-Host "Field String: " $FieldString
 
 $VerifiedUserData = Get-Content -path $tempcsv4 | convertFrom-csv | where-object { 
     $_.$FieldMatch01 -like $FieldString -and 
-    #$_.$Fieldmatch02 -match '^[0-9]+$' #Numeric values only - excludes - R N1 N2 etc
-    $_.$Fieldmatch02 -like "12" #limit to one year group
+    $_.$Fieldmatch02 -match '^[0-9]+$' #Numeric values only - excludes - R N1 N2 etc
+    #$_.$Fieldmatch02 -like "12" #limit to one year group
     } #import where field like $FieldMatch01
 
 #$VerifiedUserData = Get-Content -path $tempcsv4 | select-object -skip 1 | convertFrom-csv | where { $_.$FieldMatch01 -like $FieldString } #import where field like $FieldMatch01, and skip 1st line
