@@ -1,4 +1,4 @@
-$mnspver = "0.0.25"
+$mnspver = "0.0.26"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -159,17 +159,17 @@ foreach ($user in $VerifiedUserData) {
     $LegacyUserMail = $user."Existing Email Address" #current mail address
     $HRid = $user."Staff full name" # HR id
     $FirstName = $user."Staff first name" #prefered firstname
-    $LastName = $user."Staff Surname"
+    $lastname = $user."Staff Surname"
     $ReplacementUserMail = $user."new email"
 
     Write-Host "Processing: $LegacyUserMail"
     Write-Host "HR ID: $HRid"
     Write-Host "Firstname: $FirstName"
-    Write-Host "Lastname: $LastName"
+    Write-Host "Lastname: $lastname"
 
     Write-Host "update/move/rename destination (existing) account..."
-    Write-Host "$GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname $FirstName lastname $LastName org '$GoogleWorkspaceDestinationUserOU' "
-    Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname $FirstName lastname $LastName org '$GoogleWorkspaceDestinationUserOU' " ###move/update existing user #CID00#### dry run
+    Write-Host "$GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname '$FirstName' lastname '$lastname' org '$GoogleWorkspaceDestinationUserOU' "
+    Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname '$FirstName' lastname '$lastname' org '$GoogleWorkspaceDestinationUserOU' " ###move/update existing user #CID00#### dry run
   
     DashedLine
 }
