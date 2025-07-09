@@ -1,4 +1,4 @@
-$mnspver = "0.0.84"
+$mnspver = "0.0.85"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -58,8 +58,8 @@ foreach ($OUtoCreate in $OUsToCreate) {
     
     if ($DryRun -eq "FALSE") {
         Write-Host "Proceeding with Action: TESTING..."
-    #invoke-expression "$GamDir\gam.exe create org '$OutoCreate' parent '$GoogleWorkspaceDestinationUserOU'" #CID00#### dry run
-    }
+        #invoke-expression "$GamDir\gam.exe create org '$OutoCreate' parent '$GoogleWorkspaceDestinationUserOU'" #CID00#### dry run
+        }
     DashedLine
     }
 }
