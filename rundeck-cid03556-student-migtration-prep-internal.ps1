@@ -1,4 +1,4 @@
-$mnspver = "0.0.87"
+$mnspver = "0.0.88"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -49,7 +49,7 @@ $CurrentOUs = Import-Csv -Path $tempcsv10
 
 
 foreach ($OUtoCreate in $OUsToCreate) {
-    if ($CurrentOUs.name.contains($OUtoCreate)) { #logic does not work if NO sub OU's currently exist, hence $OUplaceHolder fix...
+    if ($CurrentOUs.name.contains($OUtoCreate)) { #logic does not work if NO sub OU's currently exist, hence $OUplaceHolder fix... ####ENHANCEMENT#### fix the logic properly
     Write-host "OU: $OUtoCreate already exists"
     DashedLine
     } else {
