@@ -1,4 +1,4 @@
-$mnspver = "0.0.183"
+$mnspver = "0.0.184"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -212,7 +212,7 @@ foreach ($user in $VerifiedUserData) {
         start-sleep 1
 
     Write-Host "create destination account..."
-    #Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname '$FirstName' lastname '$LastName' password $password org '$GoogleWorkspaceDestinationUserOU' changepassword on" #CID00#### dry run
+    Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname '$FirstName' lastname '$LastName' password $password org '$GoogleWorkspaceDestinationUserOU' changepassword on" #CID00#### dry run
     Write-Host "$GamDir\gam.exe create user $ReplacementUserMail firstname '$FirstName' lastname '$LastName' password $password org '$GoogleWorkspaceDestinationUserOU' changepassword on"
 
     #capture initial credentials
@@ -267,42 +267,42 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "$GamDir\gam.exe update user $LegacyUserMail $GoogleCustomAttribute01 $HRid"
 
     Write-Host "send current calendar invite: $LegacyUserMail add acls reader $ReplacementUserMail ..."
-    #Invoke-Expression "$GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail sendnotifications false" #CID00#### dry run
+    Invoke-Expression "$GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail sendnotifications false" #CID00#### dry run
     Write-Host "$GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail sendnotifications false"
 
     #<# #(un)comment to (not)create shared drive(s)
     #create/manage shared drives...
         Write-Host "shared drive creation (Legacy Source to Destination user)..."
         $TeamDriveName = "Migration $LegacyUserMail $(Get-Date)"
-        #$LegacyUserTeamDriveID = $(Invoke-expression "$GamDir\gam.exe user $GoogleSourceSvcAccount create teamdrive '$TeamDriveName' adminmanagedrestrictions true asadmin returnidonly") #CID00#### dry run
+        $LegacyUserTeamDriveID = $(Invoke-expression "$GamDir\gam.exe user $GoogleSourceSvcAccount create teamdrive '$TeamDriveName' adminmanagedrestrictions true asadmin returnidonly") #CID00#### dry run
         Write-Host "$(Invoke-expression "$GamDir\gam.exe user $GoogleSourceSvcAccount create teamdrive '$TeamDriveName' adminmanagedrestrictions true asadmin returnidonly")"
 
         Write-Host "Shared Drive ID: $LegacyUserTeamDriveID "
 
         Write-Host "Allow outside sharing..."
-        #Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin domainUsersOnly False" #CID00#### dry run
+        Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin domainUsersOnly False" #CID00#### dry run
         Write-Host "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin domainUsersOnly False"
 
         Write-Host "Allow people who aren't shared drive members to access files - false..."
-        #Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin sharingFoldersRequiresOrganizerPermission True" #CID00#### dry run
+        Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin sharingFoldersRequiresOrganizerPermission True" #CID00#### dry run
         Write-Host "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin sharingFoldersRequiresOrganizerPermission True"
 
         #Write-Host "move shared drive to move enabled OU..."
         #Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin ou '$LegacyUserTeamDriveOU'" #location needs confirming
 
         Write-Host "Add internal sysadmins group as manager: add drivefileacl $LegacyUserTeamDriveID user $GoogleWorkspaceSourceSysadminGroupFQDN role organizer"
-        #Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $GoogleWorkspaceSourceSysadminGroupFQDN role organizer" #CID00#### dry run
+        Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $GoogleWorkspaceSourceSysadminGroupFQDN role organizer" #CID00#### dry run
         Write-Host "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $GoogleWorkspaceSourceSysadminGroupFQDN role organizer"
 
         Write-Host "Add internal user as manager: add drivefileacl $LegacyUserTeamDriveID user $LegacyUserMail role organizer ..."
-        #Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $LegacyUserMail role organizer" #CID00#### dry run
+        Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $LegacyUserMail role organizer" #CID00#### dry run
         
         Write-Host "Add external user as manager: add drivefileacl $LegacyUserTeamDriveID user $ReplacementUserMail role organizer..."
-        #Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $ReplacementUserMail role organizer" #CID00#### dry run
+        Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $ReplacementUserMail role organizer" #CID00#### dry run
         
     #>
     Write-Host "report current shared drive folder associations for: $LegacyUserMail ..."
-    #Invoke-expression "$GamDir\gam.exe user $legacyUserMail print teamdrives todrive tdparent id:$GfolderReportsID tdnobrowser tdtitle '$LegacyUserMail shared drives summary as of $(get-date)'" #CID00#### dry run
+    Invoke-expression "$GamDir\gam.exe user $legacyUserMail print teamdrives todrive tdparent id:$GfolderReportsID tdnobrowser tdtitle '$LegacyUserMail shared drives summary as of $(get-date)'" #CID00#### dry run
     Write-Host "$GamDir\gam.exe user $legacyUserMail print teamdrives todrive tdparent id:$GfolderReportsID tdnobrowser tdtitle '$LegacyUserMail shared drives summary as of $(get-date)'"
 
     DashedLine
@@ -335,12 +335,12 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Lastname: $LastName"
 
     Write-Host "Accept calendar invite: user $LegacyUserMail add calendar $ReplacementUserMail selected true ..."
-    #Invoke-Expression "$GamDir\gam.exe user $ReplacementUserMail add calendar $LegacyUserMail selected true" #CID00#### dry run
+    Invoke-Expression "$GamDir\gam.exe user $ReplacementUserMail add calendar $LegacyUserMail selected true" #CID00#### dry run
 
     
     start-sleep 3 # #TODO - update HRID
     Write-Host "update Replacement account HR ID..."
-    #Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $HRid" #CID00#### dry run #set HR ID - 
+    Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $HRid" #CID00#### dry run #set HR ID - 
 }
     Write-Host "Add members to security groups ..."
         if (test-path $DataDir\*.lst) { remove-item $DataDir\*.lst -force -verbose } #force delete any .lst files if exist...
