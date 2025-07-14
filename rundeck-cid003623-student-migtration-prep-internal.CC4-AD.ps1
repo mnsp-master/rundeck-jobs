@@ -1,4 +1,4 @@
-$mnspver = "0.0.122"
+$mnspver = "0.0.123"
 
 <#
 Overall process to:
@@ -293,7 +293,7 @@ foreach ($user in $VerifiedUserData) {
                                     Write-host "`n---`n"
                                     Move-ADobject -id $($UserToProcess.ObjectGUID) -TargetPath $($DestADOU.DistinguishedName) -verbose -whatif ## Comment Whatif to Action
 
-                                    Write-Host "Updated AD users attributes using GUID:"
+                                    Write-Host "Updated AD users attributes using GUID: (NOTE: will not change if in Whatif Mode...)"
                                     $UserToProcessPostupdate = $(Get-ADUser -id $($UserToProcess.ObjectGUID) -Properties * | select-object $ADattribs)
                                     $UserToProcessPostupdate
                                     DashedLine01
