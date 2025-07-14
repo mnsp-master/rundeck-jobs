@@ -1,4 +1,4 @@
-$mnspver = "0.0.123"
+$mnspver = "0.0.124"
 
 <#
 Overall process to:
@@ -237,9 +237,9 @@ foreach ($user in $VerifiedUserData) {
 
                                         Write-host "`n---------`n"
 
-                                        Write-Host "updated multivalue registry key"
-                                        $test.$using:LegacyShare
-                                        Write-host "`n---------`n"
+                                        #Write-Host "updated multivalue registry key"
+                                        #$test.$using:LegacyShare
+                                        #Write-host "`n---------`n"
 
                                         Write-Host "PS to process: Rename-ItemProperty -Path $using:RegPath -Name $using:Legacyshare -NewName $using:ReplacementShare -verbose"
                                         Rename-ItemProperty -Path $using:RegPath -Name $using:Legacyshare -NewName $using:ReplacementShare -verbose -whatif ## Comment Whatif to Action
@@ -255,13 +255,13 @@ foreach ($user in $VerifiedUserData) {
                                         #restart service to reflect updated registry keys/values to present renamed share ##### ENHANCEMENT ##### highly inefficient consider restart of sevice once post mods per server
                                         restart-service LanmanServer -verbose -whatif ## Comment Whatif to Action 
 
-                                        Write-Host "Replacement Share info:"
+                                        Write-Host "Replacement Share info: (NOTE: will not report/find as expecetd if in Whatif Mode...)"
                                         Get-smbshare -name $using:ReplacementShare
                                         Write-host "`n---------`n"
 
                                         } #end of remote pssession
 
-                                    Write-Host "updating AD user: "
+                                    Write-Host "updating AD user...: "
                                     Write-host "`n---`n"
                                     $ReplacementUserPrincipalNameDomain = $UserToProcess.userPrincipalName.split("@")[1] #split using @ select 2nd element
                                     $ReplacementUserPrincipalName = $ReplacementShareNoDollar + "@" + $ReplacementUserPrincipalNameDomain #rebuild replacement userPrincipalName
@@ -269,20 +269,20 @@ foreach ($user in $VerifiedUserData) {
                                     
                                     # update multiple existing user attributes...
                                     Write-Host "PS to process: set-aduser -Identity $($UserToProcess.ObjectGUID) -GivenName "$FirstName" -surname "$LastName" -email "$ReplacementUserMail" -SamAccountName "$ReplacementShareNoDollar" -DisplayName "$FirstName $LastName" -homeDirectory "$ReplacementShareFull" -userPrincipalName "$ReplacementUserPrincipalName" -verbose"
-                                    Write-host "`n---`n"
+                                    #Write-host "`n---`n"
                                     set-aduser -Identity $($UserToProcess.ObjectGUID) -GivenName "$FirstName" -surname "$LastName" -email "$ReplacementUserMail" -SamAccountName "$ReplacementShareNoDollar" -DisplayName "$FirstName $LastName" -homeDirectory "$ReplacementShareFull" -userPrincipalName "$ReplacementUserPrincipalName" -verbose -whatif ## Comment Whatif to Action
                                     Write-host "`n---`n"
                                     
                                     # update mnspAdminNumber attribute...
                                     Write-Host "PS to process: Set-ADUser -Identity $($UserToProcess.ObjectGUID) -Add @{mnspAdminNumber="$UPN"} -verbose`n"
-                                    Write-host "`n---`n"
+                                    #Write-host "`n---`n"
                                     Set-ADUser -Identity $($UserToProcess.ObjectGUID) -Add @{mnspAdminNumber="$UPN"} -verbose -whatif ## Comment Whatif to Action
                                     Write-host "`n---`n"
                                     
                                     # rename existing AD user object...
                                     $NewName = ($Yearprefix + $FirstName + "." + $LastName).ToLower()
                                     Write-Host "PS to process: get-aduser -Identity $($UserToProcess.ObjectGUID) | rename-ADobject -NewName $NewName -verbose`n"
-                                    Write-host "`n---`n"
+                                    #Write-host "`n---`n"
                                     get-aduser -Identity $($UserToProcess.ObjectGUID) | rename-ADobject -NewName "$NewName" -verbose -whatif ## Comment Whatif to Action
                                     Write-host "`n---`n"
 
@@ -290,8 +290,8 @@ foreach ($user in $VerifiedUserData) {
                                     $DestADOU = $OUS | where-object {$_ -like "*$UpdatedDestOU*"}
                                     Write-Host "Moving user to Destination OU: $($DestADOU.DistinguishedName)"
                                     Write-Host "PS to process: Move-ADobject -id $($UserToProcess.ObjectGUID) -TargetPath $($DestADOU.DistinguishedName) -verbose"
-                                    Write-host "`n---`n"
                                     Move-ADobject -id $($UserToProcess.ObjectGUID) -TargetPath $($DestADOU.DistinguishedName) -verbose -whatif ## Comment Whatif to Action
+                                    Write-host "`n---`n"
 
                                     Write-Host "Updated AD users attributes using GUID: (NOTE: will not change if in Whatif Mode...)"
                                     $UserToProcessPostupdate = $(Get-ADUser -id $($UserToProcess.ObjectGUID) -Properties * | select-object $ADattribs)
