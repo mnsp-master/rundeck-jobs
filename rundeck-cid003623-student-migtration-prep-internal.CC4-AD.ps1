@@ -1,4 +1,4 @@
-$mnspver = "0.0.124"
+$mnspver = "0.0.125"
 
 <#
 Overall process to:
@@ -254,9 +254,12 @@ foreach ($user in $VerifiedUserData) {
 
                                         #restart service to reflect updated registry keys/values to present renamed share ##### ENHANCEMENT ##### highly inefficient consider restart of sevice once post mods per server
                                         restart-service LanmanServer -verbose -whatif ## Comment Whatif to Action 
-
+                                        
+                                        Write-host "`n---------`n"
                                         Write-Host "Replacement Share info: (NOTE: will not report/find as expecetd if in Whatif Mode...)"
-                                        Get-smbshare -name $using:ReplacementShare
+                                        $ReplacementShareInfo = Get-smbshare -name $using:ReplacementShare
+                                        $ReplacementShareInfo
+                                        
                                         Write-host "`n---------`n"
 
                                         } #end of remote pssession
