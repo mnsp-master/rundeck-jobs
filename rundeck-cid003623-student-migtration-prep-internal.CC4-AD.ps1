@@ -1,4 +1,4 @@
-$mnspver = "0.0.121"
+$mnspver = "0.0.122"
 
 <#
 Overall process to:
@@ -155,12 +155,14 @@ foreach ($user in $VerifiedUserData) {
         $UserToProcess = @()
         $UserToProcess = $(Get-ADUser -Filter "EmployeeNumber -like '$MISidComplete'" -Properties * | select-object $ADattribs) ####ENHANCEMENT#### control group needed if user member skip
         if ($UserToProcess.count -gt 1) {
-            Write-Warning "Not an singular match..."
+            Write-Warning "Not an singular match for employeeNumber $MISidComplete..." #WARNING if not a singular value, do not process current user as uniqueness cannot be confirmed...
             $UserToProcess
             DashedLine02
                 } else {
                     Write-Host "AD attributes found by searching for user with MIS ID: $MISidComplete"
                     $UserToProcess
+                    
+                    #Build Vars from current $UserToProcess object...
                     $UsersFileServer = @()
                     $UsersFileServer = $UserToProcess.HomeDirectory.Split("\")[2]
                     $Legacyshare = $UserToProcess.HomeDirectory.Split("\")[3]
@@ -239,11 +241,15 @@ foreach ($user in $VerifiedUserData) {
                                         $test.$using:LegacyShare
                                         Write-host "`n---------`n"
 
+                                        Write-Host "PS to process: Rename-ItemProperty -Path $using:RegPath -Name $using:Legacyshare -NewName $using:ReplacementShare -verbose"
                                         Rename-ItemProperty -Path $using:RegPath -Name $using:Legacyshare -NewName $using:ReplacementShare -verbose -whatif ## Comment Whatif to Action
+                                        
+                                        Write-Host "PS to process: Set-ItemProperty -path $test.PSPath -name $using:ReplacementShare -Value $test.$using:LegacyShare -verbose"
                                         Set-ItemProperty -path $test.PSPath -name $using:ReplacementShare -Value $test.$using:LegacyShare -verbose -whatif ## Comment Whatif to Action
 
                                         #rename existing user home drive folder:
                                         Write-host "rename existing folder: $LegacyPathOS to $using:ReplacementShareNoDollar"
+                                        Write-Host "PS to process: rename-item -path $LegacyPathOS -NewName $using:ReplacementShareNoDollar -verbose"
                                         rename-item -path $LegacyPathOS -NewName $using:ReplacementShareNoDollar -verbose -whatif ## Comment Whatif to Action
 
                                         #restart service to reflect updated registry keys/values to present renamed share ##### ENHANCEMENT ##### highly inefficient consider restart of sevice once post mods per server
