@@ -1,4 +1,4 @@
-$mnspver = "0.0.130"
+$mnspver = "0.0.131"
 
 <#
 Overall process to:
@@ -260,17 +260,16 @@ foreach ($user in $VerifiedUserData) {
                                         $ReplacementShareInfo =@()
                                         $ReplacementShareInfo = Get-smbshare -name $using:ReplacementShare
 
+                                        <#
                                         $ReplacementShareInfo =@()
                                         $ReplacementShareInfo = Get-smbshare -name $using:ReplacementShare 2> $Null
-                                        Write-Host "DEBUG..."
-                                        $ReplacementShareInfo
 
                                             if ($ReplacementShareInfo) {
                                                 Write-Host "Share Information: "$ReplacementShareInfo
                                                 } else {
                                                 Write-Warning "share: $using:ReplacementShare does NOT exist..."
                                             }
-                                            
+                                        #>    
                                         Write-host "`n---------`n"
 
                                         } #end of remote pssession
