@@ -1,4 +1,4 @@
-$mnspver = "0.0.92"
+$mnspver = "0.0.93"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -56,7 +56,7 @@ foreach ($OUtoCreate in $OUsToCreate) {
     Write-Warning "OU: $OUtoCreate does not exist, creating..."
     Write-Host "$GamDir\gam.exe create org '$OutoCreate' parent '$GoogleWorkspaceDestinationUserOU'"
 
-    #invoke-expression "$GamDir\gam.exe create org '$OutoCreate' parent '$GoogleWorkspaceDestinationUserOU'" #CID00#### dry run
+    invoke-expression "$GamDir\gam.exe create org '$OutoCreate' parent '$GoogleWorkspaceDestinationUserOU'" #CID00#### dry run
 
     DashedLine
     }
@@ -154,7 +154,7 @@ foreach ($user in $VerifiedUserData) {
         }
         
         
-        #Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN gal $GoogleIncludeInGal" #CID00#### dry run
+        Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN gal $GoogleIncludeInGal" #CID00#### dry run
         Write-Host "$GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN gal $GoogleIncludeInGal"
         $password = "N/A - unchanged"
         $AccountHistory = "Migrated"
@@ -177,7 +177,7 @@ foreach ($user in $VerifiedUserData) {
                 start-sleep 1
             
             Write-Warning "Creating desired target mail domain email address..."
-            #Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN password $password gal $GoogleIncludeInGal" ##CID00#### dry run
+            Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN password $password gal $GoogleIncludeInGal" ##CID00#### dry run
             Write-Host "$GamDir\gam.exe create user $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU/$UpdatedDestOU' $GoogleCustomAttribute01 $UPN password $password gal $GoogleIncludeInGal"
             $LegacyUserMail = "N/A"
             $AccountHistory = "New"
