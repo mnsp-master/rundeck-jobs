@@ -1,4 +1,4 @@
-$mnspver = "0.0.127"
+$mnspver = "0.0.128"
 
 <#
 Overall process to:
@@ -226,7 +226,7 @@ foreach ($user in $VerifiedUserData) {
                                         $test.$using:LegacyShare[3] = "$PathToAlterRegItem"
 
                                         Write-host "---------`n"
-                                        Write-Host "updated multivalue registry key"
+                                        Write-Host "updated multivalue registry key:"
                                         $test.$using:LegacyShare
 
                                         #build new path item
@@ -256,7 +256,7 @@ foreach ($user in $VerifiedUserData) {
                                         restart-service LanmanServer -verbose -whatif ## Comment Whatif to Action 
                                         
                                         Write-host "`n---------`n"
-                                        Write-Host "Replacement Share info: (NOTE: will not report/find as expecetd if in Whatif Mode...)"
+                                        Write-Host "Replacement Share info: (NOTE: will not report/find as expected if in Whatif Mode...)"
                                         $ReplacementShareInfo = Get-smbshare -name $using:ReplacementShare
 
                                         $ReplacementShareInfo = Get-smbshare -name $using:ReplacementShare 2> $Null
