@@ -1,4 +1,4 @@
-$mnspver = "0.0.129"
+$mnspver = "0.0.130"
 
 <#
 Overall process to:
@@ -262,6 +262,9 @@ foreach ($user in $VerifiedUserData) {
 
                                         $ReplacementShareInfo =@()
                                         $ReplacementShareInfo = Get-smbshare -name $using:ReplacementShare 2> $Null
+                                        Write-Host "DEBUG..."
+                                        $ReplacementShareInfo
+
                                             if ($ReplacementShareInfo) {
                                                 Write-Host "Share Information: "$ReplacementShareInfo
                                                 } else {
