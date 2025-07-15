@@ -212,7 +212,7 @@ foreach ($user in $VerifiedUserData) {
         start-sleep 1
 
     Write-Host "create destination account..."
-    Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname '$FirstName' lastname '$LastName' password $password org '$GoogleWorkspaceDestinationUserOU' changepassword on" #CID00#### dry run
+    #Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname '$FirstName' lastname '$LastName' password $password org '$GoogleWorkspaceDestinationUserOU' changepassword on" #CID00#### dry run
     Write-Host "$GamDir\gam.exe create user $ReplacementUserMail firstname '$FirstName' lastname '$LastName' password $password org '$GoogleWorkspaceDestinationUserOU' changepassword on"
 
     #capture initial credentials
@@ -267,7 +267,7 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "$GamDir\gam.exe update user $LegacyUserMail $GoogleCustomAttribute01 $HRid"
 
     Write-Host "send current calendar invite: $LegacyUserMail add acls reader $ReplacementUserMail ..."
-    Invoke-Expression "$GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail sendnotifications false" #CID00#### dry run
+    #Invoke-Expression "$GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail sendnotifications false" #CID00#### dry run
     Write-Host "$GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail sendnotifications false"
 
     #<# #(un)comment to (not)create shared drive(s)
