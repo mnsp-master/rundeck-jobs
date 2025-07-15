@@ -1,4 +1,4 @@
-$mnspver = "0.0.133"
+$mnspver = "0.0.134"
 
 <#
 Overall process to:
@@ -257,9 +257,11 @@ foreach ($user in $VerifiedUserData) {
                                         
                                         Write-host "`n---------`n"
                                         Write-Host "Replacement Share info: $using:ReplacementShare (NOTE: will not report/find as expected if in Whatif Mode...)"
-                                        $ReplacementShareInfo =@()
-                                        $ReplacementShareInfo = Get-smbshare -name $using:ReplacementShare
-                                        $ReplacementShareInfo
+                                        Get-smbshare -name $using:ReplacementShare
+
+                                        #$ReplacementShareInfo =@()
+                                        #$ReplacementShareInfo = Get-smbshare -name $using:ReplacementShare
+                                        #$ReplacementShareInfo
 
                                         <#
                                         $ReplacementShareInfo =@()
