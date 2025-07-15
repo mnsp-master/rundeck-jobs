@@ -1,4 +1,4 @@
-$mnspver = "0.0.128"
+$mnspver = "0.0.129"
 
 <#
 Overall process to:
@@ -256,9 +256,11 @@ foreach ($user in $VerifiedUserData) {
                                         restart-service LanmanServer -verbose -whatif ## Comment Whatif to Action 
                                         
                                         Write-host "`n---------`n"
-                                        Write-Host "Replacement Share info: (NOTE: will not report/find as expected if in Whatif Mode...)"
+                                        Write-Host "Replacement Share info: $using:ReplacementShare (NOTE: will not report/find as expected if in Whatif Mode...)"
+                                        $ReplacementShareInfo =@()
                                         $ReplacementShareInfo = Get-smbshare -name $using:ReplacementShare
 
+                                        $ReplacementShareInfo =@()
                                         $ReplacementShareInfo = Get-smbshare -name $using:ReplacementShare 2> $Null
                                             if ($ReplacementShareInfo) {
                                                 Write-Host "Share Information: "$ReplacementShareInfo
