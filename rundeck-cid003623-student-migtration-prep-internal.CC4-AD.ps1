@@ -1,4 +1,4 @@
-$mnspver = "0.0.134"
+$mnspver = "0.0.135"
 
 <#
 Overall process to:
@@ -10,10 +10,12 @@ Overall process to:
     - Return matched AD user and attributes
     - Use these to determine share hosting server
     - Remotely connect to that file server
+        - jump to next user if there are any open files from user's share (write ERROR to transcript log) 
         - Update local registry setting representing existing share to reflect any updated username (year number firstname.lastname,renamed homedrive local path (H:\Rmusers\.....\old username etc))
         - Rename local filesystem path to reflect/sync username change
+        - Restart LANMAN service to re-present renamed share
         - Exit PS remote session
-    - Update existing users AD attributes to set firstname,lastname,homedir path (renamed share), displayname, usePrincipalName,replacement email address
+    - Update existing users AD attributes to set firstname,lastname,homedir (profile) path (renamed share), displayname, usePrincipalName,replacement email address
     - Set custom confidential attribute (mnspAdminNumber)
     - Rename AD object to reflect desired name
     - Repeat for as many users that are in the array
