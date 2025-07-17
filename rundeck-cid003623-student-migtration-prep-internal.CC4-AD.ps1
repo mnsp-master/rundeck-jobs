@@ -1,4 +1,4 @@
-$mnspver = "0.0.137"
+$mnspver = "0.0.138"
 
 <#
 Overall process to:
@@ -15,7 +15,7 @@ Overall process to:
         - Rename local filesystem path to reflect/sync username change
         - Restart LANMAN service to re-present renamed share
         - Exit PS remote session
-    - Update existing users AD attributes to set firstname,lastname,homedir (profile) path (renamed share), displayname, usePrincipalName,replacement email address
+    - Update existing users AD attributes to set firstname,lastname,homedir (profile) path (renamed share), displayname, usePrincipalName,replacement email address... etc
     - Set custom confidential attribute (mnspAdminNumber)
     - Rename AD object to reflect desired name
     - Repeat for as many users that are in the array
