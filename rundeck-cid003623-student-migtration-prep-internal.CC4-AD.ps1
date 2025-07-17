@@ -1,4 +1,4 @@
-$mnspver = "0.0.135"
+$mnspver = "0.0.136"
 
 <#
 Overall process to:
@@ -243,9 +243,11 @@ foreach ($user in $VerifiedUserData) {
                                         #$test.$using:LegacyShare
                                         #Write-host "`n---------`n"
 
+                                        #rename existing registry key:
                                         Write-Host "PS to process: Rename-ItemProperty -Path $using:RegPath -Name $using:Legacyshare -NewName $using:ReplacementShare -verbose"
                                         Rename-ItemProperty -Path $using:RegPath -Name $using:Legacyshare -NewName $using:ReplacementShare -verbose ##-whatif ## Comment Whatif to Action
                                         
+                                        #update existing registry multivalues:
                                         Write-Host "PS to process: Set-ItemProperty -path $test.PSPath -name $using:ReplacementShare -Value $test.$using:LegacyShare -verbose"
                                         Set-ItemProperty -path $test.PSPath -name $using:ReplacementShare -Value $test.$using:LegacyShare -verbose ##-whatif ## Comment Whatif to Action
 
@@ -304,7 +306,7 @@ foreach ($user in $VerifiedUserData) {
                                     get-aduser -Identity $($UserToProcess.ObjectGUID) | rename-ADobject -NewName "$NewName" -verbose ##-whatif ## Comment Whatif to Action
                                     Write-host "`n---`n"
 
-                                    ####ENHANCEMENT#### move user to replacement AD OU
+                                    # move user to replacement AD OU
                                     $DestADOU = $OUS | where-object {$_ -like "*$UpdatedDestOU*"}
                                     Write-Host "Moving user to Destination OU: $($DestADOU.DistinguishedName)"
                                     Write-Host "PS to process: Move-ADobject -id $($UserToProcess.ObjectGUID) -TargetPath $($DestADOU.DistinguishedName) -verbose"
@@ -340,17 +342,4 @@ foreach ($user in $VerifiedUserData) {
 
 Write-Host "Closing all remote PSSessions..."
 Get-PSSession | Remove-PSSession
-
-<#
-#Write-Host "invoke-command -computername $UsersFileServer -Scriptblock {Get-SmbOpenFile | where-object {$_.Path -like "*$LegacyShareNoDollar*"} }"
-                    #$SMBopenfilesChk = $(invoke-command -computername $UsersFileServer -Scriptblock {Get-SmbOpenFile | where-object {$_.Path -like "*$LegacyShareNoDollar*"} })
-
-##### ENHANCEMENT ##### - appears to be a duplicate of lines 189 - 192
-                                        #$PathToAlter = $test.$using:Legacyshare[3] #local path of share 
-                                        #$PathToAlterVar1 = $PathToAlter.Substring(0, $PathToAlter.lastIndexOf('\')) #split using \ upto last delimeter
-                                        #$PathToAlterVar2 = $PathToAlter.split("\")[-1] #split using \ return last element (username)
-                                        #$PathToAlterOS = $PathToAlter.split("=")[-1] #remove $ from sharename
-
-
-#>
 
