@@ -1,4 +1,4 @@
-$mnspver = "0.0.139"
+$mnspver = "0.0.140"
 
 <#
 Overall process to:
@@ -262,7 +262,7 @@ foreach ($user in $VerifiedUserData) {
                                         
                                         Write-host "`n---------`n"
                                         Write-Host "Replacement Share info: $using:ReplacementShare (NOTE: will not report/find as expected if in Whatif Mode...)"
-                                        Get-smbshare -name $using:ReplacementShare ####FIX NEEDED#### currently getting a PS terminating error, but action does sucessfully report info as required.
+                                        Get-smbshare -name $using:ReplacementShare ####FIX NEEDED#### currently getting a PS terminating error, but action does sucessfully report info as required, use UNC path to fix?
 
                                         #$ReplacementShareInfo =@()
                                         #$ReplacementShareInfo = Get-smbshare -name $using:ReplacementShare
