@@ -1,4 +1,4 @@
-$mnspver = "0.0.140"
+$mnspver = "0.0.141"
 
 <#
 Overall process to:
@@ -201,7 +201,7 @@ foreach ($user in $VerifiedUserData) {
                                         
                                         #Get-ItemProperty $using:RegPath
                                         Write-Host "Checking for share: $using:Legacyshare"
-                                        #Get-smbshare -name $using:Legacyshare
+                                        #Get-smbshare -name $using:Legacyshare 
 
                                         $test = Get-ItemProperty $using:RegPath -Name $using:Legacyshare #get current multi value reg key/values
                                         
