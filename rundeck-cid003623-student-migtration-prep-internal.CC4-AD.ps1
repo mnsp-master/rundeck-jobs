@@ -1,4 +1,4 @@
-$mnspver = "0.0.138"
+$mnspver = "0.0.139"
 
 <#
 Overall process to:
@@ -25,6 +25,7 @@ Overall process to:
 #>
 
 ##### ENHANCEMENT ##### general environment/vars area required to enable PS execution outside of rundeck environment
+##### ENHANCEMENT ##### consider adding greater try/catch processing...
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
