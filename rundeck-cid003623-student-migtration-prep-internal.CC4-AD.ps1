@@ -1,4 +1,4 @@
-$mnspver = "0.0.136"
+$mnspver = "0.0.137"
 
 <#
 Overall process to:
@@ -261,7 +261,7 @@ foreach ($user in $VerifiedUserData) {
                                         
                                         Write-host "`n---------`n"
                                         Write-Host "Replacement Share info: $using:ReplacementShare (NOTE: will not report/find as expected if in Whatif Mode...)"
-                                        Get-smbshare -name $using:ReplacementShare
+                                        Get-smbshare -name $using:ReplacementShare ####FIX NEEDED#### currently getting a PS terminating error, but action does sucessfully report info as required.
 
                                         #$ReplacementShareInfo =@()
                                         #$ReplacementShareInfo = Get-smbshare -name $using:ReplacementShare
