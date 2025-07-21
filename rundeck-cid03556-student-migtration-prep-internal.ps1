@@ -1,4 +1,4 @@
-$mnspver = "0.0.94"
+$mnspver = "0.0.95"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -87,12 +87,28 @@ Write-Host "Field String: " $FieldString
 #Write-Host "$VerifiedUserData = Get-Content -path $tempcsv4 | select-object -skip 1 | convertFrom-csv | where { $_.$FieldMatch01 -like $FieldString } "
 #$VerifiedUserData = Get-Content -path $tempcsv4 | convertFrom-csv | where { $_.$FieldMatch01 -like $FieldString } #import where field like $FieldMatch01
 
+<#
 $VerifiedUserData = Get-Content -path $tempcsv4 | convertFrom-csv | where-object { 
     $_.$FieldMatch01 -like $FieldString -and 
-    #$_.$Fieldmatch02 -match '^[0-9]+$' #Numeric values only - excludes - R N1 N2 etc ####ENHANCEMENT #### include only specific year groups
-    $_.$Fieldmatch02 -like "9" -or "10" -or "12" #limit to year group(s) ###CID003776
-
+    $_.$Fieldmatch02 -match '^[0-9]+$' #Numeric values only - excludes - R N1 N2 etc ####ENHANCEMENT #### include only specific year groups
+    #$_.$Fieldmatch02 -like "12" #limit to year group(s)
     } #import where field like $FieldMatch01
+#>
+
+###CID003776#### Specific year groups only
+$VerifiedUserData = Get-Content -path $tempcsv4 | convertFrom-csv | where-object { 
+    ($_.$FieldMatch01 -like $FieldString) -and 
+        (
+            ($_.$Fieldmatch02 -like "9") -or 
+            ($_.$Fieldmatch02 -like "10") -or
+            ($_.$Fieldmatch02 -like "12")
+        )
+    }
+
+    $VerifiedUserData.count
+    $VerifiedUserData.School_Name | Get-Unique
+    $VerifiedUserData.$Fieldmatch02 | Get-Unique
+###CID003776####
 
 #$VerifiedUserData = Get-Content -path $tempcsv4 | select-object -skip 1 | convertFrom-csv | where { $_.$FieldMatch01 -like $FieldString } #import where field like $FieldMatch01, and skip 1st line
 Write Host "Number of records matching selection criteria:" $VerifiedUserData.count
