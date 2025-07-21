@@ -1,4 +1,4 @@
-$mnspver = "0.0.97"
+$mnspver = "0.0.98"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -106,7 +106,7 @@ $VerifiedUserData = Get-Content -path $tempcsv4 | convertFrom-csv | where-object
     }
 
     #$VerifiedUserData.count
-    Write-Host "Unique school_name from CSV:" $VerifiedUserData.School_Name | Get-Unique
+    #Write-Host "Unique school_name from CSV:" $VerifiedUserData.School_Name | Get-Unique
     Write-Host "Desired years to include:" 
     $VerifiedUserData.$Fieldmatch02 | Get-Unique
 ###CID003776####
