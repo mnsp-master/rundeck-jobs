@@ -1,4 +1,4 @@
-$mnspver = "0.0.39"
+$mnspver = "0.0.40"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -185,7 +185,19 @@ foreach ($user in $VerifiedUserData) {
 
     #capture initial credentials
     "$firstname,$lastname,$legacyUserMail,$ReplacementUserMail,$password,$HRid" | out-file -filepath $tempcsv2 -Append
-      
+
+    #generate MFA backup codes
+    Write-host "$GamDir\gam.exe user $ReplacementUserMail update backupcodes"
+    #$userBackupCodes = invoke-expression "$GamDir\gam.exe user $ReplacementUserMail update backupcodes"
+
+    #send mail(s)
+    ##backup codes...
+
+    ##credentials...
+
+    ##account information...
+    Write-Host "$GamDir\gam.exe sendemail $legacyUserMail from $GoogleSourceMail newuser $ReplacementUserMail firstname $FirstName LastName $LastName password $password"
+
     DashedLine
 }
 
