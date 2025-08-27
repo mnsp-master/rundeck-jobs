@@ -1,4 +1,4 @@
-$mnspver = "0.0.38"
+$mnspver = "0.0.39"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -41,7 +41,7 @@ Start-sleep 2
 $VerifiedUserData = Get-Content -path $tempcsv4 | select-object -skip 1 | convertFrom-csv | where { $_.$FieldMatch01 -like $FieldString } #import where field like $FieldMatch01, and skip 1st line
 Write-Host "Number of records matching selection criteria:" $VerifiedUserData.count
 #TODO - if count 0 break out of script...
-$VerifiedUserData
+#$VerifiedUserData
 
 Start-Sleep 10
 
