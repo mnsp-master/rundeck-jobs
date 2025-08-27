@@ -1,4 +1,4 @@
-$mnspver = "0.0.35"
+$mnspver = "0.0.36"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -170,7 +170,7 @@ foreach ($user in $VerifiedUserData) {
     #password generator...
         $pwd = @()
         try {
-        $pwd = $(Invoke-WebRequest -Uri $pwdUrl -UseBasicParsing)
+        $pwd = $(Invoke-WebRequest -Uri $PwdWebRequestURI -UseBasicParsing)
         $Password = $($pwd.content)
         }
             catch {
