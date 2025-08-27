@@ -1,4 +1,4 @@
-$mnspver = "0.0.33"
+$mnspver = "0.0.34"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -157,7 +157,7 @@ Write-Host "Creating users in destination..."
 foreach ($user in $VerifiedUserData) {
     DashedLine
     $LegacyUserMail = $user."Existing Email Address" #current mail address
-    $HRid = $user."Staff full name" # HR id
+    $HRid = $user."Person ID" # HR id
     $FirstName = $user."Staff first name" #prefered firstname
     $lastname = $user."Staff Surname"
     $ReplacementUserMail = $user."new email"
