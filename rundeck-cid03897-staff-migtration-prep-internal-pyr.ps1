@@ -1,4 +1,4 @@
-$mnspver = "0.0.34"
+$mnspver = "0.0.35"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -166,6 +166,17 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "HR ID: $HRid"
     Write-Host "Firstname: $FirstName"
     Write-Host "Lastname: $lastname"
+
+    #password generator...
+        $pwd = @()
+        try {
+        $pwd = $(Invoke-WebRequest -Uri $pwdUrl -UseBasicParsing)
+        $Password = $($pwd.content)
+        }
+            catch {
+            Write-Error "No Webserver, or pwd received"
+            $password = $pwdFailsafe
+        }
 
     Write-Host "create account..."
     #Write-Host "$GamDir\gam.exe create user email $ReplacementUserMail firstname '$FirstName' lastname '$lastname' org '$GoogleWorkspaceDestinationUserOU' "
