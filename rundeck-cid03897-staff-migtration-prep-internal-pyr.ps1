@@ -1,4 +1,4 @@
-$mnspver = "0.0.43"
+$mnspver = "0.0.44"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -187,13 +187,17 @@ foreach ($user in $VerifiedUserData) {
     "$firstname,$lastname,$legacyUserMail,$ReplacementUserMail,$password,$HRid" | out-file -filepath $tempcsv2 -Append
 
     #generate MFA backup codes
-    Write-host "$GamDir\gam.exe user $ReplacementUserMail update backupcodes"
+    Write-host "$GamDir\gam.exe user $ReplacementUserMail update backupcodes | ForEach-Object { $_ -replace '^\s*\d+:\s*', '' }"
     #$userBackupCodes = invoke-expression "$GamDir\gam.exe user $ReplacementUserMail update backupcodes"
+
+    #cleanup output
 
     #send mail(s)
     ##backup codes...
+    Write-Host "$GamDir\gam.exe sendemail $legacyUserMail from $GoogleWorkspaceSenderMail subject 'MFA Backup Codes as of $(get-Date)' message '$userBackupCodes'"
 
     ##credentials...
+    Write-Host "$GamDir\gam.exe sendemail $legacyUserMail from $GoogleWorkspaceSenderMail subject 'As required $(get-Date)' message '$password'"
 
     ##account information...
     Write-Host "$GamDir\gam.exe sendemail $legacyUserMail from $GoogleWorkspaceSenderMail newuser $ReplacementUserMail firstname $FirstName LastName $LastName password 'Sent in another email'"
