@@ -1,4 +1,4 @@
-$mnspver = "0.0.32"
+$mnspver = "0.0.33"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -168,7 +168,8 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Lastname: $lastname"
 
     Write-Host "create account..."
-    Write-Host "$GamDir\gam.exe create user email $ReplacementUserMail firstname '$FirstName' lastname '$lastname' org '$GoogleWorkspaceDestinationUserOU' "
+    #Write-Host "$GamDir\gam.exe create user email $ReplacementUserMail firstname '$FirstName' lastname '$lastname' org '$GoogleWorkspaceDestinationUserOU' "
+    Write-Host "$GamDir\gam.exe create user $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU' $GoogleCustomAttribute01 $HRid password $password gal $GoogleIncludeInGal"
     #Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname '$FirstName' lastname '$lastname' org '$GoogleWorkspaceDestinationUserOU' " ###move/update existing user #CID00#### dry run
   
     DashedLine
