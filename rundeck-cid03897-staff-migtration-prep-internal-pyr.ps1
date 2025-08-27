@@ -1,4 +1,4 @@
-$mnspver = "0.0.37"
+$mnspver = "0.0.38"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -185,9 +185,7 @@ foreach ($user in $VerifiedUserData) {
 
     #capture initial credentials
     "$firstname,$lastname,$legacyUserMail,$ReplacementUserMail,$password,$HRid" | out-file -filepath $tempcsv2 -Append
-    
-    DashedLine
-  
+      
     DashedLine
 }
 
