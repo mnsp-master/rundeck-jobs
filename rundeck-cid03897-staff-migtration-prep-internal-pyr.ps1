@@ -1,4 +1,4 @@
-$mnspver = "0.0.31"
+$mnspver = "0.0.32"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -48,7 +48,7 @@ Start-Sleep 10
 #create user info destination gsheet
 $UserInfoGsheetID = $(Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount create drivefile drivefilename '$GoogleWorkspaceDestinationMailDomain User Info' mimetype gsheet parentid $GfolderReportsID returnidonly")
 
-#<# no security groups required: START #
+<# no security groups required: START #
 
 Write-Host "Create/update common shared drives security groups (Destination instance)..."
 $GoogleWorkspaceSecGroupSettings = ("whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","isArchived true","whoCanContactOwner ALL_MANAGERS_CAN_CONTACT","whoCanMarkFavoriteReplyOnOwnTopic OWNERS_AND_MANAGERS","whoCanPostMessage ALL_MANAGERS_CAN_POST","whoCanTakeTopics OWNERS_AND_MANAGERS","whoCanViewGroup ALL_MANAGERS_CAN_VIEW","whoCanViewMembership ALL_MANAGERS_CAN_VIEW","whoCanJoin INVITED_CAN_JOIN") #ENHANCEMENT - convert to json updating 
@@ -103,7 +103,7 @@ $GroupexistCheck.email
 
 # no security groups required: END #>
 
-#<# no distribution groups required: START #
+<# no distribution groups required: START #
 Write-Host "Create email dist groups (Destination instance)..."
 $GoogleWorkspaceGroupSettings = ("isArchived true","whoCanContactOwner ALL_MEMBERS_CAN_CONTACT","whoCanMarkFavoriteReplyOnOwnTopic OWNERS_AND_MANAGERS","whoCanPostMessage ALL_MEMBERS_CAN_POST","whoCanTakeTopics OWNERS_AND_MANAGERS","whoCanViewGroup ALL_MEMBERS_CAN_VIEW","whoCanViewMembership ALL_MEMBERS_CAN_VIEW","whoCanJoin INVITED_CAN_JOIN") #ENHANCEMENT convert to json updating 
 
@@ -174,7 +174,7 @@ foreach ($user in $VerifiedUserData) {
     DashedLine
 }
 
-#<# no security groups required: START #
+<# no security groups required: START #
     Write-Host "sync members of security groups ..."
         if (test-path $DataDir\*.lst) { remove-item $DataDir\*.lst -force -verbose } #force delete any .lst files if exist...
 
@@ -197,7 +197,7 @@ foreach ($user in $VerifiedUserData) {
     }
 # no security groups required: END #>
 
-#<# no distribution groups required: START #
+<# no distribution groups required: START #
 Write-Host "sync members of mail dist groups ..."
         if (test-path $DataDir\*.lst) { remove-item $DataDir\*.lst -force -verbose } #force delete any .lst files if exist...
 
