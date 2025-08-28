@@ -1,4 +1,4 @@
-$mnspver = "0.0.52"
+$mnspver = "0.0.53"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -195,11 +195,11 @@ foreach ($user in $VerifiedUserData) {
     #send mail(s)
     ##backup codes...
     Write-Host "$GamDir\gam.exe sendemail $legacyUserMail from $GoogleWorkspaceSenderMail subject 'MFA Backup Codes as of $(get-Date)' message '$userBackupCodes'"
-    Invoke-expression "$GamDir\gam.exe sendemail $legacyUserMail from $GoogleWorkspaceSenderMail subject 'MFA Backup Codes as of $(get-Date)' message '$userBackupCodes'"
+    Invoke-expression "$GamDir\gam.exe sendemail $legacyUserMail from $GoogleWorkspaceSenderMail subject 'MFA Backup Codes as of: $(get-Date)' message '$userBackupCodes'"
     
     ##credentials...
     Write-Host "$GamDir\gam.exe sendemail $legacyUserMail from $GoogleWorkspaceSenderMail subject 'As Advised $(get-Date)' message '$password'"
-    Invoke-Expression "$GamDir\gam.exe sendemail $legacyUserMail from $GoogleWorkspaceSenderMail subject 'As Advised $(get-Date)' message '$password'"
+    Invoke-Expression "$GamDir\gam.exe sendemail $legacyUserMail from $GoogleWorkspaceSenderMail subject 'As Advised as of: $(get-Date)' message '$password'"
 
     ##account information...
     Write-Host "$GamDir\gam.exe sendemail $legacyUserMail from $GoogleWorkspaceSenderMail newuser $ReplacementUserMail firstname $FirstName LastName $LastName password 'Sent in another email'"
