@@ -1,4 +1,4 @@
-$mnspver = "0.0.51"
+$mnspver = "0.0.52"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -180,7 +180,7 @@ foreach ($user in $VerifiedUserData) {
 
     Write-Host "create account..."
     Write-Host "$GamDir\gam.exe create user $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU' $GoogleCustomAttribute01 $HRid password $password gal $GoogleIncludeInGal changepasswordatnextlogin True"
-    Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU' $GoogleCustomAttribute01 $HRid password $password gal $GoogleIncludeInGal changepasswordatnextlogin True" ###create user #CID00#### dry run
+    Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU' $GoogleCustomAttribute01 $HRid password '$password' gal $GoogleIncludeInGal changepasswordatnextlogin True" ###create user #CID00#### dry run
     Start-Sleep 5 #allow time for user creation
 
     #capture initial credentials
