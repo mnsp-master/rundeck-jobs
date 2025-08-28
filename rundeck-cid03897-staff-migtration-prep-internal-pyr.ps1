@@ -1,4 +1,4 @@
-$mnspver = "0.0.47"
+$mnspver = "0.0.48"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -201,7 +201,6 @@ foreach ($user in $VerifiedUserData) {
     ##credentials...
     Write-Host "$GamDir\gam.exe sendemail $legacyUserMail from $GoogleWorkspaceSenderMail subject 'As required $(get-Date)' message '$password'"
 
-    <#
     ##account information...
     Write-Host "$GamDir\gam.exe sendemail $legacyUserMail from $GoogleWorkspaceSenderMail newuser $ReplacementUserMail firstname $FirstName LastName $LastName password 'Sent in another email'"
     #>
