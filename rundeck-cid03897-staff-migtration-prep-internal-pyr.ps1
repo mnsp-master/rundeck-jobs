@@ -1,4 +1,4 @@
-$mnspver = "0.0.48"
+$mnspver = "0.0.49"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -179,30 +179,31 @@ foreach ($user in $VerifiedUserData) {
         }
 
     Write-Host "create account..."
-    #Write-Host "$GamDir\gam.exe create user email $ReplacementUserMail firstname '$FirstName' lastname '$lastname' org '$GoogleWorkspaceDestinationUserOU' "
-    Write-Host "$GamDir\gam.exe create user $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU' $GoogleCustomAttribute01 $HRid password $password gal $GoogleIncludeInGal"
-    #Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail email $ReplacementUserMail firstname '$FirstName' lastname '$lastname' org '$GoogleWorkspaceDestinationUserOU' " ###move/update existing user #CID00#### dry run
+    Write-Host "$GamDir\gam.exe create user $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU' $GoogleCustomAttribute01 $HRid password $password gal $GoogleIncludeInGal changepasswordatnextlogin True"
+    Invoke-Expression "$GamDir\gam.exe create user $ReplacementUserMail firstname '$FirstName' lastname '$LastName' org '$GoogleWorkspaceDestinationUserOU' $GoogleCustomAttribute01 $HRid password $password gal $GoogleIncludeInGal changepasswordatnextlogin True" ###create user #CID00#### dry run
+    Start-Sleep 5 #allow time for user creation
 
     #capture initial credentials
     "$firstname,$lastname,$legacyUserMail,$ReplacementUserMail,$password,$HRid" | out-file -filepath $tempcsv2 -Append
 
     #generate MFA backup codes
+    $userBackupCodes = invoke-expression "$GamDir\gam.exe user $ReplacementUserMail update backupcodes"
     Write-host "$GamDir\gam.exe user $ReplacementUserMail update backupcodes | ForEach-Object { $_ -replace '^\s*\d+:\s*', '' }"
-    #$userBackupCodes = invoke-expression "$GamDir\gam.exe user $ReplacementUserMail update backupcodes"
-
-    #cleanup output
+    Invoke-expression "$GamDir\gam.exe user $ReplacementUserMail update backupcodes | ForEach-Object { $_ -replace '^\s*\d+:\s*', '' }" #cleanup output
 
    
     #send mail(s)
     ##backup codes...
     Write-Host "$GamDir\gam.exe sendemail $legacyUserMail from $GoogleWorkspaceSenderMail subject 'MFA Backup Codes as of $(get-Date)' message '$userBackupCodes'"
-
+    Invoke-expression "$GamDir\gam.exe sendemail $legacyUserMail from $GoogleWorkspaceSenderMail subject 'MFA Backup Codes as of $(get-Date)' message '$userBackupCodes'"
     
     ##credentials...
     Write-Host "$GamDir\gam.exe sendemail $legacyUserMail from $GoogleWorkspaceSenderMail subject 'As required $(get-Date)' message '$password'"
+    Invoke-Expression "$GamDir\gam.exe sendemail $legacyUserMail from $GoogleWorkspaceSenderMail subject 'As required $(get-Date)' message '$password'"
 
     ##account information...
     Write-Host "$GamDir\gam.exe sendemail $legacyUserMail from $GoogleWorkspaceSenderMail newuser $ReplacementUserMail firstname $FirstName LastName $LastName password 'Sent in another email'"
+    Invoke-Expression "$GamDir\gam.exe sendemail $legacyUserMail from $GoogleWorkspaceSenderMail newuser $ReplacementUserMail firstname $FirstName LastName $LastName password 'Sent in another email'"
     #>
 
     DashedLine
