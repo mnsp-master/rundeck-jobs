@@ -1,4 +1,4 @@
-$mnspver = "0.0.5"
+$mnspver = "0.0.6"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
