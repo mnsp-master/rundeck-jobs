@@ -1,4 +1,4 @@
-$mnspver = "0.0.4"
+$mnspver = "0.0.5"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -81,8 +81,8 @@ foreach ($user in $VerifiedUserData) {
     Invoke-Expression "$GamDir\gam.exe sendemail $legacyUserMail from $GoogleWorkspaceSenderMail newuser $ReplacementUserMail firstname $FirstName LastName $LastName password 'Sent in another email'"
 
     ##General Information
-    $htmlContent = get-content $temp1html
-    #invoke-expression "$GamDir\gam.exe sendemail $legacyUserMail from $GoogleWorkspaceSenderMail subject 'Your New MNSP email account Information $(Get-date)' htmlmessage '$htmlContent'"
+    $htmlContent = get-content $temphtml1
+    invoke-expression "$GamDir\gam.exe sendemail $legacyUserMail from $GoogleWorkspaceSenderMail subject 'Your New MNSP email account Information $(Get-date)' htmlmessage '$htmlContent'"
 
     #>
 
