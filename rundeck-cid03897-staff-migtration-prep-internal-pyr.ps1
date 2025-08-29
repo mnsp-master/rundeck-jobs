@@ -1,4 +1,4 @@
-$mnspver = "0.0.54"
+$mnspver = "0.0.55"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -185,26 +185,6 @@ foreach ($user in $VerifiedUserData) {
 
     #capture initial credentials
     "$firstname,$lastname,$legacyUserMail,$ReplacementUserMail,$password,$HRid" | out-file -filepath $tempcsv2 -Append
-
-    #generate MFA backup codes
-    #$userBackupCodes = invoke-expression "$GamDir\gam.exe user $ReplacementUserMail update backupcodes"
-    Write-host "$GamDir\gam.exe user $ReplacementUserMail update backupcodes | ForEach-Object { $_ -replace '^\s*\d+:\s*', '' }"
-    $userBackupCodes = Invoke-expression "$GamDir\gam.exe user $ReplacementUserMail update backupcodes" | ForEach-Object { $_ -replace '^\s*\d+:\s*', '' } #cleanup output
-
-   
-    #send mail(s)
-    ##backup codes...
-    Write-Host "$GamDir\gam.exe sendemail $legacyUserMail from $GoogleWorkspaceSenderMail subject 'MFA Backup Codes as of $(get-Date)' message '$userBackupCodes'"
-    Invoke-expression "$GamDir\gam.exe sendemail $legacyUserMail from $GoogleWorkspaceSenderMail subject 'MFA Backup Codes as of: $(get-Date)' message '$userBackupCodes'"
-    
-    ##credentials...
-    Write-Host "$GamDir\gam.exe sendemail $legacyUserMail from $GoogleWorkspaceSenderMail subject 'As Advised $(get-Date)' message '$password'"
-    Invoke-Expression "$GamDir\gam.exe sendemail $legacyUserMail from $GoogleWorkspaceSenderMail subject 'As Advised as of: $(get-Date)' message '$password'"
-
-    ##account information...
-    Write-Host "$GamDir\gam.exe sendemail $legacyUserMail from $GoogleWorkspaceSenderMail newuser $ReplacementUserMail firstname $FirstName LastName $LastName password 'Sent in another email'"
-    Invoke-Expression "$GamDir\gam.exe sendemail $legacyUserMail from $GoogleWorkspaceSenderMail newuser $ReplacementUserMail firstname $FirstName LastName $LastName password 'Sent in another email'"
-    #>
 
     DashedLine
 }
