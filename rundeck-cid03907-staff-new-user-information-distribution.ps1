@@ -1,4 +1,4 @@
-$mnspver = "0.0.12"
+$mnspver = "0.0.13"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -82,7 +82,8 @@ foreach ($user in $VerifiedUserData) {
 
     ##General Information
     $htmlContent = get-content $temphtml1
-    $htmlContent = $htmlContent.replace('REPLACE_ME',$FirstName)
+    $htmlContent = $htmlContent.replace('REPLACE_FIRSTNAME',$FirstName)
+    $htmlContent = $htmlContent.replace('REPLACE_DOMAIN',$GoogleWorkspaceDestinationMailDomain)
 
     #Write-Host "$GamDir\gam.exe sendemail $legacyUserMail from $GoogleWorkspaceSenderMail subject 'Your New MNSP email account Information as of: $(Get-date)' htmlmessage '$htmlContent'"
     invoke-expression "$GamDir\gam.exe sendemail $legacyUserMail from $GoogleWorkspaceSenderMail subject 'Your New MNSP email account Information summary as of: $(Get-date)' htmlmessage '$htmlContent'"
