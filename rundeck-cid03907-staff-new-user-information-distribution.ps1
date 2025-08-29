@@ -1,4 +1,4 @@
-$mnspver = "0.0.2"
+$mnspver = "0.0.3"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -40,6 +40,11 @@ Write-Host "Number of records matching selection criteria:" $VerifiedUserData.co
 #TODO - if count 0 break out of script...
 #$VerifiedUserData
 
+#download html template
+#if exist check & remove $tempcsv4
+if (test-path $temphtml1) { remove-item $temphtml1 -force -verbose }
+Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleDocID format html targetfolder $DataDir targetname $temphtml1"
+
 Start-Sleep 2
 
 Write-Host "Processing users in destination..."
@@ -74,6 +79,11 @@ foreach ($user in $VerifiedUserData) {
     ##account information...
     Write-Host "$GamDir\gam.exe sendemail $legacyUserMail from $GoogleWorkspaceSenderMail newuser $ReplacementUserMail firstname $FirstName LastName $LastName password 'Sent in another email'"
     Invoke-Expression "$GamDir\gam.exe sendemail $legacyUserMail from $GoogleWorkspaceSenderMail newuser $ReplacementUserMail firstname $FirstName LastName $LastName password 'Sent in another email'"
+
+    ##General Information
+    $htmlContent = get-content $temp1html
+    invoke-expression "$GamDir\gam.exe sendemail $legacyUserMail from $GoogleWorkspaceSenderMail subject 'Your New MNSP email account Information $(Get-date)' htmlmessage '$htmlContent'"
+
     #>
 
     DashedLine
