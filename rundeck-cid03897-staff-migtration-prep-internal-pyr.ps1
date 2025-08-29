@@ -1,4 +1,4 @@
-$mnspver = "0.0.55"
+$mnspver = "0.0.56"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -191,7 +191,7 @@ foreach ($user in $VerifiedUserData) {
 
 #upload initial credentials to gsheet source $tempcsv2
 Write-Host "replacing content of existing google sheet with upto date data..."
-Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount update drivefile id $UserInfoGsheetID localfile $tempcsv2 newfilename '$GoogleWorkspaceDestinationMailDomain User Information' " ##UPDATE NEEDED## student folder/filename
+Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount update drivefile id $UserInfoGsheetID localfile $tempcsv2 newfilename '$GoogleWorkspaceDestinationMailDomain User Information as of: $(get-date)' " ##UPDATE NEEDED## student folder/filename
 
 
 <# no security groups required: START #
