@@ -1,4 +1,4 @@
-$mnspver = "0.0.6"
+$mnspver = "0.0.7"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -42,8 +42,8 @@ Write-Host "Number of records matching selection criteria:" $VerifiedUserData.co
 
 #download html template
 #if exist check & remove $tempcsv4
-if (test-path $temphtml1) { remove-item $temphtml1 -force -verbose }
-Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleDocID format html targetfolder $DataDir targetname $temphtml1"
+#if (test-path $temphtml1) { remove-item $temphtml1 -force -verbose }
+#Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleDocID format html targetfolder $DataDir targetname $temphtml1"
 
 Start-Sleep 2
 
