@@ -1,4 +1,4 @@
-$mnspver = "0.0.7"
+$mnspver = "0.0.8"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -46,7 +46,7 @@ Invoke-Expression "$GamDir\gam.exe user $GoogleSourceSvcAccount get drivefile $G
 
 Start-sleep 2
 
-$VerfiedUserData = import-csv -path $tempcsv4
+$VerifiedUserData = import-csv -path $tempcsv4
 Write Host "Number of records matching selection criteria:" $VerifiedUserData.count
 #TODO - if count 0 break out of script...
 
