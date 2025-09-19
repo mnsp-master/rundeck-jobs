@@ -1,4 +1,4 @@
-$mnspver = "0.0.5"
+$mnspver = "0.0.6"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -46,10 +46,9 @@ Invoke-Expression "$GamDir\gam.exe user $GoogleSourceSvcAccount get drivefile $G
 
 Start-sleep 2
 
-#TODO - if count 0 break out of script...
-
 $VerfiedUserData = import-csv -path $tempcsv4
 Write Host "Number of records matching selection criteria:" $VerifiedUserData.count
+#TODO - if count 0 break out of script...
 
 foreach ($user in $VerifiedUserData) {
     DashedLine
@@ -58,9 +57,10 @@ foreach ($user in $VerifiedUserData) {
     $LastName = $user."LastName"
     $ReplacementUserMail = $user."emailDestination"
     
-    Write-Host "Processing: $LegacyUserMail"
+    Write-Host "Source email: $LegacyUserMail"
     Write-Host "Firstname: $FirstName"
     Write-Host "Lastname: $LastName"
+    Write-Host "Destination email: $ReplacementUserMail"
 
     #<# #(un)comment to (not)create shared drive(s)
     #create/manage shared drives...
