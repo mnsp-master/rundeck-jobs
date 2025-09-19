@@ -1,4 +1,4 @@
-$mnspver = "0.0.3"
+$mnspver = "0.0.4"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -30,12 +30,13 @@ Write-Host "Setting workspace source: $GoogleWorkSpaceSource"
 Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceSource save" # swap/set google workspace
 Invoke-Expression "$GamDir\gam.exe" #get current google workspace
 
+<#
 #create $GoogleWorkspaceSourceSysadminGroupFQDN security group...
 Write-Host "Creating local sysadmins security group: $GoogleWorkspaceSourceSysadminGroupFQDN"
 Invoke-expression "$GamDir\gam.exe create group $GoogleWorkspaceSourceSysadminGroupFQDN" # create group
 Start-Sleep 2
 Invoke-Expression "$GamDir\gam.exe update cigroup $GoogleWorkspaceSourceSysadminGroupFQDN makesecuritygroup" # set group label/type to security
-
+#>
 DashedLine
 
 #get verified user data
@@ -48,24 +49,21 @@ Invoke-Expression "$GamDir\gam.exe user $GoogleSourceSvcAccount get drivefile $G
 
 Start-sleep 2
 
-$VerifiedUserData = Get-Content -path $tempcsv4 | select-object -skip 1 | convertFrom-csv | where { $_.$FieldMatch01 -like $FieldString } #import where field like $FieldMatch01, and skip 1st line
-Write Host "Number of records matching selection criteria:" $VerifiedUserData.count
 #TODO - if count 0 break out of script...
+
+$VerfiedUserData = import-csv -path $tempcsv4
+Write Host "Number of records matching selection criteria:" $VerifiedUserData.count
 
 foreach ($user in $VerifiedUserData) {
     DashedLine
-    $LegacyUserMail = $user."Existing Email Address" #current mail address
-    #$HRid = $user."Staff full name" # HR id
-    #$FirstName = $user."Staff first name" #prefered firstname
-    #$LastName = $user."Staff Surname"
-    $ReplacementUserMail = $user."new email"
-
-    #if ( $RunDeckDev -eq "true" ) { $ReplacementUserMail = $RundeckDevMail } #script dev check...
+    $LegacyUserMail = $user."emailSource" #current mail address
+    $FirstName = $user."firstName" #prefered firstname
+    $LastName = $user."LastName"
+    $ReplacementUserMail = $user."emailDestination"
     
     Write-Host "Processing: $LegacyUserMail"
-    #Write-Host "HR ID: $HRid"
-    #Write-Host "Firstname: $FirstName"
-    #Write-Host "Lastname: $LastName"
+    Write-Host "Firstname: $FirstName"
+    Write-Host "Lastname: $LastName"
 
     #<# #(un)comment to (not)create shared drive(s)
     #create/manage shared drives...
@@ -390,5 +388,8 @@ Write-Host "Setting workspace source: $GoogleWorkSpaceSource"
 Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceSource save" # swap/set google workspace
 Invoke-Expression "$GamDir\gam.exe"
 DashedLine
+
+$VerifiedUserData = Get-Content -path $tempcsv4 | select-object -skip 1 | convertFrom-csv | where { $_.$FieldMatch01 -like $FieldString } #import where field like $FieldMatch01, and skip 1st line
+Write Host "Number of records matching selection criteria:" $VerifiedUserData.count
 
 #>
