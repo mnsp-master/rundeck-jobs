@@ -55,19 +55,17 @@ Write Host "Number of records matching selection criteria:" $VerifiedUserData.co
 foreach ($user in $VerifiedUserData) {
     DashedLine
     $LegacyUserMail = $user."Existing Email Address" #current mail address
-    $HRid = $user."Staff full name" # HR id
-    $FirstName = $user."Staff first name" #prefered firstname
-    $LastName = $user."Staff Surname"
+    #$HRid = $user."Staff full name" # HR id
+    #$FirstName = $user."Staff first name" #prefered firstname
+    #$LastName = $user."Staff Surname"
     $ReplacementUserMail = $user."new email"
 
     #if ( $RunDeckDev -eq "true" ) { $ReplacementUserMail = $RundeckDevMail } #script dev check...
     
     Write-Host "Processing: $LegacyUserMail"
-    Write-Host "HR ID: $HRid"
-    Write-Host "Firstname: $FirstName"
-    Write-Host "Lastname: $LastName"
-
-
+    #Write-Host "HR ID: $HRid"
+    #Write-Host "Firstname: $FirstName"
+    #Write-Host "Lastname: $LastName"
 
     #<# #(un)comment to (not)create shared drive(s)
     #create/manage shared drives...
