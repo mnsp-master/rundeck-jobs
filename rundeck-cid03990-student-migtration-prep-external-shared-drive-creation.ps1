@@ -1,4 +1,4 @@
-$mnspver = "0.0.9"
+$mnspver = "0.0.10"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -66,17 +66,17 @@ foreach ($user in $VerifiedUserData) {
     #create/manage shared drives...
         Write-Host "shared drive creation (Legacy Source to Destination user)..."
         $TeamDriveName = "Migration $LegacyUserMail $(Get-Date)"
-        #$LegacyUserTeamDriveID = $(Invoke-expression "$GamDir\gam.exe user $GoogleSourceSvcAccount create teamdrive '$TeamDriveName' adminmanagedrestrictions true asadmin returnidonly") #CID00#### dry run
+        $LegacyUserTeamDriveID = $(Invoke-expression "$GamDir\gam.exe user $GoogleSourceSvcAccount create teamdrive '$TeamDriveName' adminmanagedrestrictions true asadmin returnidonly") #CID00#### dry run
         Write-Host "$GamDir\gam.exe user $GoogleSourceSvcAccount create teamdrive '$TeamDriveName' adminmanagedrestrictions true asadmin returnidonly"
 
         Write-Host "Shared Drive ID: $LegacyUserTeamDriveID "
 
         Write-Host "Allow outside sharing..."
-        #Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin domainUsersOnly False" #CID00#### dry run
+        Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin domainUsersOnly False" #CID00#### dry run
         Write-Host "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin domainUsersOnly False"
 
         Write-Host "Allow people who aren't shared drive members to access files - false..."
-        #Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin sharingFoldersRequiresOrganizerPermission True" #CID00#### dry run
+        Invoke-expression "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin sharingFoldersRequiresOrganizerPermission True" #CID00#### dry run
         Write-Host "$GamDir\gam.exe update teamdrive $LegacyUserTeamDriveID asadmin sharingFoldersRequiresOrganizerPermission True"
 
         #Write-Host "move shared drive to move enabled OU..."
@@ -87,10 +87,10 @@ foreach ($user in $VerifiedUserData) {
         Write-Host "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $GoogleWorkspaceSourceSysadminGroupFQDN role organizer"
 
         Write-Host "Add internal user as manager: add drivefileacl $LegacyUserTeamDriveID user $LegacyUserMail role organizer ..."
-        #Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $LegacyUserMail role organizer" #CID00#### dry run
+        Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $LegacyUserMail role organizer" #CID00#### dry run
         
         Write-Host "Add external user as manager: add drivefileacl $LegacyUserTeamDriveID user $ReplacementUserMail role organizer..."
-        #Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $ReplacementUserMail role organizer" #CID00#### dry run
+        Invoke-expression "$GamDir\gam.exe add drivefileacl $LegacyUserTeamDriveID user $ReplacementUserMail role organizer" #CID00#### dry run
         
     #>
 
