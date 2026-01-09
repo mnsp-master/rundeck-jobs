@@ -1,4 +1,4 @@
-$mnspver = "0.0.177.5"
+$mnspver = "0.0.177.6"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -36,6 +36,8 @@ Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleS
 Write-Host "downloading gsheet ID: $GoogleSheetID tab: $GoogleSheetTab07"
 Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleSheetID format csv gsheet ""$GoogleSheetTab07"" targetfolder $DataDir targetname $tempcsv7"
 
+#create groups...
+
 
     Write-Host "Add members to security groups ..."
         #if (test-path $DataDir\*.lst) { remove-item $DataDir\*.lst -force -verbose } #force delete any .lst files if exist...
@@ -54,7 +56,7 @@ Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount get drivefile $GoogleS
 
         $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).ToLower()
         Write-host "Invoke-expression $GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
-        Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
+        Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst" #adds members setting sync will sync add/remove
         
 
     }
@@ -76,7 +78,7 @@ Write-Host "Add members to mail dist groups ..."
 
         $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).toLower()
         Write-Host "Invoke-expression $GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
-        Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
+        Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst" #adds members setting sync will sync add/remove
         
 
     }
