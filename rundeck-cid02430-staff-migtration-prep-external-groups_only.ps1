@@ -1,4 +1,4 @@
-$mnspver = "0.0.177.10"
+$mnspver = "0.0.177.11"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -71,8 +71,9 @@ $GroupexistCheck.email
     Write-Host "$GamDir\gam.exe create group $GoogleGroupFQDN"
     Start-Sleep 2
     
+    #no longer setting groups as security groups Oct 2025
     #Invoke-Expression "$GamDir\gam.exe update cigroup $GoogleGroupFQDN makesecuritygroup" #CID00#### dry run # set group label/type to security
-    Write-Host "$GamDir\gam.exe update cigroup $GoogleGroupFQDN makesecuritygroup"
+    #Write-Host "$GamDir\gam.exe update cigroup $GoogleGroupFQDN makesecuritygroup"
 
     Start-sleep 2
         #set access controls for group from action array... ENHANCEMENT - migrate this to a single JSON control file route
