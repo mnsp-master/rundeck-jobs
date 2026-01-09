@@ -1,4 +1,4 @@
-$mnspver = "0.0.177.9"
+$mnspver = "0.0.177.10"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -87,7 +87,7 @@ $GroupexistCheck.email
 
 Write-Host "Create email dist groups (Destination instance)..."
 
-if (test-path $tempcsv7) { remove-item $tempcsv7 -force -verbose }
+#if (test-path $tempcsv7) { remove-item $tempcsv7 -force -verbose }
 if (test-path $tempcsv8) { remove-item $tempcsv8 -force -verbose }
 start-sleep 2
 
