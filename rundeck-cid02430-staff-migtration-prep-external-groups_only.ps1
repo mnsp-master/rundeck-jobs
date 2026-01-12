@@ -1,4 +1,4 @@
-$mnspver = "0.0.177.13"
+$mnspver = "0.0.177.14"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -71,7 +71,7 @@ $GroupexistCheck.email
 
     Write-Host "-----------Creating Security group:$member----------"`n
     $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).ToLower()
-    #Invoke-expression "$GamDir\gam.exe create group $GoogleGroupFQDN" #CID00#### dry run # create group 
+    Invoke-expression "$GamDir\gam.exe create group $GoogleGroupFQDN" #CID00#### dry run # create group 
     Write-Host "$GamDir\gam.exe create group $GoogleGroupFQDN"
     Start-Sleep 2
     
@@ -82,7 +82,7 @@ $GroupexistCheck.email
     Start-sleep 2
         #set access controls for group from action array... ENHANCEMENT - migrate this to a single JSON control file route
         foreach ($action in $GoogleWorkspaceSecGroupSettings) { 
-        #Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN $action" #CID00#### dry run #set access controls for group from action array
+        Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN $action" #CID00#### dry run #set access controls for group from action array
         Write-Host "$GamDir\gam.exe update group $GoogleGroupFQDN $action"
 
         }
@@ -123,13 +123,13 @@ $GroupexistCheck.email
 
     Write-Host "-----------Creating Dist group:$member----------"`n
     $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).ToLower()
-    #Invoke-expression "$GamDir\gam.exe create group $GoogleGroupFQDN" #CID00#### dry run
+    Invoke-expression "$GamDir\gam.exe create group $GoogleGroupFQDN" #CID00#### dry run
     Write-Host "$GamDir\gam.exe create group $GoogleGroupFQDN"
 
     Start-sleep 2
 
         foreach ($action in $GoogleWorkspaceGroupSettings) { 
-        #Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN $action" #CID00#### dry run
+        Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN $action" #CID00#### dry run
         Write-Host "$GamDir\gam.exe update group $GoogleGroupFQDN $action"
         
         }
@@ -155,7 +155,7 @@ $GroupexistCheck.email
 
         $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).ToLower()
         Write-host "Invoke-expression $GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
-        #Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst" #adds members setting sync will sync add/remove #CID00#### dry runv
+        Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst" #adds members setting sync will sync add/remove #CID00#### dry runv
         
 
     }
