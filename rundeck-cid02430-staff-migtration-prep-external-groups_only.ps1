@@ -1,4 +1,4 @@
-$mnspver = "0.0.177.14"
+$mnspver = "0.0.177.15"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -177,7 +177,7 @@ Write-Host "Add members to mail dist groups ..."
 
         $GoogleGroupFQDN = ($member + "@" + $GoogleWorkspaceDestinationMailDomain).toLower()
         Write-Host "Invoke-expression $GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst"
-        #Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst" #adds members setting sync will sync add/remove #CID00#### dry run
+        Invoke-expression "$GamDir\gam.exe update group $GoogleGroupFQDN add members file $DataDir\$member.lst" #adds members setting sync will sync add/remove #CID00#### dry run
         
 
     }
