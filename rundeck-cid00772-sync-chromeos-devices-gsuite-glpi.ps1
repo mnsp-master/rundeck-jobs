@@ -1,4 +1,4 @@
-$mnspver = "0.1.6"
+$mnspver = "0.1.7"
 $GlobalGamBaseOU = "/ZZ Chrome Devices/" # MNSP root base OU
 
 Write-Host $(Get-Date)
@@ -69,9 +69,37 @@ $uuids = $SearchResult.1 # create uuids array from api returned results
 #$uuids = $SearchResult.data.1 # create uuids array from api returned results
 #TID49826 - returned search results exceed php limits#
 
-
+# $UUID duplicate check(s)
 #discovered devices:
 Write-Host "Number of existing UUIDs found:" $uuids.count
+
+$TotalCount = $uuids.Count
+$UniqueCount = ($uuids | Select-Object -Unique).Count
+
+if ($TotalCount -eq $UniqueCount) {
+    Write-Host "Success: All $TotalCount UUIDs are unique." -ForegroundColor Green
+} else {
+    $Duplicates = $TotalCount - $UniqueCount
+    Write-Warning "Warning: Found $Duplicates duplicate UUIDs!"
+}
+
+# Identify duplicates
+$DuplicateGroups = $uuids | Group-Object | Where-Object { $_.Count -gt 1 }
+
+if ($DuplicateGroups) {
+    Write-Error "CRITICAL: Duplicate UUIDs found in GLPI data. Script execution aborted."
+    
+    # Display the offending UUIDs for troubleshooting
+    $DuplicateGroups | Select-Object @{Name="UUID"; Expression={$_.Name}}, Count | Format-Table
+    
+    # Exit the script with a non-zero exit code
+    exit 1
+}
+
+Write-Host "Verification complete: All $($uuids.Count) UUIDs are unique. Continuing..." -ForegroundColor Green
+
+exit 0
+
 
 ################################ incrementing plugin id's fix #######################################
 $ApiSearchResult = Invoke-RestMethod "$AppURL/listSearchOptions/Entity" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} # api serach query for glpi entities
