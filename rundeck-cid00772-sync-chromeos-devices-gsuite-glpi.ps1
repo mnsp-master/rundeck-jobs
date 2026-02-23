@@ -1,4 +1,4 @@
-$mnspver = "0.1.7"
+$mnspver = "0.1.8"
 $GlobalGamBaseOU = "/ZZ Chrome Devices/" # MNSP root base OU
 
 Write-Host $(Get-Date)
@@ -98,7 +98,7 @@ if ($DuplicateGroups) {
 
 Write-Host "Verification complete: All $($uuids.Count) UUIDs are unique. Continuing..." -ForegroundColor Green
 
-exit 0
+exit 1
 
 
 ################################ incrementing plugin id's fix #######################################
