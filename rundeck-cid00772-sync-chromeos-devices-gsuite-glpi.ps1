@@ -1,4 +1,4 @@
-$mnspver = "0.1.5"
+$mnspver = "0.1.6"
 $GlobalGamBaseOU = "/ZZ Chrome Devices/" # MNSP root base OU
 
 Write-Host $(Get-Date)
@@ -6,6 +6,9 @@ Write-Host "MNSP Version" $mnspver
 Start-Sleep 10
 $ErrorActionPreference="Continue"
 Set-Location $GamDir
+
+#TID49826 - returned search results exceed php limits#
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 #force newer TLS version
 
 #Get/Confirm Google instance
 Invoke-Expression "$GamDir\gam.exe info domain" 
@@ -29,10 +32,43 @@ $SearchResult=@()
 #$SearchResult = Invoke-RestMethod "$AppURL/search/Computer?is_deleted=0&as_map=0&range=0-100000000&criteria[0][link]=AND&criteria[0][field]=4&criteria[0][searchtype]=equals&criteria[0][value]=14&search=Search&itemtype=Computer&start=0" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
 
 #glpi device types 14 and 15 : chromebooks and chromeflexos
-$SearchResult = Invoke-RestMethod "$AppURL/search/Computer?is_deleted=0&as_map=0&range=0-100000000&browse=0&criteria[0][link]=AND&criteria[0][field]=4&criteria[0][searchtype]=equals&criteria[0][value]=14&criteria[1][link]=OR&criteria[1][field]=4&criteria[1][searchtype]=equals&criteria[1][value]=15&itemtype=Computer&start=0" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
+
+#TID49826 - returned search results exceed php limits#
+#$SearchResult = Invoke-RestMethod "$AppURL/search/Computer?is_deleted=0&as_map=0&range=0-100000000&browse=0&criteria[0][link]=AND&criteria[0][field]=4&criteria[0][searchtype]=equals&criteria[0][value]=14&criteria[1][link]=OR&criteria[1][field]=4&criteria[1][searchtype]=equals&criteria[1][value]=15&itemtype=Computer&start=0" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
+
+$SearchResult = @()
+$Start = 0
+$Step = 1000
+$MoreData = $true
+$headers = @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"}
+
+while ($MoreData) {
+    $Range = "$Start-$($Start + $Step - 1)"
+    # Removed &start=0 to let &range control the pagination
+    $Url = "$AppURL/search/Computer?is_deleted=0&as_map=0&range=$Range&browse=0&criteria[0][link]=AND&criteria[0][field]=4&criteria[0][searchtype]=equals&criteria[0][value]=14&criteria[1][link]=OR&criteria[1][field]=4&criteria[1][searchtype]=equals&criteria[1][value]=15"
+    
+    Write-Host "Fetching range $Range..."
+    $Response = Invoke-RestMethod $Url -Headers $Headers
+    
+    # Check if we got data back
+    if ($Response.data -and $Response.data.Count -gt 0) {
+        $SearchResult += $Response.data
+        $Start += $Step
+        
+        # Safety check: if we got fewer results than the step, we reached the end
+        if ($Response.data.Count -lt $Step) { $MoreData = $false }
+    } else {
+        $MoreData = $false
+    }
+}
+
+Write-Host "Total records retrieved: $($SearchResult.Count)"
 
 $uuids=@()
-$uuids = $SearchResult.data.1 # create uuids array from api returned results
+$uuids = $SearchResult.1 # create uuids array from api returned results
+#$uuids = $SearchResult.data.1 # create uuids array from api returned results
+#TID49826 - returned search results exceed php limits#
+
 
 #discovered devices:
 Write-Host "Number of existing UUIDs found:" $uuids.count
