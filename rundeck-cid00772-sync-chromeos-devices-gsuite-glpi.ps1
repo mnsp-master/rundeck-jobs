@@ -1,4 +1,4 @@
-$mnspver = "0.1.4"
+$mnspver = "0.1.5"
 $GlobalGamBaseOU = "/ZZ Chrome Devices/" # MNSP root base OU
 
 Write-Host $(Get-Date)
@@ -35,7 +35,7 @@ $uuids=@()
 $uuids = $SearchResult.data.1 # create uuids array from api returned results
 
 #discovered devices:
-$uuids.count
+Write-Host "Number of existing UUIDs found:" $uuids.count
 
 ################################ incrementing plugin id's fix #######################################
 $ApiSearchResult = Invoke-RestMethod "$AppURL/listSearchOptions/Entity" -Headers @{"session-token"=$SessionToken.session_token; "App-Token" = "$AppToken"} # api serach query for glpi entities
