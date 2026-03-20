@@ -1,5 +1,5 @@
 Clear-Host
-$mnspver = "0.0.3"
+$mnspver = "0.0.4"
 
 #from line 34
 
@@ -70,13 +70,6 @@ catch {
     exit 1 # Ensures Rundeck sees the failure
 }
 
-#gmail message config    
-$username = "@option.GoogleWorkSpaceEmail@"
-$password = "@option.GoogleWorkspaceEmailPWD@"
-$subject = "Rundeck job: $CID... transaction log as of $now"
-$SMTPServer = "smtp.gmail.com"
-$SMTPPort = "587"
-$from = "@option.GoogleWorkSpaceEmail@"
 $emailBody = @"
 <html>
 <head>
