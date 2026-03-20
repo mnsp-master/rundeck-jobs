@@ -1,5 +1,5 @@
 Clear-Host
-$mnspver = "0.0.5"
+$mnspver = "0.0.6"
 
 #from line 34
 
@@ -71,6 +71,8 @@ catch {
     exit 1 # Ensures Rundeck sees the failure
 }
 
+$ExecutionURL = "$ServerURL/project/$Project/execution/show/$ExecID"
+
 $emailBody = @"
 <html>
 <head>
@@ -89,6 +91,7 @@ $emailBody = @"
     <tr><th>Execution ID</th><td>$ExecID</td></tr>
     <tr><th>Executed By</th><td>$ExecutingUser</td></tr>
     <tr><th>Timestamp</th><td>$now</td></tr>
+    <tr><td><b>View Execution</b></td><td><a href='$ExecutionURL'>Click here to view results</a></td></tr>
   </table>
   <p>Please find the attached transcript log for full details.</p>
 </body>
