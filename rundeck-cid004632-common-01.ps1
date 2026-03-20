@@ -27,7 +27,7 @@ foreach ($dir in $structure) {
 }
 
 # Create Files
-$dataFiles = @("temp1.csv", "temp2.csv", "temp3.csv", "temp4.csv", "temp1.txt")
+$dataFiles = @("temp1.csv", "temp2.csv", "temp3.csv", "temp4.csv", "temp1.txt","temp2.txt")
 foreach ($fileName in $dataFiles) {
     $filePath = Join-Path $DataDir $fileName
     if (!(Test-Path $filePath)) {
