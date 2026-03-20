@@ -1,6 +1,7 @@
 Clear-Host
-$mnspver = "0.0.1"
+$mnspver = "0.0.2"
 
+#from line 34
 $email = "@option.GoogleWorkSpaceEmailAddress@"
 $GoogleWorkSpaceDestination = "@option.GoogleWorkSpaceDestination@"
 
