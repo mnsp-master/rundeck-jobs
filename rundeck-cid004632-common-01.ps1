@@ -1,5 +1,5 @@
 Clear-Host
-$mnspver = "0.0.7"
+$mnspver = "0.0.8"
 
 ##############################################
 ## PRE Main section - prpepare environment ###
@@ -79,6 +79,8 @@ catch {
 ##############################################
 ### POST Main section mail transaction log ###
 ##############################################
+
+Write-Host "Full url: $ExecutionURL"
 
 $emailBody = @"
 <html>
