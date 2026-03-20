@@ -1,9 +1,8 @@
 Clear-Host
-$mnspver = "0.0.2"
+$mnspver = "0.0.3"
 
 #from line 34
-$email = "@option.GoogleWorkSpaceEmailAddress@"
-$GoogleWorkSpaceDestination = "@option.GoogleWorkSpaceDestination@"
+
 
 $tempcsv1 = "$DataDir\temp1.csv"
 $tempcsv2 = "$DataDir\temp2.csv"
