@@ -1,9 +1,11 @@
 Clear-Host
-$mnspver = "0.0.8"
+$mnspver = "0.0.9"
 
 ##############################################
 ## PRE Main section - prpepare environment ###
 ##############################################
+
+Write-Host 
 
 $tempcsv1 = "$DataDir\temp1.csv"
 $tempcsv2 = "$DataDir\temp2.csv"
@@ -15,6 +17,7 @@ $temptxt2 = "$DataDir\temp2.txt"
 
 Write-Host "Rundeck user mail: $mailRecepient"
 Write-Host "Rundeck jobname: $jobName"
+DashedLine
 
 # Create Folders
 $structure = @($DataDir, $LogDir)
@@ -38,6 +41,7 @@ foreach ($fileName in $dataFiles) {
         Write-Host "File already exists: $filePath"
     }
 }
+DashedLine
 
 if (Test-Path $GitHubPS01) {
     Write-Host "Path $GitHubPS01 exists. Deleting..."
@@ -46,6 +50,7 @@ if (Test-Path $GitHubPS01) {
 } else {
     Write-Host "Path $GitHubPS01 not found, skipping delete."
 }
+DashedLine
 
 start-sleep 2
 
@@ -75,6 +80,7 @@ catch {
     Write-Error "Failed to download or execute script: $_"
     exit 1 # Ensures Rundeck sees the failure
 }
+DashedLine
 
 ##############################################
 ### POST Main section mail transaction log ###
