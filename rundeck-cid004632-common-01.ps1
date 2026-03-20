@@ -1,5 +1,5 @@
 Clear-Host
-$mnspver = "0.0.4"
+$mnspver = "0.0.5"
 
 #from line 34
 
@@ -9,6 +9,7 @@ $tempcsv2 = "$DataDir\temp2.csv"
 $tempcsv3 = "$DataDir\temp3.csv"
 $tempcsv4 = "$DataDir\temp4.csv"
 $temptxt1 = "$DataDir\temp1.txt"
+$temptxt2 = "$DataDir\temp2.txt"
 
 
 Write-Host "Rundeck user mail: $mailRecepient"
