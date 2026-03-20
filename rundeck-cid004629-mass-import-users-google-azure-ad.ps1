@@ -1,8 +1,4 @@
-$mnspver = "0.0.5"
-
-function DashedLine {
-Write-host "-----------------------------------------------------------`n"
-}
+$mnspver = "0.0.6"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
