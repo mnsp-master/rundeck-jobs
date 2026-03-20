@@ -1,8 +1,9 @@
 Clear-Host
-$mnspver = "0.0.6"
+$mnspver = "0.0.7"
 
-#from line 34
-
+##############################################
+## PRE Main section - prpepare environment ###
+##############################################
 
 $tempcsv1 = "$DataDir\temp1.csv"
 $tempcsv2 = "$DataDir\temp2.csv"
@@ -48,6 +49,10 @@ if (Test-Path $GitHubPS01) {
 
 start-sleep 2
 
+##############################################
+########## Main section to execute ###########
+##############################################
+
 Write-Host "Downloading get PS script: $GitHubUri01 to execute from github..."
 
 # Ensure TLS 1.2 is enabled (GitHub requires this, older PS versions default to 1.1)
@@ -71,7 +76,9 @@ catch {
     exit 1 # Ensures Rundeck sees the failure
 }
 
-$ExecutionURL = "$ServerURL/project/$Project/execution/show/$ExecID"
+##############################################
+### POST Main section mail transaction log ###
+##############################################
 
 $emailBody = @"
 <html>
@@ -91,7 +98,7 @@ $emailBody = @"
     <tr><th>Execution ID</th><td>$ExecID</td></tr>
     <tr><th>Executed By</th><td>$ExecutingUser</td></tr>
     <tr><th>Timestamp</th><td>$now</td></tr>
-    <tr><td><b>View Execution</b></td><td><a href='$ExecutionURL'>Click here to view results</a></td></tr>
+    <tr><th>View Execution</th><td><a href='$ExecutionURL'>Click here to view results</a></td></tr>
   </table>
   <p>Please find the attached transcript log for full details.</p>
 </body>
