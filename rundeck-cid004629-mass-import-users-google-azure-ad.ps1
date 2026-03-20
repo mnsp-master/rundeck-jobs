@@ -1,4 +1,4 @@
-$mnspver = "0.0.4"
+$mnspver = "0.0.5"
 
 function DashedLine {
 Write-host "-----------------------------------------------------------`n"
@@ -15,7 +15,7 @@ Write-Host "###### Set Google instance: Destination... ######"
 
 Write-Host "Setting workspace Destination: $GoogleWorkSpaceDestination"
 Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceDestination save" # swap/set google workspace
-Invoke-Expression "$GamDir\gam.exe"
+Invoke-Expression "$GamDir\gam.exe info domain"
 start-sleep 3
 DashedLine
 
