@@ -1,4 +1,4 @@
-$mnspver = "0.0.11"
+$mnspver = "0.0.12"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -23,7 +23,9 @@ Write-Host "School prefix: $SchoolCode"
 
 Write-Host "Getting all users and OUs from supplied source: $GoogleSourceBaseOU"
 $SourceGoogleOus = @()
-$SourceGoogleOUs = Invoke-Expression "$GamDir\Gam.exe print orgs fromparent '$GoogleSourceBaseOU'"
+Invoke-Expression "$GamDir\Gam.exe print orgs fromparent '$GoogleSourceBaseOU' > $tempcsv1"
+
+$GoogleSourceOUs = import-csv -path $tempcsv1
 
 foreach ($SourceGoogleOU in $SourceGoogleOUs) {
     Write-Host "Processing: $($SourceGoogleOU)"
