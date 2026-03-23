@@ -1,11 +1,12 @@
 Clear-Host
-$mnspver = "0.0.12"
+$mnspver = "0.0.13"
 
 ##############################################
 ## PRE Main section - prpepare environment ###
 ##############################################
 
 $ScriptName = Split-Path $PSCommandPath -Leaf
+Write-Host "Checking/preparing expected rundeck job environment..."
 Write-Host "MNSP script: $scriptName version: $mnspver"
 
 $tempcsv1 = "$DataDir\temp1.csv"
@@ -15,10 +16,9 @@ $tempcsv4 = "$DataDir\temp4.csv"
 $temptxt1 = "$DataDir\temp1.txt"
 $temptxt2 = "$DataDir\temp2.txt"
 
-
+Write-host "Rundeck job details:"
 Write-Host "Rundeck user mail: $mailRecepient"
 Write-Host "Rundeck jobname: $jobName"
-DashedLine
 
 # Create Folders
 $structure = @($DataDir, $LogDir)
@@ -59,6 +59,7 @@ start-sleep 2
 ########## Main section to execute ###########
 ##############################################
 
+Write-Host "Executing main Job..."
 Write-Host "Downloading get PS script: $GitHubUri01 to execute from github..."
 
 # Ensure TLS 1.2 is enabled (GitHub requires this, older PS versions default to 1.1)
