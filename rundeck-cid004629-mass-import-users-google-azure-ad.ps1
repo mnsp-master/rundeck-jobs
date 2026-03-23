@@ -1,4 +1,4 @@
-$mnspver = "0.0.6"
+$mnspver = "0.0.7"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -18,5 +18,17 @@ Write-Host "Setting workspace Destination: $GoogleWorkSpaceDestination"
 Invoke-Expression "$GamDir\gam.exe select $GoogleWorkSpaceDestination save" # swap/set google workspace
 Invoke-Expression "$GamDir\gam.exe info domain"
 start-sleep 3
+
+Write-Host "School prefix: $SchoolCode"
+
+Write-Host "Getting all users and OUs from supplied source: $GoogleSourceBaseOU"
+$SourceGoogleOus = @()
+$SourceGoogleOUs = Invoke-Expression "$GamDir\Gam.exe print orgs from parent $GoogleSourceBaseOU"
+
+foreach ($SourceGoogleOU in $GoogleOUs) {
+    Write-Host "Processing: $($SourceGoogleOU)"
+}
+
+
 DashedLine
 
