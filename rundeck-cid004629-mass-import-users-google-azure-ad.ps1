@@ -1,4 +1,4 @@
-$mnspver = "0.0.10"
+$mnspver = "0.0.11"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -25,7 +25,7 @@ Write-Host "Getting all users and OUs from supplied source: $GoogleSourceBaseOU"
 $SourceGoogleOus = @()
 $SourceGoogleOUs = Invoke-Expression "$GamDir\Gam.exe print orgs fromparent '$GoogleSourceBaseOU'"
 
-foreach ($SourceGoogleOU in $GoogleOUs) {
+foreach ($SourceGoogleOU in $SourceGoogleOUs) {
     Write-Host "Processing: $($SourceGoogleOU)"
 }
 
