@@ -1,5 +1,5 @@
 Clear-Host
-$mnspver = "0.0.13"
+$mnspver = "0.0.14"
 
 ##############################################
 ## PRE Main section - prpepare environment ###
@@ -19,7 +19,9 @@ $temptxt2 = "$DataDir\temp2.txt"
 Write-host "Rundeck job details:"
 Write-Host "Rundeck user mail: $mailRecepient"
 Write-Host "Rundeck jobname: $jobName"
+BlankLIne
 
+Write-Host "Checking expected folders exist..."
 # Create Folders
 $structure = @($DataDir, $LogDir)
 foreach ($dir in $structure) {
@@ -30,7 +32,7 @@ foreach ($dir in $structure) {
         Write-Host "Folder already exists: $dir"
     }
 }
-
+Write-Host "Checking expected files exist..."
 # Create Files
 $dataFiles = @("temp1.csv", "temp2.csv", "temp3.csv", "temp4.csv", "temp1.txt","temp2.txt")
 foreach ($fileName in $dataFiles) {
@@ -42,7 +44,7 @@ foreach ($fileName in $dataFiles) {
         Write-Host "File already exists: $filePath"
     }
 }
-DashedLine
+BlankLine
 
 if (Test-Path $GitHubPS01) {
     Write-Host "Path $GitHubPS01 exists. Deleting..."
@@ -59,8 +61,8 @@ start-sleep 2
 ########## Main section to execute ###########
 ##############################################
 
-Write-Host "Executing main Job..."
-Write-Host "Downloading get PS script: $GitHubUri01 to execute from github..."
+Write-Host "Executing Main Job..."
+Write-Host "Downloading Main PS script: $GitHubUri01 to execute from github..."
 
 # Ensure TLS 1.2 is enabled (GitHub requires this, older PS versions default to 1.1)
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
@@ -79,7 +81,7 @@ try {
     }
 }
 catch {
-    Write-Error "Failed to download or execute script: $_"
+    Write-Error "Failed to download or execute Main script: $_"
     exit 1 # Ensures Rundeck sees the failure
 }
 DashedLine
