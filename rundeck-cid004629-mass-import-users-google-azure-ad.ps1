@@ -1,4 +1,4 @@
-$mnspver = "0.0.9"
+$mnspver = "0.0.10"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -23,7 +23,7 @@ Write-Host "School prefix: $SchoolCode"
 
 Write-Host "Getting all users and OUs from supplied source: $GoogleSourceBaseOU"
 $SourceGoogleOus = @()
-$SourceGoogleOUs = Invoke-Expression "$GamDir\Gam.exe print orgs from parent '$GoogleSourceBaseOU'"
+$SourceGoogleOUs = Invoke-Expression "$GamDir\Gam.exe print orgs fromparent '$GoogleSourceBaseOU'"
 
 foreach ($SourceGoogleOU in $GoogleOUs) {
     Write-Host "Processing: $($SourceGoogleOU)"
