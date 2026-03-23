@@ -1,5 +1,5 @@
 Clear-Host
-$mnspver = "0.0.14"
+$mnspver = "0.0.15"
 
 ##############################################
 ## PRE Main section - prpepare environment ###
@@ -126,8 +126,6 @@ $credential = New-Object System.Management.Automation.PSCredential -ArgumentList
 #copy contents of transcript log to temp txt file to use as attachment, as log will be in use, and cannot be directly attached...
 $transcriptlogCopy = $(Get-Content $transcriptlog | set-content $transcriptlogTemp)
 $attachment = $transcriptlogTemp
-
-#Send-MailMessage -SmtpServer smtp.gmail.com -Port 587 -UseSsl -From $from -To $mailRecepient -Subject $subject -Attachments $attachment -Credential $credential -verbose
 
 $mailParams = @{
     SmtpServer  = "smtp.gmail.com"
