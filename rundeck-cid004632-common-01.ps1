@@ -1,5 +1,5 @@
 Clear-Host
-$mnspver = "0.0.15"
+$mnspver = "0.0.16"
 
 ##############################################
 ## PRE Main section - prpepare environment ###
@@ -55,12 +55,13 @@ if (Test-Path $GitHubPS01) {
 }
 DashedLine
 
-start-sleep 2
+start-sleep 1
 
 ##############################################
 ########## Main section to execute ###########
 ##############################################
 
+DashedLine
 Write-Host "Executing Main Job..."
 Write-Host "Downloading Main PS script: $GitHubUri01 to execute from github..."
 
