@@ -2,6 +2,11 @@ $mnspver = "0.0.6"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
+
+$ScriptName = Split-Path $PSCommandPath -Leaf
+Write-Host "Executing Main Rundeck Job..."
+Write-Host "MNSP script: $scriptName version: $mnspver"
+
 #Start-Sleep 10
 $ErrorActionPreference="Continue"
 Set-Location $GamDir

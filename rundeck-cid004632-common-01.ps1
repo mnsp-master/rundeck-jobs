@@ -1,5 +1,5 @@
 Clear-Host
-$mnspver = "0.0.16"
+$mnspver = "0.0.17"
 
 ##############################################
 ## PRE Main section - prpepare environment ###
@@ -62,8 +62,7 @@ start-sleep 1
 ##############################################
 
 DashedLine
-Write-Host "Executing Main Job..."
-Write-Host "Downloading Main PS script: $GitHubUri01 to execute from github..."
+Write-Host "Downloading Main PS script: $GitHubUri01 from github..."
 
 # Ensure TLS 1.2 is enabled (GitHub requires this, older PS versions default to 1.1)
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
@@ -73,7 +72,7 @@ try {
     Invoke-WebRequest -Uri $GitHubUri01 -OutFile $GitHubPS01 -UseBasicParsing
     
     if (Test-Path $GitHubPS01) {
-        Write-Host "Download successful. Executing $GitHubPS01..."
+        Write-Host "Download successful. $GitHubPS01..."
         
         # Dot-sourcing the script to run it in the current scope
         . $GitHubPS01
