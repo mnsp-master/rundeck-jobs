@@ -1,5 +1,5 @@
 Clear-Host
-$mnspver = "0.0.9"
+$mnspver = "0.0.10"
 
 ##############################################
 ## PRE Main section - prpepare environment ###
@@ -99,6 +99,7 @@ $emailBody = @"
 </head>
 <body>
   <h3>Rundeck Job Execution Report</h3>
+  <p><strong>NOTE:</strong> Full transatcion log attached below</p>
   <table>
     <tr><th>Job Name</th><td>$RundeckJobName</td></tr>
     <tr><th>Job ID</th><td>$JobID</td></tr>
@@ -106,7 +107,7 @@ $emailBody = @"
     <tr><th>Execution ID</th><td>$ExecID</td></tr>
     <tr><th>Executed By</th><td>$ExecutingUser</td></tr>
     <tr><th>Timestamp</th><td>$now</td></tr>
-    <tr><th>View Execution</th><td><a href='$ExecutionURL'>Click here to view results</a></td></tr>
+    <tr><th>View Full Execution</th><td><a href='$ExecutionURL'>Click here to view complete log</a></td></tr>
   </table>
   <p>Please find the attached transcript log for full details.</p>
 </body>
