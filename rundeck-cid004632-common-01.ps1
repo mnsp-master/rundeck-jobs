@@ -1,11 +1,12 @@
 Clear-Host
-$mnspver = "0.0.10"
+$mnspver = "0.0.11"
 
 ##############################################
 ## PRE Main section - prpepare environment ###
 ##############################################
 
-Write-Host 
+$ScriptName = Split-Path $PSCommandPath -Leaf
+Write-Host "MNSP script: $scriptName version: $mnspver"
 
 $tempcsv1 = "$DataDir\temp1.csv"
 $tempcsv2 = "$DataDir\temp2.csv"
@@ -107,7 +108,7 @@ $emailBody = @"
     <tr><th>Execution ID</th><td>$ExecID</td></tr>
     <tr><th>Executed By</th><td>$ExecutingUser</td></tr>
     <tr><th>Timestamp</th><td>$now</td></tr>
-    <tr><th>View Full Execution</th><td><a href='$ExecutionURL'>Click here to view complete log</a></td></tr>
+    <tr><th>Full Execution (Debug)</th><td><a href='$ExecutionURL'>Click here to view complete debug log (only accessible within MNSP networks)</a></td></tr>
   </table>
   <p>Please find the attached transcript log for full details.</p>
 </body>
