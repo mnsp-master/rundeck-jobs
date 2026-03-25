@@ -1,4 +1,4 @@
-$mnspver = "0.0.184.3"
+$mnspver = "0.0.184.4"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -283,7 +283,7 @@ foreach ($user in $VerifiedUserData) {
         Write-Host "shared drive creation (Legacy Source to Destination user)..."
         $TeamDriveName = "Migration $LegacyUserMail $(Get-Date)"
         #$LegacyUserTeamDriveID = $(Invoke-expression "$GamDir\gam.exe user $GoogleSourceSvcAccount create teamdrive '$TeamDriveName' adminmanagedrestrictions true asadmin returnidonly") #CID00#### dry run
-        Write-Host "$(Invoke-expression "$GamDir\gam.exe user $GoogleSourceSvcAccount create teamdrive '$TeamDriveName' adminmanagedrestrictions true asadmin returnidonly")"
+        Write-Host "$GamDir\gam.exe user $GoogleSourceSvcAccount create teamdrive '$TeamDriveName' adminmanagedrestrictions true asadmin returnidonly"
 
         Write-Host "Shared Drive ID: $LegacyUserTeamDriveID "
 
@@ -349,7 +349,7 @@ foreach ($user in $VerifiedUserData) {
     
     start-sleep 3 #update HRID
     Write-Host "update Replacement account HR ID..."
-    Write-Host "update user $ReplacementUserMail $GoogleCustomAttribute01 $HRid"
+    Write-Host "$GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $HRid"
     #Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $HRid" #CID00#### dry run #set HR ID - 
 }
 
