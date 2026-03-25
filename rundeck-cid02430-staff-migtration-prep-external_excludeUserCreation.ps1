@@ -1,4 +1,4 @@
-$mnspver = "0.0.184.1"
+$mnspver = "0.0.184.2"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -36,10 +36,12 @@ Invoke-expression "$GamDir\gam.exe create group $GoogleWorkspaceSourceSysadminGr
 Start-Sleep 2
 Invoke-Expression "$GamDir\gam.exe update cigroup $GoogleWorkspaceSourceSysadminGroupFQDN makesecuritygroup" # set group label/type to security
 
+<# #CID004654 - user creation not needed
 #create source users calendar info gsheet
 Write-Host "Source users current calendar info..."
 #Invoke-Expression "$GamDir\gam.exe ou_and_children_ns ""$GoogleWorkspaceSourceUserOU"" print calendars showhidden todrive tdparent id:$GfolderReportsID tdnobrowser" ##CID00#### dry run ###ENHANCEMENT taking excessive time MEN - needs query match domain
 Write-Host "$GamDir\gam.exe ou_and_children_ns ""$GoogleWorkspaceSourceUserOU"" print calendars showhidden todrive tdparent id:$GfolderReportsID tdnobrowser"
+#>
 
 DashedLine
 
@@ -175,6 +177,7 @@ $GroupexistCheck.email
     }
     }
 
+<# #CID004654 - user creation not needed
 Write-Host "Creating users in destination..."
 foreach ($user in $VerifiedUserData) {
     DashedLine
@@ -233,10 +236,13 @@ foreach ($user in $VerifiedUserData) {
     
     DashedLine
 }
+#>
 
+<# #CID004654 - user creation not needed
 #upload initial credentials to gsheet source $tempcsv2
 Write-Host "replacing content of existing google sheet with upto date data..."
 Invoke-Expression "$GamDir\gam.exe user $GoogleSvcAccount update drivefile id $UserInfoGsheetID localfile $tempcsv2 newfilename '$GoogleWorkspaceDestinationMailDomain User Information' "
+#>
 
 #Set Google instance: legacy...
 Write-Host "###### set google instance: legacy... ######"
@@ -266,9 +272,11 @@ foreach ($user in $VerifiedUserData) {
     #Invoke-Expression "$GamDir\gam.exe update user $LegacyUserMail $GoogleCustomAttribute01 $HRid" #CID00#### dry run #set HR ID - Confirm if this can be replicated to helpdesk user objects
     Write-Host "$GamDir\gam.exe update user $LegacyUserMail $GoogleCustomAttribute01 $HRid"
 
+    <# #CID004654 - user creation not needed
     Write-Host "send current calendar invite: $LegacyUserMail add acls reader $ReplacementUserMail ..."
     #Invoke-Expression "$GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail sendnotifications false" #CID00#### dry run
     Write-Host "$GamDir\gam.exe calendar $LegacyUserMail add acls reader $ReplacementUserMail sendnotifications false"
+    #>
 
     #<# #(un)comment to (not)create shared drive(s)
     #create/manage shared drives...
@@ -334,14 +342,16 @@ foreach ($user in $VerifiedUserData) {
     Write-Host "Firstname: $FirstName"
     Write-Host "Lastname: $LastName"
 
+    <# #CID004654 - user creation not needed
     Write-Host "Accept calendar invite: user $LegacyUserMail add calendar $ReplacementUserMail selected true ..."
     Invoke-Expression "$GamDir\gam.exe user $ReplacementUserMail add calendar $LegacyUserMail selected true" #CID00#### dry run
-
+    #>
     
-    start-sleep 3 # #TODO - update HRID
+    start-sleep 3 #update HRID
     Write-Host "update Replacement account HR ID..."
     Invoke-Expression "$GamDir\gam.exe update user $ReplacementUserMail $GoogleCustomAttribute01 $HRid" #CID00#### dry run #set HR ID - 
 }
+
     Write-Host "Add members to security groups ..."
         if (test-path $DataDir\*.lst) { remove-item $DataDir\*.lst -force -verbose } #force delete any .lst files if exist...
 
