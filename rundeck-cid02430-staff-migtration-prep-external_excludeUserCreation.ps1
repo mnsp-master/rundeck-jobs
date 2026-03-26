@@ -1,4 +1,4 @@
-$mnspver = "0.0.184.6"
+$mnspver = "0.0.184.7"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -96,7 +96,8 @@ Write-Host "CSV header: $GoogleGroupsHeader"
 $GroupNameSearchString = $($GoogleGroupsHeader[0].substring(0,11)) #first element of array, first 11 chars - TODO - better logic - also do not include names containing "security Group #"
 Write-Host "Group Search String: $GroupNameSearchString"
 
-#
+<#
+# Group creation...
 Invoke-Expression "$GamDir\gam.exe print groups query ""email:$GroupNameSearchString*"" > $tempcsv8" #check if group already exists...
 $GroupexistCheck = import-csv -Path $tempcsv8 #check if group already exists...
 Write-Host "Existing group(s):"
@@ -115,10 +116,7 @@ $GroupexistCheck.email
     Write-Host "$GamDir\gam.exe create group $GoogleGroupFQDN"
     Start-Sleep 2
     
-    <# #Not using security groups as of Nov 2025
-    Invoke-Expression "$GamDir\gam.exe update cigroup $GoogleGroupFQDN makesecuritygroup" #CID00#### dry run # set group label/type to security 
-    Write-Host "$GamDir\gam.exe update cigroup $GoogleGroupFQDN makesecuritygroup"
-    #>
+
 
     Start-sleep 2
         #set access controls for group from action array... ENHANCEMENT - migrate this to a single JSON control file route
@@ -178,6 +176,7 @@ $GroupexistCheck.email
 
     }
     }
+#>
 
 <# #CID004654 - user creation not needed
 Write-Host "Creating users in destination..."
@@ -399,4 +398,8 @@ Write-Host "Add members to mail dist groups ..."
 
 
 <#
+    <# #Not using security groups as of Nov 2025
+    Invoke-Expression "$GamDir\gam.exe update cigroup $GoogleGroupFQDN makesecuritygroup" #CID00#### dry run # set group label/type to security 
+    Write-Host "$GamDir\gam.exe update cigroup $GoogleGroupFQDN makesecuritygroup"
+    #>
 #>
