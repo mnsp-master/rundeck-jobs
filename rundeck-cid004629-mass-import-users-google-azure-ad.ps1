@@ -1,4 +1,4 @@
-$mnspver = "0.0.15"
+$mnspver = "0.0.16"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -39,6 +39,9 @@ Invoke-Expression "$GamDir\Gam.exe ou_and_children '$GoogleSourceBaseOU' print f
 $UsersToProcess = import-csv -path $tempcsv2
 Write-host "Number of users to process: " $UsersToProcess.count
 
+
+$password = Get-NewPassword
+Write-Host "Confirm Password function retrieved password: $password"
 
 DashedLine
 
