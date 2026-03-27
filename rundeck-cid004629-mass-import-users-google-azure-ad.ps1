@@ -27,9 +27,11 @@ Invoke-Expression "$GamDir\Gam.exe print orgs fromparent '$GoogleSourceBaseOU' >
 
 $GoogleSourceOUs = import-csv -path $tempcsv1
 
+<#
 foreach ($SourceGoogleOU in $GoogleSourceOUs) {
     Write-Host "Processing: $($SourceGoogleOU)"
 }
+#>
 
 Write-Host "Getting all users from supplied Source: $GoogleSourceBaseOU"
 Invoke-Expression "$GamDir\Gam.exe ou_and_children '$GoogleSourceBaseOU' print fields primaryEmail,firstname,lastname,displayname,orgUnitPath, custom MNSP.adminNumber > $tempcsv2"
