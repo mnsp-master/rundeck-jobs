@@ -1,4 +1,4 @@
-$mnspver = "0.0.13"
+$mnspver = "0.0.14"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -32,7 +32,7 @@ foreach ($SourceGoogleOU in $GoogleSourceOUs) {
 }
 
 Write-Host "Getting all users from supplied Source: $GoogleSourceBaseOU"
-Invoke-Expression "GamDir\Gam.exe ou_and_children '$GoogleSourceBaseOU' print fields primaryEmail,firstname,lastname,displayname,orgUnitPath, custom MNSP.adminNumber > $tempcsv"
+Invoke-Expression "GamDir\Gam.exe ou_and_children '$GoogleSourceBaseOU' print fields primaryEmail,firstname,lastname,displayname,orgUnitPath, custom MNSP.adminNumber > $tempcsv2"
 
 $UsersToProcess = import-csv -path $tempcsv2
 Write-host "Number of users to process: " $UsersToProcess.count
