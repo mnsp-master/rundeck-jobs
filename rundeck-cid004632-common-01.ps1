@@ -1,5 +1,32 @@
 Clear-Host
-$mnspver = "0.0.18"
+$mnspver = "0.0.19"
+
+Function Get-NewPassword {
+    $PwdUrl = $MNSPgetPasswordPRL
+
+    #failsafe password
+    $pwdFailsafe = "Blue&cat88"
+
+    
+    try {
+        Write-Host "Attempting to retrieve password from web service..."
+        $response = Invoke-WebRequest -Uri $PwdUrl -UseBasicParsing
+
+        # Extract the content from the response object and store it in a variable.
+        $password = $response.Content
+
+        # Return the generated password.
+        return $password
+    }
+    catch {
+        # If the web request fails, a detailed error message is logged.
+        Write-Error "Failed to retrieve password from $PwdUrl. Using failsafe password instead." -ErrorAction Stop
+
+        # Return the failsafe password as the function's output.
+        return $pwdFailsafe
+    }
+}
+
 
 ##############################################
 ## PRE Main section - prpepare environment ###
