@@ -1,11 +1,11 @@
 Clear-Host
-$mnspver = "0.0.19"
+$mnspver = "0.0.20"
 
 Function Get-NewPassword {
     $PwdUrl = $MNSPgetPasswordPRL
 
     #failsafe password
-    $pwdFailsafe = "Blue&cat88"
+    $pwdFailsafe = "$MNSPgetPasswordPRLfailsafe"
 
     
     try {
