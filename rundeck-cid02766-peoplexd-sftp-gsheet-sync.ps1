@@ -1,4 +1,4 @@
-$mnspver = "0.0.61"
+$mnspver = "0.0.62"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -66,7 +66,7 @@ foreach ( $report in $gsheetsData) {
                     #get-content $SourceSFTPFileNameComplete | % { if($_ -match ";") {write-host $_}}
                     get-content $SourceSFTPFileNameComplete | % { if($_ -match '"' -or $_ -match ";" ) {write-host $_}} # match semicolons or quotes
                     #Invoke-Expression ".\gam.exe sendemail $GmailRecipient subject '$GmailSubject as of $(get-date)' attach $transcriptlog"
-                    Invoke-Expression ".\gam.exe sendemail $GmailRecipient subject '$GmailSubject as of $(get-date -Format "dd-MM-YYYY HH:mm:ss")' attach $transcriptlog"
+                    Invoke-Expression ".\gam.exe sendemail $GmailRecipient subject '$GmailSubject as of $(get-date -Format "dd-MM-yyyy HH:mm:ss")' attach $transcriptlog"
 
                     #ENHANCEMENT - send offending line(s) to nominated mail recpient(s)
                 } else {
@@ -82,7 +82,7 @@ foreach ( $report in $gsheetsData) {
 
                    start-sleep 2
                    #Invoke-Expression ".\gam.exe user $GoogleWorkspaceMNSPsvcAccount update drivefile id $GoogleSheetID localfile $SourceSFTPFileNameCompleteTMP newfilename '$GoogleSheetReportName as of $(get-date)' columndelimiter ';'"
-                   Invoke-Expression ".\gam.exe user $GoogleWorkspaceMNSPsvcAccount update drivefile id $GoogleSheetID localfile $SourceSFTPFileNameCompleteTMP newfilename '$GoogleSheetReportName as of $(get-date -Format "dd-MM-YYYY HH:mm:ss")' columndelimiter ';'"
+                   Invoke-Expression ".\gam.exe user $GoogleWorkspaceMNSPsvcAccount update drivefile id $GoogleSheetID localfile $SourceSFTPFileNameCompleteTMP newfilename '$GoogleSheetReportName as of $(get-date -Format "dd-MM-yyyy HH:mm:ss")' columndelimiter ';'"
 
                 }
 
