@@ -1,4 +1,4 @@
-$mnspver = "0.0.6"
+$mnspver = "0.0.7"
 Clear-Host
 
 function DashedLine {
@@ -11,7 +11,7 @@ $now = $(Get-date -Format yyyyMMdd-HHmmss)
 $transcriptlog = "$LogDir\$(Get-date -Format yyyyMMdd-HHmmss)_transcript.log"
 $datadir = "$workdir/Data"
 
-$datasrc = "$dataDir/source3/"
+$datasrc = "$dataDir/source4/"
 $dataout = "$datadir/output/$now"
 $passports = "$dataout/250x250"
 $photosSrc = $(Get-ChildItem -Path $datasrc ) # | Select-Object -ExpandProperty FullName)
