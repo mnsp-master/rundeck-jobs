@@ -1,5 +1,5 @@
 
-$mnspver = "0.0.25"
+$mnspver = "0.0.26"
 Clear-Host
 
 function DashedLine {
@@ -86,9 +86,11 @@ foreach ($photo in $photosSrc) {
         Start-Sleep 1
 
         }
-        else {Write-Warning "No coordinates found for image: $filePath"} #no face detected in source image
-        Write-Host "try alternative python method..."
-        & python3 $workDir/cid04691.py $dataSrc $dataOut
+        else { 
+            Write-Warning "No coordinates found for image: $filePath"} #no face detected in source image
+            Write-Host "try alternative python method..."
+            & python3 $workDir/cid04691.py $dataSrc $dataOut
+
 
     DashedLine
 }
