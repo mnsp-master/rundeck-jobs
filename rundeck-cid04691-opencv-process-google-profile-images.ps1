@@ -1,4 +1,4 @@
-$mnspver = "0.0.7"
+$mnspver = "0.0.8"
 Clear-Host
 
 function DashedLine {
@@ -32,6 +32,9 @@ foreach ($photo in $photosSrc) {
     Write-Host "Processing Image: " $photo
     $filePath = $photo.FullName
     $fileName = $photo.name
+    Write-Host "Details:"
+    $filePath
+    $fileName
     
     $ImgDimensionX, $ImgDimensionY = ( & identify -format "%w,%h" $filePath).Split(',') #get image dimensions
     $ImgEXIFDateTimeOriginal = (& identify -format "%[EXIF:DateTimeOriginal]" $filePath) #get image creation date using EXIF
@@ -72,8 +75,11 @@ foreach ($photo in $photosSrc) {
         
         $IMG = $(Get-Date -Format HHmmss) #temporary unique filename generator
         & rembg i $dataout/$fileName $dataout/$IMG.png # use pyton library rembg to remove background 
-        
-        & convert $dataout/$fileName -resize 250x250 $passports/$fileName
+
+        #& convert $dataout/$IMG.png -background white -alpha remove -alpha off 
+
+        & convert $dataout/$IMG.png -resize 250x250 $passports/$fileName # reduce image with transparent
+        #& convert $dataout/$fileName -resize 250x250 $passports/$fileName
         
         Start-Sleep 1
 
