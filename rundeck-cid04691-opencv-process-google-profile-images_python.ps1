@@ -1,5 +1,5 @@
 
-$mnspver = "0.0.26_2"
+$mnspver = "0.0.26_3"
 Clear-Host
 
 function DashedLine {
@@ -47,7 +47,7 @@ foreach ($photo in $photosSrc) {
         if ([string]::IsNullOrWhiteSpace($imgCoordinates)) {
                 Write-Warning "No coordinates found for image: $filePath" #no face detected in source image
                 Write-Host "try alternative python method..."
-                & python3 $workDir/cid04691_01.py $fileName $dataOut
+                & python3 $workDir/cid04691_01.py $filePath $dataOut
                 #set coordinates from python processing... [TODO]
                 DashedLine
                 continue 
