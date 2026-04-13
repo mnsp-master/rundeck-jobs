@@ -1,4 +1,4 @@
-$mnspver = "0.0.10"
+$mnspver = "0.0.11"
 Clear-Host
 
 function DashedLine {
@@ -35,7 +35,7 @@ foreach ($photo in $photosSrc) {
     $fileBaseName = $photo.BaseName
     
     Write-Host "FullPath: $filePath"
-    Write-Hist "FileName: $fileName"
+    Write-Host "FileName: $fileName"
     Write-Host "BaseName: $fileBaseName `n"
     
     $ImgDimensionX, $ImgDimensionY = ( & identify -format "%w,%h" $filePath).Split(',') #get image dimensions
