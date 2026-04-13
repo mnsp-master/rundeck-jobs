@@ -1,4 +1,4 @@
-$mnspver = "0.0.12"
+$mnspver = "0.0.13"
 Clear-Host
 
 function DashedLine {
@@ -25,8 +25,6 @@ Write-Host "MNSP version:" $mnspver
 New-item -Path $dataout -ItemType Directory
 New-item -Path $passports -ItemType Directory
 DashedLine
-
-Clear-Host
 
 foreach ($photo in $photosSrc) {
     Write-Host "Processing Image Details:"
