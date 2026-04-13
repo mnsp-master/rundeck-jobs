@@ -1,5 +1,5 @@
 
-$mnspver = "0.0.22"
+$mnspver = "0.0.23"
 Clear-Host
 
 function DashedLine {
