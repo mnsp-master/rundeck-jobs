@@ -1,4 +1,4 @@
-$mnspver = "0.0.14"
+$mnspver = "0.0.15"
 Clear-Host
 
 function DashedLine {
@@ -74,7 +74,7 @@ foreach ($photo in $photosSrc) {
         & convert $filePath -crop "${CoordXY}x${CoordXY}+$OriginLeft+$OriginTop" +repage -gravity center -background white -extent "${CoordXY}x${CoordXY}" "$dataout/$fileName"
         
 
-        $TMPIMG = "{$BaseName}_$(Get-Date -Format HHmmss)"  #temporary unique filename generator
+        $TMPIMG = "${BaseName}_$(Get-Date -Format HHmmss)"  #temporary unique filename generator
         & rembg i $dataout/$fileName $dataout/$TMPIMG.png # use pyton library rembg to remove background 
 
         #& convert $dataout/$IMG.png -background white -alpha remove -alpha off 
@@ -86,6 +86,8 @@ foreach ($photo in $photosSrc) {
 
         }
         else {Write-Warning "No coordinates found for image: $filePath"} #no face detected in source image
+        #try alternative python method...
+
     DashedLine
 }
 
