@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_4"
+$mnspver = "0.0.26_5"
 Clear-Host
 
 function DashedLine {
@@ -48,7 +48,7 @@ foreach ($photo in $photosSrc) {
                 Write-Host "try alternative python method..."
                 & python3 $workDir/cid04691_01.py $filePath $dataOut
                 #set coordinates from python processing... [TODO]
-                $pythonCoords = importcsv -path $dataout/face_metadata.csv #update to use Variable [TODO]
+                $pythonCoords = import-csv -path $dataout/face_metadata.csv #update to use Variable [TODO]
                 Write-Host "Python Library coordinates..."
                 $pythonCoords
 
