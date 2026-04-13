@@ -1,4 +1,4 @@
-$mnspver = "0.0.16"
+$mnspver = "0.0.17"
 Clear-Host
 
 function DashedLine {
@@ -32,7 +32,7 @@ foreach ($photo in $photosSrc) {
     $fileName = $photo.name
     $fileBaseName = $photo.BaseName
     
-    Write-Host "FullPath: $filePath"
+    Write-Host "FilePath: $filePath"
     Write-Host "FileName: $fileName"
     Write-Host "BaseName: $fileBaseName `n"
     
@@ -74,12 +74,12 @@ foreach ($photo in $photosSrc) {
         & convert $filePath -crop "${CoordXY}x${CoordXY}+$OriginLeft+$OriginTop" +repage -gravity center -background white -extent "${CoordXY}x${CoordXY}" "$dataout/$fileName"
         
 
-        $TMPIMG = "${fileBaseName}_$(Get-Date -Format HHmmss)"  #temporary unique filename generator
-        & rembg i $dataout/$fileName $dataout/$TMPIMG.png # use pyton library rembg to remove background 
+        $TMPIMG1 = "${fileBaseName}_$(Get-Date -Format HHmmss)"  #temporary unique filename generator
+        & rembg i $dataout/$fileName $dataout/$TMPIMG1.png # use pyton library rembg to remove background 
 
-        #& convert $dataout/$IMG.png -background white -alpha remove -alpha off 
+        & convert $dataout/$TMPIMG1.png -background white -alpha remove -alpha off $dataout/$fileName #replaces transparent bg with solid white
 
-        & convert $dataout/$TMPIMG.png -resize 250x250 $passports/$fileName # reduce image with transparent
+        & convert $dataout/$fileName -resize 250x250 $passports/$fileName 
         #& convert $dataout/$fileName -resize 250x250 $passports/$fileName
         
         Start-Sleep 1
