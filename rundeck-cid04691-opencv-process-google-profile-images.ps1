@@ -1,4 +1,4 @@
-$mnspver = "0.0.8"
+$mnspver = "0.0.9"
 Clear-Host
 
 function DashedLine {
@@ -32,9 +32,11 @@ foreach ($photo in $photosSrc) {
     Write-Host "Processing Image: " $photo
     $filePath = $photo.FullName
     $fileName = $photo.name
+    $fileBaseName = $photo.BaseName
     Write-Host "Details:"
     $filePath
     $fileName
+    $fileBaseName
     
     $ImgDimensionX, $ImgDimensionY = ( & identify -format "%w,%h" $filePath).Split(',') #get image dimensions
     $ImgEXIFDateTimeOriginal = (& identify -format "%[EXIF:DateTimeOriginal]" $filePath) #get image creation date using EXIF
