@@ -1,10 +1,9 @@
-$mnspver = "0.0.5"
+$mnspver = "0.0.6"
 Clear-Host
 
 function DashedLine {
 Write-host "-----------------------------------------------------------`n"
 }
-
 
 $workdir = "$HOME/Documents/opencv-dev" #linux dev environment
 $LogDir = "$workdir/Logs"
@@ -42,7 +41,6 @@ foreach ($photo in $photosSrc) {
     
     if ($null -ne $imgCoordinates) { #check for detected face in source image
         
-        #Write-Host "Image Dimensions     :" $ImgDimensions
         Write-Host "Image Dimension X     :" $ImgDimensionX
         Write-Host "Image Dimension Y     :" $ImgDimensionY
         Write-Host "EXIF DateTimeOriginal :" $ImgEXIFDateTimeOriginal
@@ -61,14 +59,15 @@ foreach ($photo in $photosSrc) {
         
         $Coords = $($imgCoordinates.Split(" ")[2] )
         
-        $CoordXY = ([int]$Coords * 2) 
+        $CoordXY = ([int]$Coords * 2)
         
         Write-Host "New XY Coordinate     :" $CoordXY
         Write-Host "Output Image: " $dataout/$fileName
 
-        
+        #NOTE: can fail to give 1:1 ratio image under some source image secnarios...
         #& convert $filePath -crop $CoordXY$convertX$CoordXY+$OriginLeft+$OriginTop $dataout/$fileName
-        #force - not ideal
+
+        #resolves issue if detrmined co-ordinates are out of range of source image - not 1:1 ratio:
         & convert $filePath -crop "${CoordXY}x${CoordXY}+$OriginLeft+$OriginTop" +repage -gravity center -background white -extent "${CoordXY}x${CoordXY}" "$dataout/$fileName"
         
         $IMG = $(Get-Date -Format HHmmss) #temporary unique filename generator
@@ -76,7 +75,6 @@ foreach ($photo in $photosSrc) {
         
         & convert $dataout/$fileName -resize 250x250 $passports/$fileName
         
-        #Invoke-Expression "convert $dataout/$fileName -resize 250x250 $passports/$fileName"
         Start-Sleep 1
 
         }
@@ -100,5 +98,6 @@ Stop-Transcript
         #$CoordX = $($OriginLeft + ($unit * 4))
         #$CoordY = $($OriginTop + ($unit * 4))
         #Write-Host "New Y Coordinate     :" $CoordY
-        #Invoke-expression "convert $filePath -crop $CoordXY$convertX$CoordXY+$OriginLeft+$OriginTop $dataout/$fileName"
+    #Invoke-expression "convert $filePath -crop $CoordXY$convertX$CoordXY+$OriginLeft+$OriginTop $dataout/$fileName"
+    #Invoke-Expression "convert $dataout/$fileName -resize 250x250 $passports/$fileName"
 #>
