@@ -1,4 +1,4 @@
-$mnspver = "0.0.11"
+$mnspver = "0.0.12"
 Clear-Host
 
 function DashedLine {
@@ -75,12 +75,13 @@ foreach ($photo in $photosSrc) {
         #resolves issue if detrmined co-ordinates are out of range of source image - not 1:1 ratio:
         & convert $filePath -crop "${CoordXY}x${CoordXY}+$OriginLeft+$OriginTop" +repage -gravity center -background white -extent "${CoordXY}x${CoordXY}" "$dataout/$fileName"
         
-        $IMG = $(Get-Date -Format HHmmss) #temporary unique filename generator
-        & rembg i $dataout/$fileName $dataout/$IMG.png # use pyton library rembg to remove background 
+
+        $TMPIMG = {$BaseName + $(Get-Date -Format HHmmss)}  #temporary unique filename generator
+        & rembg i $dataout/$fileName $dataout/$TMPIMG.png # use pyton library rembg to remove background 
 
         #& convert $dataout/$IMG.png -background white -alpha remove -alpha off 
 
-        & convert $dataout/$IMG.png -resize 250x250 $passports/$fileName # reduce image with transparent
+        & convert $dataout/$TMPIMG.png -resize 250x250 $passports/$fileName # reduce image with transparent
         #& convert $dataout/$fileName -resize 250x250 $passports/$fileName
         
         Start-Sleep 1
