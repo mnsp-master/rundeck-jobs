@@ -1,3 +1,6 @@
+<<<<<<< HEAD
+$mnspver = "0.0.21"
+=======
 $mnspver = "0.0.20"
 Clear-Host
 
@@ -86,8 +89,13 @@ foreach ($photo in $photosSrc) {
 
         }
         else {Write-Warning "No coordinates found for image: $filePath"} #no face detected in source image
+<<<<<<< HEAD
+        Write-Host "try alternative python method..."
+        & python3 cid04691.py $dataSrc $dataOut
+=======
         #try alternative python method...
         & python3 $workDir/cid04691.py $dataDir $dataOut
+>>>>>>> d391f997d784177a2300e44124fe2064ccc76d71
 
     DashedLine
 }
