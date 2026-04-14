@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_19_15" #use python for all image coordinates
+$mnspver = "0.0.26_19_16" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -107,7 +107,7 @@ foreach ($photo in $photosSrc) {
                 
                 #$OriginLeft = $($imgCoordinates.Split(" ")[0] -$unit) #minus full unit
                 $OriginLeft = $($pythonCoords.CenterX - ($unit *2))
-                Write-Host "New Vertical Origin  :" $OriginLeft
+                Write-Host "New Vertical Origin   :" $OriginLeft
                 
                 #$Coords = $($imgCoordinates.Split(" ")[2] )
                 $Coords = $($unit * 2)
@@ -116,7 +116,7 @@ foreach ($photo in $photosSrc) {
                 $CoordXY = ($unit * 4)
                 
                 Write-Host "New XY Coordinate     :" $CoordXY
-                Write-Host "Output Image: " $dataout/$fileName
+                Write-Host "Output Image          : " $dataout/$fileName
 
                 if ($OriginTop -lt 0 -or $OriginLeft -lt 0) {
                 Write-Warning "One or more Origin values: $OriginTop $OriginLeft are negative, consider providing a better image..."
