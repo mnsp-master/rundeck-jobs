@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_19_14" #use python for all image coordinates
+$mnspver = "0.0.26_19_15" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -84,7 +84,7 @@ foreach ($photo in $photosSrc) {
         #only proceed if facial detection confidence is above 0.7 %
         $faceDetectionScore = $PythonCoords.confidence
         if ($faceDetectionScore -ge 0.7) {
-            Write-Host "Face detected with high confidence:" $faceDetectionScore
+            Write-Host "Face detected with confidence:" $faceDetectionScore
 
             #Write-Host "Face detected by facedetect Processing image..."
             #$imgCoordinatesCentre = ( & facedetect $filePath --best -c) # get center of image co-ordinates
@@ -119,7 +119,7 @@ foreach ($photo in $photosSrc) {
                 Write-Host "Output Image: " $dataout/$fileName
 
                 if ($OriginTop -lt 0 -or $OriginLeft -lt 0) {
-                Write-Warning "One or more Origin values: $OriginTop $OriginLeft are negative, consider sourcing a better image..."
+                Write-Warning "One or more Origin values: $OriginTop $OriginLeft are negative, consider providing a better image..."
                 }
 
                 #NOTE: can fail to give 1:1 ratio image under some source image secnarios...
