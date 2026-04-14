@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_19_7" #use python for all image coordinates
+$mnspver = "0.0.26_19_8" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -73,67 +73,64 @@ foreach ($photo in $photosSrc) {
                 $pythonCoords
                 $unit = [Math]::Round($pythonCoords.CenterX - $pythonCoords.StartX)
                 #Write-Host "Python determined Unit value:" $Unit 
-    #only proceed if facial detection confidence is above 0.7 %
-    $faceDetectionScore = $PythonCoords.confidence
-    if ($faceDetectionScore -ge 0.7)
-        Write-Host "Face detected with high confidence:" $faceDetectionScore
+        #only proceed if facial detection confidence is above 0.7 %
+        $faceDetectionScore = $PythonCoords.confidence
+        if ($faceDetectionScore -ge 0.7) {
+            Write-Host "Face detected with high confidence:" $faceDetectionScore
 
-        #Write-Host "Face detected by facedetect Processing image..."
-        #$imgCoordinatesCentre = ( & facedetect $filePath --best -c) # get center of image co-ordinates
-        
-        #if ($null -ne $imgCoordinates) { #check for detected face in source image
+            #Write-Host "Face detected by facedetect Processing image..."
+            #$imgCoordinatesCentre = ( & facedetect $filePath --best -c) # get center of image co-ordinates
             
-            Write-Host "Image Dimension X     :" $ImgDimensionX
-            Write-Host "Image Dimension Y     :" $ImgDimensionY
-            Write-Host "EXIF DateTimeOriginal :" $ImgEXIFDateTimeOriginal
-            #Write-Host "Derived Face coords   :" $imgCoordinates
-            #Write-Host "Derived face Center   :" $imgCoordinatesCentre
-            
-            #unit - detected bounding box divided in half
-            #$unit = $([Math]::Round($imgCoordinates.Split(" ")[3]/2)) # divide one of square values in half, rounded up to next whole number
-            Write-Host "Square Unit           :" $unit
-            
-            #$OriginTop = $($imgCoordinates.Split(" ")[1] -$unit) #new Horizontal Origin Value
-            $OriginTop = $($pythonCoords.CenterY - ($unit * 2)) #new Horizontal Origin Value
-            Write-Host "New Horizontal Origin :" $OriginTop
-            
-            #$OriginLeft = $($imgCoordinates.Split(" ")[0] -$unit) #minus full unit
-            $OriginLeft = $($pythonCoords.CenterX - ($unit *2))
-            Write-Host "New Vertical Origin  :" $OriginLeft
-            
-            #$Coords = $($imgCoordinates.Split(" ")[2] )
-            $Coords = $($unit * 2)
-            
-            #$CoordXY = ([int]$Coords * 2)
-            $CoordXY = ($unit * 4)
-            
-            Write-Host "New XY Coordinate     :" $CoordXY
-            Write-Host "Output Image: " $dataout/$fileName
+            #if ($null -ne $imgCoordinates) { #check for detected face in source image
+                
+                Write-Host "Image Dimension X     :" $ImgDimensionX
+                Write-Host "Image Dimension Y     :" $ImgDimensionY
+                Write-Host "EXIF DateTimeOriginal :" $ImgEXIFDateTimeOriginal
+                #Write-Host "Derived Face coords   :" $imgCoordinates
+                #Write-Host "Derived face Center   :" $imgCoordinatesCentre
+                
+                #unit - detected bounding box divided in half
+                #$unit = $([Math]::Round($imgCoordinates.Split(" ")[3]/2)) # divide one of square values in half, rounded up to next whole number
+                Write-Host "Square Unit           :" $unit
+                
+                #$OriginTop = $($imgCoordinates.Split(" ")[1] -$unit) #new Horizontal Origin Value
+                $OriginTop = $($pythonCoords.CenterY - ($unit * 2)) #new Horizontal Origin Value
+                Write-Host "New Horizontal Origin :" $OriginTop
+                
+                #$OriginLeft = $($imgCoordinates.Split(" ")[0] -$unit) #minus full unit
+                $OriginLeft = $($pythonCoords.CenterX - ($unit *2))
+                Write-Host "New Vertical Origin  :" $OriginLeft
+                
+                #$Coords = $($imgCoordinates.Split(" ")[2] )
+                $Coords = $($unit * 2)
+                
+                #$CoordXY = ([int]$Coords * 2)
+                $CoordXY = ($unit * 4)
+                
+                Write-Host "New XY Coordinate     :" $CoordXY
+                Write-Host "Output Image: " $dataout/$fileName
 
-            #NOTE: can fail to give 1:1 ratio image under some source image secnarios...
-            #& convert $filePath -crop $CoordXY$convertX$CoordXY+$OriginLeft+$OriginTop $dataout/$fileName
+                #NOTE: can fail to give 1:1 ratio image under some source image secnarios...
+                #& convert $filePath -crop $CoordXY$convertX$CoordXY+$OriginLeft+$OriginTop $dataout/$fileName
 
-            #resolves issue if detrmined co-ordinates are out of range of source image - not 1:1 ratio:
-            & convert $filePath -crop "${CoordXY}x${CoordXY}+$OriginLeft+$OriginTop" +repage -gravity center -background white -extent "${CoordXY}x${CoordXY}" "$dataout/$fileName"
+                #resolves issue if detrmined co-ordinates are out of range of source image - not 1:1 ratio:
+                & convert $filePath -crop "${CoordXY}x${CoordXY}+$OriginLeft+$OriginTop" +repage -gravity center -background white -extent "${CoordXY}x${CoordXY}" "$dataout/$fileName"
 
-            $TMPIMG1 = "${fileBaseName}_$(Get-Date -Format HHmmss)"  #temporary unique filename
-            & rembg i $dataout/$fileName $dataout/$TMPIMG1.png # use pyton library rembg to remove background 
+                $TMPIMG1 = "${fileBaseName}_$(Get-Date -Format HHmmss)"  #temporary unique filename
+                & rembg i $dataout/$fileName $dataout/$TMPIMG1.png # use pyton library rembg to remove background 
 
-            & convert $dataout/$TMPIMG1.png -background white -alpha remove -alpha off $dataout/$fileName #replaces transparent bg with solid white
+                & convert $dataout/$TMPIMG1.png -background white -alpha remove -alpha off $dataout/$fileName #replaces transparent bg with solid white
 
-            & convert $dataout/$fileName -resize 250x250 $passports/$fileName #produce 250x250 pixel image in $passports directory
-            
-            remove-item $dataout/$TMPIMG1.png -force -verbose # delete temp file
-            
-            Start-Sleep 1
-
-        #    }
-        #    else {
-
-        DashedLine
-    } else {
-        Write-Warning "No Face detected for file: $filePath"
+                & convert $dataout/$fileName -resize 250x250 $passports/$fileName #produce 250x250 pixel image in $passports directory
+                
+                remove-item $dataout/$TMPIMG1.png -force -verbose # delete temp file
+                
+                Start-Sleep 1
+            DashedLine
+        } else {
+            Write-Warning "No Face detected for file: $filePath"
     }
+}
 
 Write-Host "Cleaning up temporary files..."
 remove-item $dataout/*.csv -force -verbose
