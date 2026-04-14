@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_19_12" #use python for all image coordinates
+$mnspver = "0.0.26_19_13" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -141,9 +141,12 @@ foreach ($photo in $photosSrc) {
 
                 #remove background from source image first...
                 $TMPIMG1 = "${fileBaseName}_$(Get-Date -Format HHmmss)"  #temporary unique filename
-                & rembg i $FilePath $dataOut/$TMPIMG1.png # use pyton library rembg to remove background
+                #& rembg i $FilePath $dataOut/$TMPIMG1.png # use pyton library rembg to remove background
+                & rembg i -m u2net -bgc 255 255 255 255 -a -ae 15 $FilePath $dataOut/$TMPIMG1.png # use pyton library rembg to replace background with solid white
+
                 & convert $dataout/$TMPIMG1.png -background white -alpha remove -alpha off $dataout/$fileName #replaces transparent bg with solid white
-                & convert $dataout/$TMPIMG1.png -crop "${CoordXY}x${CoordXY}+$OriginLeft+$OriginTop" +repage -gravity center -background white -extent "${CoordXY}x${CoordXY}" "$dataout/$fileName"
+                #& convert $dataout/$TMPIMG1.png -crop "${CoordXY}x${CoordXY}+$OriginLeft+$OriginTop" +repage -gravity center -background white -extent "${CoordXY}x${CoordXY}" "$dataout/$fileName"
+                & convert $dataout/$TMPIMG1.png -crop "${CoordXY}x${CoordXY}+$OriginLeft+$OriginTop" +repage -gravity center -extent "${CoordXY}x${CoordXY}" "$dataout/$fileName"
                 & convert $dataout/$fileName -resize 250x250 $passports/$fileName #produce 250x250 pixel image in $passports directory
                 remove-item $dataout/$TMPIMG1.png -force -verbose # delete temp file
 
