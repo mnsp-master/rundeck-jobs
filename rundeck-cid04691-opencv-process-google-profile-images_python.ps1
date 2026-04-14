@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_6"
+$mnspver = "0.0.26_7"
 Clear-Host
 
 function DashedLine {
@@ -19,8 +19,20 @@ $ImgDimensions = @()
 $ImgDimensionX = @()
 $ImgDimensionY = @()
 $convertX = "x"
+
 Start-Transcript -Path $transcriptlog -Force -NoClobber -Append
 Write-Host "MNSP version:" $mnspver
+
+#get python script from github
+    $gitHubPythonSrcURI = "https://raw.githubusercontent.com/mnsp-master/rundeck-jobs/refs/heads/main/rundeck-cid04691-opencv-process-images_python.py"
+    $pythonScriptName = ($gitHubPythonSrcURI -split '/')[-1]
+
+    if (Test-Path "$workdir/$pythonScriptName") {
+        Remove-item "$workdir/$pythonScriptName" -Force -verbose
+    }
+
+    Write-host "downloading python script: $pythonScriptName from github..."
+    invoke-webrequest -Uri $gitHubPythonSrcURI -OutFile "$workdir/$pythonScriptName"
 
 New-item -Path $dataout -ItemType Directory
 New-item -Path $passports -ItemType Directory
@@ -46,7 +58,9 @@ foreach ($photo in $photosSrc) {
         if ([string]::IsNullOrWhiteSpace($imgCoordinates)) {
                 Write-Warning "No coordinates found for image: $filePath" #no face detected in source image
                 Write-Host "try alternative python method..."
-                & python3 $workDir/cid04691_01.py $filePath $dataOut #update to use Variable(s) [TODO]
+                #& python3 $workDir/cid04691_01.py $filePath $dataOut #update to use Variable(s) [TODO]
+                & python3 "$workDir/$pythonScriptName" $filePath $dataOut
+
                 #set coordinates from python processing... [TODO]
                 $pythonCoords = import-csv -path $dataout/face_metadata.csv #update to use Variable(s) [TODO]
                 Write-Host "Python Library coordinates..."
