@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_15"
+$mnspver = "0.0.26_16"
 Clear-Host
 
 function DashedLine {
@@ -70,6 +70,8 @@ foreach ($photo in $photosSrc) {
                 $pythonCoords = import-csv -path $dataout/$FileBaseName.csv #update to use Variable(s) [IN PROGRESS]
                 Write-Host "Python Library coordinates..."
                 $pythonCoords
+                $unit = [Math]::Round([double]$pythonCoords.CentreX - [double]$pythonCoords.StartX)
+                Write-Host "Python determined Unit value:" $Unit 
 
                 DashedLine
                 continue 
