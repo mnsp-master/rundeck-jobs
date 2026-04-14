@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_19_10" #use python for all image coordinates
+$mnspver = "0.0.26_19_11" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -118,6 +118,10 @@ foreach ($photo in $photosSrc) {
                 Write-Host "New XY Coordinate     :" $CoordXY
                 Write-Host "Output Image: " $dataout/$fileName
 
+                if ($OriginTop -lt 0 -or $OriginLeft -lt 0) {
+                Write-Warning "One or more Origin values: $OriginTop $OriginLeft are negative, consider sourcing a better image..."
+                }
+
                 #NOTE: can fail to give 1:1 ratio image under some source image secnarios...
                 #& convert $filePath -crop $CoordXY$convertX$CoordXY+$OriginLeft+$OriginTop $dataout/$fileName
 
@@ -132,6 +136,7 @@ foreach ($photo in $photosSrc) {
                 & convert $dataout/$fileName -resize 250x250 $passports/$fileName #produce 250x250 pixel image in $passports directory
                 
                 remove-item $dataout/$TMPIMG1.png -force -verbose # delete temp file
+
                 
                 Start-Sleep 1
             DashedLine
