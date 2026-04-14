@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_19_9" #use python for all image coordinates
+$mnspver = "0.0.26_19_10" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -75,7 +75,8 @@ foreach ($photo in $photosSrc) {
                 $pythonCoords
                 $unit = [Math]::Round($pythonCoords.CenterX - $pythonCoords.StartX)
                     } else {
-                    Write-Host "No Face csv detected"
+                    Write-Host "No Face csv detected, moving to next image..."
+                    DashedLine
                     continue
                 }
 
