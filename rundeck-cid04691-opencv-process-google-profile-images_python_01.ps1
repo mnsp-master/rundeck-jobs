@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_19_8" #use python for all image coordinates
+$mnspver = "0.0.26_19_9" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -68,10 +68,17 @@ foreach ($photo in $photosSrc) {
                 & python3 "$workDir/$pythonScriptName" $filePath $dataOut
 
                 #set coordinates from python processing...[IN PROGRESS]
+                #check for csv (none produced if no faces detected)
+                if (Test-path -path $dataout/$FileBaseName.csv) {
                 $pythonCoords = import-csv -path $dataout/$FileBaseName.csv #update to use Variable(s) 
                 Write-Host "Python Library coordinates..."
                 $pythonCoords
                 $unit = [Math]::Round($pythonCoords.CenterX - $pythonCoords.StartX)
+                    } else {
+                    Write-Host "No Face csv detected"
+                    continue
+                }
+
                 #Write-Host "Python determined Unit value:" $Unit 
         #only proceed if facial detection confidence is above 0.7 %
         $faceDetectionScore = $PythonCoords.confidence
