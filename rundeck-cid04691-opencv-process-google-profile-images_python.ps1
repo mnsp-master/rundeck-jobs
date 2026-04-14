@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_7"
+$mnspver = "0.0.26_9"
 Clear-Host
 
 function DashedLine {
@@ -24,15 +24,20 @@ Start-Transcript -Path $transcriptlog -Force -NoClobber -Append
 Write-Host "MNSP version:" $mnspver
 
 #get python script from github
-    $gitHubPythonSrcURI = "https://raw.githubusercontent.com/mnsp-master/rundeck-jobs/refs/heads/main/rundeck-cid04691-opencv-process-images_python.py"
+    $gitHubPythonSrcURI = "https://raw.githubusercontent.com/mnsp-master/rundeck-jobs/refs/heads/main/rundeck-cid04691-opencv-process-images_python1.py"
     $pythonScriptName = ($gitHubPythonSrcURI -split '/')[-1]
 
     if (Test-Path "$workdir/$pythonScriptName") {
         Remove-item "$workdir/$pythonScriptName" -Force -verbose
     }
 
+    try {
     Write-host "downloading python script: $pythonScriptName from github..."
     invoke-webrequest -Uri $gitHubPythonSrcURI -OutFile "$workdir/$pythonScriptName"
+    } catch {
+        Write-Error "Failed to download $pythonScriptName Error: $($_.Exception.Message)"
+        exit 1
+    }
 
 New-item -Path $dataout -ItemType Directory
 New-item -Path $passports -ItemType Directory
@@ -57,7 +62,7 @@ foreach ($photo in $photosSrc) {
     # if facedetect fails, trigger python fallback
         if ([string]::IsNullOrWhiteSpace($imgCoordinates)) {
                 Write-Warning "No coordinates found for image: $filePath" #no face detected in source image
-                Write-Host "try alternative python method..."
+                Write-Host "Trying alternative python method using: $pythonScriptName"
                 #& python3 $workDir/cid04691_01.py $filePath $dataOut #update to use Variable(s) [TODO]
                 & python3 "$workDir/$pythonScriptName" $filePath $dataOut
 
