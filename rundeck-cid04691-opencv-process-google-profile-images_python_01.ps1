@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_19_4" #use python for all image coordinates
+$mnspver = "0.0.26_19_5" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -128,6 +128,10 @@ foreach ($photo in $photosSrc) {
 
     DashedLine
 }
+
+Write-Host "Cleaning up temporary files..."
+remove-item $dataout/*.csv -force -verbose
+#remove-item $dataout/detected*.* -force -verbose
 
 Stop-Transcript
 
