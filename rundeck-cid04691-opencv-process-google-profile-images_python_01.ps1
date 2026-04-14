@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_19_2" #use python for all image coordinates
+$mnspver = "0.0.26_19_3" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -82,26 +82,27 @@ foreach ($photo in $photosSrc) {
         Write-Host "Image Dimension X     :" $ImgDimensionX
         Write-Host "Image Dimension Y     :" $ImgDimensionY
         Write-Host "EXIF DateTimeOriginal :" $ImgEXIFDateTimeOriginal
-        Write-Host "Derived Face coords   :" $imgCoordinates
-        Write-Host "Derived face Center   :" $imgCoordinatesCentre
+        #Write-Host "Derived Face coords   :" $imgCoordinates
+        #Write-Host "Derived face Center   :" $imgCoordinatesCentre
         
         #unit - detected bounding box divided in half
         #$unit = $([Math]::Round($imgCoordinates.Split(" ")[3]/2)) # divide one of square values in half, rounded up to next whole number
         Write-Host "Square Unit           :" $unit
         
         #$OriginTop = $($imgCoordinates.Split(" ")[1] -$unit) #new Horizontal Origin Value
-        $OriginTop = $([Math]::$pythonCoords.CenterY - ($unit * 2)) #new Horizontal Origin Value
+        Write-Host "Maths: $pythonCoords.CenterY - ($uint * 2)"
+        $OriginTop = $($pythonCoords.CenterY - ($unit * 2)) #new Horizontal Origin Value
         Write-Host "New Horizontal Origin :" $OriginTop
         
         #$OriginLeft = $($imgCoordinates.Split(" ")[0] -$unit) #minus full unit
-        $OriginLeft = $([Math]::$pythonCoords.CenterX - ($unit *2))
+        $OriginLeft = $($pythonCoords.CenterX - ($unit *2))
         Write-Host "New Vertical Origin  :" $OriginLeft
         
         #$Coords = $($imgCoordinates.Split(" ")[2] )
-        $Coords = $([int]$unit * 2)
+        $Coords = $($unit * 2)
         
         #$CoordXY = ([int]$Coords * 2)
-        $CoordXY = ([int]$unit * 4)
+        $CoordXY = ($unit * 4)
         
         Write-Host "New XY Coordinate     :" $CoordXY
         Write-Host "Output Image: " $dataout/$fileName
