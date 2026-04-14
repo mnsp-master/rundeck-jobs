@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_19_3" #use python for all image coordinates
+$mnspver = "0.0.26_19_4" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -61,8 +61,8 @@ foreach ($photo in $photosSrc) {
 
     # if facedetect fails, trigger python fallback
         
-                Write-Warning "No coordinates found for image: $filePath" #no face detected in source image
-                Write-Host "Trying alternative python method using: $pythonScriptName"
+                #Write-Warning "No coordinates found for image: $filePath" #no face detected in source image
+                #Write-Host "Trying alternative python method using: $pythonScriptName"
                 
                 #generate image with bounding box,center and csv data of metadata for image...
                 & python3 "$workDir/$pythonScriptName" $filePath $dataOut
@@ -90,7 +90,6 @@ foreach ($photo in $photosSrc) {
         Write-Host "Square Unit           :" $unit
         
         #$OriginTop = $($imgCoordinates.Split(" ")[1] -$unit) #new Horizontal Origin Value
-        Write-Host "Maths: $pythonCoords.CenterY - ($uint * 2)"
         $OriginTop = $($pythonCoords.CenterY - ($unit * 2)) #new Horizontal Origin Value
         Write-Host "New Horizontal Origin :" $OriginTop
         
