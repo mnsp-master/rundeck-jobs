@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_9"
+$mnspver = "0.0.26_10"
 Clear-Host
 
 function DashedLine {
@@ -24,7 +24,7 @@ Start-Transcript -Path $transcriptlog -Force -NoClobber -Append
 Write-Host "MNSP version:" $mnspver
 
 #get python script from github
-    $gitHubPythonSrcURI = "https://raw.githubusercontent.com/mnsp-master/rundeck-jobs/refs/heads/main/rundeck-cid04691-opencv-process-images_python1.py"
+    $gitHubPythonSrcURI = "https://raw.githubusercontent.com/mnsp-master/rundeck-jobs/refs/heads/main/rundeck-cid04691-opencv-process-images_python.py"
     $pythonScriptName = ($gitHubPythonSrcURI -split '/')[-1]
 
     if (Test-Path "$workdir/$pythonScriptName") {
