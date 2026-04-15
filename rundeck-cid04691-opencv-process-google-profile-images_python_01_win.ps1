@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_19_16_10" #use python for all image coordinates
+$mnspver = "0.0.26_19_16_11" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -67,7 +67,8 @@ foreach ($photo in $photosSrc) {
         start-sleep 1
         $metaData = & "$workdir\$exiftoolAppVersion\exiftool.exe" -json $filePath | convertFrom-Json
         $ImgDimensionX = $metaData.ImageWidth
-        $ImgDimensionY = $metaData.Imageheight       
+        $ImgDimensionY = $metaData.Imageheight
+        Write-Host "Updated image dimensions:" $ImgDimensionX $ImgDimensionY 
 
     }
 
