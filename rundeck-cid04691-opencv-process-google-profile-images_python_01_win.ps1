@@ -1,19 +1,19 @@
-$mnspver = "0.0.26_19_16_1" #use python for all image coordinates
+$mnspver = "0.0.26_19_16_2" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
 Write-host "-----------------------------------------------------------`n"
 }
 
-$workdir = "$HOME/Documents/opencv-dev" #linux dev environment
-$LogDir = "$workdir/Logs"
+$workdir = "$HOME\opencv-dev" #windows dev environment
+$LogDir = "$workdir\Logs"
 $now = $(Get-date -Format yyyyMMdd-HHmmss)
 $transcriptlog = "$LogDir\$(Get-date -Format yyyyMMdd-HHmmss)_transcript.log"
-$datadir = "$workdir/Data"
+$datadir = "$workdir\Data"
 
-$datasrc = "$dataDir/source4/"
-$dataout = "$datadir/output/$now"
-$passports = "$dataout/250x250"
+$datasrc = "$dataDir\source4\"
+$dataout = "$datadir\output\$now"
+$passports = "$dataout\250x250"
 $photosSrc = $(Get-ChildItem -Path $datasrc ) # | Select-Object -ExpandProperty FullName)
 $ImgDimensions = @()
 $ImgDimensionX = @()
@@ -24,7 +24,7 @@ Start-Transcript -Path $transcriptlog -Force -NoClobber -Append
 Write-Host "MNSP version:" $mnspver
 
 #get python script from github
-    $gitHubPythonSrcURI = "https://raw.githubusercontent.com/mnsp-master/rundeck-jobs/refs/heads/main/rundeck-cid04691-opencv-process-images_python_dev-02.py"
+    $gitHubPythonSrcURI = "https://raw.githubusercontent.com/mnsp-master/rundeck-jobs/refs/heads/main/rundeck-cid04691-opencv-process-images_python_dev-02_win.py"
     $pythonScriptName = ($gitHubPythonSrcURI -split '/')[-1]
 
     if (Test-Path "$workdir/$pythonScriptName") {
