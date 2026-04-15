@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_19_16_18" #use python for all image coordinates
+$mnspver = "0.0.26_19_16_19" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -140,7 +140,7 @@ foreach ($photo in $photosSrc) {
             
             & $WorkDir\ImageMagick\magick.exe $passports\$fileName `
             "(" +clone -threshold 101% -fill white -draw "circle 125,125 125,0" ")" `
-            -alpha off -compose copy_opacity -composite -background gray -alpha remove -alpha off `
+            -alpha off -compose copy_opacity -composite -background "#F1F3F4" -alpha remove -alpha off `
             $passports\${FileBaseName}_vignette.png
 
 
