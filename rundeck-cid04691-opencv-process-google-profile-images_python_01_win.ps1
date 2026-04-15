@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_19_16_19" #use python for all image coordinates
+$mnspver = "0.0.26_19_16_20" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
