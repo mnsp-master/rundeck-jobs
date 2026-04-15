@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_19_16_5" #use python for all image coordinates
+$mnspver = "0.0.26_19_16_6" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -53,8 +53,8 @@ foreach ($photo in $photosSrc) {
     Write-Host "FileName: $fileName"
     Write-Host "BaseName: $fileBaseName `n"
     
-    $ImgDimensionX, $ImgDimensionY = ( & identify -format "%w,%h" $filePath).Split(',') #get image dimensions
-    $ImgEXIFDateTimeOriginal = (& identify -format "%[EXIF:DateTimeOriginal]" $filePath) #get image creation date using EXIF
+    # $ImgDimensionX, $ImgDimensionY = ( & identify -format "%w,%h" $filePath).Split(',') #get image dimensions #linx need win alternative [TODO]
+    # $ImgEXIFDateTimeOriginal = (& identify -format "%[EXIF:DateTimeOriginal]" $filePath) #get image creation date using EXIF #linx need win alternative [TODO]
 
     # attempt detection using facedetect
     #$imgCoordinates = ( & facedetect $filePath --best) # get bounding box of face
@@ -69,8 +69,8 @@ foreach ($photo in $photosSrc) {
 
                 #set coordinates from python processing...[IN PROGRESS]
                 #check for csv (none produced if no faces detected)
-                if (Test-path -path $dataout/$FileBaseName.csv) {
-                $pythonCoords = import-csv -path $dataout/$FileBaseName.csv #update to use Variable(s) 
+                if (Test-path -path $dataout\$FileBaseName.csv) {
+                $pythonCoords = import-csv -path $dataout\$FileBaseName.csv #update to use Variable(s) 
                 Write-Host "Python Library coordinates..."
                 $pythonCoords
                 $unit = [Math]::Round($pythonCoords.CenterX - $pythonCoords.StartX)
@@ -116,7 +116,7 @@ foreach ($photo in $photosSrc) {
                 $CoordXY = ($unit * 4)
                 
                 Write-Host "New XY Coordinate     :" $CoordXY
-                Write-Host "Output Image          : " $dataout/$fileName
+                Write-Host "Output Image          : " $dataout\$fileName
 
                 if ($OriginTop -lt 0 -or $OriginLeft -lt 0) {
                 Write-Warning "One or more Origin values: $OriginTop $OriginLeft are negative, consider providing a better image..."
@@ -144,11 +144,11 @@ foreach ($photo in $photosSrc) {
                 #& rembg i $FilePath $dataOut/$TMPIMG1.png # use pyton library rembg to remove background
                 & rembg i -m u2net -bgc 255 255 255 255 -a -ae 5 $FilePath $dataOut/$TMPIMG1.png # use pyton library rembg to replace background with solid white
 
-                & convert $dataout/$TMPIMG1.png -background white -alpha remove -alpha off $dataout/$fileName #replaces transparent bg with solid white
+                & convert $dataout\$TMPIMG1.png -background white -alpha remove -alpha off $dataout/$fileName #replaces transparent bg with solid white
                 #& convert $dataout/$TMPIMG1.png -crop "${CoordXY}x${CoordXY}+$OriginLeft+$OriginTop" +repage -gravity center -background white -extent "${CoordXY}x${CoordXY}" "$dataout/$fileName"
-                & convert $dataout/$TMPIMG1.png -crop "${CoordXY}x${CoordXY}+$OriginLeft+$OriginTop" +repage -gravity center -extent "${CoordXY}x${CoordXY}" "$dataout/$fileName"
-                & convert $dataout/$fileName -resize 250x250 $passports/$fileName #produce 250x250 pixel image in $passports directory
-                remove-item $dataout/$TMPIMG1.png -force -verbose # delete temp file
+                & convert $dataout\$TMPIMG1.png -crop "${CoordXY}x${CoordXY}+$OriginLeft+$OriginTop" +repage -gravity center -extent "${CoordXY}x${CoordXY}" "$dataout/$fileName"
+                & convert $dataout\$fileName -resize 250x250 $passports/$fileName #produce 250x250 pixel image in $passports directory
+                remove-item $dataout\$TMPIMG1.png -force -verbose # delete temp file
 
                 
                 Start-Sleep 1
@@ -159,8 +159,8 @@ foreach ($photo in $photosSrc) {
 }
 
 Write-Host "Cleaning up temporary files..."
-remove-item $dataout/*.csv -force -verbose
-remove-item $dataout/detected*.* -force -verbose
+remove-item $dataout\*.csv -force -verbose
+remove-item $dataout\detected*.* -force -verbose
 
 Stop-Transcript
 
