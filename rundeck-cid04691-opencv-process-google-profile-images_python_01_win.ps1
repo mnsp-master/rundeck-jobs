@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_19_16_9" #use python for all image coordinates
+$mnspver = "0.0.26_19_16_10" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -59,6 +59,19 @@ foreach ($photo in $photosSrc) {
     Write-Host "FilePath: $filePath"
     Write-Host "FileName: $fileName"
     Write-Host "BaseName: $fileBaseName `n"
+
+    #resize source image if original is too large - opencv can have issues if image is too large
+    if ( $ImgDimensionX -gt 1030 ) {
+        Write-Warning "Source Image: $filename is too large for open-cv processing, scaling down..."
+        & $WorkDir\ImageMagick\magick.exe $filePath -resize "1024X>" $filePath
+        start-sleep 1
+        $metaData = & "$workdir\$exiftoolAppVersion\exiftool.exe" -json $filePath | convertFrom-Json
+        $ImgDimensionX = $metaData.ImageWidth
+        $ImgDimensionY = $metaData.Imageheight       
+
+    }
+
+
     
     # $ImgDimensionX, $ImgDimensionY = ( & identify -format "%w,%h" $filePath).Split(',') #get image dimensions #linx need win alternative [TODO]
     # $ImgEXIFDateTimeOriginal = (& identify -format "%[EXIF:DateTimeOriginal]" $filePath) #get image creation date using EXIF #linx need win alternative [TODO]
