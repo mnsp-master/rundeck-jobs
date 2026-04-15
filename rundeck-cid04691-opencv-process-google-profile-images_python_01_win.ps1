@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_19_16_4" #use python for all image coordinates
+$mnspver = "0.0.26_19_16_5" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -65,7 +65,7 @@ foreach ($photo in $photosSrc) {
                 #Write-Host "Trying alternative python method using: $pythonScriptName"
                 
                 #generate image with bounding box,center and csv data of metadata for image...
-                & python3 "$workDir/$pythonScriptName" $filePath $dataOut
+                & python "$workDir\$pythonScriptName" $filePath $dataOut
 
                 #set coordinates from python processing...[IN PROGRESS]
                 #check for csv (none produced if no faces detected)
