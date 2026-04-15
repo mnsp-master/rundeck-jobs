@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_19_16_12" #use python for all image coordinates
+$mnspver = "0.0.26_19_16_13" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -29,13 +29,13 @@ Write-Host "MNSP version:" $mnspver
     $gitHubPythonSrcURI = "https://raw.githubusercontent.com/mnsp-master/rundeck-jobs/refs/heads/main/rundeck-cid04691-opencv-process-images_python_dev-02-win.py"
     $pythonScriptName = ($gitHubPythonSrcURI -split '/')[-1]
 
-    if (Test-Path "$workdir/$pythonScriptName") {
-        Remove-item "$workdir/$pythonScriptName" -Force -verbose
+    if (Test-Path "$workdir\$pythonScriptName") {
+        Remove-item "$workdir\$pythonScriptName" -Force -verbose
     }
 
     try {
     Write-host "downloading python script: $pythonScriptName from github..."
-    invoke-webrequest -Uri $gitHubPythonSrcURI -OutFile "$workdir/$pythonScriptName"
+    invoke-webrequest -Uri $gitHubPythonSrcURI -OutFile "$workdir\$pythonScriptName"
     } catch {
         Write-Error "Failed to download $pythonScriptName Error: $($_.Exception.Message)"
         exit 1
@@ -60,7 +60,7 @@ foreach ($photo in $photosSrc) {
     Write-Host "FileName: $fileName"
     Write-Host "BaseName: $fileBaseName `n"
 
-    #resize source image if original is too large - opencv can have issues if image is too large
+    #resize source image if original is too large - opencv can return unpredictable results if the source image is too large
     if ( $ImgDimensionX -gt 1030 ) {
         Write-Warning "Source Image: $filename is too large for open-cv processing, scaling down..."
         & $WorkDir\ImageMagick\magick.exe $filePath -resize "1024X>" $filePath
@@ -68,26 +68,25 @@ foreach ($photo in $photosSrc) {
         $metaData = & "$workdir\$exiftoolAppVersion\exiftool.exe" -json $filePath | convertFrom-Json
         $ImgDimensionX = $metaData.ImageWidth
         $ImgDimensionY = $metaData.Imageheight
-        Write-Host "Updated image dimensions:" $ImgDimensionX $ImgDimensionY 
-
+        Write-Host "Updated image dimensions:" $ImgDimensionX $ImgDimensionY
     }
 
                 
-                #generate image with bounding box,center and csv data of metadata for image...
-                & python "$workDir\$pythonScriptName" $filePath $dataOut
+        #generate image with bounding box,center and csv data of metadata for image...
+        & python "$workDir\$pythonScriptName" $filePath $dataOut
 
-                #set coordinates from python processing...
-                #check for csv (none produced if no faces detected)
-                if (Test-path -path $dataout\$FileBaseName.csv) {
-                $pythonCoords = import-csv -path $dataout\$FileBaseName.csv #update to use Variable(s) 
-                Write-Host "Python Library coordinates..."
-                $pythonCoords
-                $unit = [Math]::Round($pythonCoords.CenterX - $pythonCoords.StartX)
-                    } else {
-                    Write-Host "No Face csv detected, moving to next image..."
-                    DashedLine
-                    continue
-                }
+            #set coordinates from python processing...
+            #check for csv (none produced if no faces detected)
+            if (Test-path -path $dataout\$FileBaseName.csv) {
+            $pythonCoords = import-csv -path $dataout\$FileBaseName.csv #update to use Variable(s) 
+            Write-Host "Python Library coordinates..."
+            $pythonCoords
+            $unit = [Math]::Round($pythonCoords.CenterX - $pythonCoords.StartX)
+                } else {
+                Write-Host "No Face csv detected, moving to next image..."
+                DashedLine
+                continue
+            }
 
         #only proceed if facial detection confidence is above 0.7 %
         $faceDetectionScore = $PythonCoords.confidence
