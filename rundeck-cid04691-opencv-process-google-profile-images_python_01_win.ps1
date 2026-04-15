@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_19_16_6" #use python for all image coordinates
+$mnspver = "0.0.26_19_16_7" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -14,6 +14,8 @@ $datadir = "$workdir\Data"
 $datasrc = "$dataDir\source4\"
 $dataout = "$datadir\output\$now"
 $passports = "$dataout\250x250"
+$exiftoolAppVersion = "exiftool-13.55_64" # https://exiftool.org/
+
 $photosSrc = $(Get-ChildItem -Path $datasrc ) # | Select-Object -ExpandProperty FullName)
 $ImgDimensions = @()
 $ImgDimensionX = @()
@@ -49,6 +51,11 @@ foreach ($photo in $photosSrc) {
     $fileName = $photo.name
     $fileBaseName = $photo.BaseName
     
+    $metaData = & "$workdir\$exiftoolAppVersion\exiftool.exe" -json $filePath | convertFrom-Json
+    $ImgEXIFDateTimeOriginal = $metaData.DateTimeOriginal
+    $ImgDimensionX = $metaData.ImageWidth
+    $ImgDimensionY = $metaData.Imageheight
+
     Write-Host "FilePath: $filePath"
     Write-Host "FileName: $fileName"
     Write-Host "BaseName: $fileBaseName `n"
