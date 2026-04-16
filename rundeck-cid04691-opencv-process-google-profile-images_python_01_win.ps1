@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_19_16_30" #use python for all image coordinates
+$mnspver = "0.0.26_19_16_31" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -102,7 +102,7 @@ foreach ($photo in $photosSrc) {
         }
         #>
 
-        if ($faceDetectionScore -ge $ConfidenceLevel ) {
+        if ($faceDetectionScore -gt $ConfidenceLevel ) {
             Write-Host "Face detected with confidence:" $faceDetectionScore
             Write-Host "Image Dimension X     :" $ImgDimensionX
             Write-Host "Image Dimension Y     :" $ImgDimensionY
