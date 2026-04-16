@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_19_16_22" #use python for all image coordinates
+$mnspver = "0.0.26_19_16_23" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -21,7 +21,7 @@ $ImgDimensions = @()
 $ImgDimensionX = @()
 $ImgDimensionY = @()
 $convertX = "x"
-$ConfidenceLevel = "0.9" #facedetection confidence level
+$ConfidenceLevel = "0.85" #facedetection confidence level
 
 Start-Transcript -Path $transcriptlog -Force -NoClobber -Append
 Write-Host "MNSP version:" $mnspver
