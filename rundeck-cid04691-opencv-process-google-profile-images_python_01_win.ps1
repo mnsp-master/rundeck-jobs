@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_19_16_25" #use python for all image coordinates
+$mnspver = "0.0.26_19_16_26" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -91,13 +91,16 @@ foreach ($photo in $photosSrc) {
 
         #only proceed if facial detection confidence is above $ConfidenceLevel %
         $faceDetectionScore = [int]$PythonCoords.confidence
+        
+        #<#
         #some images return multiple confidence values - ignore these
         $values = $faceDetectionScore.split(" ") | where-object { $_ -match "^\d+\.\d+$" }
         if ($values.count -gt 1) {
             Write-Warning "Multipe Values detected for $fileName ..."
-            Continue
+            DashedLine
+            #Continue
         }
-
+        #>
 
         if ($faceDetectionScore -ge $ConfidenceLevel ) {
             Write-Host "Face detected with confidence:" $faceDetectionScore
