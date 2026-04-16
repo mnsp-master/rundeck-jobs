@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_19_16_29" #use python for all image coordinates
+$mnspver = "0.0.26_19_16_30" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -165,6 +165,7 @@ foreach ($photo in $photosSrc) {
             DashedLine
         } else {
             Write-Warning "No Face detected for file: $filePath"
+            DashedLine
     }
 }
 
