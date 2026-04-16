@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_19_16_21" #use python for all image coordinates
+$mnspver = "0.0.26_19_16_22" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -21,6 +21,7 @@ $ImgDimensions = @()
 $ImgDimensionX = @()
 $ImgDimensionY = @()
 $convertX = "x"
+$ConfidenceLevel = "0.9" #facedetection confidence level
 
 Start-Transcript -Path $transcriptlog -Force -NoClobber -Append
 Write-Host "MNSP version:" $mnspver
@@ -88,9 +89,9 @@ foreach ($photo in $photosSrc) {
                 continue
             }
 
-        #only proceed if facial detection confidence is above 0.9 %
+        #only proceed if facial detection confidence is above $ConfidenceLevel %
         $faceDetectionScore = $PythonCoords.confidence
-        if ($faceDetectionScore -ge 0.9) {
+        if ($faceDetectionScore -ge $ConfidenceLevel ) {
             Write-Host "Face detected with confidence:" $faceDetectionScore
             Write-Host "Image Dimension X     :" $ImgDimensionX
             Write-Host "Image Dimension Y     :" $ImgDimensionY
@@ -116,6 +117,9 @@ foreach ($photo in $photosSrc) {
 
             if ($OriginTop -lt 0 -or $OriginLeft -lt 0) {
                 Write-Warning "One or more Origin values: $OriginTop $OriginLeft are negative, consider providing a better image..."
+            } else {
+                Write-Warning "Facedetection for $fileName is below confidence level $ConfidenceLevel ignoring..."
+                continue
             }
             
             #remove background from source image first...
