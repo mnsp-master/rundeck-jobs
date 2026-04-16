@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_19_16_27" #use python for all image coordinates
+$mnspver = "0.0.26_19_16_28" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -90,7 +90,7 @@ foreach ($photo in $photosSrc) {
             }
 
         #only proceed if facial detection confidence is above $ConfidenceLevel %
-        $faceDetectionScore = [int]$PythonCoords.confidence
+        $faceDetectionScore = $PythonCoords.confidence
         
         <#
         #some images return multiple confidence values - ignore these
