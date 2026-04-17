@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_19_16_23_a" #use python for all image coordinates
+$mnspver = "0.0.26_19_16_24_a" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -95,7 +95,7 @@ foreach ($photo in $photosSrc) {
         #only proceed if facial detection confidence is above 0.7 % [TODO - current -ge logic is not working effectively]
         # need to sddress if multiple images are detected, selecting first result only [TODO]
         $faceDetectionScore = $PythonCoords.confidence[0]
-        if ($faceDetectionScore -ge 0.7) {
+        if ([double]$faceDetectionScore -ge 0.7) {
             Write-Host "Face detected with confidence:" $faceDetectionScore
             Write-Host "Image Dimension X     :" $ImgDimensionX
             Write-Host "Image Dimension Y     :" $ImgDimensionY
