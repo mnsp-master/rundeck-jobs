@@ -1,4 +1,4 @@
-$mnspver = "1.0.10" #use python for all image coordinates
+$mnspver = "1.0.11" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -27,13 +27,6 @@ $convertX = "x"
 Start-Transcript -Path $transcriptlog -Force -NoClobber -Append
 Write-Host "MNSP version:" $mnspver
 
-$userSalt = Read-Host "SALT..." -AsSecureString #replace with var from secure vault [TODO]
-$BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($userSalt)
-$plainSalt = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
-$plainSalt
-
-
-
 #get python script from github
     $gitHubPythonSrcURI = "https://raw.githubusercontent.com/mnsp-master/rundeck-jobs/refs/heads/main/rundeck-cid04691-opencv-process-images_python_dev-02-win.py"
     $pythonScriptName = ($gitHubPythonSrcURI -split '/')[-1]
@@ -61,13 +54,6 @@ foreach ($photo in $photosSrc) {
     $filePath = $photo.FullName
     $fileName = $photo.name
     $fileBaseName = $photo.BaseName
-
-    #additional exif data prep...
-    $HRid = $photo.BaseName
-    $combinedString = $plaintSalt + $HRid
-    $hasher = [System.Security.Cryptography.HashAlgorithm]::Create("SHA256")
-    $hashBytes = $hasher.ComputeHash([System.Text.Encoding]::UTF8.GetBytes($combinedString))
-    $encryptedID = (($hashBytes | ForEach-Object { $_.ToString("x2") }) -join "").Substring(0, 32)
 
     
     $metaData = & "$workdir\$exiftoolAppVersion\exiftool.exe" -json $filePath | convertFrom-Json
@@ -150,19 +136,6 @@ foreach ($photo in $photosSrc) {
             
             #produce 250x250 pixel image in $passports directory...
             & $WorkDir\ImageMagick\magick.exe $dataout\$fileName -resize 250x250 $passports/$fileName
-            #add additional exif data to image...
-            $exifPath = "$workdir\$exiftoolAppVersion\exiftool.exe"
-            $targetFile = "$passports\$filename"
-            $params = @(
-                "-ImageUniqueID=$encryptedID",
-                "-overwrite_original",
-                $targetFile
-            )
-            & $exifPath @params
-
-            [System.Runtime.InteropServices.Marshal]::ZeroFreeBSTR($BSTR)
-            $plainSalt = $null
-
             
             #produce example of eventual profile image...
             & $WorkDir\ImageMagick\magick.exe $passports\$fileName `
