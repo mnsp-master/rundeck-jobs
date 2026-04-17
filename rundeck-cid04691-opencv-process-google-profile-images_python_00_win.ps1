@@ -1,4 +1,4 @@
-$mnspver = "1.0.9" #use python for all image coordinates
+$mnspver = "1.0.10" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -63,7 +63,7 @@ foreach ($photo in $photosSrc) {
     $fileBaseName = $photo.BaseName
 
     #additional exif data prep...
-    $HRid = $photo.name
+    $HRid = $photo.BaseName
     $combinedString = $plaintSalt + $HRid
     $hasher = [System.Security.Cryptography.HashAlgorithm]::Create("SHA256")
     $hashBytes = $hasher.ComputeHash([System.Text.Encoding]::UTF8.GetBytes($combinedString))
