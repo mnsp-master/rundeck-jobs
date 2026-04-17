@@ -1,4 +1,4 @@
-$mnspver = "1.0.8" #use python for all image coordinates
+$mnspver = "1.0.9" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -30,6 +30,8 @@ Write-Host "MNSP version:" $mnspver
 $userSalt = Read-Host "SALT..." -AsSecureString #replace with var from secure vault [TODO]
 $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($userSalt)
 $plainSalt = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
+$plainSalt
+
 
 
 #get python script from github
