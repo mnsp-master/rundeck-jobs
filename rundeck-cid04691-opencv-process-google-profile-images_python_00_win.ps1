@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_19_16_29_a" #use python for all image coordinates
+$mnspver = "0.0.26_19_16_30_a" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -83,10 +83,19 @@ foreach ($photo in $photosSrc) {
             #check for csv (none produced if no faces detected)
             if (Test-path -path $dataout\$FileBaseName.csv) {
             #$pythonCoords = import-csv -path $dataout\$FileBaseName.csv #update to use Variable(s) 
-            $pythonCoords = @(import-csv -path $dataout\$FileBaseName.csv)
+            
+            #$pythonCoords = @(import-csv -path $dataout\$FileBaseName.csv)
+
+            #multiple faces detected in csv fix...
+            $pythonCoords = Import-csv -path $dataOut\$FileBaseName.csv |
+                Sort-object { [double]$_.confidence } -descending |
+                Select-object -first 1
+            Write-Host "Top Face detected with confidence $(pythonCoords.confidence)"
+
             Write-Host "Python Library coordinates..."
             $pythonCoords
-            $unit = [Math]::Round($pythonCoords.CenterX - $pythonCoords.StartX)
+            #$unit = [Math]::Round($pythonCoords.CenterX - $pythonCoords.StartX)
+            $unit = [Math]::Round([double]$pythonCoords.CenterX - [double]$pythonCoords.StartX) #gemini suggestion
                 } else {
                 Write-Host "No Face csv detected, moving to next image..."
                 DashedLine
