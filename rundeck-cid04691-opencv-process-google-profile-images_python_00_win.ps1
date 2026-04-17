@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_19_16_22_a" #use python for all image coordinates
+$mnspver = "0.0.26_19_16_23_a" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -15,6 +15,7 @@ $datasrc = "$dataDir\source4\"
 $dataout = "$datadir\output\$now"
 $passports = "$dataout\250x250"
 $vignettes = "$dataout\vignettes"
+$temp = "$dataout\temp"
 $exiftoolAppVersion = "exiftool-13.55_64" # https://exiftool.org/
 
 $photosSrc = $(Get-ChildItem -Path $datasrc )
@@ -91,8 +92,9 @@ foreach ($photo in $photosSrc) {
                 continue
             }
 
-        #only proceed if facial detection confidence is above 0.7 % [TODO - current -ge logic is not working]
-        $faceDetectionScore = $PythonCoords.confidence 
+        #only proceed if facial detection confidence is above 0.7 % [TODO - current -ge logic is not working effectively]
+        # need to sddress if multiple images are detected, selecting first result only [TODO]
+        $faceDetectionScore = $PythonCoords.confidence[0]
         if ($faceDetectionScore -ge 0.7) {
             Write-Host "Face detected with confidence:" $faceDetectionScore
             Write-Host "Image Dimension X     :" $ImgDimensionX
