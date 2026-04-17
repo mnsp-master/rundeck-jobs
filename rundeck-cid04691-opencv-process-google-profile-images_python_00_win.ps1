@@ -1,4 +1,4 @@
-$mnspver = "1.0.1" #use python for all image coordinates
+$mnspver = "1.0.2" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -11,7 +11,7 @@ $now = $(Get-date -Format yyyyMMdd-HHmmss)
 $transcriptlog = "$LogDir\$(Get-date -Format yyyyMMdd-HHmmss)_transcript.log"
 $datadir = "$workdir\Data"
 
-$datasrc = "$dataDir\source4\"
+$datasrc = "$dataDir\source\"
 $dataout = "$datadir\output\$now"
 $passports = "$dataout\250x250"
 $vignettes = "$dataout\vignettes"
