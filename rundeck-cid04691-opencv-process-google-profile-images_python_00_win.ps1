@@ -1,4 +1,4 @@
-$mnspver = "1.0.6" #use python for all image coordinates
+$mnspver = "1.0.7" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -149,7 +149,14 @@ foreach ($photo in $photosSrc) {
             #produce 250x250 pixel image in $passports directory...
             & $WorkDir\ImageMagick\magick.exe $dataout\$fileName -resize 250x250 $passports/$fileName
             #add additional exif data to image...
-            & "$workdir\$exiftoolAppVersion\exiftool.exe" "-ImageUniqueID=$encryptedID" "$passports/$fileName"
+            $exifPath = "workdir\$exiftoolAppVersion\exiftool.exe"
+            $targetFile = "$passports\$filename"
+            $params = @(
+                "-ImageUniqueID=$encryptedID",
+                "-overwrite_original",
+                $targetFile
+            )
+            & $exifPath @params
 
             [System.Runtime.InteropServices.Marshal]::ZeroFreeBSTR($BSTR)
             $plainSalt = $null
