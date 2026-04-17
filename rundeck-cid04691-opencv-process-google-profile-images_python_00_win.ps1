@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_19_16_21_a" #use python for all image coordinates
+$mnspver = "0.0.26_19_16_22_a" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -14,6 +14,7 @@ $datadir = "$workdir\Data"
 $datasrc = "$dataDir\source4\"
 $dataout = "$datadir\output\$now"
 $passports = "$dataout\250x250"
+$vignettes = "$dataout\vignettes"
 $exiftoolAppVersion = "exiftool-13.55_64" # https://exiftool.org/
 
 $photosSrc = $(Get-ChildItem -Path $datasrc )
@@ -41,8 +42,10 @@ Write-Host "MNSP version:" $mnspver
         exit 1
     }
 
+#create directory structure
 New-item -Path $dataout -ItemType Directory
 New-item -Path $passports -ItemType Directory
+New-item -Path $vignettes -ItemType Directory
 DashedLine
 
 foreach ($photo in $photosSrc) {
@@ -141,7 +144,7 @@ foreach ($photo in $photosSrc) {
             & $WorkDir\ImageMagick\magick.exe $passports\$fileName `
             "(" +clone -threshold 101% -fill white -draw "circle 125,125 125,0" ")" `
             -alpha off -compose copy_opacity -composite -background "#F1F3F4" -alpha remove -alpha off `
-            $passports\${FileBaseName}_vignette.png
+            $vignettes\${FileBaseName}_vignette.png
 
 
             remove-item $dataout\$TMPIMG1.png -force -verbose # delete temp file
