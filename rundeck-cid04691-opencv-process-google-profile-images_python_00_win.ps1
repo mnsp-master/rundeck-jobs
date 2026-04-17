@@ -1,4 +1,4 @@
-$mnspver = "1.0.3" #use python for all image coordinates
+$mnspver = "1.0.4" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -142,7 +142,7 @@ foreach ($photo in $photosSrc) {
             -alpha off -compose copy_opacity -composite -background "#F1F3F4" -alpha remove -alpha off `
             $vignettes\${FileBaseName}_vignette.png
 
-            remove-item $dataout\$TMPIMG1.png -force -verbose # delete temp file
+            remove-item $dataout\$TMPIMG1.png -force # delete temp file
                 
             Start-Sleep 1
             DashedLine
