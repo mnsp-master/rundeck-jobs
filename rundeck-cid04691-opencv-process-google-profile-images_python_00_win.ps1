@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_19_16_31_a" #use python for all image coordinates
+$mnspver = "1.0.1" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -80,51 +80,38 @@ foreach ($photo in $photosSrc) {
         & python "$workDir\$pythonScriptName" $filePath $dataOut
 
             #set coordinates from python processing...
-            #check for csv (none produced if no faces detected)
             if (Test-path -path $dataout\$FileBaseName.csv) {
-            #$pythonCoords = import-csv -path $dataout\$FileBaseName.csv #update to use Variable(s) 
             
-            #$pythonCoords = @(import-csv -path $dataout\$FileBaseName.csv)
-
-            #multiple faces detected in csv fix...
+            #adress multiple faces detected in csv, select highest confidence value row...
             $pythonCoords = Import-csv -path $dataOut\$FileBaseName.csv |
                 Sort-object { [double]$_.confidence } -descending |
                 Select-object -first 1
-            Write-Host "Top Face detected with confidence ($pythonCoords.confidence)"
 
             Write-Host "Python Library coordinates..."
             $pythonCoords
-            #$unit = [Math]::Round($pythonCoords.CenterX - $pythonCoords.StartX)
-            $unit = [Math]::Round([double]$pythonCoords.CenterX - [double]$pythonCoords.StartX) #gemini suggestion
+            $unit = [Math]::Round([double]$pythonCoords.CenterX - [double]$pythonCoords.StartX)
                 } else {
                 Write-Host "No Face csv detected, moving to next image..."
                 DashedLine
                 continue
             }
 
-        #only proceed if facial detection confidence is above 0.7 % [TODO - current -ge logic is not working effectively]
-        # need to address if multiple images are detected, selecting first result only [TODO]
-        #$faceDetectionScore = $PythonCoords.confidence[0]
-        $faceDetectionScore = [double]$PythonCoords[0].confidence
-        if ($faceDetectionScore -ge 0.7) {
+        #only proceed if facial detection confidence is above 0.# percent...
+        $faceDetectionScore = [double]$PythonCoords[0].confidence #[double] deals with decimal values
+        if ($faceDetectionScore -ge 0.8) {
             Write-Host "Face detected with confidence:" $faceDetectionScore
             Write-Host "Image Dimension X     :" $ImgDimensionX
             Write-Host "Image Dimension Y     :" $ImgDimensionY
             Write-Host "EXIF DateTimeOriginal :" $ImgEXIFDateTimeOriginal
             Write-Host "Square Unit           :" $unit
                 
-            #$OriginTop = $($imgCoordinates.Split(" ")[1] -$unit) #new Horizontal Origin Value
             $OriginTop = $($pythonCoords.CenterY - ($unit * 2)) #new Horizontal Origin Value
             Write-Host "New Horizontal Origin :" $OriginTop
                 
-            #$OriginLeft = $($imgCoordinates.Split(" ")[0] -$unit) #minus full unit
             $OriginLeft = $($pythonCoords.CenterX - ($unit *2))
             Write-Host "New Vertical Origin   :" $OriginLeft
                 
-            #$Coords = $($imgCoordinates.Split(" ")[2] )
-            $Coords = $($unit * 2)
-                
-            #$CoordXY = ([int]$Coords * 2)
+            $Coords = $($unit * 2)    
             $CoordXY = ($unit * 4)
                 
             Write-Host "New XY Coordinate     :" $CoordXY
@@ -137,28 +124,23 @@ foreach ($photo in $photosSrc) {
             #remove background from source image first...
             $TMPIMG1 = "${fileBaseName}_$(Get-Date -Format HHmmss)"  #temporary unique filename
             
-            # use pyton library rembg to replace background with solid white
+            # use pyton library rembg to replace background with solid white...
             & rembg i -m u2net -bgc 255 255 255 255 -a -ae 5 $FilePath $dataOut/$TMPIMG1.png
 
-            #replaces transparent bg with solid white
+            #replaces transparent bg with solid white...
             & $WorkDir\ImageMagick\magick.exe $dataout\$TMPIMG1.png -background white -alpha remove -alpha off $dataout/$fileName 
             
-            #center produced image
+            #center produced image...
             & $WorkDir\ImageMagick\magick.exe $dataout\$TMPIMG1.png -crop "${CoordXY}x${CoordXY}+$OriginLeft+$OriginTop" +repage -gravity center -extent "${CoordXY}x${CoordXY}" "$dataout/$fileName"
             
-            #produce 250x250 pixel image in $passports directory
+            #produce 250x250 pixel image in $passports directory...
             & $WorkDir\ImageMagick\magick.exe $dataout\$fileName -resize 250x250 $passports/$fileName
-
-            #produce circular vignette - emulate geunine profile picture appearence
-            #& $WorkDir\ImageMagick\magick.exe $passports\$fileName ( +clone -threshold 101% -fill white -draw "circle 125,125 125,0" ) -alpha off -compose copy_opacity -composite $passports\$FileBaseName_vignette.png
             
-            #& $WorkDir\ImageMagick\magick.exe $passports\$fileName "(" +clone -threshold 101% -fill white -draw "circle 125,125 125,0" ")" -alpha off -compose copy_opacity -composite $passports\${FileBaseName}_vignette.png
-            
+            #produce example of eventual profile image...
             & $WorkDir\ImageMagick\magick.exe $passports\$fileName `
             "(" +clone -threshold 101% -fill white -draw "circle 125,125 125,0" ")" `
             -alpha off -compose copy_opacity -composite -background "#F1F3F4" -alpha remove -alpha off `
             $vignettes\${FileBaseName}_vignette.png
-
 
             remove-item $dataout\$TMPIMG1.png -force -verbose # delete temp file
                 
@@ -176,40 +158,3 @@ remove-item $dataout\detected*.* -force -verbose
 #>
 
 Stop-Transcript
-
-<#
-#& convert $dataout/$TMPIMG1.png -crop "${CoordXY}x${CoordXY}+$OriginLeft+$OriginTop" +repage -gravity center -background white -extent "${CoordXY}x${CoordXY}" "$dataout/$fileName"
-#$ImgDimensions = $((Invoke-Expression "identify $filePath").Split(" ")[2])
-    #$ImgDimensionX = $($ImgDimensions.Split("x")[0])
-    #$ImgDimensionY = $($ImgDimensions.Split("x")[1])
-
-    #$imgCoordinates = $(Invoke-Expression "facedetect $filePath --best")
-    #$imgCoordinatesCentre = $(Invoke-Expression "facedetect $filePath --best -c")
-
-    #$OriginLeft = $($imgCoordinates.Split(" ")[0] -$unit/2)#minus half unit
-
-    #$CoordXY
-        #$CoordX = $($OriginLeft + ($unit * 4))
-        #$CoordY = $($OriginTop + ($unit * 4))
-        #Write-Host "New Y Coordinate     :" $CoordY
-    #Invoke-expression "convert $filePath -crop $CoordXY$convertX$CoordXY+$OriginLeft+$OriginTop $dataout/$fileName"
-    #Invoke-Expression "convert $dataout/$fileName -resize 250x250 $passports/$fileName"
-
-        #NOTE: can fail to give 1:1 ratio image under some source image secnarios...
-                #& convert $filePath -crop $CoordXY$convertX$CoordXY+$OriginLeft+$OriginTop $dataout/$fileName
-
-                <# original process
-                #resolves issue if detrmined co-ordinates are out of range of source image - not 1:1 ratio:
-                
-
-                $TMPIMG1 = "${fileBaseName}_$(Get-Date -Format HHmmss)"  #temporary unique filename
-                & rembg i $dataout/$fileName $dataout/$TMPIMG1.png # use pyton library rembg to remove background 
-
-                & convert $dataout/$TMPIMG1.png -background white -alpha remove -alpha off $dataout/$fileName #replaces transparent bg with solid white
-
-                & convert $dataout/$fileName -resize 250x250 $passports/$fileName #produce 250x250 pixel image in $passports directory
-                
-                remove-item $dataout/$TMPIMG1.png -force -verbose # delete temp file
-                #>
-
-#>
