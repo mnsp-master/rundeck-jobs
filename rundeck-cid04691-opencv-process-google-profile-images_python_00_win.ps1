@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_19_16_28_a" #use python for all image coordinates
+$mnspver = "0.0.26_19_16_29_a" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -82,7 +82,8 @@ foreach ($photo in $photosSrc) {
             #set coordinates from python processing...
             #check for csv (none produced if no faces detected)
             if (Test-path -path $dataout\$FileBaseName.csv) {
-            $pythonCoords = import-csv -path $dataout\$FileBaseName.csv #update to use Variable(s) 
+            #$pythonCoords = import-csv -path $dataout\$FileBaseName.csv #update to use Variable(s) 
+            $pythonCoords = @(import-csv -path $dataout\$FileBaseName.csv)
             Write-Host "Python Library coordinates..."
             $pythonCoords
             $unit = [Math]::Round($pythonCoords.CenterX - $pythonCoords.StartX)
@@ -94,8 +95,9 @@ foreach ($photo in $photosSrc) {
 
         #only proceed if facial detection confidence is above 0.7 % [TODO - current -ge logic is not working effectively]
         # need to address if multiple images are detected, selecting first result only [TODO]
-        $faceDetectionScore = $PythonCoords.confidence[0]
-        if ([double]$faceDetectionScore -ge 0.7) {
+        #$faceDetectionScore = $PythonCoords.confidence[0]
+        $faceDetectionScore = [double]$PythonCoords[0].confidence
+        if ($faceDetectionScore -ge 0.7) {
             Write-Host "Face detected with confidence:" $faceDetectionScore
             Write-Host "Image Dimension X     :" $ImgDimensionX
             Write-Host "Image Dimension Y     :" $ImgDimensionY
