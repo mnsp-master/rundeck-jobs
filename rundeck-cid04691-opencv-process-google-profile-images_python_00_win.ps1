@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_19_16_26_a" #use python for all image coordinates
+$mnspver = "0.0.26_19_16_27_a" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -96,7 +96,7 @@ foreach ($photo in $photosSrc) {
         # need to sddress if multiple images are detected, selecting first result only [TODO]
         $faceDetectionScore = $PythonCoords.confidence[0]
         if ([double]$faceDetectionScore -ge 0.7) {
-            Write-Host "Face detected with confidence:" [double]$faceDetectionScore
+            Write-Host "Face detected with confidence:" $faceDetectionScore
             Write-Host "Image Dimension X     :" $ImgDimensionX
             Write-Host "Image Dimension Y     :" $ImgDimensionY
             Write-Host "EXIF DateTimeOriginal :" $ImgEXIFDateTimeOriginal
