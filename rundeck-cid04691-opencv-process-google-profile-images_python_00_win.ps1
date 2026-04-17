@@ -1,4 +1,4 @@
-$mnspver = "1.0.2" #use python for all image coordinates
+$mnspver = "1.0.3" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -67,7 +67,7 @@ foreach ($photo in $photosSrc) {
     #resize source image if original is too large - opencv can return unpredictable results if the source image is too large
     if ( $ImgDimensionX -gt 1030 ) {
         Write-Warning "Source Image: $filename is too large for open-cv processing, scaling down..."
-        & $WorkDir\ImageMagick\magick.exe $filePath -resize "1024X>" $filePath
+        & $WorkDir\ImageMagick\magick.exe $filePath -resize "512X>" $filePath
         start-sleep 1
         $metaData = & "$workdir\$exiftoolAppVersion\exiftool.exe" -json $filePath | convertFrom-Json
         $ImgDimensionX = $metaData.ImageWidth
