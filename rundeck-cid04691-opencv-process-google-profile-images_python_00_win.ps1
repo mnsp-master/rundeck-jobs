@@ -1,4 +1,4 @@
-$mnspver = "0.0.26_19_16_30_a" #use python for all image coordinates
+$mnspver = "0.0.26_19_16_31_a" #use python for all image coordinates
 Clear-Host
 
 function DashedLine {
@@ -90,7 +90,7 @@ foreach ($photo in $photosSrc) {
             $pythonCoords = Import-csv -path $dataOut\$FileBaseName.csv |
                 Sort-object { [double]$_.confidence } -descending |
                 Select-object -first 1
-            Write-Host "Top Face detected with confidence $(pythonCoords.confidence)"
+            Write-Host "Top Face detected with confidence ($pythonCoords.confidence)"
 
             Write-Host "Python Library coordinates..."
             $pythonCoords
