@@ -1,4 +1,4 @@
-$mnspver = "0.0.13"
+$mnspver = "0.0.14"
 
 Function Get-NewPassword {
     $PwdUrl = $MNSPgetPasswordURL
@@ -49,7 +49,7 @@ $SecurePassword = $password | ConvertTo-SecureString -AsPlainText -Force
 
 # 2. Find the user by their email address and reset the password
 
-    $ADuser = Get-ADUser -server $DC -Filter mail -eq '$CustomerEmailaddress'
+    $ADuser = Get-ADUser -server $DC -Filter "mail -eq '$CustomerEmailaddress'"
 if ($null -eq $ADuser) {
    throw "No user found with email address: '$CustomerEmailaddress'"
     }
