@@ -1,5 +1,5 @@
 Clear-Host
-$mnspver = "0.0.22"
+$mnspver = "0.0.23"
 
 
 
@@ -120,7 +120,7 @@ $emailBody = @"
 
 
 #create credential object to authenticate to smtp 
-[SecureString]$securepassword = $password | ConvertTo-SecureString -AsPlainText -Force
+[SecureString]$securepassword = $GWSpassword | ConvertTo-SecureString -AsPlainText -Force
 $credential = New-Object System.Management.Automation.PSCredential -ArgumentList $username, $securepassword
 
 #copy contents of transcript log to temp txt file to use as attachment, as log will be in use, and cannot be directly attached...
