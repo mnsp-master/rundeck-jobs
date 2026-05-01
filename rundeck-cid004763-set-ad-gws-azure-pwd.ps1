@@ -12,10 +12,10 @@ Function Get-NewPassword {
         $response = Invoke-WebRequest -Uri $PwdUrl -UseBasicParsing
 
         # Extract the content from the response object and store it in a variable.
-        $newPassword = $response.Content
+        $password = $response.Content
 
         # Return the generated password.
-        return $newPassword
+        return $password
     }
     catch {
         # If the web request fails, a detailed error message is logged.
@@ -40,7 +40,7 @@ Write-Host "MNSP script: $scriptName version: $mnspver"
 
 
 $password = Get-NewPassword
-Write-Host "Confirm Password function: $newPassword"
+Write-Host "Confirm Password function: $password"
 
 DashedLine
 
