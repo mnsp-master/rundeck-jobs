@@ -1,10 +1,10 @@
-$mnspver = "0.0.1"
+$mnspver = "0.0.2"
 
 Function Get-NewPassword {
-    $PwdUrl = $MNSPgetPasswordPRL
+    $PwdUrl = $MNSPgetPasswordURL
 
     #failsafe password
-    $pwdFailsafe = $MNSPgetPasswordPRLfailsafe
+    $pwdFailsafe = $MNSPgetPasswordURLfailsafe
 
     
     try {
