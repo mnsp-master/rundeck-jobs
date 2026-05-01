@@ -1,4 +1,4 @@
-$mnspver = "0.0.5"
+$mnspver = "0.0.6"
 
 Function Get-NewPassword {
     $PwdUrl = $MNSPgetPasswordURL
@@ -41,6 +41,7 @@ Write-Host "MNSP script: $scriptName version: $mnspver"
 
 $password = Get-NewPassword
 Write-Host "Confirm Password function: $password"
+$RundeckJobOutput = "New User password: $password"
 
 DashedLine
 
