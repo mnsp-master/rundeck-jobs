@@ -1,4 +1,4 @@
-$mnspver = "0.0.3"
+$mnspver = "0.0.4"
 
 Function Get-NewPassword {
     $PwdUrl = $MNSPgetPasswordURL
@@ -12,10 +12,10 @@ Function Get-NewPassword {
         $response = Invoke-WebRequest -Uri $PwdUrl -UseBasicParsing
 
         # Extract the content from the response object and store it in a variable.
-        $password = $response.Content
+        $newPassword = $response.Content
 
         # Return the generated password.
-        return $password
+        return $newPassword
     }
     catch {
         # If the web request fails, a detailed error message is logged.
@@ -40,7 +40,7 @@ Write-Host "MNSP script: $scriptName version: $mnspver"
 
 
 $password = Get-NewPassword
-Write-Host "Confirm Password function: $password"
+Write-Host "Confirm Password function: $newPassword"
 
 DashedLine
 
