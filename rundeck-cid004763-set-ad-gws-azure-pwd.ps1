@@ -1,4 +1,4 @@
-$mnspver = "0.0.2"
+$mnspver = "0.0.3"
 
 Function Get-NewPassword {
     $PwdUrl = $MNSPgetPasswordURL
@@ -36,7 +36,7 @@ Write-Host "Executing Main Rundeck Job..."
 Write-Host "MNSP script: $scriptName version: $mnspver"
 
 #Start-Sleep 10
-$ErrorActionPreference="Continue"
+#$ErrorActionPreference="Continue"
 
 
 $password = Get-NewPassword
