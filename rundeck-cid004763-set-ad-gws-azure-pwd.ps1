@@ -1,4 +1,4 @@
-$mnspver = "0.0.7"
+$mnspver = "0.0.9"
 
 Function Get-NewPassword {
     $PwdUrl = $MNSPgetPasswordURL
@@ -38,10 +38,17 @@ Write-Host "MNSP script: $scriptName version: $mnspver"
 #Start-Sleep 10
 #$ErrorActionPreference="Continue"
 
+$CustomerEmailAddress
 
 $password = Get-NewPassword
 #Write-Host "Confirm Password function: $password"
-$RundeckJobOutput = "New User password: $password"
+$RundeckJobOutput = "New User's email: $CustomerEmailaddress password: $password"
+
+# 1. Convert the plain text password into a SecureString
+$SecurePassword = $password | ConvertTo-SecureString -AsPlainText -Force
+
+# 2. Find the user by their email address and reset the password
+Get-ADUser -Filter "mail -eq '$CustomerEmailaddress'" | Set-ADAccountPassword -NewPassword $SecurePassword -Reset -whatif
 
 DashedLine
 
