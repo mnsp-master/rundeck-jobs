@@ -1,4 +1,4 @@
-$mnspver = "0.0.62"
+$mnspver = "0.0.63"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -30,7 +30,11 @@ remove-item $DataDir\*.csv -force -verbose
 
 Write-Host "downloading gsheet ID: $GoogleSheetID"
 Write-Host "$GamDir\gam.exe user $GoogleWorkspaceMNSPsvcAccount get drivefile $GoogleSheetID format csv targetfolder $DataDir targetname $tempcsv1"
-Invoke-Expression "$GamDir\gam.exe user $GoogleWorkspaceMNSPsvcAccount get drivefile $GoogleSheetID format csv targetfolder $DataDir targetname $tempcsv1"
+#Invoke-Expression "$GamDir\gam.exe user $GoogleWorkspaceMNSPsvcAccount get drivefile $GoogleSheetID format csv targetfolder $DataDir targetname $tempcsv1"
+
+#429 error fix
+$env:GAM_NUM_RETRIES = "10"
+& "$GamDir\gam.exe" user $GoogleWorkspaceMNSPsvcAccount get drivefile id $GoogleSheetID format csv targetfolder $DataDir targetname $tempcsv1
 
 Start-sleep 1
 
