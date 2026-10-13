@@ -1,4 +1,4 @@
-$mnspver = "0.0.26"
+$mnspver = "0.0.27"
 
 Function Get-NewPassword {
     $PwdUrl = $MNSPgetPasswordURL
@@ -58,7 +58,9 @@ try {
     $ADuser | Set-ADAccountPassword -server $DC -NewPassword $SecurePassword -Reset #-whatif
     $JobOutput01 = "Successfully reset password for: $CustomerEmailaddress to: $password"
     #generate GWS MFA backup codes
-    $GWSbackupCodes = (& $GamDir\gam.exe user $CustomerEmailAddress update backupcodes) | select-object -Skip 1
+    $RawGWSbackupCodes = (& $GamDir\gam.exe user $CustomerEmailAddress update backupcodes) #| select-object -Skip 1
+    $backupCodes = [regex] ::Matches(($RawGWSbackupCodes -join ' '), '\b\d{8}\b').Value
+    $CodesFormatted = $backupcodes -Join ' '
 
 } catch {
     $JobOutput01 = "Failed to set password for user with email address: '$CustomerEmailaddress' Error: $($_.Exception.Message)"
@@ -66,9 +68,8 @@ try {
 
 $RundeckJobOutput = @"
 $jobOutput01
-
-Backup Codes:
-$GWSbackupCodes
+ | Backup Codes:
+$CodesFormatted
 "@
 
 DashedLine
