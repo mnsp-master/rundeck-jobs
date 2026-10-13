@@ -1,4 +1,4 @@
-$mnspver = "0.0.21"
+$mnspver = "0.0.22"
 
 Function Get-NewPassword {
     $PwdUrl = $MNSPgetPasswordURL
@@ -65,7 +65,7 @@ try {
 #generate GWS MFA backup codes
 $GWSbackupCodes = (& $GamDir\gam.exe user $CustomerEmailAddress update backupcodes) | select-object -Skip 1
 
-$RundeckJobOutput += $GWSbackupCodes
+$RundeckJobOutput += "`nUpdated GWS nbackup codes: `n" $GWSbackupCodes
 
 
 DashedLine
