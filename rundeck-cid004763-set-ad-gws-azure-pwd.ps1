@@ -1,4 +1,4 @@
-$mnspver = "0.0.27"
+$mnspver = "0.0.28"
 
 Function Get-NewPassword {
     $PwdUrl = $MNSPgetPasswordURL
@@ -59,7 +59,7 @@ try {
     $JobOutput01 = "Successfully reset password for: $CustomerEmailaddress to: $password"
     #generate GWS MFA backup codes
     $RawGWSbackupCodes = (& $GamDir\gam.exe user $CustomerEmailAddress update backupcodes) #| select-object -Skip 1
-    $backupCodes = [regex] ::Matches(($RawGWSbackupCodes -join ' '), '\b\d{8}\b').Value
+    $backupCodes = [regex]::Matches(($RawGWSbackupCodes -join ' '), '\b\d{8}\b').Value
     $CodesFormatted = $backupcodes -Join ' '
 
 } catch {
