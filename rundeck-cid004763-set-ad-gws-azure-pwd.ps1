@@ -1,4 +1,4 @@
-$mnspver = "0.0.17"
+$mnspver = "0.0.18"
 
 Function Get-NewPassword {
     $PwdUrl = $MNSPgetPasswordURL
@@ -63,7 +63,7 @@ try {
 }
 
 #generate GWS MFA backup codes
-& $GamDir\gam.exe user $CustomerEmailAddress show backupcodes
+$GWSbackupCodes = (& $GamDir\gam.exe user $CustomerEmailAddress show backupcodes) | Where-Object { $_ -match '^\d{4}\s\d{4}$' }
 
 
 DashedLine
