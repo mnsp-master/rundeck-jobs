@@ -1,4 +1,4 @@
-$mnspver = "0.0.28"
+$mnspver = "0.0.29"
 
 Function Get-NewPassword {
     $PwdUrl = $MNSPgetPasswordURL
