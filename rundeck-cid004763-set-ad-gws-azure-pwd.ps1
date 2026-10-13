@@ -1,4 +1,4 @@
-$mnspver = "0.0.25"
+$mnspver = "0.0.26"
 
 Function Get-NewPassword {
     $PwdUrl = $MNSPgetPasswordURL
@@ -66,6 +66,7 @@ try {
 
 $RundeckJobOutput = @"
 $jobOutput01
+
 Backup Codes:
 $GWSbackupCodes
 "@
