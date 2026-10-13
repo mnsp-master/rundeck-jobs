@@ -1,4 +1,4 @@
-$mnspver = "0.0.16"
+$mnspver = "0.0.17"
 
 Function Get-NewPassword {
     $PwdUrl = $MNSPgetPasswordURL
@@ -63,7 +63,7 @@ try {
 }
 
 #generate GWS MFA backup codes
-& $GamDir\gam.exe info domain
+& $GamDir\gam.exe user $CustomerEmailAddress show backupcodes
 
 
 DashedLine
