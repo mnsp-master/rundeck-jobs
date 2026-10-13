@@ -1,4 +1,4 @@
-$mnspver = "0.0.15"
+$mnspver = "0.0.16"
 
 Function Get-NewPassword {
     $PwdUrl = $MNSPgetPasswordURL
@@ -61,6 +61,10 @@ try {
 } catch {
     $RundeckJobOutput = "Failed to set password for user with email address: '$CustomerEmailaddress' Error: $($_.Exception.Message)"
 }
+
+#generate GWS MFA backup codes
+& $GamDir\gam.exe info domain
+
 
 DashedLine
 
