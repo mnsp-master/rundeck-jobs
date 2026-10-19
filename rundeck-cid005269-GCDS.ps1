@@ -1,4 +1,4 @@
-$mnspver = "0.0.14"
+$mnspver = "0.0.15"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -28,40 +28,27 @@ if ($mode -eq "PRODUCTION") {
 Write-Output "Executing GCDS command with arguments: $GCDSargs"
 & $GCDSappPath $GCDSargs
 
-<#
+# get latest GCDS log file
+$latestLog = Get-ChildItem -Path $GCDSlogFolder -File | 
+             Where-Object { \$_.LastWriteTime -gt (Get-Date).AddMinutes(-5) } | 
+             Sort-Object LastWriteTime -Descending | 
+             Select-Object -First 1
 
-$password = Get-NewPassword
-#Write-Host "Confirm Password function: $password"
 
-
-#Convert the plain text password into a SecureString
-$SecurePassword = $password | ConvertTo-SecureString -AsPlainText -Force
-
-#Find the user by their email address and reset the password
-try {
-    $ADuser = Get-ADUser -server $DC -Filter "mail -eq '$CustomerEmailaddress'"
-
-    if ($null -eq $ADuser) {
-        throw "No user found with email address: '$CustomerEmailaddress'"
-    }
-
-    $ADuser | Set-ADAccountPassword -server $DC -NewPassword $SecurePassword -Reset #-whatif
-    $JobOutput01 = "Successfully reset password for: $CustomerEmailaddress to: $password"
-    #generate GWS MFA backup codes
-    $RawGWSbackupCodes = (& $GamDir\gam.exe user $CustomerEmailAddress update backupcodes) #| select-object -Skip 1
-    $backupCodes = [regex]::Matches(($RawGWSbackupCodes -join ' '), '\b\d{8}\b').Value
-    $CodesFormatted = $backupcodes -Join ' '
-
-} catch {
-    $JobOutput01 = "Failed to set password for user with email address: '$CustomerEmailaddress' Error: $($_.Exception.Message)"
+if (\$latestLog) {
+    Write-Output "`n"
+    Write-Output "======================================================================"
+    Write-Output "               START OF INJECTED GCDS TRANSACTION LOG                 "
+    Write-Output " Source File: $($latestLog.FullName)"
+    Write-Output "======================================================================"
+    
+    # Read and output the entire file content into the transcript stream
+    Get-Content -Path $latestLog.FullName
+    
+    Write-Output "======================================================================"
+    Write-Output "                END OF INJECTED GCDS TRANSACTION LOG                  "
+    Write-Output "======================================================================"
+    Write-Output "`n"
+} else {
+    Write-Warning "Automation Warning: Could not locate a fresh GCDS log file in \$logFolder to inject into the transcript."
 }
-
-$RundeckJobOutput = @"
-$jobOutput01
- | Backup Codes:
-$CodesFormatted
-"@
-
-DashedLine
-
-#>
