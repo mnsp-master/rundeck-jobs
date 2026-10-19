@@ -1,4 +1,4 @@
-$mnspver = "0.0.18"
+$mnspver = "0.0.19"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -36,19 +36,24 @@ $latestLog = Get-ChildItem -Path $GCDSlogFolder -File |
              Sort-Object LastWriteTime -Descending | 
              Select-Object -First 1
 
+$logLines = Get-Content -Path $latestLog.FullName
+    # Match EITHER "Proposed Change Report" OR "Change Status Report"
+    $matchedLine = $logLines | Select-String -Pattern "(Proposed Change Report|Change Status Report)" | Select-Object -First 1
 
-if ($latestLog) {
-    Write-Output "`n"
-    Write-Output "======================================================================"
-    Write-Output "               START OF INJECTED GCDS TRANSACTION LOG                 "
-    Write-Output " Source File: $($latestLog.FullName)"
-    Write-Output "======================================================================"
+
+if ($matchedLine) {
+        # Extract the line number where the summary starts (0-indexed adjustment)
+        $startIndex = $matchedLine.LineNumber - 1
+        
+        # Output everything from that line onwards
+        $logLines[$startIndex..($logLines.Count - 1)] | Out-String | Write-Output
+    } else {
+        Write-Warning "Could not find 'Proposed Change Report' marker. Dumping last 50 lines instead:"
+        $logLines[-50..-1] | Out-String | Write-Output
+    }
     
-    # Read and output the entire file content into the transcript stream
-    Get-Content -Path $latestLog.FullName
-    
     Write-Output "======================================================================"
-    Write-Output "                END OF INJECTED GCDS TRANSACTION LOG                  "
+    Write-Output "                END OF INJECTED GCDS SUMMARY REPORT                   "
     Write-Output "======================================================================"
     Write-Output "`n"
 } else {
