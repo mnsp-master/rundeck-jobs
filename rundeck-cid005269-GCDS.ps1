@@ -1,4 +1,4 @@
-$mnspver = "0.0.17"
+$mnspver = "0.0.18"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -37,7 +37,7 @@ $latestLog = Get-ChildItem -Path $GCDSlogFolder -File |
              Select-Object -First 1
 
 
-if (\$latestLog) {
+if ($latestLog) {
     Write-Output "`n"
     Write-Output "======================================================================"
     Write-Output "               START OF INJECTED GCDS TRANSACTION LOG                 "
