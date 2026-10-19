@@ -1,4 +1,4 @@
-$mnspver = "0.0.8"
+$mnspver = "0.0.9"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -17,6 +17,8 @@ Write-Host "$GCDSappPath $GCDSparams"
 
 $RundeckJobOutput = "Processed CLI: $GCDSappPath $GCDSparams"
 Write-Output "Windows actual execution user: $(([Security.Principal.WindowsIdentity]::GetCurrent()).Name)"
+
+& $GCDSappPath $GCDSparams
 
 <#
 
