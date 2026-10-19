@@ -1,4 +1,4 @@
-$mnspver = "0.0.12"
+$mnspver = "0.0.14"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -10,15 +10,23 @@ Write-Host "MNSP script: $scriptName version: $mnspver"
 #Start-Sleep 10
 #$ErrorActionPreference="Continue"
 
-$CustomerEmailAddress
-
-Write-Host "Executing GCDS..."
-Write-Host "$GCDSappPath $GCDSparams"
+#$CustomerEmailAddress
 
 $RundeckJobOutput = "Processed CLI: $GCDSappPath $GCDSparams"
 Write-Output "Windows actual execution user: $(([Security.Principal.WindowsIdentity]::GetCurrent()).Name)"
 
-& "$GCDSappPath" "$GCDSparams"
+# mode set from rundeck job option
+if ($mode -eq "PRODUCTION") {
+    Write-Output "WARNING: Launching GCDS in PRODUCTION mode."
+    $GCDSargs = @("-a", "-f", "-o", "-c", $GCDSconfigXML)
+} else {
+    Write-Output "INFO: Launching GCDS in DRY RUN mode."
+    $GCDSargs = @("-o", "-c", $GCDSconfigXML)
+}
+
+# 4. Execute the command natively passing the argument array
+Write-Output "Executing GCDS command with arguments: $GCDSargs"
+& $GCDSappPath $GCDSargs
 
 <#
 
