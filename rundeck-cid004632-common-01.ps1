@@ -1,5 +1,5 @@
 Clear-Host
-$mnspver = "0.0.26"
+$mnspver = "0.0.27"
 
 
 
@@ -126,7 +126,7 @@ $credential = New-Object System.Management.Automation.PSCredential -ArgumentList
 
 #copy contents of transcript log to temp txt file to use as attachment, as log will be in use, and cannot be directly attached...
 $transcriptlogCopy = $(Get-Content $transcriptlog | set-content $transcriptlogTemp)
-$attachment = $transcriptlogTemp
+$attachment = @($transcriptlogTemp, $otherLog01)
 
 $mailParams = @{
     SmtpServer  = "smtp.gmail.com"
