@@ -1,4 +1,4 @@
-$mnspver = "0.0.2"
+$mnspver = "0.0.3"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -12,8 +12,8 @@ Write-Host "MNSP script: $scriptName version: $mnspver"
 
 $CustomerEmailAddress
 
-
-
+Write-Host "Executing GCDS..."
+Write-Host "$GCDSappPath $GCDSparams"
 
 <#
 
