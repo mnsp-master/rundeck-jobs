@@ -1,4 +1,4 @@
-$mnspver = "0.0.15"
+$mnspver = "0.0.16"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -27,6 +27,8 @@ if ($mode -eq "PRODUCTION") {
 # 4. Execute the command natively passing the argument array
 Write-Output "Executing GCDS command with arguments: $GCDSargs"
 & $GCDSappPath $GCDSargs
+
+start-sleep 2
 
 # get latest GCDS log file
 $latestLog = Get-ChildItem -Path $GCDSlogFolder -File | 
