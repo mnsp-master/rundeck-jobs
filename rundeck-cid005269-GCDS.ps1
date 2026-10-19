@@ -1,4 +1,4 @@
-$mnspver = "0.0.3"
+$mnspver = "0.0.4"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -14,6 +14,8 @@ $CustomerEmailAddress
 
 Write-Host "Executing GCDS..."
 Write-Host "$GCDSappPath $GCDSparams"
+
+$RundeckJobOutput = "Processed CLI: $GCDSappPath $GCDSparams"
 
 <#
 
