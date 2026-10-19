@@ -1,32 +1,4 @@
-$mnspver = "0.0.1"
-
-Function Get-NewPassword {
-    $PwdUrl = $MNSPgetPasswordURL
-
-    #failsafe password
-    $pwdFailsafe = $MNSPgetPasswordURLfailsafe
-
-    
-    try {
-        Write-Host "Attempting to retrieve password from web service..."
-        $response = Invoke-WebRequest -Uri $PwdUrl -UseBasicParsing
-
-        # Extract the content from the response object and store it in a variable.
-        $password = $response.Content
-
-        # Return the generated password.
-        return $password
-    }
-    catch {
-        # If the web request fails, a detailed error message is logged.
-        Write-Error "Failed to retrieve password from $PwdUrl. Using failsafe password instead." -ErrorAction Stop
-
-        # Return the failsafe password as the function's output.
-        return $pwdFailsafe
-    }
-}
-
-
+$mnspver = "0.0.2"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -39,6 +11,11 @@ Write-Host "MNSP script: $scriptName version: $mnspver"
 #$ErrorActionPreference="Continue"
 
 $CustomerEmailAddress
+
+
+
+
+<#
 
 $password = Get-NewPassword
 #Write-Host "Confirm Password function: $password"
@@ -74,3 +51,4 @@ $CodesFormatted
 
 DashedLine
 
+#>
