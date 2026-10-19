@@ -1,4 +1,4 @@
-$mnspver = "0.0.25"
+$mnspver = "0.0.26"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -12,7 +12,7 @@ Write-Host "MNSP script: $scriptName version: $mnspver"
 
 #$CustomerEmailAddress
 
-$RundeckJobOutput = "See attached files for transcript and GCDS logs"
+$RundeckJobOutput = "See attached files for powershell transcript and GCDS logs"
 Write-Output "Windows actual execution user: $(([Security.Principal.WindowsIdentity]::GetCurrent()).Name)"
 
 # mode set from rundeck job option
