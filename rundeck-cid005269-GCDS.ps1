@@ -1,4 +1,4 @@
-$mnspver = "0.0.19"
+$mnspver = "0.0.20"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -36,4 +36,4 @@ $latestLog = Get-ChildItem -Path $GCDSlogFolder -File |
              Sort-Object LastWriteTime -Descending | 
              Select-Object -First 1
 
-
+$otherLog01 = $latestLog
