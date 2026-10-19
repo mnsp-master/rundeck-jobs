@@ -1,4 +1,4 @@
-$mnspver = "0.0.23"
+$mnspver = "0.0.24"
 
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
@@ -37,4 +37,4 @@ $latestLog = Get-ChildItem -Path $GCDSlogFolder -File |
              Select-Object -First 1
 Write-Host "Latest log:" $latestLog
 
-$otherLog01 = $latestLog #additional attachement to add to mail summary
+$otherLog01 = $latestLog.FullName #additional attachement to add to mail summary
