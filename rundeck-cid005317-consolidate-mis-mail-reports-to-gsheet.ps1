@@ -1,4 +1,4 @@
-$mnspver = "0.0.8"
+$mnspver = "0.0.9"
 
 
 Write-Host $(Get-Date)
@@ -136,11 +136,12 @@ try {
 
         # Trash processed emails to keep inbox clean and avoid re-downloading tomorrow
         Write-Host "Trashing processed mailbox message(s)..."
-        & "$GamDir\gam.exe" user $GWSmail trash messages query $query 
-        #doit temp disable
+        & "$GamDir\gam.exe" user $GWSmail trash messages query $query doit
+        
         if ($LASTEXITCODE -ne 0) {
             Write-Warning "Failed to trash processed email for '$prefix' (Exit code: $LASTEXITCODE). Check mailbox permissions."
         }
+        
     }
 
     # --- Pre-Upload Integrity Validation ---
