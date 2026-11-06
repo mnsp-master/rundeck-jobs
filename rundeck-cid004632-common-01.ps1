@@ -1,5 +1,5 @@
 Clear-Host
-$mnspver = "0.0.28"
+$mnspver = "0.0.29"
 
 
 
@@ -114,7 +114,6 @@ $emailBody = @"
     <tr><th>Full Execution (Debug)</th><td><a href='$ExecutionURL'>Click here to view complete debug log (only accessible within MNSP networks)</a></td></tr>
     <tr><th>Job Output </th><td>$RundeckJobOutput</td></tr>
   </table>
-  <p>Please find the attached transcript log for full details.</p>
 </body>
 </html>
 "@
