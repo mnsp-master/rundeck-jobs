@@ -1,4 +1,4 @@
-$mnspver = "3.2.6"
+$mnspver = "3.2.7"
 
 
 Write-Host $(Get-Date)
@@ -303,9 +303,11 @@ if ($UpdatedCount -gt 0 -or $NewlyAppendedCount -gt 0) {
     Write-Host "Uploading back to Google Sheets ($UpdatedCount password(s) generated/updated, $NewlyAppendedCount new user(s) added)..." -ForegroundColor Cyan
     & "$GamDir\gam.exe" user $GamUser update drivefile $GoogleSheetID localfile $FullPath retainname gsheet id:$TabID
     
+    $RundeckJobOutput = "Success! Google Sheet ($MISname) updated successfully." 
     Write-Host "Success! Google Sheet ($MISname) updated successfully." -ForegroundColor Green
 } else {
     Write-Host "Google Sheet ($MISname) is already up to date. No upload required." -ForegroundColor Yellow
+    $RundeckJobOutput = "Google Sheet ($MISname) is already up to date. No upload required."
 }
 
 # Cleanup
@@ -313,8 +315,6 @@ if (Test-Path $FullPath) { Remove-Item $FullPath -Force }
 
 Write-Host "`nSync run completed." -ForegroundColor Cyan
 Stop-Transcript
-
-$RundeckJobOutput = "Testing..."
 
 DashedLine
 
