@@ -1,4 +1,4 @@
-$mnspver = "3.2.2"
+$mnspver = "3.2.3"
 
 
 Write-Host $(Get-Date)
@@ -22,7 +22,7 @@ Write-Host "MNSP script: $scriptName version: $mnspver"
 $now           = Get-Date -Format "yyyyMMdd-HHmmss"  #ENHANCEMENT convert to Rundeck var
 $transcriptlog = Join-Path $LogDir "${now}_transcript.log"  #ENHANCEMENT convert to Rundeck var
 
-Start-Transcript -Path $transcriptlog -Force -NoClobber -Append
+#Start-Transcript -Path $transcriptlog -Force -NoClobber -Append
 Clear-Host
 Write-Host "MNSP Version: $mnspver" -ForegroundColor Yellow
 
