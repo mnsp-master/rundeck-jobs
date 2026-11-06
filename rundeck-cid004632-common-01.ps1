@@ -1,5 +1,5 @@
 Clear-Host
-$mnspver = "0.0.30"
+$mnspver = "0.0.31"
 
 
 
@@ -25,7 +25,7 @@ BlankLIne
 
 Write-Host "Checking expected folders exist..."
 # Create Folders
-$structure = @($DataDir, $LogDir)
+$structure = @($DataDir, $LogDir, $TestDir)
 foreach ($dir in $structure) {
     if (!(Test-Path $dir)) {
         Write-Host "Creating directory: $dir"
