@@ -1,4 +1,4 @@
-$mnspver = "3.2.1"
+$mnspver = "3.2.2"
 
 
 Write-Host $(Get-Date)
@@ -80,6 +80,7 @@ function Get-NewPassword {
 # ==============================================================================
 # PHASE 1: DOWNLOAD GOOGLE SHEET (SOURCE OF TRUTH)
 # ==============================================================================
+$FullPath      = Join-Path $DataDir $TempCSV
 
 Write-Host "`n--- PHASE 1: DOWNLOADING GOOGLE SHEET ---" -ForegroundColor Cyan
 if (Test-Path $FullPath) { Remove-Item $FullPath -Force -Verbose }
