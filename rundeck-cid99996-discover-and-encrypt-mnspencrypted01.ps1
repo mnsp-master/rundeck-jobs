@@ -1,4 +1,4 @@
-$mnspver = "3.2.4"
+$mnspver = "3.2.5"
 
 
 Write-Host $(Get-Date)
@@ -28,7 +28,7 @@ Write-Host "MNSP Version: $mnspver" -ForegroundColor Yellow
 
 # Convert the incoming string safely into a real boolean variable
 #$mnspRun = [System.Convert]::ToBoolean($toggle)
-$mnspRun = $false # Uncomment to force dry run testing interactively
+#$mnspRun = $false # Uncomment to force dry run testing interactively
 
 function GoogleSheetEncryptedPassword {
     param (
