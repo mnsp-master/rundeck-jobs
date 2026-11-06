@@ -1,4 +1,4 @@
-$mnspver = "3.2.7"
+$mnspver = "3.2.8"
 
 
 Write-Host $(Get-Date)
@@ -314,7 +314,7 @@ if ($UpdatedCount -gt 0 -or $NewlyAppendedCount -gt 0) {
 if (Test-Path $FullPath) { Remove-Item $FullPath -Force }
 
 Write-Host "`nSync run completed." -ForegroundColor Cyan
-Stop-Transcript
+#Stop-Transcript
 
 DashedLine
 
