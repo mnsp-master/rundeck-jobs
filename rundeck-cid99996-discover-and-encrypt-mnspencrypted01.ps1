@@ -1,4 +1,4 @@
-$mnspver = "3.2.0"
+$mnspver = "3.2.1"
 
 
 Write-Host $(Get-Date)
@@ -65,7 +65,7 @@ function GoogleSheetEncryptedPassword {
 
 function Get-NewPassword {
     $PwdUrl = $MNSPgetPasswordURL
-    $pwdFailsafe = "Blue&cat88"
+    $pwdFailsafe = $MNSPgetPasswordPRLfailsafe
 
     try {
         $response = Invoke-WebRequest -Uri $PwdUrl -UseBasicParsing -ErrorAction Stop
