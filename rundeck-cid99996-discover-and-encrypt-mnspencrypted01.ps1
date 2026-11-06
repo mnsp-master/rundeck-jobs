@@ -1,4 +1,4 @@
-$mnspver = "3.2.5"
+$mnspver = "3.2.6"
 
 
 Write-Host $(Get-Date)
@@ -259,7 +259,7 @@ foreach ($Row in $DataList) {
         $SecurePassword = ConvertTo-SecureString -AsPlainText $PlainPassword -Force
         try {
             Write-Host "  -> Setting AD password (Attempt $attemptCount of $maxAttempts)..."
-            Set-ADAccountPassword -Identity $userToUpdate.objectGuid -NewPassword $SecurePassword -Reset -ErrorAction Stop
+            # Set-ADAccountPassword -Identity $userToUpdate.objectGuid -NewPassword $SecurePassword -Reset -ErrorAction Stop
             
             Write-Host "  -> AD password updated successfully!" -ForegroundColor Green
             $pwdIsValid = $true
@@ -281,7 +281,7 @@ foreach ($Row in $DataList) {
 
     # Update mnspEncrypted01 attribute in Active Directory (overwrites previous value)
     Write-Host "  -> Overwriting mnspEncrypted01 attribute in AD"
-    Set-ADUser -Identity $userToUpdate.objectGuid -Replace @{ mnspEncrypted01 = $EncryptedOutput }
+    # Set-ADUser -Identity $userToUpdate.objectGuid -Replace @{ mnspEncrypted01 = $EncryptedOutput }
 
     Start-Sleep -Seconds 1 # TID60279 throttle
     
