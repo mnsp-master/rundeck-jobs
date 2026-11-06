@@ -1,5 +1,5 @@
 Clear-Host
-$mnspver = "0.0.29"
+$mnspver = "0.0.30"
 
 
 
@@ -103,7 +103,7 @@ $emailBody = @"
 </head>
 <body>
   <h3>Rundeck Job Execution Report</h3>
-  <p><strong>NOTE:</strong> Full transatcion rundeck job log attached below</p>
+  <p><strong>NOTE:</strong> Full transcript rundeck job log attached below</p>
   <table>
     <tr><th>Job Name</th><td>$RundeckJobName</td></tr>
     <tr><th>Job ID</th><td>$JobID</td></tr>
