@@ -1,5 +1,5 @@
 Clear-Host
-$mnspver = "0.0.32"
+$mnspver = "0.0.33"
 
 
 
@@ -11,25 +11,15 @@ $ScriptName = Split-Path $PSCommandPath -Leaf
 Write-Host "Checking/preparing expected rundeck job environment..."
 Write-Host "MNSP script: $scriptName version: $mnspver"
 
-$tempcsv1 = "$DataDir\temp1.csv"
-$tempcsv2 = "$DataDir\temp2.csv"
-$tempcsv3 = "$DataDir\temp3.csv"
-$tempcsv4 = "$DataDir\temp4.csv"
-$temptxt1 = "$DataDir\temp1.txt"
-$temptxt2 = "$DataDir\temp2.txt"
-
 Write-host "Rundeck job details:"
 Write-Host "Rundeck user mail: $mailRecepient"
 Write-Host "Rundeck jobname: $jobName"
 BlankLIne
 
+<#
 Write-Host "Checking expected folders exist..."
 # Create Folders
 $structure = @($DataDir, $LogDir, $TestDir)
-
-$DataDir
-$LogDir
-$TestDir
 
 foreach ($dir in $structure) {
     if (!(Test-Path $dir)) {
@@ -39,7 +29,14 @@ foreach ($dir in $structure) {
         Write-Host "Folder already exists: $dir"
     }
 }
+
 Write-Host "Checking expected files exist..."
+$tempcsv1 = "$DataDir\temp1.csv"
+$tempcsv2 = "$DataDir\temp2.csv"
+$tempcsv3 = "$DataDir\temp3.csv"
+$tempcsv4 = "$DataDir\temp4.csv"
+$temptxt1 = "$DataDir\temp1.txt"
+$temptxt2 = "$DataDir\temp2.txt"
 # Create Files
 $dataFiles = @("temp1.csv", "temp2.csv", "temp3.csv", "temp4.csv", "temp1.txt","temp2.txt")
 foreach ($fileName in $dataFiles) {
@@ -52,6 +49,7 @@ foreach ($fileName in $dataFiles) {
     }
 }
 BlankLine
+#>
 
 if (Test-Path $GitHubPS01) {
     Write-Host "Path $GitHubPS01 exists. Deleting..."
