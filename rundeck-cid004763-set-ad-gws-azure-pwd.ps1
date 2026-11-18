@@ -1,4 +1,4 @@
-$mnspver = "0.0.30"
+$mnspver = "0.0.31"
 
 Function Get-NewPassword {
     $PwdUrl = $MNSPgetPasswordURL
@@ -54,7 +54,7 @@ try {
         throw "No user found with email address: '$CustomerEmailaddress'"
     }
 
-    if ($ADuser.DistinguishedName -like "*,OU=Student,*") {
+    if ($ADuser.DistinguishedName -like "*,OU=Student*,*") {
         throw "Action aborted: '$CustomerEmailaddress' is a Student account ($($ADuser.DistinguishedName)). Password resets are not permitted for Students. See GLPI KB 269 - Additional Supporting notes"
     }
 
