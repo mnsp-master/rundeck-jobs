@@ -1,4 +1,4 @@
-$mnspver = "0.0.31"
+$mnspver = "0.0.32"
 
 Function Get-NewPassword {
     $PwdUrl = $MNSPgetPasswordURL
@@ -55,7 +55,7 @@ try {
     }
 
     if ($ADuser.DistinguishedName -like "*,OU=Student*,*") {
-        throw "Action aborted: '$CustomerEmailaddress' is a Student account ($($ADuser.DistinguishedName)). Password resets are not permitted for Students. See GLPI KB 269 - Additional Supporting notes"
+        throw "Action aborted: '$CustomerEmailaddress' is a Student account ($($ADuser.DistinguishedName)). Password resets are not permitted for Students using this job. See GLPI KB 269 - Additional Supporting notes"
     }
 
     $ADuser | Set-ADAccountPassword -Server $DC -NewPassword $SecurePassword -Reset #-whatif
