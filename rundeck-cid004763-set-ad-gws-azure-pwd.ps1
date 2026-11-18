@@ -6,7 +6,6 @@ Function Get-NewPassword {
     #failsafe password
     $pwdFailsafe = $MNSPgetPasswordURLfailsafe
 
-    
     try {
         Write-Host "Attempting to retrieve password from web service..."
         $response = Invoke-WebRequest -Uri $PwdUrl -UseBasicParsing
@@ -26,8 +25,6 @@ Function Get-NewPassword {
     }
 }
 
-
-
 Write-Host $(Get-Date)
 Write-Host "MNSP Version" $mnspver
 
@@ -43,34 +40,41 @@ $CustomerEmailAddress
 $password = Get-NewPassword
 #Write-Host "Confirm Password function: $password"
 
-
 #Convert the plain text password into a SecureString
 $SecurePassword = $password | ConvertTo-SecureString -AsPlainText -Force
 
+#Initialize output variables
+$CodesFormatted = $null
+
 #Find the user by their email address and reset the password
 try {
-    $ADuser = Get-ADUser -server $DC -Filter "mail -eq '$CustomerEmailaddress'"
+    $ADuser = Get-ADUser -Server $DC -Filter "mail -eq '$CustomerEmailaddress'"
 
     if ($null -eq $ADuser) {
         throw "No user found with email address: '$CustomerEmailaddress'"
     }
 
-    $ADuser | Set-ADAccountPassword -server $DC -NewPassword $SecurePassword -Reset #-whatif
+    if ($ADuser.DistinguishedName -like "*,OU=Staff,*") {
+        throw "Action aborted: '$CustomerEmailaddress' is a Staff account ($($ADuser.DistinguishedName)). Password resets are not permitted for Staff."
+    }
+
+    $ADuser | Set-ADAccountPassword -Server $DC -NewPassword $SecurePassword -Reset #-whatif
     $JobOutput01 = "Successfully reset password for: $CustomerEmailaddress to: $password"
+
     #generate GWS MFA backup codes
     $RawGWSbackupCodes = (& $GamDir\gam.exe user $CustomerEmailAddress update backupcodes) #| select-object -Skip 1
     $backupCodes = [regex]::Matches(($RawGWSbackupCodes -join ' '), '\b\d{8}\b').Value
-    $CodesFormatted = $backupcodes -Join ' '
+    $CodesFormatted = $backupcodes -join ' '
 
-} catch {
-    $JobOutput01 = "Failed to set password for user with email address: '$CustomerEmailaddress' Error: $($_.Exception.Message)"
-}
-
-$RundeckJobOutput = @"
-$jobOutput01
+    $RundeckJobOutput = @"
+$JobOutput01
  | Backup Codes:
 $CodesFormatted
 "@
 
-DashedLine
+} catch {
+    $JobOutput01 = "Failed to set password for user with email address: '$CustomerEmailaddress' Error: $($_.Exception.Message)"
+    $RundeckJobOutput = $JobOutput01
+}
 
+DashedLine
